@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Connect | Versailles United Methodist Church</title>
+<meta name="description" content="Find your place, grow in faith, and get connected at Versailles United Methodist Church through ministries, discipleship, recovery support, families, missions, and next steps." />
+<script src="https://js.churchcenter.com/modal/v1"></script>
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --surface: #ffffff;
+    --surface-soft: #f1ece4;
+    --text: #1f242c;
+    --muted: #5b6470;
+    --dark: #11161d;
+    --dark-soft: #171d25;
+    --accent: #bb8c3f;
+    --accent-soft: #e4cda7;
+    --border: rgba(17, 22, 29, 0.08);
+    --shadow: 0 18px 45px rgba(17, 22, 29, 0.12);
+    --radius-xl: 28px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --max-width: 1240px;
+    --transition: 220ms ease;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+
+  .container {
+    width: min(calc(100% - 32px), var(--max-width));
+    margin: 0 auto;
+  }
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(247, 244, 239, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(17, 22, 29, 0.06);
+  }
+
+  .nav-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 78px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .brand-mark {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #ddd;
+  }
+
+  .brand-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .brand-tagline {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    transition: color var(--transition);
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--text);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mobile-toggle {
+    display: none;
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  .mobile-menu {
+    display: none;
+    padding: 0 0 18px;
+  }
+
+  .mobile-menu.show { display: block; }
+
+  .mobile-menu-inner {
+    display: grid;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .mobile-menu a {
+    padding: 10px 2px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 0 22px;
+    border-radius: 999px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+  }
+
+  .btn:hover { transform: translateY(-2px); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(187, 140, 63, 0.28);
+  }
+
+  .btn-light {
+    background: #fff;
+    color: var(--text);
+    border-color: var(--border);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
+
+  .btn-dark {
+    background: var(--dark);
+    color: #fff;
+  }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.64)),
+      url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+    color: #fff;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at top right, rgba(187,140,63,0.28), transparent 34%),
+      radial-gradient(circle at bottom left, rgba(255,255,255,0.06), transparent 28%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: 76px 0 62px;
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .hero .eyebrow { color: var(--accent-soft); }
+
+  .hero h1 {
+    font-size: clamp(38px, 6vw, 66px);
+    line-height: 0.98;
+    margin: 0 0 16px;
+    letter-spacing: -0.04em;
+  }
+
+  .hero p {
+    font-size: clamp(17px, 2.2vw, 21px);
+    color: rgba(255,255,255,0.85);
+    margin: 0;
+    max-width: 700px;
+  }
+
+  .hero-card {
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 24px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+  }
+
+  .hero-card h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+  }
+
+  .hero-card p {
+    margin: 0;
+    font-size: 15px;
+    color: rgba(255,255,255,0.78);
+  }
+
+  .hero-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .hero-list-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.08);
+    font-size: 15px;
+  }
+
+  .section {
+    padding: 64px 0;
+  }
+
+  .section-title {
+    margin: 0 0 14px;
+    font-size: clamp(30px, 4.2vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+
+  .section-copy {
+    font-size: 18px;
+    color: var(--muted);
+    margin: 0;
+    max-width: 760px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-top: 34px;
+  }
+
+  .connect-card {
+    display: block;
+    border-radius: 28px;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+
+  .connect-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 48px rgba(17, 22, 29, 0.14);
+  }
+
+  .connect-card-image {
+    position: relative;
+    min-height: 220px;
+    background: #ddd center/cover no-repeat;
+  }
+
+  .connect-card-image::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(17,22,29,0.78), rgba(17,22,29,0.12));
+  }
+
+  .connect-card-title {
+    position: absolute;
+    inset: auto 18px 18px 18px;
+    z-index: 1;
+    color: #fff;
+    font-size: 20px;
+    line-height: 1.15;
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  }
+
+  .connect-card-body {
+    padding: 18px 18px 0;
+  }
+
+  .connect-card-body p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.55;
+    min-height: 72px;
+  }
+
+  .connect-card-footer {
+    padding: 18px;
+  }
+
+  .connect-card-button {
+    width: 100%;
+    min-height: 48px;
+    border-radius: 14px;
+    background: #353f69;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    transition: background var(--transition), transform var(--transition);
+  }
+
+  .connect-card:hover .connect-card-button {
+    background: #2c3559;
+  }
+
+  .cta-band {
+    background:
+      linear-gradient(135deg, rgba(17,22,29,0.90), rgba(17,22,29,0.72)),
+      url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    color: #fff;
+    border-radius: 28px;
+    padding: 34px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-band::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(187,140,63,0.24), transparent 36%);
+    pointer-events: none;
+  }
+
+  .cta-band > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-band p {
+    color: rgba(255,255,255,0.84);
+    max-width: 760px;
+  }
+
+  .site-footer {
+    background: var(--dark);
+    color: #fff;
+    padding: 24px 0 54px;
+    margin-top: 40px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr 0.85fr 0.85fr;
+    gap: 20px;
+    margin-top: 22px;
+  }
+
+  .footer-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px;
+    padding: 24px;
+  }
+
+  .footer-card h4 {
+    margin: 0 0 12px;
+    font-size: 16px;
+  }
+
+  .footer-card p,
+  .footer-card a {
+    margin: 0;
+    color: rgba(255,255,255,0.76);
+    font-size: 14px;
+    display: block;
+    line-height: 1.8;
+  }
+
+  .footer-bottom {
+    margin-top: 26px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.58);
+    text-align: center;
+  }
+
+  @media (max-width: 1100px) {
+    .nav-links,
+    .nav-actions .btn-dark {
+      display: none;
+    }
+
+    .mobile-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-inner,
+    .card-grid,
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .card-grid .connect-card:last-child,
+    .card-grid .connect-card:nth-last-child(2) {
+      grid-column: span 1;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .hero-inner,
+    .card-grid,
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-inner {
+      padding: 58px 0 48px;
+    }
+
+    .section {
+      padding: 54px 0;
+    }
+
+    .cta-band {
+      padding: 24px;
+    }
+
+    .connect-card-body p {
+      min-height: auto;
+    }
+
+    .brand-name { font-size: 15px; }
+    .brand-tagline { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="nav-wrap">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s176-c-k-c0x00ffffff-no-rj" alt="Versailles UMC logo" />
+        <div>
+          <p class="brand-name">Versailles United Methodist Church</p>
+          <p class="brand-tagline">A Church Striving to Love Like Jesus</p>
+        </div>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="watch.html">Watch</a>
+        <a href="connect.html" class="active">Connect</a>
+        <a href="events.html">Events</a>
+        <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+        <a href="plan-your-visit.html">Plan Your Visit</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-dark" href="plan-your-visit.html">Plan Your Visit</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mobile-menu-inner">
+        <a href="index.html">Home</a>
+        <a href="watch.html">Watch</a>
+        <a href="connect.html">Connect</a>
+        <a href="events.html">Events</a>
+        <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+        <a href="plan-your-visit.html">Plan Your Visit</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div>
+          <div class="eyebrow">Find Your Place</div>
+          <h1>Grow in faith. Get connected.</h1>
+          <p>
+            Whether you are new here or looking for your next step, there is a place for you at Versailles United Methodist Church. Explore the ministries and opportunities below to find community, support, growth, and ways to serve.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:28px;">
+            <a class="btn btn-primary" href="#connect-pathways">Explore Pathways</a>
+            <a class="btn btn-light" href="plan-your-visit.html">Plan Your Visit</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <h3>Connection happens in many ways.</h3>
+          <p>Some people begin by visiting. Others start with recovery, discipleship, missions, or family ministry. What matters is taking one next step.</p>
+          <div class="hero-list">
+            <div class="hero-list-item"><strong>Grow</strong><span>Discipleship & next steps</span></div>
+            <div class="hero-list-item"><strong>Belong</strong><span>Families, support, community</span></div>
+            <div class="hero-list-item"><strong>Serve</strong><span>Missions & outreach</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="connect-pathways">
+    <div class="container">
+      <div class="eyebrow">Connection Pathways</div>
+      <h2 class="section-title">Explore ministries and opportunities to take your next step.</h2>
+      <p class="section-copy">
+        This page is designed to help people quickly find a meaningful path into the life of the church, whether through learning, support, service, children and family ministry, or simply discovering where to begin.
+      </p>
+
+      <div class="card-grid">
+        <a class="connect-card" href="#" style="cursor:default;">
+          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1200&q=80');">
+            <div class="connect-card-title">The Academy</div>
+          </div>
+          <div class="connect-card-body">
+            <p>A joyful preschool experience where children are guided in learning, kindness, and the love of Jesus.</p>
+          </div>
+          <div class="connect-card-footer">
+            <span class="connect-card-button">Learn More</span>
+          </div>
+        </a>
+
+        <a class="connect-card" href="#" style="cursor:default;">
+          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1517486808906-6ca8b3f8e1c1?auto=format&fit=crop&w=1200&q=80');">
+            <div class="connect-card-title">Discipleship</div>
+          </div>
+          <div class="connect-card-body">
+            <p>Take the next step in following Jesus through Bible study, small groups, prayer, and intentional spiritual growth.</p>
+          </div>
+          <div class="connect-card-footer">
+            <span class="connect-card-button">Explore Discipleship</span>
+          </div>
+        </a>
+
+        <a class="connect-card" href="#" style="cursor:default;">
+          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80');">
+            <div class="connect-card-title">Recovery Ministry</div>
+          </div>
+          <div class="connect-card-body">
+            <p>Find hope, healing, and support in a safe and welcoming community. You do not have to walk hard seasons alone.</p>
+          </div>
+          <div class="connect-card-footer">
+            <span class="connect-card-button">Find Support</span>
+          </div>
+        </a>
+
+        <a class="connect-card" href="#" style="cursor:default;">
+          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80');">
+            <div class="connect-card-title">Get Involved</div>
+          </div>
+          <div class="connect-card-body">
+            <p>Find ways to serve, connect, and make a difference through the life of the church. There is room for your gifts here.</p>
+          </div>
+          <div class="connect-card-footer">
+            <span class="connect-card-button">Get Connected</span>
+          </div>
+        </a>
+
+        <a class="connect-card" href="#" style="cursor:default;">
+          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1516589091380-5d8e87df6999?auto=format&fit=crop&w=1200&q=80');">
+            <div class="connect-card-title">Kids & Families</div>
+          </div>
+          <div class="connect-card-body">
+            <p>We want children and families to know they are welcome here. Discover opportunities for worship, learning, and belonging.</p>
+          </div>
+          <div class="connect-card-footer">
+            <span class="connect-card-button">Learn More</span>
+          </div>
+        </a>
+
+        <a class="connect-card" href="#" style="cursor:default;">
+          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1469571486292-b53601020b3b?auto=format&fit=crop&w=1200&q=80');">
+            <div class="connect-card-title">Local Missions & Outreach</div>
+          </div>
+          <div class="connect-card-body">
+            <p>Join us in serving our community through ministries of compassion, generosity, and practical support.</p>
+          </div>
+          <div class="connect-card-footer">
+            <span class="connect-card-button">Explore Opportunities</span>
+          </div>
+        </a>
+
+        <a class="connect-card" href="#" style="cursor:default;">
+          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80');">
+            <div class="connect-card-title">Next Steps</div>
+          </div>
+          <div class="connect-card-body">
+            <p>Ready to take a next step in your faith? Let us help you find a pathway into community, service, and spiritual growth.</p>
+          </div>
+          <div class="connect-card-footer">
+            <span class="connect-card-button">Know More</span>
+          </div>
+        </a>
+
+        <a class="connect-card" href="plan-your-visit.html">
+          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80');">
+            <div class="connect-card-title">Plan a Visit</div>
+          </div>
+          <div class="connect-card-body">
+            <p>Thinking about attending? Learn what to expect and how to get connected before your first Sunday.</p>
+          </div>
+          <div class="connect-card-footer">
+            <span class="connect-card-button">Connect With Us</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="cta-band">
+        <div class="eyebrow">Take a Next Step</div>
+        <h2 class="section-title" style="color:#fff;max-width:760px;">You do not have to figure it out alone.</h2>
+        <p class="section-copy">
+          Whether you are brand new, returning to church, or ready to grow deeper in faith, we would love to help you find the right next step for this season.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:26px;">
+          <a class="btn btn-primary" href="plan-your-visit.html">Plan Your Visit</a>
+          <a class="btn btn-light" href="watch.html">Watch Online</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="eyebrow">Versailles United Methodist Church</div>
+    <div class="footer-grid">
+      <div class="footer-card">
+        <h4>About</h4>
+        <p>A Church Striving to Love Like Jesus.</p>
+        <p>Worship, connection, discipleship, and service in Versailles, Kentucky.</p>
+      </div>
+
+      <div class="footer-card">
+        <h4>Service Times</h4>
+        <p>Traditional Worship — 9:30 AM</p>
+        <p>Contemporary Worship — 10:30 AM</p>
+      </div>
+
+      <div class="footer-card">
+        <h4>Visit</h4>
+        <p>230 Paynes Mill Road</p>
+        <p>Versailles, KY 40383</p>
+        <a href="plan-your-visit.html">Plan Your Visit</a>
+      </div>
+
+      <div class="footer-card">
+        <h4>Quick Links</h4>
+        <a href="watch.html">Watch Worship Online</a>
+        <a href="events.html">Events</a>
+        <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+        <a href="https://versaillesumc.churchcenter.com/" target="_blank" rel="noopener noreferrer">Church Center</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2026 Versailles United Methodist Church • VUMC Media Designs
+    </div>
+  </div>
+</footer>
+
+<script>
+  const mobileToggle = document.getElementById('mobileToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  if (mobileToggle && mobileMenu) {
+    mobileToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('show');
+    });
+  }
+</script>
+</body>
+</html>
