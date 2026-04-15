@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VUMC Watch Live</title>
+
+<style>
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  body {
+    min-height: 100vh;
+    background: #0f1115;
+  }
+
+  a { color: inherit; }
+
+  .vumcBackWrap {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 9999;
+  }
+
+  .vumcBackBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(15,17,21,.78);
+    border: 1px solid rgba(255,255,255,.12);
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.24);
+    transition: background .2s ease, transform .2s ease;
+  }
+
+  .vumcBackBtn:hover {
+    background: rgba(15,17,21,.92);
+    transform: translateY(-1px);
+  }
+
+  .vumcBackThumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  #vumcApp {
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  #vumcShell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 420px;
+    min-height: 100vh;
+  }
+
+  #vumcMain {
+    background: #000;
+  }
+
+  #vumcWrap {
+    width: 100%;
+    height: 100%;
+  }
+
+  #vumcFrame {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    background: #000;
+  }
+
+  #vumcLiveFrame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: none;
+    background: #000;
+  }
+
+  #vumcOffline {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 24px;
+    background:
+      linear-gradient(rgba(0,0,0,.38), rgba(0,0,0,.38)),
+      url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVeu24CGoxKiGKIMqt16SMry2rYHrAFStWTA&s') center/cover no-repeat;
+  }
+
+  #vumcInner {
+    max-width: 720px;
+    width: 100%;
+    background: rgba(16,18,24,.70);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 24px;
+    padding: 28px 22px;
+    backdrop-filter: blur(8px);
+  }
+
+  #vumcTitle {
+    font-size: clamp(24px, 3vw, 38px);
+    font-weight: 800;
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+
+  #vumcCountdown {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+
+  .vumcBoxWrap {
+    min-width: 76px;
+  }
+
+  .vumcBox {
+    min-width: 76px;
+    padding: 14px 10px;
+    border-radius: 14px;
+    background: #fff;
+    color: #111;
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .vumcLabel {
+    font-size: 11px;
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    font-weight: 700;
+  }
+
+  .vumcTimes {
+    margin-bottom: 14px;
+    font-size: clamp(14px, 2vw, 18px);
+    line-height: 1.5;
+  }
+
+  #vumcBtn {
+    display: inline-block;
+    background: #d4af37;
+    color: #000;
+    padding: 12px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  .vumcNote {
+    font-size: 13px;
+    opacity: .88;
+  }
+
+  #vumcSidebar {
+    background: #15181f;
+    border-left: 1px solid rgba(255,255,255,.08);
+    min-height: 100vh;
+  }
+
+  #vumcSidebarInner {
+    padding: 16px;
+  }
+
+  .vumcPanel {
+    margin-bottom: 16px;
+  }
+
+  .vumcPanelTitle {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    opacity: .9;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  .vumcCard {
+    background: #262a33;
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  #vumcNotesCard,
+  #vumcChatCard {
+    min-height: 560px;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    background: #262a33;
+  }
+
+  #vumcNotesFrame,
+  #vumcChatFrame {
+    width: 100%;
+    height: 560px;
+    border: 0;
+    background: #fff;
+    display: none;
+  }
+
+  #vumcNotesPlaceholder,
+  #vumcChatPlaceholder {
+    width: 100%;
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    text-align: center;
+    color: #fff;
+    background:
+      linear-gradient(rgba(0,0,0,.24), rgba(0,0,0,.24)),
+      radial-gradient(circle at top, rgba(212,175,55,.18), transparent 45%),
+      #262a33;
+  }
+
+  .vumcPlaceholderInner {
+    max-width: 280px;
+  }
+
+  .vumcPlaceholderTitle {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .vumcPlaceholderText {
+    font-size: 15px;
+    line-height: 1.6;
+    opacity: .92;
+  }
+
+  .vumcTabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .vumcTabBtn {
+    flex: 1;
+    border: 1px solid rgba(255,255,255,.08);
+    background: #262a33;
+    color: #fff;
+    padding: 12px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    min-width: 0;
+  }
+
+  .vumcTabBtn.active {
+    background: #d4af37;
+    color: #111;
+    border-color: transparent;
+  }
+
+  .vumcTabPane {
+    display: none;
+  }
+
+  .vumcTabPane.active {
+    display: block;
+  }
+
+  .vumcFormCard {
+    background: #262a33;
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .vumcField {
+    margin-bottom: 12px;
+  }
+
+  .vumcField label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #fff;
+  }
+
+  .vumcInput,
+  .vumcSelect,
+  .vumcTextarea {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,.12);
+    background: #1d2129;
+    color: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+
+  .vumcTextarea {
+    min-height: 130px;
+    resize: vertical;
+  }
+
+  .vumcCheckboxRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  .vumcCheckboxRow input {
+    transform: scale(1.1);
+  }
+
+  .vumcSubmitBtn {
+    width: 100%;
+    border: 0;
+    background: #d4af37;
+    color: #111;
+    padding: 13px 14px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .vumcSubmitBtn:disabled {
+    opacity: .65;
+    cursor: not-allowed;
+  }
+
+  .vumcHelp {
+    font-size: 12px;
+    line-height: 1.5;
+    opacity: .8;
+    margin-top: 10px;
+  }
+
+  .vumcStatus {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    display: none;
+  }
+
+  .vumcStatus.success {
+    display: block;
+    background: rgba(50, 140, 90, .18);
+    border: 1px solid rgba(50, 140, 90, .35);
+    color: #dff7e8;
+  }
+
+  .vumcStatus.error {
+    display: block;
+    background: rgba(170, 70, 70, .18);
+    border: 1px solid rgba(170, 70, 70, .35);
+    color: #ffe6e6;
+  }
+
+  .vumcHidden {
+    display: none !important;
+  }
+
+  @media (max-width: 980px) {
+    #vumcShell {
+      grid-template-columns: 1fr;
+    }
+
+    #vumcSidebar {
+      display: none;
+    }
+
+    #vumcFrame {
+      min-height: auto;
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .vumcBackWrap {
+      top: 10px;
+      left: 10px;
+    }
+
+    .vumcBackBtn {
+      padding: 9px 12px;
+      font-size: 13px;
+    }
+
+    .vumcBackThumb {
+      width: 24px;
+      height: 24px;
+    }
+
+    #vumcInner {
+      padding: 20px 14px;
+    }
+
+    .vumcBoxWrap {
+      min-width: 64px;
+    }
+
+    .vumcBox {
+      min-width: 64px;
+      font-size: 22px;
+      padding: 12px 8px;
+    }
+
+    .vumcTimes {
+      font-size: 14px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="vumcBackWrap">
+  <a href="index.html" class="vumcBackBtn" aria-label="Back to VUMC Online home">
+    <img
+      src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s900-c-k-c0x00ffffff-no-rj"
+      alt="VUMC"
+      class="vumcBackThumb"
+    />
+    <span>Home</span>
+  </a>
+</div>
+
+<div id="vumcApp">
+  <div id="vumcShell">
+
+    <main id="vumcMain">
+      <div id="vumcWrap">
+        <div id="vumcFrame">
+
+          <iframe
+            id="vumcLiveFrame"
+            title="Versailles UMC Live"
+            allow="autoplay; encrypted-media; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+
+          <div id="vumcOffline">
+            <div id="vumcInner">
+
+              <div id="vumcTitle">Next Service Begins In</div>
+
+              <div id="vumcCountdown">
+                <div class="vumcBoxWrap">
+                  <div id="d" class="vumcBox">00</div>
+                  <div class="vumcLabel">Days</div>
+                </div>
+                <div class="vumcBoxWrap">
+                  <div id="h" class="vumcBox">00</div>
+                  <div class="vumcLabel">Hours</div>
+                </div>
+                <div class="vumcBoxWrap">
+                  <div id="m" class="vumcBox">00</div>
+                  <div class="vumcLabel">Min</div>
+                </div>
+                <div class="vumcBoxWrap">
+                  <div id="s" class="vumcBox">00</div>
+                  <div class="vumcLabel">Sec</div>
+                </div>
+              </div>
+
+              <div class="vumcTimes">
+                Traditional Worship — 9:30am<br>
+                Contemporary Worship — 10:30am
+              </div>
+
+              <a id="vumcBtn" href="https://www.versaillesumc.org/plan-your-visit" target="_blank" rel="noopener">
+                PLAN YOUR VISIT
+              </a>
+
+              <div class="vumcNote">
+                Live video will appear automatically when active
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <aside id="vumcSidebar">
+      <div id="vumcSidebarInner">
+
+        <div class="vumcPanel">
+          <div class="vumcTabs">
+            <button type="button" class="vumcTabBtn active" data-tab="notes">Sermon Notes</button>
+            <button type="button" id="chatTabBtn" class="vumcTabBtn" data-tab="chat">Live Chat</button>
+            <button type="button" class="vumcTabBtn" data-tab="checkin">Check In</button>
+            <button type="button" class="vumcTabBtn" data-tab="prayer">Prayer</button>
+          </div>
+        </div>
+
+        <div id="tab-notes" class="vumcTabPane active">
+          <div class="vumcPanel">
+            <div class="vumcPanelTitle">Sermon Notes</div>
+            <div class="vumcCard" id="vumcNotesCard">
+
+              <div id="vumcNotesPlaceholder">
+                <div class="vumcPlaceholderInner">
+                  <div class="vumcPlaceholderTitle">Sermon Notes</div>
+                  <div class="vumcPlaceholderText">
+                    Sermon notes will appear here when the livestream is active.<br><br>
+                    Join us live Sundays at 9:30am or 10:30am.
+                  </div>
+                </div>
+              </div>
+
+              <iframe
+                id="vumcNotesFrame"
+                src=""
+                title="Sermon Notes">
+              </iframe>
+
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-chat" class="vumcTabPane">
+          <div class="vumcPanel">
+            <div class="vumcPanelTitle">Live Chat</div>
+            <div class="vumcCard" id="vumcChatCard">
+
+              <div id="vumcChatPlaceholder">
+                <div class="vumcPlaceholderInner">
+                  <div class="vumcPlaceholderTitle">Live Chat</div>
+                  <div class="vumcPlaceholderText">
+                    Live chat is available during our Sunday worship services.<br><br>
+                    Join us live at 9:30am or 10:30am and be part of the conversation.
+                  </div>
+                </div>
+              </div>
+
+              <iframe
+                id="vumcChatFrame"
+                src=""
+                title="YouTube Live Chat">
+              </iframe>
+
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-checkin" class="vumcTabPane">
+          <div class="vumcPanel">
+            <div class="vumcPanelTitle">Check In</div>
+            <div class="vumcFormCard">
+              <form id="checkinForm">
+                <div class="vumcField">
+                  <label for="checkinName">Name</label>
+                  <input id="checkinName" name="name" class="vumcInput" type="text" required />
+                </div>
+
+                <div class="vumcField">
+                  <label for="checkinEmail">Email</label>
+                  <input id="checkinEmail" name="email" class="vumcInput" type="email" />
+                </div>
+
+                <div class="vumcField">
+                  <label for="checkinService">Service Attended</label>
+                  <select id="checkinService" name="service" class="vumcSelect" required>
+                    <option value="">Select a service</option>
+                    <option value="Traditional Worship — 9:30 AM">Traditional Worship — 9:30 AM</option>
+                    <option value="Contemporary Worship — 10:30 AM">Contemporary Worship — 10:30 AM</option>
+                  </select>
+                </div>
+
+                <div class="vumcCheckboxRow">
+                  <input id="checkinFirstTime" name="firstTime" type="checkbox" />
+                  <label for="checkinFirstTime" style="margin:0;">I’m a first-time guest</label>
+                </div>
+
+                <input type="text" name="website" class="vumcHidden" tabindex="-1" autocomplete="off" />
+
+                <button id="checkinSubmit" class="vumcSubmitBtn" type="submit">Submit Check In</button>
+
+                <div class="vumcHelp">
+                  Check-ins are sent to the church office for attendance and follow-up.
+                </div>
+
+                <div id="checkinStatus" class="vumcStatus"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-prayer" class="vumcTabPane">
+          <div class="vumcPanel">
+            <div class="vumcPanelTitle">Prayer Request</div>
+            <div class="vumcFormCard">
+              <form id="prayerForm">
+                <div class="vumcField">
+                  <label for="prayerName">Name</label>
+                  <input id="prayerName" name="name" class="vumcInput" type="text" />
+                </div>
+
+                <div class="vumcField">
+                  <label for="prayerContact">Email or Phone</label>
+                  <input id="prayerContact" name="contact" class="vumcInput" type="text" />
+                </div>
+
+                <div class="vumcField">
+                  <label for="prayerRequest">Prayer Request</label>
+                  <textarea id="prayerRequest" name="request" class="vumcTextarea" required></textarea>
+                </div>
+
+                <div class="vumcCheckboxRow">
+                  <input id="prayerPrivate" name="privateOnly" type="checkbox" />
+                  <label for="prayerPrivate" style="margin:0;">Keep this private</label>
+                </div>
+
+                <div class="vumcCheckboxRow">
+                  <input id="prayerFollowUp" name="followUp" type="checkbox" />
+                  <label for="prayerFollowUp" style="margin:0;">I would like follow-up</label>
+                </div>
+
+                <input type="text" name="website" class="vumcHidden" tabindex="-1" autocomplete="off" />
+
+                <button id="prayerSubmit" class="vumcSubmitBtn" type="submit">Submit Prayer Request</button>
+
+                <div class="vumcHelp">
+                  Prayer requests are sent to the lead pastor.
+                </div>
+
+                <div id="prayerStatus" class="vumcStatus"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<script>
+(async function () {
+
+  const endpoint = "https://script.google.com/macros/s/AKfycbxClNiX6jIT7ykEIox3Qw-dzynO4TgGhqbdTTzOzESS9C8ZxCRNiLLAuc3bSYFKVbg/exec";
+  const formsEndpoint = "https://script.google.com/macros/s/AKfycbxyOSYQ7HjJlCWKuquZ47TpWvHfHwmLSqXPaDI9IIdvwkQgXp3ClDXd6U1UzdePOOGU/exec";
+
+  const CHAT_EMBED_DOMAIN = window.location.hostname;
+  const MOBILE_BREAKPOINT = 980;
+
+  const frame = document.getElementById("vumcLiveFrame");
+  const offline = document.getElementById("vumcOffline");
+  const notesFrame = document.getElementById("vumcNotesFrame");
+  const notesPlaceholder = document.getElementById("vumcNotesPlaceholder");
+  const chatFrame = document.getElementById("vumcChatFrame");
+  const chatPlaceholder = document.getElementById("vumcChatPlaceholder");
+
+  let currentVideo = "";
+
+  const NOTES_URLS = {
+    traditional: "https://sermon.versaillesumc.org",
+    contemporary: "https://sermon.versaillesumc.org"
+  };
+
+  function isDesktopOrTablet() {
+    return window.innerWidth > MOBILE_BREAKPOINT;
+  }
+
+  function getNextServiceDate() {
+    const now = new Date();
+    const day = now.getDay();
+
+    const traditional = new Date(now);
+    traditional.setHours(9, 30, 0, 0);
+
+    const contemporary = new Date(now);
+    contemporary.setHours(10, 30, 0, 0);
+
+    if (day === 0) {
+      if (now < traditional) return traditional;
+      if (now < contemporary) return contemporary;
+    }
+
+    const nextSunday = new Date(now);
+    const daysUntilSunday = ((7 - day) % 7) || 7;
+    nextSunday.setDate(now.getDate() + daysUntilSunday);
+    nextSunday.setHours(9, 30, 0, 0);
+    return nextSunday;
+  }
+
+  function getLikelyLiveServiceKey() {
+    const now = new Date();
+    const day = now.getDay();
+
+    if (day !== 0) return "traditional";
+
+    const minutes = now.getHours() * 60 + now.getMinutes();
+
+    if (minutes >= 9 * 60 + 15 && minutes < 10 * 60 + 15) {
+      return "traditional";
+    }
+
+    if (minutes >= 10 * 60 + 15 && minutes < 12 * 60) {
+      return "contemporary";
+    }
+
+    return "traditional";
+  }
+
+  function tick() {
+    const now = new Date();
+    const target = getNextServiceDate();
+    let diff = Math.floor((target - now) / 1000);
+
+    if (diff < 0) diff = 0;
+
+    const d = Math.floor(diff / 86400);
+    diff %= 86400;
+    const h = Math.floor(diff / 3600);
+    diff %= 3600;
+    const m = Math.floor(diff / 60);
+    const s = diff % 60;
+
+    document.getElementById("d").textContent = String(d).padStart(2, "0");
+    document.getElementById("h").textContent = String(h).padStart(2, "0");
+    document.getElementById("m").textContent = String(m).padStart(2, "0");
+    document.getElementById("s").textContent = String(s).padStart(2, "0");
+  }
+
+  function showNotes(url) {
+    notesPlaceholder.style.display = "none";
+    notesFrame.style.display = "block";
+    if (notesFrame.src !== url) {
+      notesFrame.src = url;
+    }
+  }
+
+  function hideNotes() {
+    notesFrame.style.display = "none";
+    notesFrame.src = "";
+    notesPlaceholder.style.display = "flex";
+  }
+
+  function activateTab(tabName) {
+    document.querySelectorAll(".vumcTabBtn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".vumcTabPane").forEach(p => p.classList.remove("active"));
+
+    const btn = document.querySelector('.vumcTabBtn[data-tab="' + tabName + '"]');
+    const pane = document.getElementById("tab-" + tabName);
+
+    if (btn) btn.classList.add("active");
+    if (pane) pane.classList.add("active");
+  }
+
+  function showChat(videoId) {
+    if (!isDesktopOrTablet()) {
+      hideChat();
+      return;
+    }
+
+    const chatUrl = "https://www.youtube.com/live_chat?v=" + encodeURIComponent(videoId) +
+      "&embed_domain=" + encodeURIComponent(CHAT_EMBED_DOMAIN);
+
+    chatPlaceholder.style.display = "none";
+    chatFrame.style.display = "block";
+
+    if (chatFrame.src !== chatUrl) {
+      chatFrame.src = chatUrl;
+    }
+  }
+
+  function hideChat() {
+    chatFrame.style.display = "none";
+    chatFrame.src = "";
+    chatPlaceholder.style.display = "flex";
+  }
+
+  async function checkLive() {
+    try {
+      const res = await fetch(endpoint + "?t=" + Date.now(), {
+        method: "GET",
+        cache: "no-store"
+      });
+
+      if (!res.ok) throw new Error("HTTP " + res.status);
+
+      const data = await res.json();
+
+      if (data && data.ok && data.live && data.videoId) {
+        if (currentVideo !== data.videoId) {
+          currentVideo = data.videoId;
+          frame.src = "https://www.youtube.com/embed/" + data.videoId + "?autoplay=1&mute=1&rel=0";
+        }
+
+        frame.style.display = "block";
+        offline.style.display = "none";
+
+        const serviceKey = data.serviceKey || getLikelyLiveServiceKey();
+        const notesUrl = data.notesUrl || NOTES_URLS[serviceKey] || NOTES_URLS.traditional;
+        showNotes(notesUrl);
+        showChat(data.videoId);
+
+      } else {
+        currentVideo = "";
+        frame.src = "";
+        frame.style.display = "none";
+        offline.style.display = "flex";
+        hideNotes();
+        hideChat();
+      }
+
+    } catch (e) {
+      currentVideo = "";
+      frame.src = "";
+      frame.style.display = "none";
+      offline.style.display = "flex";
+      hideNotes();
+      hideChat();
+    }
+  }
+
+  function setStatus(el, type, message) {
+    el.className = "vumcStatus " + type;
+    el.textContent = message;
+  }
+
+  function clearStatus(el) {
+    el.className = "vumcStatus";
+    el.textContent = "";
+  }
+
+  async function postForm(payload) {
+    const res = await fetch(formsEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      throw new Error("Request failed: " + res.status);
+    }
+
+    return await res.json();
+  }
+
+  document.querySelectorAll(".vumcTabBtn").forEach(btn => {
+    btn.addEventListener("click", function () {
+      activateTab(this.dataset.tab);
+    });
+  });
+
+  window.addEventListener("resize", function () {
+    if (!isDesktopOrTablet()) {
+      hideChat();
+    } else if (currentVideo) {
+      showChat(currentVideo);
+    }
+  });
+
+  const checkinForm = document.getElementById("checkinForm");
+  const checkinSubmit = document.getElementById("checkinSubmit");
+  const checkinStatus = document.getElementById("checkinStatus");
+
+  checkinForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    clearStatus(checkinStatus);
+
+    const payload = {
+      type: "checkin",
+      name: checkinForm.name.value.trim(),
+      email: checkinForm.email.value.trim(),
+      service: checkinForm.service.value,
+      firstTime: checkinForm.firstTime.checked,
+      website: checkinForm.website.value.trim(),
+      source: "Watch Live Page"
+    };
+
+    if (!payload.name || !payload.service) {
+      setStatus(checkinStatus, "error", "Please complete the required fields.");
+      return;
+    }
+
+    checkinSubmit.disabled = true;
+    checkinSubmit.textContent = "Submitting...";
+
+    try {
+      const result = await postForm(payload);
+      if (result && result.ok) {
+        checkinForm.reset();
+        setStatus(checkinStatus, "success", "Thanks for checking in. We’re glad you worshiped with us today.");
+      } else {
+        throw new Error((result && result.error) || "Unknown error");
+      }
+    } catch (err) {
+      setStatus(checkinStatus, "error", "Your check-in could not be submitted right now. Please try again.");
+    } finally {
+      checkinSubmit.disabled = false;
+      checkinSubmit.textContent = "Submit Check In";
+    }
+  });
+
+  const prayerForm = document.getElementById("prayerForm");
+  const prayerSubmit = document.getElementById("prayerSubmit");
+  const prayerStatus = document.getElementById("prayerStatus");
+
+  prayerForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    clearStatus(prayerStatus);
+
+    const payload = {
+      type: "prayer",
+      name: prayerForm.name.value.trim(),
+      contact: prayerForm.contact.value.trim(),
+      request: prayerForm.request.value.trim(),
+      privateOnly: prayerForm.privateOnly.checked,
+      followUp: prayerForm.followUp.checked,
+      website: prayerForm.website.value.trim(),
+      source: "Watch Live Page"
+    };
+
+    if (!payload.request) {
+      setStatus(prayerStatus, "error", "Please enter your prayer request.");
+      return;
+    }
+
+    prayerSubmit.disabled = true;
+    prayerSubmit.textContent = "Submitting...";
+
+    try {
+      const result = await postForm(payload);
+      if (result && result.ok) {
+        prayerForm.reset();
+        setStatus(prayerStatus, "success", "Your prayer request has been submitted.");
+      } else {
+        throw new Error((result && result.error) || "Unknown error");
+      }
+    } catch (err) {
+      setStatus(prayerStatus, "error", "Your prayer request could not be submitted right now. Please try again.");
+    } finally {
+      prayerSubmit.disabled = false;
+      prayerSubmit.textContent = "Submit Prayer Request";
+    }
+  });
+
+  tick();
+  setInterval(tick, 1000);
+
+  hideNotes();
+  hideChat();
+  await checkLive();
+  setInterval(checkLive, 30000);
+
+})();
+</script>
+
+</body>
+</html>
