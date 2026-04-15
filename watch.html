@@ -167,17 +167,20 @@
   }
 
   .btn:hover { transform: translateY(-2px); }
+
   .btn-primary {
     background: var(--accent);
     color: #fff;
     box-shadow: 0 10px 24px rgba(187, 140, 63, 0.28);
   }
+
   .btn-light {
     background: #fff;
     color: var(--text);
     border-color: var(--border);
     box-shadow: 0 8px 20px rgba(0,0,0,0.05);
   }
+
   .btn-dark {
     background: var(--dark);
     color: #fff;
@@ -478,6 +481,7 @@
   }
 
   .vumcPlaceholderInner { max-width: 280px; }
+
   .vumcPlaceholderTitle {
     font-size: 22px;
     font-weight: 800;
@@ -796,6 +800,7 @@
     }
 
     .vumcBoxWrap { min-width: 64px; }
+
     .vumcBox {
       min-width: 64px;
       font-size: 22px;
@@ -996,42 +1001,23 @@
                 <div id="tab-checkin" class="vumcTabPane">
                   <div class="vumcPanel">
                     <div class="vumcPanelTitle">Check In</div>
-                    <div class="vumcFormCard">
-                      <form id="checkinForm">
-                        <div class="vumcField">
-                          <label for="checkinName">Name</label>
-                          <input id="checkinName" name="name" class="vumcInput" type="text" required />
-                        </div>
+                    <div class="vumcFormCard" style="text-align:center;">
+                      <h3 style="margin-top:0;color:#fff;">Check In for Worship</h3>
+                      <p style="color:rgba(255,255,255,0.8);margin-bottom:18px;">
+                        Let us know you're here and check in your household for worship.
+                      </p>
 
-                        <div class="vumcField">
-                          <label for="checkinEmail">Email</label>
-                          <input id="checkinEmail" name="email" class="vumcInput" type="email" />
-                        </div>
+                      <a
+                        href="https://versaillesumc.churchcenter.com/people/forms/859778"
+                        data-open-in-church-center-modal="true"
+                        class="vumcSubmitBtn"
+                        style="display:inline-block;text-decoration:none;">
+                        Check In Now
+                      </a>
 
-                        <div class="vumcField">
-                          <label for="checkinService">Service Attended</label>
-                          <select id="checkinService" name="service" class="vumcSelect" required>
-                            <option value="">Select a service</option>
-                            <option value="Traditional Worship — 9:30 AM">Traditional Worship — 9:30 AM</option>
-                            <option value="Contemporary Worship — 10:30 AM">Contemporary Worship — 10:30 AM</option>
-                          </select>
-                        </div>
-
-                        <div class="vumcCheckboxRow">
-                          <input id="checkinFirstTime" name="firstTime" type="checkbox" />
-                          <label for="checkinFirstTime" style="margin:0;">I’m a first-time guest</label>
-                        </div>
-
-                        <input type="text" name="website" class="vumcHidden" tabindex="-1" autocomplete="off" />
-
-                        <button id="checkinSubmit" class="vumcSubmitBtn" type="submit">Submit Check In</button>
-
-                        <div class="vumcHelp">
-                          Check-ins are sent to the church office for attendance and follow-up.
-                        </div>
-
-                        <div id="checkinStatus" class="vumcStatus"></div>
-                      </form>
+                      <div class="vumcHelp">
+                        Sign in through Church Center and add additional household members during check-in.
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1383,48 +1369,6 @@
       hideChat();
     } else if (currentVideo) {
       showChat(currentVideo);
-    }
-  });
-
-  const checkinForm = document.getElementById("checkinForm");
-  const checkinSubmit = document.getElementById("checkinSubmit");
-  const checkinStatus = document.getElementById("checkinStatus");
-
-  checkinForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    clearStatus(checkinStatus);
-
-    const payload = {
-      type: "checkin",
-      name: checkinForm.name.value.trim(),
-      email: checkinForm.email.value.trim(),
-      service: checkinForm.service.value,
-      firstTime: checkinForm.firstTime.checked,
-      website: checkinForm.website.value.trim(),
-      source: "Watch Live Page"
-    };
-
-    if (!payload.name || !payload.service) {
-      setStatus(checkinStatus, "error", "Please complete the required fields.");
-      return;
-    }
-
-    checkinSubmit.disabled = true;
-    checkinSubmit.textContent = "Submitting...";
-
-    try {
-      const result = await postForm(payload);
-      if (result && result.ok) {
-        checkinForm.reset();
-        setStatus(checkinStatus, "success", "Thanks for checking in. We’re glad you worshiped with us today.");
-      } else {
-        throw new Error((result && result.error) || "Unknown error");
-      }
-    } catch (err) {
-      setStatus(checkinStatus, "error", "Your check-in could not be submitted right now. Please try again.");
-    } finally {
-      checkinSubmit.disabled = false;
-      checkinSubmit.textContent = "Submit Check In";
     }
   });
 
