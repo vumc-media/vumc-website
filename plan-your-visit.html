@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Plan Your Visit | Versailles United Methodist Church</title>
+<meta name="description" content="Plan your first visit to Versailles United Methodist Church. Find service times, what to expect, what to wear, children’s ministry info, parking, and how to let us know you're coming." />
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --surface: #ffffff;
+    --surface-soft: #f1ece4;
+    --text: #1f242c;
+    --muted: #5b6470;
+    --dark: #11161d;
+    --dark-soft: #171d25;
+    --accent: #bb8c3f;
+    --accent-soft: #e4cda7;
+    --border: rgba(17, 22, 29, 0.08);
+    --shadow: 0 18px 45px rgba(17, 22, 29, 0.12);
+    --radius-xl: 28px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --max-width: 1240px;
+    --transition: 220ms ease;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+
+  .container {
+    width: min(calc(100% - 32px), var(--max-width));
+    margin: 0 auto;
+  }
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(247, 244, 239, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(17, 22, 29, 0.06);
+  }
+
+  .nav-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 78px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .brand-mark {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #ddd;
+  }
+
+  .brand-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .brand-tagline {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    transition: color var(--transition);
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--text);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mobile-toggle {
+    display: none;
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  .mobile-menu {
+    display: none;
+    padding: 0 0 18px;
+  }
+
+  .mobile-menu.show { display: block; }
+
+  .mobile-menu-inner {
+    display: grid;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .mobile-menu a {
+    padding: 10px 2px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 0 22px;
+    border-radius: 999px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+  }
+
+  .btn:hover { transform: translateY(-2px); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(187, 140, 63, 0.28);
+  }
+
+  .btn-light {
+    background: #fff;
+    color: var(--text);
+    border-color: var(--border);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
+
+  .btn-dark {
+    background: var(--dark);
+    color: #fff;
+  }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.64)),
+      url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+    color: #fff;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at top right, rgba(187,140,63,0.28), transparent 34%),
+      radial-gradient(circle at bottom left, rgba(255,255,255,0.06), transparent 28%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: 76px 0 62px;
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .hero .eyebrow { color: var(--accent-soft); }
+
+  .hero h1 {
+    font-size: clamp(38px, 6vw, 66px);
+    line-height: 0.98;
+    margin: 0 0 16px;
+    letter-spacing: -0.04em;
+  }
+
+  .hero p {
+    font-size: clamp(17px, 2.2vw, 21px);
+    color: rgba(255,255,255,0.85);
+    margin: 0;
+    max-width: 700px;
+  }
+
+  .hero-card {
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 24px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+  }
+
+  .hero-card h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+  }
+
+  .hero-card p {
+    margin: 0;
+    font-size: 15px;
+    color: rgba(255,255,255,0.78);
+  }
+
+  .service-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .service-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.08);
+    font-size: 15px;
+  }
+
+  .section {
+    padding: 64px 0;
+  }
+
+  .section-title {
+    margin: 0 0 14px;
+    font-size: clamp(30px, 4.2vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+
+  .section-copy {
+    font-size: 18px;
+    color: var(--muted);
+    margin: 0;
+    max-width: 760px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    margin-top: 34px;
+  }
+
+  .info-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 28px 24px;
+    box-shadow: var(--shadow);
+  }
+
+  .info-card h3 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    line-height: 1.12;
+  }
+
+  .info-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+    align-items: stretch;
+  }
+
+  .content-card,
+  .image-card,
+  .wide-card,
+  .cta-card,
+  .footer-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+  }
+
+  .content-card,
+  .cta-card {
+    padding: 34px;
+  }
+
+  .image-card {
+    min-height: 430px;
+    background:
+      linear-gradient(135deg, rgba(17,22,29,0.18), rgba(17,22,29,0.08)),
+      url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+  }
+
+  .wide-card {
+    padding: 32px;
+  }
+
+  .wide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-top: 18px;
+  }
+
+  .mini-block {
+    background: var(--surface-soft);
+    border-radius: 20px;
+    padding: 22px;
+  }
+
+  .mini-block h4 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    line-height: 1.15;
+  }
+
+  .mini-block p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .cta-card {
+    background:
+      linear-gradient(135deg, rgba(17,22,29,0.90), rgba(17,22,29,0.72)),
+      url('https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(187,140,63,0.25), transparent 34%);
+    pointer-events: none;
+  }
+
+  .cta-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-card p {
+    color: rgba(255,255,255,0.84);
+  }
+
+  .site-footer {
+    background: var(--dark);
+    color: #fff;
+    padding: 24px 0 54px;
+    margin-top: 40px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr 0.85fr 0.85fr;
+    gap: 20px;
+    margin-top: 22px;
+  }
+
+  .footer-card {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.08);
+    box-shadow: none;
+    padding: 24px;
+  }
+
+  .footer-card h4 {
+    margin: 0 0 12px;
+    font-size: 16px;
+  }
+
+  .footer-card p,
+  .footer-card a {
+    margin: 0;
+    color: rgba(255,255,255,0.76);
+    font-size: 14px;
+    display: block;
+    line-height: 1.8;
+  }
+
+  .footer-bottom {
+    margin-top: 26px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.58);
+    text-align: center;
+  }
+
+  @media (max-width: 1100px) {
+    .nav-links,
+    .nav-actions .btn-dark {
+      display: none;
+    }
+
+    .mobile-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-inner,
+    .card-grid,
+    .two-column,
+    .wide-grid,
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .hero-inner,
+    .card-grid,
+    .two-column,
+    .wide-grid,
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-inner {
+      padding: 58px 0 48px;
+    }
+
+    .section {
+      padding: 54px 0;
+    }
+
+    .content-card,
+    .cta-card,
+    .wide-card {
+      padding: 24px;
+    }
+
+    .image-card {
+      min-height: 280px;
+    }
+
+    .brand-name { font-size: 15px; }
+    .brand-tagline { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="nav-wrap">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s176-c-k-c0x00ffffff-no-rj" alt="Versailles UMC logo" />
+        <div>
+          <p class="brand-name">Versailles United Methodist Church</p>
+          <p class="brand-tagline">A Church Striving to Love Like Jesus</p>
+        </div>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="watch.html">Watch</a>
+        <a href="connect.html">Connect</a>
+        <a href="events.html">Events</a>
+        <a href="give.html">Give</a>
+        <a href="plan-your-visit.html" class="active">Plan Your Visit</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-dark" href="plan-visit-form.html">Schedule a Visit</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mobile-menu-inner">
+        <a href="index.html">Home</a>
+        <a href="watch.html">Watch</a>
+        <a href="connect.html">Connect</a>
+        <a href="events.html">Events</a>
+        <a href="give.html">Give</a>
+        <a href="plan-your-visit.html">Plan Your Visit</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div>
+          <div class="eyebrow">We’re Glad You’re Here</div>
+          <h1>Plan your visit with confidence.</h1>
+          <p>
+            Whether you are new to church, returning after some time away, or just looking for a place to worship, we want your first visit to feel warm, easy, and welcoming.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:28px;">
+            <a class="btn btn-primary" href="plan-visit-form.html">Schedule a Visit</a>
+            <a class="btn btn-light" href="watch.html">Watch Online First</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <h3>Sunday Worship Times</h3>
+          <p>Join us in person or online each Sunday.</p>
+          <div class="service-list">
+            <div class="service-item"><strong>Traditional Worship</strong><span>9:30 AM</span></div>
+            <div class="service-item"><strong>Contemporary Worship</strong><span>10:30 AM</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="eyebrow">Quick Answers</div>
+      <h2 class="section-title">What first-time guests usually want to know.</h2>
+      <p class="section-copy">
+        We want your first Sunday to feel simple, not stressful. Here are a few helpful things to know before you arrive.
+      </p>
+
+      <div class="card-grid">
+        <div class="info-card">
+          <h3>What should I wear?</h3>
+          <p>Come as you are. Some dress casually, some dress up a little more, and you are welcome either way.</p>
+        </div>
+
+        <div class="info-card">
+          <h3>Is there something for children?</h3>
+          <p>Yes. We offer children’s ministry and family-friendly spaces to help your Sunday morning go smoothly.</p>
+        </div>
+
+        <div class="info-card">
+          <h3>Where do I park?</h3>
+          <p>Parking is available on site, and we want to make your arrival as easy as possible from the moment you pull in.</p>
+        </div>
+
+        <div class="info-card">
+          <h3>Can I watch online first?</h3>
+          <p>Absolutely. You can get a feel for worship and the church atmosphere before visiting in person.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="two-column">
+        <div class="content-card">
+          <div class="eyebrow">Sunday Mornings</div>
+          <h2 class="section-title">A welcoming place to worship, learn, and connect.</h2>
+          <p class="section-copy">
+            Sunday mornings at VUMC are designed to help people of all ages encounter God, grow in faith, and feel part of a caring community. Whether you are attending alone, with a spouse, with children, or with friends, we want you to feel at home.
+          </p>
+        </div>
+
+        <div class="image-card" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="wide-card">
+        <div class="eyebrow">What To Expect</div>
+        <h2 class="section-title">A few things that can make your first visit easier.</h2>
+        <p class="section-copy">
+          Here is a quick overview of what you can expect when you come to Versailles United Methodist Church.
+        </p>
+
+        <div class="wide-grid">
+          <div class="mini-block">
+            <h4>Two worship styles</h4>
+            <p>Our 9:30 AM traditional service offers a more classic worship atmosphere, while our 10:30 AM contemporary service has a more modern feel.</p>
+          </div>
+
+          <div class="mini-block">
+            <h4>Children and families</h4>
+            <p>Families matter here. We want children to feel welcomed and parents to feel supported as they worship and connect.</p>
+          </div>
+
+          <div class="mini-block">
+            <h4>Location and arrival</h4>
+            <p>You can find us at 230 Paynes Mill Road, Versailles, Kentucky 40383. Parking is available on site for guests and regular attenders alike.</p>
+          </div>
+
+          <div class="mini-block">
+            <h4>No pressure</h4>
+            <p>You do not need to know everything before coming. Just show up, breathe, and let us help you feel at ease.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="eyebrow">Let Us Know You’re Coming</div>
+        <h2 class="section-title" style="color:#fff;max-width:760px;">We would love to welcome you well.</h2>
+        <p class="section-copy" style="max-width:760px;">
+          Fill out the visit form so we can help make your first Sunday feel easier. Whether you want directions, have questions, or just want someone to expect you, we are glad to help.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:26px;">
+          <a class="btn btn-primary" href="plan-visit-form.html">Schedule a Visit</a>
+          <a class="btn btn-light" href="watch.html">Watch Online First</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="eyebrow" style="color:var(--accent-soft);">Versailles United Methodist Church</div>
+    <div class="footer-grid">
+      <div class="footer-card">
+        <h4>About</h4>
+        <p>A Church Striving to Love Like Jesus.</p>
+        <p>Worship, connection, discipleship, and service in Versailles, Kentucky.</p>
+      </div>
+
+      <div class="footer-card">
+        <h4>Service Times</h4>
+        <p>Traditional Worship — 9:30 AM</p>
+        <p>Contemporary Worship — 10:30 AM</p>
+      </div>
+
+      <div class="footer-card">
+        <h4>Visit</h4>
+        <p>230 Paynes Mill Road</p>
+        <p>Versailles, KY 40383</p>
+        <a href="plan-visit-form.html">Schedule a Visit</a>
+      </div>
+
+      <div class="footer-card">
+        <h4>Quick Links</h4>
+        <a href="watch.html">Watch Worship Online</a>
+        <a href="connect.html">Connect</a>
+        <a href="give.html">Give</a>
+        <a href="https://versaillesumc.churchcenter.com/" target="_blank" rel="noopener noreferrer">Church Center</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2026 Versailles United Methodist Church • VUMC Media Designs
+    </div>
+  </div>
+</footer>
+
+<script>
+  const mobileToggle = document.getElementById('mobileToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  if (mobileToggle && mobileMenu) {
+    mobileToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('show');
+    });
+  }
+</script>
+</body>
+</html>
