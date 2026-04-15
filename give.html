@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Give to Versailles UMC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://js.churchcenter.com/modal/v1"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: transparent;
+      text-align: center;
+      padding: 5vw;
+      margin: 0;
+    }
+
+    .card {
+      background-color: white;
+      color: black;
+      padding: 6vw;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      max-width: 500px;
+      margin: auto;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 5vw;
+    }
+
+    p {
+      font-size: 4vw;
+      margin: 10px 0 20px;
+    }
+
+    .btn {
+      margin-top: 20px;
+      background-color: #cc0000;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 4vw;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      font-weight: bold;
+      max-width: 100%;
+    }
+
+    @media (min-width: 600px) {
+      h2 { font-size: 1.8em; }
+      p { font-size: 1.1em; }
+      .btn { font-size: 1.1em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="content">
+    <h2>Support Our Ministry</h2>
+    <p>Your generosity helps fuel life-changing ministry in our community and beyond.</p>
+    <a 
+      href="https://versaillesumc.churchcenter.com/giving" 
+      data-open-in-church-center-modal="true" 
+      class="btn">
+      Give Now →
+    </a>
+  </div>
+
+  <script>
+    function sendHeight() {
+      const height = document.documentElement.scrollHeight;
+      window.parent.postMessage({ type: "adjustHeight", height: height }, "*");
+    }
+
+    // Send on load and on resize
+    window.addEventListener("load", sendHeight);
+    window.addEventListener("resize", sendHeight);
+    setTimeout(sendHeight, 100); // safety delay
+  </script>
+</body>
+</html>
