@@ -38,6 +38,10 @@
       line-height: 1.6;
     }
 
+    body.vumc-modal-open {
+      overflow: hidden;
+    }
+
     img { max-width: 100%; display: block; }
     a { color: inherit; text-decoration: none; }
 
@@ -90,6 +94,7 @@
       font-weight: 700;
       transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
       border: 1px solid transparent;
+      cursor: pointer;
     }
 
     .btn:hover {
@@ -208,6 +213,10 @@
     .mobile-menu {
       display: none;
       padding: 0 0 18px;
+    }
+
+    .mobile-menu.show {
+      display: block;
     }
 
     .mobile-menu-inner {
@@ -576,9 +585,124 @@
       text-align: center;
     }
 
+    .vumc-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 14, 20, 0.72);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 99999;
+    }
+
+    .vumc-modal-overlay.open {
+      display: flex;
+    }
+
+    .vumc-modal {
+      width: min(100%, 1040px);
+      height: min(88vh, 860px);
+      background: #ffffff;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      animation: vumcModalIn 220ms ease;
+    }
+
+    @keyframes vumcModalIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .vumc-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      background: #11161d;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .vumc-modal-title-wrap {
+      min-width: 0;
+    }
+
+    .vumc-modal-kicker {
+      margin: 0 0 4px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #e4cda7;
+      font-weight: 700;
+    }
+
+    .vumc-modal-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .vumc-modal-close {
+      border: 0;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .vumc-modal-close:hover {
+      background: rgba(255,255,255,0.18);
+    }
+
+    .vumc-modal-body {
+      flex: 1;
+      background: #f7f4ef;
+      position: relative;
+    }
+
+    .vumc-modal-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #fff;
+    }
+
+    .vumc-modal-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      color: #5b6470;
+      font-size: 16px;
+      background: #f7f4ef;
+    }
+
     @media (max-width: 1100px) {
       .nav-links,
-      .nav-actions .btn-dark {
+      .nav-actions .btn-dark,
+      .nav-actions .btn-light.subscribe-desktop {
         display: none;
       }
 
@@ -603,6 +727,28 @@
 
       .hero-grid {
         min-height: unset;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .vumc-modal-overlay {
+        padding: 0;
+        align-items: flex-end;
+      }
+
+      .vumc-modal {
+        width: 100%;
+        height: 100dvh;
+        max-height: 100dvh;
+        border-radius: 22px 22px 0 0;
+      }
+
+      .vumc-modal-header {
+        padding: 16px;
+      }
+
+      .vumc-modal-title {
+        font-size: 18px;
       }
     }
 
@@ -652,6 +798,10 @@
       .brand-tagline {
         font-size: 11px;
       }
+
+      .btn-row {
+        align-items: stretch;
+      }
     }
   </style>
 </head>
@@ -678,6 +828,7 @@
 
         <div class="nav-actions">
           <a class="btn btn-dark" href="watch.html">Watch Live</a>
+          <a class="btn btn-light subscribe-desktop" href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
           <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
         </div>
       </div>
@@ -690,6 +841,7 @@
           <a href="events.html">Events</a>
           <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
           <a href="plan-your-visit.html">Plan Your Visit</a>
+          <a href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
         </div>
       </div>
     </div>
@@ -709,6 +861,7 @@
             <div class="btn-row">
               <a class="btn btn-primary" href="plan-your-visit.html">Plan Your Visit</a>
               <a class="btn btn-secondary" href="watch.html">Watch Worship Online</a>
+              <a class="btn btn-light" href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
             </div>
           </div>
 
@@ -910,6 +1063,7 @@
           <a href="watch.html">Watch Worship Online</a>
           <a href="connect.html">Connect</a>
           <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+          <a href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
           <a href="https://versaillesumc.churchcenter.com/" target="_blank" rel="noopener noreferrer">Church Center</a>
         </div>
       </div>
@@ -920,12 +1074,81 @@
     </div>
   </footer>
 
+  <div class="vumc-modal-overlay" id="vumcModalOverlay" aria-hidden="true">
+    <div class="vumc-modal" role="dialog" aria-modal="true" aria-labelledby="vumcModalTitle">
+      <div class="vumc-modal-header">
+        <div class="vumc-modal-title-wrap">
+          <p class="vumc-modal-kicker">Versailles United Methodist Church</p>
+          <h2 class="vumc-modal-title" id="vumcModalTitle">Subscribe to Updates</h2>
+        </div>
+        <button class="vumc-modal-close" id="vumcModalClose" aria-label="Close modal">×</button>
+      </div>
+
+      <div class="vumc-modal-body">
+        <div class="vumc-modal-loading" id="vumcModalLoading">Loading…</div>
+        <iframe class="vumc-modal-frame" id="vumcModalFrame" src="" title="VUMC Modal Content"></iframe>
+      </div>
+    </div>
+  </div>
+
   <script>
     const mobileToggle = document.getElementById('mobileToggle');
     const mobileMenu = document.getElementById('mobileMenu');
 
-    mobileToggle.addEventListener('click', () => {
-      mobileMenu.classList.toggle('show');
+    if (mobileToggle && mobileMenu) {
+      mobileToggle.addEventListener('click', () => {
+        mobileMenu.classList.toggle('show');
+      });
+    }
+
+    const overlay = document.getElementById('vumcModalOverlay');
+    const frame = document.getElementById('vumcModalFrame');
+    const loading = document.getElementById('vumcModalLoading');
+    const closeBtn = document.getElementById('vumcModalClose');
+    const titleEl = document.getElementById('vumcModalTitle');
+    let lastTrigger = null;
+
+    function openModal(url, title, triggerEl) {
+      if (!url) return;
+      lastTrigger = triggerEl || null;
+      titleEl.textContent = title || 'Open Form';
+      loading.style.display = 'flex';
+      frame.src = url;
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('vumc-modal-open');
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('vumc-modal-open');
+      frame.src = '';
+      loading.style.display = 'flex';
+      if (lastTrigger) lastTrigger.focus();
+    }
+
+    document.addEventListener('click', function (e) {
+      const trigger = e.target.closest('[data-modal-url]');
+      if (!trigger) return;
+      e.preventDefault();
+      const url = trigger.getAttribute('data-modal-url');
+      const title = trigger.getAttribute('data-modal-title') || 'Open Form';
+      openModal(url, title, trigger);
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+    });
+
+    frame.addEventListener('load', function () {
+      loading.style.display = 'none';
     });
   </script>
 </body>
