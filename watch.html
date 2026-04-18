@@ -5,16 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Watch Worship Online | Versailles United Methodist Church</title>
 <meta name="description" content="Watch Versailles United Methodist Church live online, access sermon notes, chat during worship, and connect through check-in and prayer request tools." />
-  <!-- Favicon / App Icons -->
 <link rel="icon" href="/favicon.ico">
-
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
 <link rel="manifest" href="/site.webmanifest">
-
 <meta name="theme-color" content="#353f69">
 <script src="https://js.churchcenter.com/modal/v1"></script>
 <style>
@@ -631,50 +626,35 @@
 
   .vumcHidden { display: none !important; }
 
-  .mobile-watch-card {
+  /* MOBILE: player only + small message */
+  .mobile-player-wrap {
     display: none;
-    margin-top: 32px;
+    margin-top: 34px;
+  }
+
+  .mobile-player-shell {
     background: var(--dark);
-    color: #fff;
-    border-radius: 28px;
-    padding: 26px;
-    box-shadow: var(--shadow);
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 24px 55px rgba(17, 22, 29, 0.18);
+    border: 1px solid rgba(17,22,29,0.06);
   }
 
-  .mobile-watch-card h3 {
-    margin: 0 0 10px;
-    font-size: 28px;
-    line-height: 1.1;
-  }
-
-  .mobile-watch-card p {
-    margin: 0;
-    color: rgba(255,255,255,0.8);
-  }
-
-  .mobile-card-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 18px;
-  }
-
-  .mobile-mini-card {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 18px;
-    padding: 18px;
-  }
-
-  .mobile-mini-card h4 {
-    margin: 0 0 6px;
-    font-size: 16px;
-  }
-
-  .mobile-mini-card p {
+  .mobile-player-note {
+    margin-top: 10px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.04);
     font-size: 14px;
     line-height: 1.5;
-    margin: 0;
+    color: var(--muted);
+  }
+
+  .mobile-player-note a {
+    color: var(--text);
+    font-weight: 700;
   }
 
   .below-grid {
@@ -775,7 +755,7 @@
       display: none;
     }
 
-    .mobile-watch-card {
+    .mobile-player-wrap {
       display: block;
     }
 
@@ -802,10 +782,6 @@
       padding: 54px 0;
     }
 
-    .mobile-card-grid {
-      grid-template-columns: 1fr;
-    }
-
     #vumcInner {
       padding: 20px 14px;
     }
@@ -823,9 +799,13 @@
     .brand-name { font-size: 15px; }
     .brand-tagline { font-size: 11px; }
 
-    .info-card,
-    .mobile-watch-card {
+    .info-card {
       padding: 24px;
+    }
+
+    .mobile-player-note {
+      font-size: 13px;
+      padding: 10px 12px;
     }
   }
 </style>
@@ -903,9 +883,10 @@
       <div class="eyebrow" style="color: var(--accent);">Interactive Worship</div>
       <h2 class="section-title">Everything in one place on desktop. A simplified path on mobile.</h2>
       <p class="section-copy">
-        On larger screens, this page gives you the full worship experience with livestream, sermon notes, live chat, check-in, and prayer tools together. On mobile, you get a simplified version that keeps the experience clean and easy to use.
+        On larger screens, this page gives you the full worship experience with livestream, sermon notes, live chat, check-in, and prayer tools together. On mobile, only the player and countdown appear here for a simpler experience.
       </p>
 
+      <!-- DESKTOP ONLY: full online experience -->
       <div class="app-shell">
         <div id="vumcApp">
           <div id="vumcShell">
@@ -1082,26 +1063,82 @@
         </div>
       </div>
 
-      <div class="mobile-watch-card">
-        <div class="eyebrow">Mobile Worship</div>
-        <h3>Watch simply on your phone.</h3>
-        <p>
-          The full desktop experience includes sermon notes, live chat, and side tools. On mobile, we keep things simpler so your worship experience stays clean and easy to use.
-        </p>
-        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:20px;">
-          <a class="btn btn-primary" href="https://watch.versaillesumc.org" target="_blank" rel="noopener">Open Full Watch Experience</a>
-          <a class="btn btn-light" href="https://www.youtube.com/@versaillesumc" target="_blank" rel="noopener">Open YouTube</a>
+      <!-- MOBILE ONLY: player + small message -->
+      <div class="mobile-player-wrap">
+        <div class="mobile-player-shell">
+          <div id="vumcAppMobile">
+            <div id="vumcWrapMobile">
+              <div id="vumcFrameMobile" style="position:relative;width:100%;aspect-ratio:16 / 9;overflow:hidden;background:#000;">
+                <iframe
+                  id="vumcLiveFrameMobile"
+                  title="Versailles UMC Live Mobile"
+                  allow="autoplay; encrypted-media; picture-in-picture; web-share"
+                  allowfullscreen
+                  style="position:absolute;inset:0;width:100%;height:100%;border:0;display:none;background:#000;">
+                </iframe>
+
+                <div id="vumcOfflineMobile" style="
+                  position:absolute;
+                  inset:0;
+                  display:flex;
+                  align-items:center;
+                  justify-content:center;
+                  text-align:center;
+                  color:#fff;
+                  padding:16px;
+                  background:
+                    linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.42)),
+                    url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVeu24CGoxKiGKIMqt16SMry2rYHrAFStWTA&s') center/cover no-repeat;
+                ">
+                  <div style="
+                    max-width:720px;
+                    width:100%;
+                    background:rgba(16,18,24,.72);
+                    border:1px solid rgba(255,255,255,.08);
+                    border-radius:24px;
+                    padding:18px 14px;
+                    backdrop-filter:blur(8px);
+                  ">
+                    <div style="font-size:clamp(20px, 4vw, 30px);font-weight:800;margin-bottom:12px;line-height:1.15;">
+                      Next Service Begins In
+                    </div>
+
+                    <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+                      <div style="min-width:60px;">
+                        <div id="dm" class="vumcBox" style="min-width:60px;font-size:20px;padding:10px 8px;">00</div>
+                        <div class="vumcLabel">Days</div>
+                      </div>
+                      <div style="min-width:60px;">
+                        <div id="hm" class="vumcBox" style="min-width:60px;font-size:20px;padding:10px 8px;">00</div>
+                        <div class="vumcLabel">Hours</div>
+                      </div>
+                      <div style="min-width:60px;">
+                        <div id="mm" class="vumcBox" style="min-width:60px;font-size:20px;padding:10px 8px;">00</div>
+                        <div class="vumcLabel">Min</div>
+                      </div>
+                      <div style="min-width:60px;">
+                        <div id="sm" class="vumcBox" style="min-width:60px;font-size:20px;padding:10px 8px;">00</div>
+                        <div class="vumcLabel">Sec</div>
+                      </div>
+                    </div>
+
+                    <div class="vumcTimes" style="margin-bottom:12px;font-size:14px;">
+                      Traditional Worship — 9:30am<br>
+                      Contemporary Worship — 10:30am
+                    </div>
+
+                    <a href="plan-your-visit.html" class="btn btn-primary" style="min-height:46px;padding:0 18px;">
+                      Plan Your Visit
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="mobile-card-grid">
-          <div class="mobile-mini-card">
-            <h4>Traditional Worship</h4>
-            <p>Join Sundays at 9:30 AM.</p>
-          </div>
-          <div class="mobile-mini-card">
-            <h4>Contemporary Worship</h4>
-            <p>Join Sundays at 10:30 AM.</p>
-          </div>
+        <div class="mobile-player-note">
+          Looking for sermon notes, chat, prayer, and other online campus tools? Those are available on desktop through the full VUMC Online experience.
         </div>
       </div>
 
@@ -1191,6 +1228,9 @@
   const chatFrame = document.getElementById("vumcChatFrame");
   const chatPlaceholder = document.getElementById("vumcChatPlaceholder");
 
+  const frameMobile = document.getElementById("vumcLiveFrameMobile");
+  const offlineMobile = document.getElementById("vumcOfflineMobile");
+
   let currentVideo = "";
 
   const NOTES_URLS = {
@@ -1260,15 +1300,22 @@
     set("h", h);
     set("m", m);
     set("s", s);
+
+    set("dm", d);
+    set("hm", h);
+    set("mm", m);
+    set("sm", s);
   }
 
   function showNotes(url) {
+    if (!notesPlaceholder || !notesFrame) return;
     notesPlaceholder.style.display = "none";
     notesFrame.style.display = "block";
     if (notesFrame.src !== url) notesFrame.src = url;
   }
 
   function hideNotes() {
+    if (!notesFrame || !notesPlaceholder) return;
     notesFrame.style.display = "none";
     notesFrame.src = "";
     notesPlaceholder.style.display = "flex";
@@ -1286,7 +1333,7 @@
   }
 
   function showChat(videoId) {
-    if (!isDesktopOrTablet()) {
+    if (!isDesktopOrTablet() || !chatFrame || !chatPlaceholder) {
       hideChat();
       return;
     }
@@ -1300,6 +1347,7 @@
   }
 
   function hideChat() {
+    if (!chatFrame || !chatPlaceholder) return;
     chatFrame.style.display = "none";
     chatFrame.src = "";
     chatPlaceholder.style.display = "flex";
@@ -1318,29 +1366,59 @@
       if (data && data.ok && data.live && data.videoId) {
         if (currentVideo !== data.videoId) {
           currentVideo = data.videoId;
-          frame.src = "https://www.youtube.com/embed/" + data.videoId + "?autoplay=1&mute=1&rel=0";
+          if (frame) frame.src = "https://www.youtube.com/embed/" + data.videoId + "?autoplay=1&mute=1&rel=0";
+          if (frameMobile) frameMobile.src = "https://www.youtube.com/embed/" + data.videoId + "?autoplay=1&mute=1&rel=0";
         }
 
-        frame.style.display = "block";
-        offline.style.display = "none";
+        if (frame) frame.style.display = "block";
+        if (offline) offline.style.display = "none";
+
+        if (frameMobile) frameMobile.style.display = "block";
+        if (offlineMobile) offlineMobile.style.display = "none";
 
         const serviceKey = data.serviceKey || getLikelyLiveServiceKey();
         const notesUrl = data.notesUrl || NOTES_URLS[serviceKey] || NOTES_URLS.traditional;
-        showNotes(notesUrl);
-        showChat(data.videoId);
+
+        if (isDesktopOrTablet()) {
+          showNotes(notesUrl);
+          showChat(data.videoId);
+        } else {
+          hideNotes();
+          hideChat();
+        }
       } else {
         currentVideo = "";
-        frame.src = "";
-        frame.style.display = "none";
-        offline.style.display = "flex";
+
+        if (frame) {
+          frame.src = "";
+          frame.style.display = "none";
+        }
+        if (offline) offline.style.display = "flex";
+
+        if (frameMobile) {
+          frameMobile.src = "";
+          frameMobile.style.display = "none";
+        }
+        if (offlineMobile) offlineMobile.style.display = "flex";
+
         hideNotes();
         hideChat();
       }
     } catch (e) {
       currentVideo = "";
-      frame.src = "";
-      frame.style.display = "none";
-      offline.style.display = "flex";
+
+      if (frame) {
+        frame.src = "";
+        frame.style.display = "none";
+      }
+      if (offline) offline.style.display = "flex";
+
+      if (frameMobile) {
+        frameMobile.src = "";
+        frameMobile.style.display = "none";
+      }
+      if (offlineMobile) offlineMobile.style.display = "flex";
+
       hideNotes();
       hideChat();
     }
@@ -1378,8 +1456,12 @@
   window.addEventListener("resize", function () {
     if (!isDesktopOrTablet()) {
       hideChat();
-    } else if (currentVideo) {
-      showChat(currentVideo);
+      hideNotes();
+    } else {
+      if (currentVideo) {
+        showChat(currentVideo);
+        showNotes(NOTES_URLS[getLikelyLiveServiceKey()] || NOTES_URLS.traditional);
+      }
     }
   });
 
@@ -1387,44 +1469,46 @@
   const prayerSubmit = document.getElementById("prayerSubmit");
   const prayerStatus = document.getElementById("prayerStatus");
 
-  prayerForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    clearStatus(prayerStatus);
+  if (prayerForm) {
+    prayerForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      clearStatus(prayerStatus);
 
-    const payload = {
-      type: "prayer",
-      name: prayerForm.name.value.trim(),
-      contact: prayerForm.contact.value.trim(),
-      request: prayerForm.request.value.trim(),
-      privateOnly: prayerForm.privateOnly.checked,
-      followUp: prayerForm.followUp.checked,
-      website: prayerForm.website.value.trim(),
-      source: "Watch Live Page"
-    };
+      const payload = {
+        type: "prayer",
+        name: prayerForm.name.value.trim(),
+        contact: prayerForm.contact.value.trim(),
+        request: prayerForm.request.value.trim(),
+        privateOnly: prayerForm.privateOnly.checked,
+        followUp: prayerForm.followUp.checked,
+        website: prayerForm.website.value.trim(),
+        source: "Watch Live Page"
+      };
 
-    if (!payload.request) {
-      setStatus(prayerStatus, "error", "Please enter your prayer request.");
-      return;
-    }
-
-    prayerSubmit.disabled = true;
-    prayerSubmit.textContent = "Submitting...";
-
-    try {
-      const result = await postForm(payload);
-      if (result && result.ok) {
-        prayerForm.reset();
-        setStatus(prayerStatus, "success", "Your prayer request has been submitted.");
-      } else {
-        throw new Error((result && result.error) || "Unknown error");
+      if (!payload.request) {
+        setStatus(prayerStatus, "error", "Please enter your prayer request.");
+        return;
       }
-    } catch (err) {
-      setStatus(prayerStatus, "error", "Your prayer request could not be submitted right now. Please try again.");
-    } finally {
-      prayerSubmit.disabled = false;
-      prayerSubmit.textContent = "Submit Prayer Request";
-    }
-  });
+
+      prayerSubmit.disabled = true;
+      prayerSubmit.textContent = "Submitting...";
+
+      try {
+        const result = await postForm(payload);
+        if (result && result.ok) {
+          prayerForm.reset();
+          setStatus(prayerStatus, "success", "Your prayer request has been submitted.");
+        } else {
+          throw new Error((result && result.error) || "Unknown error");
+        }
+      } catch (err) {
+        setStatus(prayerStatus, "error", "Your prayer request could not be submitted right now. Please try again.");
+      } finally {
+        prayerSubmit.disabled = false;
+        prayerSubmit.textContent = "Submit Prayer Request";
+      }
+    });
+  }
 
   tick();
   setInterval(tick, 1000);
