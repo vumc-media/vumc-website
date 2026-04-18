@@ -301,26 +301,30 @@
     border: 1px solid rgba(17,22,29,0.06);
   }
 
+  #vumcApp {
+    width: 100%;
+    height: auto;
+  }
+
   #vumcShell {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 420px;
-    min-height: 780px;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    align-items: start;
   }
 
   #vumcMain {
     background: #000;
   }
 
-  #vumcWrap,
-  #vumcApp {
+  #vumcWrap {
     width: 100%;
-    height: 100%;
+    height: auto;
   }
 
   #vumcFrame {
     position: relative;
     width: 100%;
-    min-height: 780px;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
     background: #000;
   }
@@ -350,7 +354,7 @@
   }
 
   #vumcInner {
-    max-width: 720px;
+    max-width: 640px;
     width: 100%;
     background: rgba(16,18,24,.72);
     border: 1px solid rgba(255,255,255,.08);
@@ -448,7 +452,7 @@
 
   #vumcNotesCard,
   #vumcChatCard {
-    min-height: 560px;
+    min-height: 500px;
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -458,7 +462,7 @@
   #vumcNotesFrame,
   #vumcChatFrame {
     width: 100%;
-    height: 560px;
+    height: 500px;
     border: 0;
     background: #fff;
     display: none;
@@ -467,7 +471,7 @@
   #vumcNotesPlaceholder,
   #vumcChatPlaceholder {
     width: 100%;
-    min-height: 560px;
+    min-height: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -797,6 +801,7 @@
 
     #vumcInner {
       padding: 20px 14px;
+      max-width: 92%;
     }
 
     .vumcBoxWrap { min-width: 64px; }
