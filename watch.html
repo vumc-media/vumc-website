@@ -3,496 +3,704 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>VUMC Watch Live</title>
-
+<title>Watch Worship Online | Versailles United Methodist Church</title>
+<meta name="description" content="Watch Versailles United Methodist Church live online and join us for worship each Sunday." />
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#353f69">
 <script src="https://js.churchcenter.com/modal/v1"></script>
 
 <style>
-:root{
-  --border:#d8e0e6;
-  --accent:#305f72;
-}
-
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  background: #0f1115;
-  color: #fff;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.topbar{
-  background:#17313d;
-  color:#fff;
-  padding:14px;
-  text-align:center;
-  font-size:14px;
-  font-weight:700;
-}
-
-.wrap{
-  max-width:1180px;
-  margin:auto;
-}
-
-.nav-shell{
-  background:rgba(255,255,255,.92);
-  backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--border);
-}
-
-.nav{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:18px 20px;
-}
-
-.brand{
-  font-size:24px;
-  font-weight:700;
-  color:#1f2933;
-}
-
-.brand a{
-  text-decoration:none;
-  color:inherit;
-}
-
-.brand a:visited,
-.brand a:hover,
-.brand a:active{
-  text-decoration:none;
-  color:inherit;
-}
-
-.nav-links{
-  display:flex;
-  gap:18px;
-  flex-wrap:wrap;
-}
-
-.nav-links a{
-  color:var(--accent);
-  font-weight:700;
-  text-decoration:none;
-}
-
-.nav-links a.active{
-  color:#17313d;
-}
-
-#vumcShell {
-  display:grid;
-  grid-template-columns:1fr 420px;
-  min-height:calc(100vh - 95px);
-}
-
-#playerWrap{
-  position:relative;
-  width:100%;
-  aspect-ratio:16/9;
-  background:#000;
-  overflow:hidden;
-}
-
-iframe{
-  width:100%;
-  height:100%;
-  border:0;
-}
-
-.playerOverlay{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  pointer-events:auto;
-  z-index:2;
-  background:
-    linear-gradient(to top, rgba(0,0,0,0.88), rgba(0,0,0,0.72)),
-    radial-gradient(circle at center, rgba(48,95,114,0.20), transparent 55%);
-  transition: opacity 0.6s ease, visibility 0.6s ease;
-}
-
-.playerOverlay.hidden{
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-}
-
-.overlayContent{
-  text-align:center;
-  max-width:540px;
-  padding:28px 24px;
-  border-radius:20px;
-  background:rgba(10,14,22,0.72);
-  border:1px solid rgba(255,255,255,0.10);
-  box-shadow:0 18px 40px rgba(0,0,0,0.35);
-  backdrop-filter:blur(8px);
-}
-
-.overlayEyebrow{
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:.14em;
-  opacity:.82;
-  margin-bottom:10px;
-  color:#d4af37;
-  font-weight:700;
-}
-
-.overlayTitle{
-  font-size:30px;
-  font-weight:800;
-  line-height:1.1;
-  margin-bottom:10px;
-}
-
-.overlayText{
-  font-size:16px;
-  line-height:1.6;
-  opacity:.92;
-  margin-bottom:12px;
-}
-
-.overlayTimes{
-  font-size:15px;
-  font-weight:700;
-  opacity:.95;
-}
-
-#vumcSidebar{
-  background:#15181f;
-  border-left:1px solid rgba(255,255,255,.08);
-}
-
-#vumcSidebarInner{
-  padding:16px;
-}
-
-.vumcTabs{
-  display:flex;
-  gap:8px;
-  margin-bottom:12px;
-  flex-wrap:wrap;
-}
-
-.vumcTabBtn{
-  flex:1;
-  background:#262a33;
-  border:1px solid rgba(255,255,255,.08);
-  color:#fff;
-  padding:12px;
-  border-radius:12px;
-  font-weight:700;
-  cursor:pointer;
-  min-width:0;
-}
-
-.vumcTabBtn.active{
-  background:#d4af37;
-  color:#111;
-}
-
-.vumcTabPane{
-  display:none;
-}
-
-.vumcTabPane.active{
-  display:block;
-}
-
-.vumcCard{
-  background:#262a33;
-  border-radius:16px;
-  overflow:hidden;
-}
-
-#vumcNotesFrame{
-  width:100%;
-  height:600px;
-  background:#fff;
-}
-
-.vumcFormCard{
-  padding:16px;
-  background:#262a33;
-  border-radius:16px;
-}
-
-.vumcSubmitBtn{
-  width:100%;
-  background:#d4af37;
-  color:#111;
-  padding:12px;
-  border-radius:12px;
-  font-weight:800;
-  border:0;
-  cursor:pointer;
-  text-align:center;
-  display:inline-block;
-  text-decoration:none;
-}
-
-.vumcFormCard h3{
-  margin-top:0;
-}
-
-.vumcField{
-  margin-bottom:14px;
-}
-
-.vumcField label{
-  display:block;
-  font-size:13px;
-  font-weight:700;
-  margin-bottom:6px;
-  color:#fff;
-}
-
-.vumcInput,
-.vumcTextarea{
-  width:100%;
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:14px;
-  padding:14px;
-  font:inherit;
-  background:#1d2129;
-  color:#fff;
-}
-
-.vumcTextarea{
-  min-height:150px;
-  resize:vertical;
-}
-
-.vumcCheckRow{
-  display:flex;
-  gap:10px;
-  margin-bottom:12px;
-  color:rgba(255,255,255,.78);
-  align-items:flex-start;
-  font-size:14px;
-}
-
-.vumcCheckRow input{
-  margin-top:3px;
-}
-
-.vumcStatus{
-  display:none;
-  margin-top:14px;
-  padding:12px;
-  border-radius:12px;
-  font-size:14px;
-  line-height:1.5;
-}
-
-.vumcStatus.success{
-  display:block;
-  background:#e7f6ee;
-  color:#1d5e3a;
-}
-
-.vumcStatus.error{
-  display:block;
-  background:#fdeeee;
-  color:#8a2b2b;
-}
-
-.vumcHelp{
-  margin-top:12px;
-  color:rgba(255,255,255,.72);
-  font-size:13px;
-  line-height:1.5;
-}
-
-.vumcHidden{
-  display:none !important;
-}
-
-@media (max-width:980px){
-  #vumcShell{
-    grid-template-columns:1fr;
+  :root {
+    --bg: #f7f4ef;
+    --surface: #ffffff;
+    --surface-soft: #f1ece4;
+    --text: #1f242c;
+    --muted: #5b6470;
+    --dark: #11161d;
+    --dark-soft: #171d25;
+    --accent: #bb8c3f;
+    --accent-soft: #e4cda7;
+    --border: rgba(17, 22, 29, 0.08);
+    --shadow: 0 18px 45px rgba(17, 22, 29, 0.12);
+    --radius-xl: 28px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --max-width: 1240px;
+    --transition: 220ms ease;
   }
 
-  #vumcSidebar{
-    display:none;
-  }
-}
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
 
-@media (max-width:767px){
-  .overlayContent{
-    max-width:90%;
-    padding:22px 18px;
-  }
-
-  .overlayTitle{
-    font-size:24px;
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
   }
 
-  .overlayText{
-    font-size:14px;
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  button { font: inherit; }
+
+  .container {
+    width: min(calc(100% - 32px), var(--max-width));
+    margin: 0 auto;
   }
 
-  .overlayTimes{
-    font-size:14px;
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(247, 244, 239, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(17, 22, 29, 0.06);
   }
-}
+
+  .nav-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 78px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .brand-mark {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #ddd;
+  }
+
+  .brand-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .brand-tagline {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    transition: color var(--transition);
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--text);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mobile-toggle {
+    display: none;
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  .mobile-menu {
+    display: none;
+    padding: 0 0 18px;
+  }
+
+  .mobile-menu.show {
+    display: block;
+  }
+
+  .mobile-menu-inner {
+    display: grid;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .mobile-menu a {
+    padding: 10px 2px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 0 22px;
+    border-radius: 999px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+  }
+
+  .btn:hover { transform: translateY(-2px); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(187, 140, 63, 0.28);
+  }
+
+  .btn-light {
+    background: #fff;
+    color: var(--text);
+    border-color: var(--border);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
+
+  .btn-dark {
+    background: var(--dark);
+    color: #fff;
+  }
+
+  .watch-hero {
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.68)),
+      url('https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+    color: #fff;
+  }
+
+  .watch-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at top right, rgba(187,140,63,0.28), transparent 34%),
+      radial-gradient(circle at bottom left, rgba(255,255,255,0.06), transparent 28%);
+    pointer-events: none;
+  }
+
+  .watch-hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: 72px 0 58px;
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent-soft);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .watch-hero h1 {
+    font-size: clamp(38px, 6vw, 64px);
+    line-height: 0.98;
+    margin: 0 0 16px;
+    letter-spacing: -0.04em;
+  }
+
+  .watch-hero p {
+    font-size: clamp(17px, 2.2vw, 21px);
+    color: rgba(255,255,255,0.85);
+    margin: 0;
+    max-width: 680px;
+  }
+
+  .hero-card {
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 24px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+  }
+
+  .hero-card h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+  }
+
+  .hero-card p {
+    margin: 0;
+    font-size: 15px;
+    color: rgba(255,255,255,0.78);
+  }
+
+  .service-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .service-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.08);
+    font-size: 15px;
+  }
+
+  .section {
+    padding: 64px 0;
+  }
+
+  .section-title {
+    margin: 0 0 14px;
+    font-size: clamp(30px, 4.2vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+
+  .section-copy {
+    font-size: 18px;
+    color: var(--muted);
+    margin: 0;
+    max-width: 760px;
+  }
+
+  .app-shell {
+    margin-top: 34px;
+    background: var(--dark);
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 24px 55px rgba(17, 22, 29, 0.18);
+    border: 1px solid rgba(17,22,29,0.06);
+  }
+
+  #vumcFrame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #000;
+  }
+
+  #vumcLiveFrame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: #000;
+  }
+
+  /* Added overlay styles */
+  #playerOverlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    background:
+      linear-gradient(to top, rgba(0,0,0,0.88), rgba(0,0,0,0.72)),
+      radial-gradient(circle at center, rgba(48,95,114,0.20), transparent 55%);
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+
+  #playerOverlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .overlayContent {
+    text-align: center;
+    max-width: 540px;
+    padding: 28px 24px;
+    border-radius: 20px;
+    background: rgba(10,14,22,0.72);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+    color: #fff;
+  }
+
+  .overlayEyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    margin-bottom: 10px;
+    color: #d4af37;
+    font-weight: 700;
+  }
+
+  .overlayTitle {
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+
+  .overlayText {
+    font-size: 16px;
+    margin-bottom: 12px;
+    opacity: .92;
+  }
+
+  .overlayTimes {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .watch-support {
+    background: var(--surface);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 24px;
+  }
+
+  .watch-support-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .watch-support h3 {
+    margin: 0 0 8px;
+    font-size: 22px;
+  }
+
+  .watch-support p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 720px;
+  }
+
+  .schedule-line {
+    margin-top: 10px;
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .site-footer {
+    background: var(--dark);
+    color: #fff;
+    padding: 24px 0 54px;
+    margin-top: 40px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr 0.85fr 0.85fr;
+    gap: 20px;
+    margin-top: 22px;
+  }
+
+  .footer-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px;
+    padding: 24px;
+  }
+
+  .footer-card h4 {
+    margin: 0 0 12px;
+    font-size: 16px;
+  }
+
+  .footer-card p,
+  .footer-card a {
+    margin: 0;
+    color: rgba(255,255,255,0.76);
+    font-size: 14px;
+    display: block;
+    line-height: 1.8;
+  }
+
+  .footer-bottom {
+    margin-top: 26px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.58);
+    text-align: center;
+  }
+
+  @media (max-width: 1100px) {
+    .nav-links,
+    .nav-actions .btn-dark {
+      display: none;
+    }
+
+    .mobile-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .watch-hero-inner,
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 980px) {
+    .watch-hero-inner,
+    .footer-grid,
+    .watch-support-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .watch-support {
+      padding: 20px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .watch-hero-inner {
+      padding: 58px 0 48px;
+    }
+
+    .section {
+      padding: 54px 0;
+    }
+
+    .brand-name { font-size: 15px; }
+    .brand-tagline { font-size: 11px; }
+
+    .watch-support h3 {
+      font-size: 20px;
+    }
+
+    .watch-support {
+      display: none;
+    }
+
+    .overlayContent {
+      max-width: 90%;
+      padding: 22px 18px;
+    }
+
+    .overlayTitle {
+      font-size: 24px;
+    }
+
+    .overlayText,
+    .overlayTimes {
+      font-size: 14px;
+    }
+  }
 </style>
 </head>
-
 <body>
+<header class="site-header">
+  <div class="container">
+    <div class="nav-wrap">
+      <a class='brand' href='/'>
+        <img class="brand-mark" src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s176-c-k-c0x00ffffff-no-rj" alt="Versailles UMC logo" />
+        <div>
+          <p class="brand-name">Versailles United Methodist Church</p>
+          <p class="brand-tagline">A Church Striving to Love Like Jesus</p>
+        </div>
+      </a>
 
-<div class="topbar">
-  VUMC Online is an extension of the ministry and community of Versailles United Methodist Church
-</div>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href='/'>Home</a>
+        <a class='active' href='/watch'>Watch</a>
+        <a href='/connect'>Connect</a>
+        <a href='/events'>Events</a>
+        <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+        <a href='/plan-your-visit'>Plan Your Visit</a>
+      </nav>
 
-<div class="nav-shell">
-  <div class="wrap nav">
-    <div class="brand"><a href="/">VUMC Online</a></div>
-    <div class="nav-links">
-      <a class="active" href="/watch">Worship</a>
-      <a href="/prayer">Prayer</a>
-      <a href="/community">Community</a>
-      <a href="/support">Give</a>
+      <div class="nav-actions">
+        <a class='btn btn-dark' href='/plan-your-visit'>Plan Your Visit</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mobile-menu-inner">
+        <a href='/'>Home</a>
+        <a href='/watch'>Watch</a>
+        <a href='/connect'>Connect</a>
+        <a href='/events'>Events</a>
+        <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+        <a href='/plan-your-visit'>Plan Your Visit</a>
+      </div>
     </div>
   </div>
-</div>
+</header>
 
-<div id="vumcShell">
-
-  <main>
-    <div id="playerWrap">
-      <iframe
-        src="https://www.youtube.com/embed/live_stream?channel=UC_svgodM3blLqWEBQ5yNjmA&autoplay=1&mute=1&rel=0&playsinline=1"
-        title="Versailles UMC Live"
-        allow="autoplay; encrypted-media; picture-in-picture; web-share"
-        allowfullscreen>
-      </iframe>
-
-      <div id="playerOverlay" class="playerOverlay">
-        <div class="overlayContent">
-          <div class="overlayEyebrow">VUMC eCampus</div>
-          <div class="overlayTitle">Worship With Us</div>
-          <div class="overlayText">
-            Join our online community and worship with us each Sunday.
+<main>
+  <section class="watch-hero">
+    <div class="container">
+      <div class="watch-hero-inner">
+        <div>
+          <div class="eyebrow">Worship Online</div>
+          <h1>Join worship live with a clear and simple path.</h1>
+          <p>
+            Watch worship live here on the church website, and go deeper through our eCampus if you want a more interactive experience.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:28px;">
+            <a class="btn btn-primary" href="#watch-experience">Watch Worship</a>
+            <a class='btn btn-light' href='/plan-your-visit'>Visit in Person</a>
           </div>
-          <div class="overlayTimes">
-            Sundays • 9:30 AM & 10:30 AM
+        </div>
+
+        <div class="hero-card">
+          <h3>Sunday Worship Times</h3>
+          <p>Join us in person or online each Sunday.</p>
+          <div class="service-list">
+            <div class="service-item"><strong>Traditional Worship</strong><span>9:30 AM</span></div>
+            <div class="service-item"><strong>Contemporary Worship</strong><span>10:30 AM</span></div>
           </div>
         </div>
       </div>
     </div>
-  </main>
+  </section>
 
-  <aside id="vumcSidebar">
-    <div id="vumcSidebarInner">
+  <section class="section" id="watch-experience">
+    <div class="container">
+      <div class="eyebrow" style="color: var(--accent);">Watch Worship Online</div>
+      <h2 class="section-title">Worship here. Go deeper if you want more.</h2>
+      <p class="section-copy">
+        This page keeps worship simple. If you want a more interactive experience with sermon notes, live chat, check-in, and prayer, you can enter the VUMC eCampus.
+      </p>
 
-      <div class="vumcTabs">
-        <button id="notesTabBtn" class="vumcTabBtn active" data-tab="notes">Sermon Notes</button>
-        <button class="vumcTabBtn" data-tab="checkin">Check In</button>
-        <button class="vumcTabBtn" data-tab="prayer">Prayer</button>
-      </div>
-
-      <div id="tab-notes" class="vumcTabPane active">
-        <div class="vumcCard">
+      <div class="app-shell">
+        <div id="vumcFrame">
           <iframe
-            id="vumcNotesFrame"
-            src="https://sermon.versaillesumc.org"
-            title="Sermon Notes">
+            id="vumcLiveFrame"
+            src="https://www.youtube.com/embed/live_stream?channel=UC_svgodM3blLqWEBQ5yNjmA&autoplay=1&mute=1&rel=0&playsinline=1"
+            title="Versailles UMC Live"
+            allow="autoplay; encrypted-media; picture-in-picture; web-share"
+            allowfullscreen>
           </iframe>
+
+          <div id="playerOverlay">
+            <div class="overlayContent">
+              <div class="overlayEyebrow">Worship Online</div>
+              <div class="overlayTitle">Join Us for Worship</div>
+              <div class="overlayText">
+                Join us online each Sunday for worship and be part of the Versailles UMC community.
+              </div>
+              <div class="overlayTimes">
+                Sundays • 9:30 AM Traditional • 10:30 AM Contemporary
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="watch-support">
+          <div class="watch-support-inner">
+            <div>
+              <h3>Want a more interactive experience?</h3>
+              <p>Join VUMC eCampus for sermon notes, live chat, check-in, and prayer during worship.</p>
+              <div class="schedule-line">
+                Traditional Worship — 9:30 AM &nbsp; • &nbsp; Contemporary Worship — 10:30 AM
+              </div>
+            </div>
+
+            <div>
+              <a class="btn btn-primary" href="https://online.versaillesumc.org/watch" target="_blank" rel="noopener noreferrer">
+                Enter eCampus
+              </a>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div id="tab-checkin" class="vumcTabPane">
-        <div class="vumcFormCard" style="text-align:center;">
-          <h3>Check In for Worship</h3>
-          <p>Let us know you're here through Church Center.</p>
-          <a
-            href="https://versaillesumc.churchcenter.com/people/forms/859778"
-            data-open-in-church-center-modal="true"
-            class="vumcSubmitBtn">
-            Check In Now
-          </a>
-        </div>
-      </div>
-
-      <div id="tab-prayer" class="vumcTabPane">
-        <div class="vumcFormCard">
-          <h3>Prayer Request</h3>
-          <p>You do not have to carry this alone. Share your request and let us pray with you.</p>
-
-          <form id="watchPrayerForm">
-            <div class="vumcField">
-              <label for="watchPrayerName">Name</label>
-              <input id="watchPrayerName" name="name" class="vumcInput" type="text">
-            </div>
-
-            <div class="vumcField">
-              <label for="watchPrayerContact">Email or Phone</label>
-              <input id="watchPrayerContact" name="contact" class="vumcInput" type="text">
-            </div>
-
-            <div class="vumcField">
-              <label for="watchPrayerRequest">Prayer Request</label>
-              <textarea id="watchPrayerRequest" name="request" class="vumcTextarea" required></textarea>
-            </div>
-
-            <div class="vumcCheckRow">
-              <input id="watchPrayerPrivate" type="checkbox" name="privateOnly">
-              <label for="watchPrayerPrivate" style="margin:0;">Keep private</label>
-            </div>
-
-            <div class="vumcCheckRow">
-              <input id="watchPrayerFollowUp" type="checkbox" name="followUp">
-              <label for="watchPrayerFollowUp" style="margin:0;">Request follow-up</label>
-            </div>
-
-            <input type="text" name="website" class="vumcHidden" tabindex="-1" autocomplete="off">
-
-            <button type="submit" id="watchPrayerSubmit" class="vumcSubmitBtn">Submit Prayer Request</button>
-            <div id="watchPrayerStatus" class="vumcStatus"></div>
-
-            <div class="vumcHelp">
-              Private requests may be shared only with pastors or the prayer team.
-            </div>
-          </form>
-        </div>
-      </div>
-
     </div>
-  </aside>
+  </section>
+</main>
 
-</div>
+<footer class="site-footer">
+  <div class="container">
+    <div class="eyebrow">Versailles United Methodist Church</div>
+    <div class="footer-grid">
+      <div class="footer-card">
+        <h4>About</h4>
+        <p>A Church Striving to Love Like Jesus.</p>
+        <p>Worship, connection, discipleship, and service in Versailles, Kentucky.</p>
+      </div>
+
+      <div class="footer-card">
+        <h4>Service Times</h4>
+        <p>Traditional Worship — 9:30 AM</p>
+        <p>Contemporary Worship — 10:30 AM</p>
+      </div>
+
+      <div class="footer-card">
+        <h4>Visit</h4>
+        <p>230 Paynes Mill Road</p>
+        <p>Versailles, KY 40383</p>
+        <a href='/plan-your-visit'>Plan Your Visit</a>
+      </div>
+
+      <div class="footer-card">
+        <h4>Quick Links</h4>
+        <a href='/watch'>Watch Worship Online</a>
+        <a href='/connect'>Connect</a>
+        <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+        <a href="https://watch.versaillesumc.org" target="_blank" rel="noopener noreferrer">VUMC eCampus</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2026 Versailles United Methodist Church • VUMC Media Designs
+    </div>
+  </div>
+</footer>
 
 <script>
-const formsEndpoint = "https://script.google.com/macros/s/AKfycbxyOSYQ7HjJlCWKuquZ47TpWvHfHwmLSqXPaDI9IIdvwkQgXp3ClDXd6U1UzdePOOGU/exec";
+(function () {
+  const mobileToggle = document.getElementById('mobileToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  if (mobileToggle && mobileMenu) {
+    mobileToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('show');
+    });
+  }
+})();
 
 function isSundayServiceWindow() {
   const now = new Date();
   const day = now.getDay();
   const minutes = now.getHours() * 60 + now.getMinutes();
-  return day === 0 && minutes >= 555 && minutes <= 720; // 9:15 AM–12:00 PM
-}
 
-function shouldShowSermonNotes() {
-  return isSundayServiceWindow();
-}
-
-function activateTab(tabName) {
-  document.querySelectorAll(".vumcTabBtn").forEach(b => b.classList.remove("active"));
-  document.querySelectorAll(".vumcTabPane").forEach(p => p.classList.remove("active"));
-
-  const btn = document.querySelector('.vumcTabBtn[data-tab="' + tabName + '"]');
-  const pane = document.getElementById("tab-" + tabName);
-
-  if (btn) btn.classList.add("active");
-  if (pane) pane.classList.add("active");
+  // Sunday 9:27 AM – 12:00 PM
+  return day === 0 && minutes >= 567 && minutes <= 720;
 }
 
 function updateOverlay() {
@@ -506,106 +714,8 @@ function updateOverlay() {
   }
 }
 
-function setupSermonNotesSchedule() {
-  const notesTabBtn = document.getElementById("notesTabBtn");
-  const notesPane = document.getElementById("tab-notes");
-
-  if (!shouldShowSermonNotes()) {
-    if (notesTabBtn) notesTabBtn.style.display = "none";
-    if (notesPane) notesPane.style.display = "none";
-    activateTab("checkin");
-  } else {
-    if (notesTabBtn) notesTabBtn.style.display = "";
-    if (notesPane) notesPane.style.display = "";
-    activateTab("notes");
-  }
-}
-
-function setPrayerStatus(el, type, message) {
-  el.className = "vumcStatus " + type;
-  el.textContent = message;
-}
-
-function clearPrayerStatus(el) {
-  el.className = "vumcStatus";
-  el.textContent = "";
-}
-
-async function postPrayerForm(payload) {
-  const res = await fetch(formsEndpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8"
-    },
-    body: JSON.stringify(payload)
-  });
-
-  if (!res.ok) {
-    throw new Error("Request failed: " + res.status);
-  }
-
-  return await res.json();
-}
-
-document.querySelectorAll(".vumcTabBtn").forEach(btn => {
-  btn.addEventListener("click", function () {
-    activateTab(this.dataset.tab);
-  });
-});
-
-const watchPrayerForm = document.getElementById("watchPrayerForm");
-const watchPrayerSubmit = document.getElementById("watchPrayerSubmit");
-const watchPrayerStatus = document.getElementById("watchPrayerStatus");
-
-if (watchPrayerForm) {
-  watchPrayerForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    clearPrayerStatus(watchPrayerStatus);
-
-    const payload = {
-      type: "prayer",
-      name: watchPrayerForm.name.value.trim(),
-      contact: watchPrayerForm.contact.value.trim(),
-      request: watchPrayerForm.request.value.trim(),
-      privateOnly: watchPrayerForm.privateOnly.checked,
-      followUp: watchPrayerForm.followUp.checked,
-      website: watchPrayerForm.website.value.trim(),
-      source: "Watch Page Prayer Tab"
-    };
-
-    if (!payload.request) {
-      setPrayerStatus(watchPrayerStatus, "error", "Please enter your prayer request.");
-      return;
-    }
-
-    watchPrayerSubmit.disabled = true;
-    watchPrayerSubmit.textContent = "Submitting...";
-
-    try {
-      const result = await postPrayerForm(payload);
-      if (result && result.ok) {
-        watchPrayerForm.reset();
-        setPrayerStatus(watchPrayerStatus, "success", "Your prayer request has been submitted.");
-      } else {
-        throw new Error((result && result.error) || "Unknown error");
-      }
-    } catch (err) {
-      setPrayerStatus(watchPrayerStatus, "error", "Your prayer request could not be submitted right now. Please try again.");
-    } finally {
-      watchPrayerSubmit.disabled = false;
-      watchPrayerSubmit.textContent = "Submit Prayer Request";
-    }
-  });
-}
-
 updateOverlay();
-setupSermonNotesSchedule();
-
-setInterval(() => {
-  updateOverlay();
-  setupSermonNotesSchedule();
-}, 60000);
+setInterval(updateOverlay, 60000);
 </script>
-
 </body>
 </html>
