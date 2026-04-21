@@ -3,30 +3,28 @@
 <head>
   <meta name="robots" content="noindex, nofollow">
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-19L2K5PDLB"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-19L2K5PDLB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-19L2K5PDLB');
+  </script>
 
-  gtag('config', 'G-19L2K5PDLB');
-</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Versailles United Methodist Church</title>
   <meta name="description" content="Versailles United Methodist Church is a church striving to love like Jesus. Join us for worship, connection, service, and spiritual growth." />
-  <!-- Favicon / App Icons -->
-<link rel="icon" href="/favicon.ico">
 
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#353f69">
 
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
-<link rel="manifest" href="/site.webmanifest">
-
-<meta name="theme-color" content="#353f69">
   <script src="https://js.churchcenter.com/modal/v1"></script>
+
   <style>
     :root {
       --bg: #f7f4ef;
@@ -194,12 +192,74 @@
       font-weight: 600;
     }
 
-    .nav-links a {
+    .nav-links > a,
+    .dropdown-toggle {
       color: var(--muted);
       transition: color var(--transition);
     }
 
-    .nav-links a:hover { color: var(--text); }
+    .nav-links > a:hover,
+    .dropdown-toggle:hover {
+      color: var(--text);
+    }
+
+    .nav-item.dropdown {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .dropdown-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .dropdown-toggle::after {
+      content: "▾";
+      font-size: 11px;
+      line-height: 1;
+      transform: translateY(1px);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 16px);
+      left: 0;
+      min-width: 240px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(17,22,29,0.12);
+      padding: 10px 0;
+      display: none;
+      z-index: 1200;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 11px 16px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .dropdown-menu a:hover {
+      background: #f6f3ee;
+      color: var(--text);
+    }
+
+    .nav-item.dropdown:hover .dropdown-menu,
+    .nav-item.dropdown.open .dropdown-menu {
+      display: block;
+    }
 
     .nav-actions {
       display: flex;
@@ -236,10 +296,34 @@
       box-shadow: var(--shadow);
     }
 
-    .mobile-menu a {
+    .mobile-menu a,
+    .mobile-submenu-toggle {
       padding: 10px 2px;
       font-weight: 600;
       color: var(--text);
+      background: none;
+      border: none;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .mobile-submenu {
+      display: none;
+      padding-left: 14px;
+      border-left: 2px solid rgba(17,22,29,0.08);
+      margin-top: -4px;
+    }
+
+    .mobile-submenu.show {
+      display: grid;
+      gap: 2px;
+    }
+
+    .mobile-submenu a {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 8px 2px;
     }
 
     .hero {
@@ -688,7 +772,6 @@
       background: #f7f4ef;
     }
 
-    /* CHAT WIDGET */
     .vumc-chat-launcher {
       position: fixed;
       right: 20px;
@@ -1078,7 +1161,22 @@
         <nav class="nav-links" aria-label="Primary navigation">
           <a href="index.html">Home</a>
           <a href="watch.html">Watch</a>
-          <a href="connect.html">Connect</a>
+
+          <div class="nav-item dropdown" id="connectDropdown">
+            <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="connectMenuDesktop">
+              Connect
+            </button>
+            <div class="dropdown-menu" id="connectMenuDesktop">
+              <a href="new-here.html">New Here</a>
+              <a href="kids.html">Kids & Families</a>
+              <a href="youth.html">Youth</a>
+              <a href="groups.html">Groups</a>
+              <a href="serve.html">Serve</a>
+              <a href="missions.html">Missions</a>
+              <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
+            </div>
+          </div>
+
           <a href="events.html">Events</a>
           <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
           <a href="plan-your-visit.html">Plan Your Visit</a>
@@ -1095,7 +1193,20 @@
         <div class="mobile-menu-inner">
           <a href="index.html">Home</a>
           <a href="watch.html">Watch</a>
-          <a href="connect.html">Connect</a>
+
+          <button class="mobile-submenu-toggle" id="mobileConnectToggle" type="button" aria-expanded="false" aria-controls="mobileConnectMenu">
+            Connect
+          </button>
+          <div class="mobile-submenu" id="mobileConnectMenu">
+            <a href="new-here.html">New Here</a>
+            <a href="kids.html">Kids & Families</a>
+            <a href="youth.html">Youth</a>
+            <a href="groups.html">Groups</a>
+            <a href="serve.html">Serve</a>
+            <a href="missions.html">Missions</a>
+            <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
+          </div>
+
           <a href="events.html">Events</a>
           <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
           <a href="plan-your-visit.html">Plan Your Visit</a>
@@ -1158,7 +1269,7 @@
             </div>
           </a>
 
-          <a class="feature-card" href="connect.html" style="background-image:url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1200&q=80');">
+          <a class="feature-card" href="new-here.html" style="background-image:url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1200&q=80');">
             <div class="feature-card-inner">
               <h3>Connect</h3>
               <p>Find ministries, classes, groups, and next steps for getting involved at VUMC.</p>
@@ -1194,7 +1305,7 @@
             </p>
             <div class="btn-row">
               <a class="btn btn-dark" href="about.html">Learn More</a>
-              <a class="btn btn-light" href="connect.html">Find Your Place</a>
+              <a class="btn btn-light" href="new-here.html">Find Your Place</a>
             </div>
           </div>
 
@@ -1277,7 +1388,7 @@
             <span class="arrow">Share a Prayer Request →</span>
           </a>
 
-          <a class="next-step" href="connect.html">
+          <a class="next-step" href="groups.html">
             <h3>Get Connected</h3>
             <p>Explore ministries, discipleship opportunities, and ways to belong.</p>
             <span class="arrow">Explore Connection →</span>
@@ -1319,16 +1430,18 @@
         <div class="footer-card">
           <h4>Quick Links</h4>
           <a href="watch.html">Watch Worship Online</a>
-          <a href="connect.html">Connect</a>
+          <a href="new-here.html">New Here</a>
+          <a href="groups.html">Groups</a>
+          <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
           <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
           <a href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
           <a href="https://versaillesumc.churchcenter.com/" target="_blank" rel="noopener noreferrer">Church Center</a>
         </div>
       </div>
 
-<div class="footer-bottom">
-  © 2026 Versailles United Methodist Church • VUMC Media Designs
-</div>
+      <div class="footer-bottom">
+        © 2026 Versailles United Methodist Church • VUMC Media Designs
+      </div>
     </div>
   </footer>
 
@@ -1349,7 +1462,6 @@
     </div>
   </div>
 
-  <!-- CHAT WIDGET -->
   <button class="vumc-chat-launcher" id="vumcChatLauncher" aria-label="Open chat">
     <img src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s900-c-k-c0x00ffffff-no-rj" alt="VUMC Logo" />
   </button>
@@ -1407,10 +1519,38 @@
   <script>
     const mobileToggle = document.getElementById('mobileToggle');
     const mobileMenu = document.getElementById('mobileMenu');
+    const mobileConnectToggle = document.getElementById('mobileConnectToggle');
+    const mobileConnectMenu = document.getElementById('mobileConnectMenu');
+    const connectDropdown = document.getElementById('connectDropdown');
+    const desktopDropdownToggle = connectDropdown ? connectDropdown.querySelector('.dropdown-toggle') : null;
 
     if (mobileToggle && mobileMenu) {
       mobileToggle.addEventListener('click', () => {
         mobileMenu.classList.toggle('show');
+      });
+    }
+
+    if (mobileConnectToggle && mobileConnectMenu) {
+      mobileConnectToggle.addEventListener('click', () => {
+        const isOpen = mobileConnectMenu.classList.toggle('show');
+        mobileConnectToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    }
+
+    if (desktopDropdownToggle && connectDropdown) {
+      desktopDropdownToggle.addEventListener('click', (e) => {
+        if (window.innerWidth > 1100) {
+          e.preventDefault();
+          const isOpen = connectDropdown.classList.toggle('open');
+          desktopDropdownToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!connectDropdown.contains(e.target)) {
+          connectDropdown.classList.remove('open');
+          desktopDropdownToggle.setAttribute('aria-expanded', 'false');
+        }
       });
     }
 
@@ -1464,7 +1604,6 @@
       loading.style.display = 'none';
     });
 
-    /* CHAT WIDGET */
     const VUMC_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3RvHWZ0RIiUMZBdjVtgq-4ZJ60AHlYwy2ybZMCUYqoWVsIt1eurqn6gJYywf6gi1SuA/exec';
 
     const vumcChatLauncher = document.getElementById('vumcChatLauncher');
