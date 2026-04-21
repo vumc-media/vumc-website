@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,8 +12,8 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coming Soon | Versailles United Methodist Church</title>
-  <meta name="description" content="This page is currently being built for Versailles United Methodist Church. Please check back soon." />
+  <title>VUMC Kids | Versailles United Methodist Church</title>
+  <meta name="description" content="VUMC Kids helps children grow in faith through fun, age-appropriate teaching, worship, creativity, and a welcoming church environment at Versailles United Methodist Church." />
 
   <link rel="icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -65,6 +64,38 @@
       margin: 0 auto;
     }
 
+    .section { padding: 64px 0; }
+
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: clamp(30px, 4.4vw, 48px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .section-copy {
+      font-size: 18px;
+      color: var(--muted);
+      margin: 0;
+      max-width: 760px;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -84,6 +115,13 @@
       background: var(--accent);
       color: #fff;
       box-shadow: 0 10px 24px rgba(187, 140, 63, 0.28);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.16);
+      color: #fff;
+      border-color: rgba(255,255,255,0.32);
+      backdrop-filter: blur(6px);
     }
 
     .btn-dark {
@@ -160,7 +198,8 @@
     }
 
     .nav-links > a:hover,
-    .dropdown-toggle:hover {
+    .dropdown-toggle:hover,
+    .dropdown-menu a.active {
       color: var(--text);
     }
 
@@ -213,7 +252,8 @@
       transition: background var(--transition), color var(--transition);
     }
 
-    .dropdown-menu a:hover {
+    .dropdown-menu a:hover,
+    .dropdown-menu a.active {
       background: #f6f3ee;
     }
 
@@ -296,8 +336,8 @@
       position: relative;
       overflow: hidden;
       background:
-        linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.66)),
-        url('vumc-media/atrium.jpg') center/cover no-repeat;
+        linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.64)),
+        url('vumc-media/sprouts.jpg') center/cover no-repeat;
       color: #fff;
     }
 
@@ -314,49 +354,30 @@
     .hero-inner {
       position: relative;
       z-index: 1;
-      min-height: 72vh;
+      padding: 76px 0 62px;
       display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 28px;
       align-items: center;
-      padding: 88px 0;
     }
 
-    .hero-panel {
-      max-width: 760px;
-    }
-
-    .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.18);
-      backdrop-filter: blur(7px);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      margin-bottom: 20px;
-    }
+    .hero .eyebrow { color: var(--accent-soft); }
 
     .hero h1 {
-      font-size: clamp(38px, 6vw, 68px);
+      font-size: clamp(38px, 6vw, 66px);
       line-height: 0.98;
-      margin: 0 0 18px;
+      margin: 0 0 16px;
       letter-spacing: -0.04em;
     }
 
     .hero p {
-      font-size: clamp(18px, 2.2vw, 22px);
-      color: rgba(255,255,255,0.86);
+      font-size: clamp(17px, 2.2vw, 21px);
+      color: rgba(255,255,255,0.85);
       margin: 0;
       max-width: 700px;
     }
 
     .hero-card {
-      margin-top: 28px;
-      max-width: 560px;
       background: rgba(255,255,255,0.10);
       border: 1px solid rgba(255,255,255,0.16);
       border-radius: 24px;
@@ -366,27 +387,178 @@
     }
 
     .hero-card h3 {
-      margin: 0 0 8px;
+      margin: 0 0 10px;
       font-size: 20px;
     }
 
     .hero-card p {
+      margin: 0;
       font-size: 15px;
       color: rgba(255,255,255,0.78);
     }
 
-    .btn-row {
+    .hero-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .hero-list-item {
       display: flex;
-      flex-wrap: wrap;
+      justify-content: space-between;
       gap: 14px;
-      margin-top: 28px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      font-size: 15px;
+    }
+
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 34px;
+    }
+
+    .info-card,
+    .faq-card,
+    .footer-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .info-card,
+    .faq-card {
+      padding: 28px;
+    }
+
+    .info-card h3,
+    .faq-card h3 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      line-height: 1.15;
+    }
+
+    .info-card p,
+    .faq-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .feature-list,
+    .faq-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .feature-item,
+    .faq-item {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--surface-soft);
+    }
+
+    .feature-item strong,
+    .faq-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .family-row {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 28px;
+      align-items: center;
+      margin-top: 34px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .family-row.reverse {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .family-row.reverse .family-image {
+      order: 2;
+    }
+
+    .family-row.reverse .family-content {
+      order: 1;
+    }
+
+    .family-image img {
+      width: 100%;
+      height: 100%;
+      min-height: 340px;
+      object-fit: cover;
+    }
+
+    .family-content {
+      padding: 34px;
+    }
+
+    .family-content h2 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.08;
+    }
+
+    .family-subtitle {
+      margin: 0 0 14px;
+      font-size: 18px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .family-content p {
+      margin: 0 0 14px;
+      font-size: 17px;
+      color: var(--text);
+    }
+
+    .cta-band {
+      background:
+        linear-gradient(135deg, rgba(17,22,29,0.90), rgba(17,22,29,0.72)),
+        url('vumc-media/plan a visit.png') center/cover no-repeat;
+      color: #fff;
+      border-radius: 28px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-band::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(187,140,63,0.24), transparent 36%);
+      pointer-events: none;
+    }
+
+    .cta-band > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-band p {
+      color: rgba(255,255,255,0.84);
+      max-width: 760px;
     }
 
     .site-footer {
       background: var(--dark);
       color: #fff;
       padding: 24px 0 54px;
-      margin-top: 0;
+      margin-top: 40px;
     }
 
     .footer-grid {
@@ -811,6 +983,7 @@
       .mobile-menu.show { display: block; }
 
       .hero-inner,
+      .split-grid,
       .footer-grid {
         grid-template-columns: 1fr 1fr;
       }
@@ -818,15 +991,31 @@
 
     @media (max-width: 760px) {
       .hero-inner,
-      .footer-grid {
+      .split-grid,
+      .footer-grid,
+      .family-row,
+      .family-row.reverse {
         grid-template-columns: 1fr;
+      }
+
+      .family-row.reverse .family-image,
+      .family-row.reverse .family-content {
+        order: initial;
       }
 
       .hero-inner {
         padding: 58px 0 48px;
       }
 
-      .hero-card {
+      .section {
+        padding: 54px 0;
+      }
+
+      .cta-band,
+      .family-content,
+      .hero-card,
+      .info-card,
+      .faq-card {
         padding: 24px;
       }
 
@@ -875,7 +1064,7 @@
             </button>
             <div class="dropdown-menu" id="connectMenuDesktop">
               <a href="new-here.html">New Here</a>
-              <a href="kids-families.html">Kids & Families</a>
+              <a href="kids-families.html" class="active">Kids & Families</a>
               <a href="groups.html">Groups</a>
               <a href="serve.html">Serve</a>
               <a href="missions.html">Missions</a>
@@ -927,25 +1116,133 @@
     <section class="hero">
       <div class="container">
         <div class="hero-inner">
-          <div class="hero-panel">
-            <div class="hero-kicker">Versailles UMC • Building This Page</div>
-            <h1>This page is coming soon.</h1>
+          <div>
+            <div class="eyebrow">VUMC Kids</div>
+            <h1>A joyful place for children to grow in faith.</h1>
             <p>
-              We’re currently building this section of the website. Please check back soon as we continue creating clearer pathways for connection, discipleship, and ministry.
+              VUMC Kids helps children discover the love of God in a safe, welcoming, and engaging environment. Through Bible teaching, worship, creativity, and caring relationships, we want every child to know they are loved and that they belong here.
             </p>
-
-            <div class="hero-card">
-              <h3>In the meantime…</h3>
-              <p>
-                You can still explore the rest of the website, plan a visit, watch worship online, or return to the Kids & Families page.
-              </p>
-            </div>
-
             <div class="btn-row">
-              <a class="btn btn-primary" href="kids-families.html">Back to Kids & Families</a>
-              <a class="btn btn-light" href="index.html">Return Home</a>
-              <a class="btn btn-secondary" href="watch.html">Watch Online</a>
+              <a class="btn btn-primary" href="plan-your-visit.html">Plan Your Visit</a>
+              <a class="btn btn-light" href="kids-families.html">Back to Kids & Families</a>
             </div>
+          </div>
+
+          <div class="hero-card">
+            <h3>What children experience</h3>
+            <p>Our goal is to create an environment where children can learn about Jesus, build friendships, and begin forming a faith that grows with them.</p>
+            <div class="hero-list">
+              <div class="hero-list-item"><strong>Bible Teaching</strong><span>Age-appropriate lessons</span></div>
+              <div class="hero-list-item"><strong>Engagement</strong><span>Music, crafts, activities</span></div>
+              <div class="hero-list-item"><strong>Care</strong><span>Welcoming volunteers</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="eyebrow">Why VUMC Kids?</div>
+        <h2 class="section-title">Helping children build a strong beginning in faith.</h2>
+        <p class="section-copy">
+          Childhood is a powerful season for learning, trust, wonder, and belonging. We want VUMC Kids to be a place where children can ask questions, experience joy, and begin learning the story of God’s love in ways they can understand.
+        </p>
+
+        <div class="split-grid">
+          <div class="info-card">
+            <h3>What makes this ministry special</h3>
+            <p>We want kids to feel safe, seen, and excited to come back each week.</p>
+            <div class="feature-list">
+              <div class="feature-item">
+                <strong>Faith made understandable</strong>
+                Bible truths are presented in ways children can connect with and remember.
+              </div>
+              <div class="feature-item">
+                <strong>Learning through creativity</strong>
+                Music, crafts, movement, and interaction help children stay engaged.
+              </div>
+              <div class="feature-item">
+                <strong>A welcoming environment</strong>
+                Caring volunteers help every child feel included, loved, and valued.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-card">
+            <h3>Good to know</h3>
+            <p>Families often want to know what to expect before the first visit.</p>
+            <div class="faq-list">
+              <div class="faq-item">
+                <strong>Children are welcome here</strong>
+                We want families to feel comfortable taking a first step without pressure.
+              </div>
+              <div class="faq-item">
+                <strong>You do not need to know everything first</strong>
+                We’re happy to help families get oriented when they arrive.
+              </div>
+              <div class="faq-item">
+                <strong>Every child matters</strong>
+                Our heart is to help children experience faith, joy, and belonging.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="family-row">
+          <div class="family-image">
+            <img src="vumc-media/sprouts.jpg" alt="VUMC Kids ministry" />
+          </div>
+          <div class="family-content">
+            <div class="eyebrow">A Place to Grow</div>
+            <h2>Faith that starts early can shape a lifetime.</h2>
+            <p class="family-subtitle">Planting seeds of faith in young hearts.</p>
+            <p>
+              VUMC Kids is designed to help children grow in their love for God in a safe, fun, and engaging environment. Through age-appropriate Bible lessons, music, crafts, and interactive activities, children learn foundational truths of faith while building friendships and having a meaningful experience at church.
+            </p>
+            <p>
+              Our caring volunteers are committed to helping every child feel welcomed, loved, and excited to learn more about Jesus.
+            </p>
+          </div>
+        </div>
+
+        <div class="family-row reverse">
+          <div class="family-image">
+            <img src="vumc-media/plan a visit.png" alt="Families visiting church" />
+          </div>
+          <div class="family-content">
+            <div class="eyebrow">For Families</div>
+            <h2>You do not have to figure everything out before you come.</h2>
+            <p class="family-subtitle">We want your family to feel at home.</p>
+            <p>
+              Whether you have children who are excited, nervous, curious, or brand new to church life, we want families to know there is room for them here. VUMC Kids exists to support families as they help children begin learning what it means to know and follow Jesus.
+            </p>
+            <p>
+              If you are planning a first visit, our Kids & Families page is a great place to begin, and we would love to help you take the next step with confidence.
+            </p>
+            <div class="btn-row">
+              <a class="btn btn-dark" href="kids-families.html">Explore Kids & Families</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta-band">
+          <div class="eyebrow">Take a Next Step</div>
+          <h2 class="section-title" style="color:#fff;max-width:760px;">We would love to welcome your child to VUMC Kids.</h2>
+          <p class="section-copy">
+            If you are exploring church for the first time, returning after a while, or simply looking for a place where your child can belong and grow, we would love to help your family take the next step.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="plan-your-visit.html">Plan Your Visit</a>
+            <a class="btn btn-light" href="kids-families.html">Back to Kids & Families</a>
           </div>
         </div>
       </div>
@@ -954,7 +1251,7 @@
 
   <footer class="site-footer">
     <div class="container">
-      <div class="eyebrow" style="color:var(--accent-soft);">Versailles United Methodist Church</div>
+      <div class="eyebrow">Versailles United Methodist Church</div>
       <div class="footer-grid">
         <div class="footer-card">
           <h4>About</h4>
