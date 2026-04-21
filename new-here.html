@@ -3,20 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Connect | Versailles United Methodist Church</title>
-<meta name="description" content="Find your place, grow in faith, and get connected at Versailles United Methodist Church through ministries, discipleship, recovery support, families, missions, and next steps." />
-<!-- Favicon / App Icons -->
-<link rel="icon" href="/favicon.ico">
+<title>New Here | Versailles United Methodist Church</title>
+<meta name="description" content="New to Versailles United Methodist Church? Learn what to expect, explore worship times, find help for your first visit, and discover the next step that is right for you." />
 
+<link rel="icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
 <link rel="manifest" href="/site.webmanifest">
-
 <meta name="theme-color" content="#353f69">
-  <script src="https://js.churchcenter.com/modal/v1"></script>
+
+<script src="https://js.churchcenter.com/modal/v1"></script>
+
 <style>
   :root {
     --bg: #f7f4ef;
@@ -39,6 +37,7 @@
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+
   body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
@@ -108,14 +107,80 @@
     font-weight: 600;
   }
 
-  .nav-links a {
+  .nav-links > a,
+  .dropdown-toggle {
     color: var(--muted);
     transition: color var(--transition);
   }
 
-  .nav-links a:hover,
-  .nav-links a.active {
+  .nav-links > a:hover,
+  .dropdown-toggle:hover {
     color: var(--text);
+  }
+
+  .nav-item.dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .dropdown-toggle::after {
+    content: "▾";
+    font-size: 11px;
+    line-height: 1;
+    transform: translateY(1px);
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 250px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: 0 18px 40px rgba(17,22,29,0.12);
+    padding: 10px 0;
+    display: none;
+    z-index: 1200;
+  }
+
+  .dropdown-menu a {
+    display: block;
+    padding: 11px 16px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  .dropdown-menu a:hover,
+  .dropdown-menu a.active {
+    background: #f6f3ee;
+    color: var(--text);
+  }
+
+  @media (min-width: 1101px) {
+    .nav-item.dropdown:hover .dropdown-menu {
+      display: block;
+    }
+  }
+
+  .nav-item.dropdown.open .dropdown-menu {
+    display: block;
   }
 
   .nav-actions {
@@ -153,10 +218,34 @@
     box-shadow: var(--shadow);
   }
 
-  .mobile-menu a {
+  .mobile-menu a,
+  .mobile-submenu-toggle {
     padding: 10px 2px;
     font-weight: 600;
     color: var(--text);
+    background: none;
+    border: none;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .mobile-submenu {
+    display: none;
+    padding-left: 14px;
+    border-left: 2px solid rgba(17,22,29,0.08);
+    margin-top: -4px;
+  }
+
+  .mobile-submenu.show {
+    display: grid;
+    gap: 2px;
+  }
+
+  .mobile-submenu a {
+    font-size: 14px;
+    color: var(--muted);
+    padding: 8px 2px;
   }
 
   .btn {
@@ -196,7 +285,7 @@
     overflow: hidden;
     background:
       linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.64)),
-      url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+      url('vumc-media/plan a visit.png') center/cover no-repeat;
     color: #fff;
   }
 
@@ -299,14 +388,84 @@
     max-width: 760px;
   }
 
-  .card-grid {
+  .split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 34px;
+  }
+
+  .info-card,
+  .expect-card,
+  .faq-card,
+  .footer-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+  }
+
+  .info-card,
+  .expect-card,
+  .faq-card {
+    padding: 28px;
+  }
+
+  .info-card h3,
+  .expect-card h3,
+  .faq-card h3 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    line-height: 1.15;
+  }
+
+  .info-card p,
+  .expect-card p,
+  .faq-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  .times-list,
+  .expect-list,
+  .faq-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .times-item,
+  .expect-item,
+  .faq-item {
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: var(--surface-soft);
+  }
+
+  .times-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .expect-item strong,
+  .faq-item strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 15px;
+  }
+
+  .pathway-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 22px;
     margin-top: 34px;
   }
 
-  .connect-card {
+  .pathway-card {
     display: block;
     border-radius: 28px;
     overflow: hidden;
@@ -316,25 +475,25 @@
     transition: transform var(--transition), box-shadow var(--transition);
   }
 
-  .connect-card:hover {
+  .pathway-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 24px 48px rgba(17, 22, 29, 0.14);
   }
 
-  .connect-card-image {
+  .pathway-card-image {
     position: relative;
     min-height: 220px;
     background: #ddd center/cover no-repeat;
   }
 
-  .connect-card-image::before {
+  .pathway-card-image::before {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(to top, rgba(17,22,29,0.78), rgba(17,22,29,0.12));
   }
 
-  .connect-card-title {
+  .pathway-card-title {
     position: absolute;
     inset: auto 18px 18px 18px;
     z-index: 1;
@@ -345,11 +504,11 @@
     text-shadow: 0 2px 10px rgba(0,0,0,0.25);
   }
 
-  .connect-card-body {
+  .pathway-card-body {
     padding: 18px 18px 0;
   }
 
-  .connect-card-body p {
+  .pathway-card-body p {
     margin: 0;
     font-size: 15px;
     color: var(--muted);
@@ -357,11 +516,11 @@
     min-height: 72px;
   }
 
-  .connect-card-footer {
+  .pathway-card-footer {
     padding: 18px;
   }
 
-  .connect-card-button {
+  .pathway-card-button {
     width: 100%;
     min-height: 48px;
     border-radius: 14px;
@@ -374,14 +533,14 @@
     transition: background var(--transition), transform var(--transition);
   }
 
-  .connect-card:hover .connect-card-button {
+  .pathway-card:hover .pathway-card-button {
     background: #2c3559;
   }
 
   .cta-band {
     background:
       linear-gradient(135deg, rgba(17,22,29,0.90), rgba(17,22,29,0.72)),
-      url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      url('vumc-media/candlelight-worship.jpg') center/cover no-repeat;
     color: #fff;
     border-radius: 28px;
     padding: 34px;
@@ -463,20 +622,17 @@
     }
 
     .hero-inner,
-    .card-grid,
+    .split-grid,
+    .pathway-grid,
     .footer-grid {
       grid-template-columns: 1fr 1fr;
-    }
-
-    .card-grid .connect-card:last-child,
-    .card-grid .connect-card:nth-last-child(2) {
-      grid-column: span 1;
     }
   }
 
   @media (max-width: 760px) {
     .hero-inner,
-    .card-grid,
+    .split-grid,
+    .pathway-grid,
     .footer-grid {
       grid-template-columns: 1fr;
     }
@@ -493,7 +649,7 @@
       padding: 24px;
     }
 
-    .connect-card-body p {
+    .pathway-card-body p {
       min-height: auto;
     }
 
@@ -517,7 +673,7 @@
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="index.html">Home</a>
         <a href="watch.html">Watch</a>
-        <a href="connect.html" class="active">Connect</a>
+        <a href="new-here.html" class="active">New Here</a>
         <a href="events.html">Events</a>
         <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
         <a href="plan-your-visit.html">Plan Your Visit</a>
@@ -533,7 +689,7 @@
       <div class="mobile-menu-inner">
         <a href="index.html">Home</a>
         <a href="watch.html">Watch</a>
-        <a href="connect.html">Connect</a>
+        <a href="new-here.html">New Here</a>
         <a href="events.html">Events</a>
         <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
         <a href="plan-your-visit.html">Plan Your Visit</a>
@@ -547,132 +703,139 @@
     <div class="container">
       <div class="hero-inner">
         <div>
-          <div class="eyebrow">Find Your Place</div>
-          <h1>Grow in faith. Get connected.</h1>
+          <div class="eyebrow">New Here?</div>
+          <h1>You are welcome here.</h1>
           <p>
-            Whether you are new here or looking for your next step, there is a place for you at Versailles United Methodist Church. Explore the ministries and opportunities below to find community, support, growth, and ways to serve.
+            Whether you have been away from church for a while, are exploring faith for the first time, or are simply looking for a church home, we want your first visit to feel clear, comfortable, and welcoming.
           </p>
           <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:28px;">
-            <a class="btn btn-primary" href="#connect-pathways">Explore Pathways</a>
-            <a class="btn btn-light" href="plan-your-visit.html">Plan Your Visit</a>
+            <a class="btn btn-primary" href="plan-your-visit.html">Plan Your Visit</a>
+            <a class="btn btn-light" href="#what-to-expect">What to Expect</a>
           </div>
         </div>
 
         <div class="hero-card">
-          <h3>Connection happens in many ways.</h3>
-          <p>Some people begin by visiting. Others start with recovery, discipleship, missions, or family ministry. What matters is taking one next step.</p>
+          <h3>Your first step does not have to be complicated.</h3>
+          <p>Come as you are. Worship with us. Ask questions. Take your time. We would love to help you get oriented and feel at home.</p>
           <div class="hero-list">
-            <div class="hero-list-item"><strong>Grow</strong><span>Discipleship & next steps</span></div>
-            <div class="hero-list-item"><strong>Belong</strong><span>Families, support, community</span></div>
-            <div class="hero-list-item"><strong>Serve</strong><span>Missions & outreach</span></div>
+            <div class="hero-list-item"><strong>Traditional Worship</strong><span>9:30 AM</span></div>
+            <div class="hero-list-item"><strong>Contemporary Worship</strong><span>10:30 AM</span></div>
+            <div class="hero-list-item"><strong>Location</strong><span>230 Paynes Mill Road</span></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="connect-pathways">
+  <section class="section" id="what-to-expect">
     <div class="container">
-      <div class="eyebrow">Connection Pathways</div>
-      <h2 class="section-title">Explore ministries and opportunities to take your next step.</h2>
+      <div class="eyebrow">What to Expect</div>
+      <h2 class="section-title">A simple place to start.</h2>
       <p class="section-copy">
-        This page is designed to help people quickly find a meaningful path into the life of the church, whether through learning, support, service, children and family ministry, or simply discovering where to begin.
+        Visiting a church for the first time can feel like a big step. Here are a few things that may help make your first experience easier.
       </p>
 
-      <div class="card-grid">
-        <a class="connect-card" href="https://academy.versaillesumc.org" target="_blank" rel="noopener">
-          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1200&q=80');">
-            <div class="connect-card-title">The Academy</div>
+      <div class="split-grid">
+        <div class="info-card">
+          <h3>Sunday worship times</h3>
+          <p>We offer two worship experiences each Sunday morning.</p>
+          <div class="times-list">
+            <div class="times-item"><span>Traditional Worship</span><span>9:30 AM</span></div>
+            <div class="times-item"><span>Contemporary Worship</span><span>10:30 AM</span></div>
           </div>
-          <div class="connect-card-body">
-            <p>A joyful preschool experience where children are guided in learning, kindness, and the love of Jesus.</p>
+        </div>
+
+        <div class="expect-card">
+          <h3>What your first visit may feel like</h3>
+          <p>You do not need to have everything figured out before you come. We want you to feel comfortable taking a first step.</p>
+          <div class="expect-list">
+            <div class="expect-item"><strong>Come as you are</strong>Dress in whatever feels comfortable for you.</div>
+            <div class="expect-item"><strong>Friendly but not pressured</strong>We want to welcome you, not overwhelm you.</div>
+            <div class="expect-item"><strong>Families are welcome</strong>There are opportunities for children and families to connect.</div>
           </div>
-          <div class="connect-card-footer">
-            <span class="connect-card-button">Learn More</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="eyebrow">Helpful Next Steps</div>
+      <h2 class="section-title">Where would you like to begin?</h2>
+      <p class="section-copy">
+        Not everyone takes the same first step. These pathways can help you find the one that feels right for you.
+      </p>
+
+      <div class="pathway-grid">
+        <a class="pathway-card" href="plan-your-visit.html">
+          <div class="pathway-card-image" style="background-image:url('vumc-media/plan a visit.png');">
+            <div class="pathway-card-title">Plan a Visit</div>
+          </div>
+          <div class="pathway-card-body">
+            <p>Learn what to expect, where we are located, and how to make your first Sunday a little easier.</p>
+          </div>
+          <div class="pathway-card-footer">
+            <span class="pathway-card-button">Start Here</span>
           </div>
         </a>
 
-        <a class="connect-card" href="#" style="cursor:default;">
-          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1517486808906-6ca8b3f8e1c1?auto=format&fit=crop&w=1200&q=80');">
-            <div class="connect-card-title">Discipleship</div>
+        <a class="pathway-card" href="watch.html">
+          <div class="pathway-card-image" style="background-image:url('vumc-media/worship.jpg');">
+            <div class="pathway-card-title">Watch Online</div>
           </div>
-          <div class="connect-card-body">
-            <p>Take the next step in following Jesus through Bible study, small groups, prayer, and intentional spiritual growth.</p>
+          <div class="pathway-card-body">
+            <p>Want to get a feel for worship first? Join us online and explore before attending in person.</p>
           </div>
-          <div class="connect-card-footer">
-            <span class="connect-card-button">Explore Discipleship</span>
-          </div>
-        </a>
-
-        <a class="connect-card" href="#" style="cursor:default;">
-          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80');">
-            <div class="connect-card-title">Recovery Ministry</div>
-          </div>
-          <div class="connect-card-body">
-            <p>Find hope, healing, and support in a safe and welcoming community. You do not have to walk hard seasons alone.</p>
-          </div>
-          <div class="connect-card-footer">
-            <span class="connect-card-button">Find Support</span>
+          <div class="pathway-card-footer">
+            <span class="pathway-card-button">Watch Worship</span>
           </div>
         </a>
 
-        <a class="connect-card" href="#" style="cursor:default;">
-          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80');">
-            <div class="connect-card-title">Get Involved</div>
+        <a class="pathway-card" href="kids-families.html">
+          <div class="pathway-card-image" style="background-image:url('vumc-media/sprouts.jpg');">
+            <div class="pathway-card-title">Kids & Families</div>
           </div>
-          <div class="connect-card-body">
-            <p>Find ways to serve, connect, and make a difference through the life of the church. There is room for your gifts here.</p>
+          <div class="pathway-card-body">
+            <p>Discover opportunities for children and families to worship, learn, and feel at home here.</p>
           </div>
-          <div class="connect-card-footer">
-            <span class="connect-card-button">Get Connected</span>
-          </div>
-        </a>
-
-        <a class="connect-card" href="kids-families.html">
-          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1516589091380-5d8e87df6999?auto=format&fit=crop&w=1200&q=80');">
-            <div class="connect-card-title">Kids & Families</div>
-          </div>
-          <div class="connect-card-body">
-            <p>We want children and families to know they are welcome here. Discover opportunities for worship, learning, and belonging.</p>
-          </div>
-          <div class="connect-card-footer">
-            <span class="connect-card-button">Learn More</span>
+          <div class="pathway-card-footer">
+            <span class="pathway-card-button">Learn More</span>
           </div>
         </a>
 
-        <a class="connect-card" href="#" style="cursor:default;">
-          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1469571486292-b53601020b3b?auto=format&fit=crop&w=1200&q=80');">
-            <div class="connect-card-title">Local Missions & Outreach</div>
+        <a class="pathway-card" href="next-steps.html">
+          <div class="pathway-card-image" style="background-image:url('vumc-media/rear-shot-church.png');">
+            <div class="pathway-card-title">Next Steps</div>
           </div>
-          <div class="connect-card-body">
-            <p>Join us in serving our community through ministries of compassion, generosity, and practical support.</p>
+          <div class="pathway-card-body">
+            <p>If you are ready to go deeper, explore simple next steps for faith, connection, and involvement.</p>
           </div>
-          <div class="connect-card-footer">
-            <span class="connect-card-button">Explore Opportunities</span>
-          </div>
-        </a>
-
-        <a class="connect-card" href="next-steps.html">
-          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80');">
-            <div class="connect-card-title">Next Steps</div>
-          </div>
-          <div class="connect-card-body">
-            <p>Ready to take a next step in your faith? Let us help you find a pathway into community, service, and spiritual growth.</p>
-          </div>
-          <div class="connect-card-footer">
-            <span class="connect-card-button">Know More</span>
+          <div class="pathway-card-footer">
+            <span class="pathway-card-button">Take a Next Step</span>
           </div>
         </a>
 
-        <a class="connect-card" href="plan-your-visit.html">
-          <div class="connect-card-image" style="background-image:url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80');">
-            <div class="connect-card-title">Plan a Visit</div>
+        <a class="pathway-card" href="https://academy.versaillesumc.org" target="_blank" rel="noopener">
+          <div class="pathway-card-image" style="background-image:url('vumc-media/building.jpg');">
+            <div class="pathway-card-title">The Academy</div>
           </div>
-          <div class="connect-card-body">
-            <p>Thinking about attending? Learn what to expect and how to get connected before your first Sunday.</p>
+          <div class="pathway-card-body">
+            <p>Learn more about our preschool ministry and a joyful environment for children to grow and learn.</p>
           </div>
-          <div class="connect-card-footer">
-            <span class="connect-card-button">Connect With Us</span>
+          <div class="pathway-card-footer">
+            <span class="pathway-card-button">Visit Academy</span>
+          </div>
+        </a>
+
+        <a class="pathway-card" href="events.html">
+          <div class="pathway-card-image" style="background-image:url('vumc-media/atrium.jpg');">
+            <div class="pathway-card-title">Events</div>
+          </div>
+          <div class="pathway-card-body">
+            <p>See upcoming opportunities to worship, gather, and connect with the church and community.</p>
+          </div>
+          <div class="pathway-card-footer">
+            <span class="pathway-card-button">See Events</span>
           </div>
         </a>
       </div>
@@ -681,11 +844,37 @@
 
   <section class="section">
     <div class="container">
+      <div class="split-grid">
+        <div class="faq-card">
+          <h3>Questions people often have</h3>
+          <p>If you are unsure where to begin, these are some of the most common things guests want to know.</p>
+          <div class="faq-list">
+            <div class="faq-item"><strong>What should I wear?</strong>Whatever feels comfortable. We want you to come as you are.</div>
+            <div class="faq-item"><strong>Do I need to know anyone first?</strong>No. You are welcome whether you know someone here or not.</div>
+            <div class="faq-item"><strong>Can I visit online first?</strong>Yes. Our watch page is a great way to explore before attending in person.</div>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <h3>Want a simple first step?</h3>
+          <p>You do not need to do everything at once. A first visit, an online service, or a quick look at the kids page may be all you need right now.</p>
+          <div class="faq-list">
+            <div class="faq-item"><strong>Visit in person</strong>Start with a Sunday morning and let the rest unfold naturally.</div>
+            <div class="faq-item"><strong>Watch first</strong>Explore worship online if that feels easier.</div>
+            <div class="faq-item"><strong>Ask questions</strong>Use the site, connect with us, and move at a pace that feels right.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
       <div class="cta-band">
-        <div class="eyebrow">Take a Next Step</div>
-        <h2 class="section-title" style="color:#fff;max-width:760px;">You do not have to figure it out alone.</h2>
+        <div class="eyebrow">Your First Visit Matters</div>
+        <h2 class="section-title" style="color:#fff;max-width:760px;">We would love to help you feel at home.</h2>
         <p class="section-copy">
-          Whether you are brand new, returning to church, or ready to grow deeper in faith, we would love to help you find the right next step for this season.
+          Whether you plan a visit this Sunday or simply explore a little more first, we are glad you are here.
         </p>
         <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:26px;">
           <a class="btn btn-primary" href="plan-your-visit.html">Plan Your Visit</a>
