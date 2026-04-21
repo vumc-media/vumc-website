@@ -457,12 +457,12 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(17,22,29,0.88), rgba(17,22,29,0.28));
+      background: linear-gradient(to top, rgba(17,22,29,0.82), rgba(17,22,29,0.22));
       transition: background var(--transition), transform var(--transition);
     }
 
     .feature-card:hover::before {
-      background: linear-gradient(to top, rgba(17,22,29,0.94), rgba(17,22,29,0.16));
+      background: linear-gradient(to top, rgba(17,22,29,0.90), rgba(17,22,29,0.14));
     }
 
     .feature-card:hover .feature-card-inner {
@@ -533,8 +533,8 @@
     .watch-card.preview {
       min-height: 420px;
       background:
-        linear-gradient(135deg, rgba(17,22,29,0.78), rgba(17,22,29,0.54)),
-        url('vumc-media/Church Center mobile.png') center/cover no-repeat;
+        linear-gradient(135deg, rgba(17,22,29,0.58), rgba(17,22,29,0.34)),
+        url('vumc-media/worship-on-laptop.png') center/cover no-repeat;
       color: #fff;
       position: relative;
       display: flex;
@@ -769,6 +769,284 @@
       background: #f7f4ef;
     }
 
+    /* CHAT WIDGET */
+    .vumc-chat-launcher {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      width: 64px;
+      height: 64px;
+      border: none;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #163a70, #2957a4);
+      box-shadow: 0 12px 28px rgba(0,0,0,.25);
+      cursor: pointer;
+      z-index: 999998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .vumc-chat-launcher img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .vumc-chat-widget {
+      position: fixed;
+      right: 20px;
+      bottom: 96px;
+      width: 390px;
+      max-width: calc(100vw - 24px);
+      height: 700px;
+      max-height: calc(100vh - 120px);
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 18px 45px rgba(0,0,0,.18);
+      overflow: hidden;
+      z-index: 999997;
+      border: 1px solid rgba(0,0,0,.08);
+      display: none;
+      flex-direction: column;
+    }
+
+    .vumc-chat-widget.open { display: flex; }
+
+    .vumc-chat-header {
+      background: linear-gradient(135deg, #163a70, #2957a4);
+      color: #fff;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .vumc-chat-header-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: rgba(255,255,255,.18);
+    }
+
+    .vumc-chat-header-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .vumc-chat-header-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .vumc-chat-header-text h2 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+
+    .vumc-chat-header-text p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      opacity: .92;
+    }
+
+    .vumc-chat-close {
+      border: none;
+      background: rgba(255,255,255,.16);
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .vumc-chat-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 14px;
+      background: linear-gradient(to bottom, #f7faff, #ffffff);
+    }
+
+    .vumc-message-row {
+      display: flex;
+      margin-bottom: 12px;
+    }
+
+    .vumc-message-row.bot { justify-content: flex-start; }
+    .vumc-message-row.user { justify-content: flex-end; }
+
+    .vumc-message-group { max-width: 84%; }
+
+    .vumc-bubble {
+      padding: 12px 14px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .vumc-message-row.bot .vumc-bubble {
+      background: #eef3fb;
+      color: #1f2937;
+      border-bottom-left-radius: 6px;
+    }
+
+    .vumc-message-row.user .vumc-bubble {
+      background: #2957a4;
+      color: #fff;
+      border-bottom-right-radius: 6px;
+    }
+
+    .vumc-link-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .vumc-link-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border: 1px solid #d7e2f4;
+      background: #ffffff;
+      color: #2957a4;
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      transition: .2s ease;
+    }
+
+    .vumc-link-btn:hover { background: #edf4ff; }
+
+    .vumc-quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 14px 10px;
+      border-top: 1px solid #edf2f7;
+      background: #fff;
+    }
+
+    .vumc-quick-btn {
+      border: 1px solid #d7e2f4;
+      background: #f7faff;
+      color: #2957a4;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .vumc-quick-btn:hover { background: #edf4ff; }
+
+    .vumc-fallback-form {
+      display: none;
+      padding: 12px 14px 14px;
+      border-top: 1px solid #edf2f7;
+      background: #fcfdff;
+    }
+
+    .vumc-fallback-form.active { display: block; }
+
+    .vumc-fallback-form h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      color: #163a70;
+    }
+
+    .vumc-fallback-form p {
+      margin: 0 0 12px;
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.4;
+    }
+
+    .vumc-field { margin-bottom: 10px; }
+
+    .vumc-field input,
+    .vumc-field textarea {
+      width: 100%;
+      border: 1px solid #dbe4f0;
+      border-radius: 14px;
+      padding: 11px 12px;
+      font-size: 14px;
+      font-family: Arial, Helvetica, sans-serif;
+      outline: none;
+      background: #fff;
+    }
+
+    .vumc-field textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .vumc-send-fallback-btn {
+      width: 100%;
+      border: none;
+      background: #163a70;
+      color: #fff;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .vumc-send-fallback-btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .vumc-status-text {
+      padding: 8px 14px 0;
+      font-size: 12px;
+      color: #6b7280;
+      background: #fff;
+      min-height: 24px;
+    }
+
+    .vumc-composer {
+      display: flex;
+      gap: 10px;
+      padding: 12px;
+      background: #fff;
+      border-top: 1px solid #e8edf5;
+    }
+
+    .vumc-composer input {
+      flex: 1;
+      border: 1px solid #dbe4f0;
+      border-radius: 999px;
+      padding: 12px 14px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .vumc-composer button {
+      border: none;
+      background: #2957a4;
+      color: #fff;
+      border-radius: 999px;
+      padding: 0 18px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
     @media (max-width: 1100px) {
       .nav-links,
       .nav-actions .btn-dark,
@@ -828,6 +1106,24 @@
       .brand-name { font-size: 15px; }
       .brand-tagline { font-size: 11px; }
       .btn-row { align-items: stretch; }
+
+      .vumc-chat-launcher {
+        right: 14px;
+        bottom: 14px;
+        width: 60px;
+        height: 60px;
+      }
+
+      .vumc-chat-widget {
+        right: 12px;
+        left: 12px;
+        bottom: 86px;
+        width: auto;
+        max-width: none;
+        height: 72vh;
+        max-height: 72vh;
+        border-radius: 20px;
+      }
     }
   </style>
 </head>
@@ -947,8 +1243,8 @@
         </p>
 
         <div class="cards-grid">
-<a class="feature-card" href="watch.html" style="background-image:url('vumc-media/worship-on-laptop.png');">            
-  <div class="feature-card-inner">
+          <a class="feature-card" href="watch.html" style="background-image:url('vumc-media/worship-on-laptop.png');">
+            <div class="feature-card-inner">
               <h3>Watch</h3>
               <p>Join worship live, catch recent services, and experience our interactive watch page.</p>
             </div>
@@ -1141,6 +1437,61 @@
     </div>
   </div>
 
+  <!-- CHAT WIDGET -->
+  <button class="vumc-chat-launcher" id="vumcChatLauncher" aria-label="Open chat">
+    <img src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s900-c-k-c0x00ffffff-no-rj" alt="VUMC Logo" />
+  </button>
+
+  <div class="vumc-chat-widget" id="vumcChatWidget">
+    <div class="vumc-chat-header">
+      <div class="vumc-chat-header-logo">
+        <img src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s900-c-k-c0x00ffffff-no-rj" alt="VUMC Logo" />
+      </div>
+      <div class="vumc-chat-header-text">
+        <h2>Ask VUMC</h2>
+        <p>Quick answers and church office support</p>
+      </div>
+      <button class="vumc-chat-close" id="vumcChatClose" aria-label="Close chat">×</button>
+    </div>
+
+    <div class="vumc-chat-body" id="vumcChatBody"></div>
+
+    <div class="vumc-quick-replies">
+      <button class="vumc-quick-btn" data-question="What are the Sunday worship times?">Worship Times</button>
+      <button class="vumc-quick-btn" data-question="Where is Versailles UMC located?">Address</button>
+      <button class="vumc-quick-btn" data-question="How can I contact the church?">Contact</button>
+      <button class="vumc-quick-btn" data-question="Are the services available online?">Watch Online</button>
+      <button class="vumc-quick-btn" data-question="How can I get involved with the church community?">Get Involved</button>
+      <button class="vumc-quick-btn" data-question="How can I give to Versailles UMC?">Giving</button>
+    </div>
+
+    <div class="vumc-fallback-form" id="vumcFallbackForm">
+      <h3>Send us a message</h3>
+      <p>I’m not sure about that one, but I can send your message to our church office.</p>
+
+      <div class="vumc-field">
+        <input type="text" id="vumcFallbackName" placeholder="Your name" />
+      </div>
+
+      <div class="vumc-field">
+        <input type="email" id="vumcFallbackEmail" placeholder="Your email" />
+      </div>
+
+      <div class="vumc-field">
+        <textarea id="vumcFallbackMessage" placeholder="Type your message here"></textarea>
+      </div>
+
+      <button class="vumc-send-fallback-btn" id="vumcSendFallbackBtn">Send Message</button>
+    </div>
+
+    <div class="vumc-status-text" id="vumcStatusText"></div>
+
+    <div class="vumc-composer">
+      <input type="text" id="vumcChatInput" placeholder="Type your question..." />
+      <button id="vumcSendBtn">Send</button>
+    </div>
+  </div>
+
   <script>
     const mobileToggle = document.getElementById('mobileToggle');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -1228,6 +1579,275 @@
     frame.addEventListener('load', function () {
       loading.style.display = 'none';
     });
+
+    /* CHAT WIDGET */
+    const VUMC_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3RvHWZ0RIiUMZBdjVtgq-4ZJ60AHlYwy2ybZMCUYqoWVsIt1eurqn6gJYywf6gi1SuA/exec';
+
+    const vumcChatLauncher = document.getElementById('vumcChatLauncher');
+    const vumcChatWidget = document.getElementById('vumcChatWidget');
+    const vumcChatClose = document.getElementById('vumcChatClose');
+    const vumcChatBody = document.getElementById('vumcChatBody');
+    const vumcChatInput = document.getElementById('vumcChatInput');
+    const vumcSendBtn = document.getElementById('vumcSendBtn');
+    const vumcQuickButtons = document.querySelectorAll('.vumc-quick-btn');
+    const vumcFallbackForm = document.getElementById('vumcFallbackForm');
+    const vumcFallbackName = document.getElementById('vumcFallbackName');
+    const vumcFallbackEmail = document.getElementById('vumcFallbackEmail');
+    const vumcFallbackMessage = document.getElementById('vumcFallbackMessage');
+    const vumcSendFallbackBtn = document.getElementById('vumcSendFallbackBtn');
+    const vumcStatusText = document.getElementById('vumcStatusText');
+
+    let vumcLastUnmatchedQuestion = '';
+
+    const vumcFaqResponses = [
+      {
+        keywords: ['address', 'location', 'where are you', 'where is the church', 'directions'],
+        response: {
+          text: `Versailles United Methodist Church is located at:\n\n230 Paynes Mill Road\nVersailles, Kentucky.`,
+          buttons: [
+            { label: 'Open Maps', url: 'https://maps.google.com/?q=230+Paynes+Mill+Road+Versailles+KY' }
+          ]
+        }
+      },
+      {
+        keywords: ['office hours', 'hours', 'when are you open', 'office open'],
+        response: {
+          text: `Our church office hours are:\n\nMonday through Friday\n10:00 AM – 2:00 PM.`
+        }
+      },
+      {
+        keywords: ['contact', 'phone', 'telephone', 'call', 'email'],
+        response: {
+          text: `You can contact Versailles UMC by phone or email.`,
+          buttons: [
+            { label: 'Call 859-873-4304', url: 'tel:8598734304' },
+            { label: 'Email Office', url: 'mailto:vumcsecretary@gmail.com' }
+          ]
+        }
+      },
+      {
+        keywords: ['worship', 'service time', 'service times', 'sunday', 'traditional', 'contemporary'],
+        response: {
+          text: `Our Sunday worship schedule:\n\n• Traditional Worship — 9:30 AM\n• Contemporary Worship — 10:30 AM\n\nWe would love for you to join us.`
+        }
+      },
+      {
+        keywords: ['online', 'livestream', 'live stream', 'watch online', 'youtube', 'stream'],
+        response: {
+          text: `Yes, we offer live streaming of our services.`,
+          buttons: [
+            { label: 'Watch Online', url: 'https://www.versaillesumc.org/worship-online' }
+          ]
+        }
+      },
+      {
+        keywords: ['get involved', 'volunteer', 'serve', 'ministries', 'help', 'community'],
+        response: {
+          text: `We offer various ways to get involved, including Life Groups, AA meetings, and volunteer ministries.`
+        }
+      },
+      {
+        keywords: ['life group', 'small group', 'groups', 'bible study'],
+        response: {
+          text: `Life Groups meet on Sundays at:\n\n• 9:15 AM\n• 10:30 AM.`
+        }
+      },
+      {
+        keywords: ['give', 'giving', 'donate', 'offering', 'tithe'],
+        response: {
+          text: `You can make a secure one-time or recurring donation here.`,
+          buttons: [
+            { label: 'Give Online', url: 'https://www.versaillesumc.org/ways-to-serve/give' }
+          ]
+        }
+      }
+    ];
+
+    function vumcCreateLinkButtons(buttons = []) {
+      if (!buttons.length) return null;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'vumc-link-buttons';
+
+      buttons.forEach(btn => {
+        const a = document.createElement('a');
+        a.className = 'vumc-link-btn';
+        a.href = btn.url;
+        a.target = btn.url.startsWith('http') ? '_blank' : '_self';
+        a.rel = btn.url.startsWith('http') ? 'noopener noreferrer' : '';
+        a.textContent = btn.label;
+        wrap.appendChild(a);
+      });
+
+      return wrap;
+    }
+
+    function vumcAddMessage(content, sender = 'bot') {
+      const row = document.createElement('div');
+      row.className = `vumc-message-row ${sender}`;
+
+      const group = document.createElement('div');
+      group.className = 'vumc-message-group';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'vumc-bubble';
+
+      if (typeof content === 'string') {
+        bubble.textContent = content;
+        group.appendChild(bubble);
+      } else {
+        bubble.textContent = content.text || '';
+        group.appendChild(bubble);
+
+        const buttonWrap = vumcCreateLinkButtons(content.buttons || []);
+        if (buttonWrap) group.appendChild(buttonWrap);
+      }
+
+      row.appendChild(group);
+      vumcChatBody.appendChild(row);
+      vumcChatBody.scrollTop = vumcChatBody.scrollHeight;
+    }
+
+    function vumcNormalizeText(text) {
+      return text.toLowerCase().trim();
+    }
+
+    function vumcFindFaqMatch(userText) {
+      const cleanText = vumcNormalizeText(userText);
+
+      for (const item of vumcFaqResponses) {
+        for (const keyword of item.keywords) {
+          if (cleanText.includes(keyword)) {
+            return item.response;
+          }
+        }
+      }
+
+      return null;
+    }
+
+    function vumcShowFallbackForm(originalQuestion) {
+      vumcFallbackForm.classList.add('active');
+      vumcFallbackMessage.value = originalQuestion || '';
+      vumcLastUnmatchedQuestion = originalQuestion || '';
+      vumcStatusText.textContent = 'Your question did not match one of our quick answers. Please send us a message below.';
+      vumcChatBody.scrollTop = vumcChatBody.scrollHeight;
+    }
+
+    function vumcHideFallbackForm() {
+      vumcFallbackForm.classList.remove('active');
+      vumcStatusText.textContent = '';
+    }
+
+    function vumcHandleUserMessage(messageText) {
+      if (!messageText.trim()) return;
+
+      vumcAddMessage(messageText, 'user');
+
+      const match = vumcFindFaqMatch(messageText);
+
+      if (match) {
+        setTimeout(() => {
+          vumcAddMessage(match, 'bot');
+          vumcHideFallbackForm();
+        }, 250);
+      } else {
+        setTimeout(() => {
+          vumcAddMessage('I’m not sure about that, but I can send your message to our church office.', 'bot');
+          vumcShowFallbackForm(messageText);
+        }, 250);
+      }
+    }
+
+    function vumcSendCurrentMessage() {
+      const text = vumcChatInput.value;
+      if (!text.trim()) return;
+      vumcHandleUserMessage(text);
+      vumcChatInput.value = '';
+    }
+
+    async function vumcSubmitFallback() {
+      const name = vumcFallbackName.value.trim();
+      const email = vumcFallbackEmail.value.trim();
+      const message = vumcFallbackMessage.value.trim();
+
+      if (!name || !email || !message) {
+        vumcStatusText.textContent = 'Please fill out your name, email, and message.';
+        return;
+      }
+
+      vumcSendFallbackBtn.disabled = true;
+      vumcStatusText.textContent = 'Sending your message...';
+
+      try {
+        const response = await fetch(VUMC_APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            name,
+            email,
+            message,
+            originalQuestion: vumcLastUnmatchedQuestion,
+            source: 'Ask VUMC Floating Website Chat'
+          }),
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          }
+        });
+
+        const result = await response.json();
+
+        if (result.ok) {
+          vumcAddMessage('Thanks! Your message has been sent to our church office. Someone will be in contact with you.', 'bot');
+          vumcFallbackName.value = '';
+          vumcFallbackEmail.value = '';
+          vumcFallbackMessage.value = '';
+          vumcHideFallbackForm();
+          vumcStatusText.textContent = 'Message sent successfully.';
+        } else {
+          vumcStatusText.textContent = 'There was a problem sending your message. Please try again.';
+        }
+      } catch (error) {
+        vumcStatusText.textContent = 'There was a problem sending your message. Please try again.';
+      } finally {
+        vumcSendFallbackBtn.disabled = false;
+      }
+    }
+
+    function vumcOpenChat() {
+      vumcChatWidget.classList.add('open');
+    }
+
+    function vumcCloseChat() {
+      vumcChatWidget.classList.remove('open');
+    }
+
+    vumcChatLauncher.addEventListener('click', vumcOpenChat);
+    vumcChatClose.addEventListener('click', vumcCloseChat);
+
+    vumcQuickButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const question = button.getAttribute('data-question');
+        vumcHandleUserMessage(question);
+      });
+    });
+
+    vumcSendBtn.addEventListener('click', vumcSendCurrentMessage);
+
+    vumcChatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        vumcSendCurrentMessage();
+      }
+    });
+
+    vumcSendFallbackBtn.addEventListener('click', vumcSubmitFallback);
+
+    vumcAddMessage({
+      text: `Hi! Welcome to Versailles UMC.\n\nI can help with common questions like worship times, office hours, contact information, online worship, Life Groups, and giving.\n\nIf I can’t answer your question, I can send your message to our church office.`,
+      buttons: [
+        { label: 'Worship Online', url: 'https://www.versaillesumc.org/worship-online' },
+        { label: 'Give Online', url: 'https://www.versaillesumc.org/ways-to-serve/give' }
+      ]
+    }, 'bot');
   </script>
 </body>
 </html>
