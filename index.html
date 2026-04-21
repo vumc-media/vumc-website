@@ -398,8 +398,7 @@
       gap: 18px;
     }
 
-    .glass-card,
-    .hero-card {
+    .glass-card {
       background: rgba(255,255,255,0.10);
       border: 1px solid rgba(255,255,255,0.16);
       border-radius: 24px;
@@ -408,28 +407,24 @@
       box-shadow: 0 18px 40px rgba(0,0,0,0.22);
     }
 
-    .glass-card h3,
-    .hero-card h3 {
+    .glass-card h3 {
       margin: 0 0 10px;
       font-size: 20px;
     }
 
-    .glass-card p,
-    .hero-card p {
+    .glass-card p {
       margin: 0;
       font-size: 15px;
       color: rgba(255,255,255,0.78);
     }
 
-    .service-times,
-    .hero-list {
+    .service-times {
       display: grid;
       gap: 12px;
       margin-top: 18px;
     }
 
-    .service-time,
-    .hero-list-item {
+    .service-time {
       display: flex;
       justify-content: space-between;
       gap: 14px;
@@ -589,85 +584,6 @@
       background: rgba(255,255,255,0.08);
     }
 
-    .connect-home-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-      margin-top: 34px;
-    }
-
-    .connect-card {
-      display: block;
-      border-radius: 28px;
-      overflow: hidden;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      transition: transform var(--transition), box-shadow var(--transition);
-    }
-
-    .connect-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 24px 48px rgba(17, 22, 29, 0.14);
-    }
-
-    .connect-card-image {
-      position: relative;
-      min-height: 220px;
-      background: #ddd center/cover no-repeat;
-    }
-
-    .connect-card-image::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(17,22,29,0.78), rgba(17,22,29,0.12));
-    }
-
-    .connect-card-title {
-      position: absolute;
-      inset: auto 18px 18px 18px;
-      z-index: 1;
-      color: #fff;
-      font-size: 20px;
-      line-height: 1.15;
-      font-weight: 700;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.25);
-    }
-
-    .connect-card-body {
-      padding: 18px 18px 0;
-    }
-
-    .connect-card-body p {
-      margin: 0;
-      font-size: 15px;
-      color: var(--muted);
-      line-height: 1.55;
-      min-height: 72px;
-    }
-
-    .connect-card-footer {
-      padding: 18px;
-    }
-
-    .connect-card-button {
-      width: 100%;
-      min-height: 48px;
-      border-radius: 14px;
-      background: #353f69;
-      color: #fff;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      transition: background var(--transition), transform var(--transition);
-    }
-
-    .connect-card:hover .connect-card-button {
-      background: #2c3559;
-    }
-
     .event-card {
       position: relative;
       min-height: 360px;
@@ -715,36 +631,6 @@
       margin-top: 18px;
       font-weight: 700;
       color: var(--accent);
-    }
-
-    .cta-band {
-      background:
-        linear-gradient(135deg, rgba(17,22,29,0.90), rgba(17,22,29,0.72)),
-        url('vumc-media/plan a visit.png') center/cover no-repeat;
-      color: #fff;
-      border-radius: 28px;
-      padding: 34px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-band::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top right, rgba(187,140,63,0.24), transparent 36%);
-      pointer-events: none;
-    }
-
-    .cta-band > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .cta-band p {
-      color: rgba(255,255,255,0.84);
-      max-width: 760px;
     }
 
     .site-footer {
@@ -902,7 +788,6 @@
       .cards-grid,
       .two-column,
       .watch-grid,
-      .connect-home-grid,
       .next-steps-grid,
       .footer-grid {
         grid-template-columns: 1fr 1fr;
@@ -918,7 +803,6 @@
       .cards-grid,
       .two-column,
       .watch-grid,
-      .connect-home-grid,
       .next-steps-grid,
       .footer-grid {
         grid-template-columns: 1fr;
@@ -930,8 +814,7 @@
       .content-card,
       .watch-card.info,
       .event-card,
-      .glass-card,
-      .hero-card {
+      .glass-card {
         padding: 26px;
       }
 
@@ -940,14 +823,6 @@
       .watch-card.preview,
       .event-card {
         min-height: 280px;
-      }
-
-      .connect-card-body p {
-        min-height: auto;
-      }
-
-      .cta-band {
-        padding: 24px;
       }
 
       .brand-name { font-size: 15px; }
@@ -1072,7 +947,7 @@
         </p>
 
         <div class="cards-grid">
-          <a class="feature-card" href="watch.html" style="background-image:url('<img src="https://raw.githubusercontent.com/vumc-media/vumc-website/main/vumc-media/worship-on-laptop.png" alt="Worship on laptop">
+          <a class="feature-card" href="watch.html" style="background-image:url('https://raw.githubusercontent.com/vumc-media/vumc-website/main/vumc-media/worship-on-laptop.png');">
             <div class="feature-card-inner">
               <h3>Watch</h3>
               <p>Join worship live, catch recent services, and experience our interactive watch page.</p>
@@ -1124,90 +999,6 @@
       </div>
     </section>
 
-    <section class="section" id="connect-pathways">
-      <div class="container">
-        <div class="eyebrow">Connection Pathways</div>
-        <h2 class="section-title">Explore ministries and opportunities to take your next step.</h2>
-        <p class="section-copy">
-          Whether you are new, returning, or ready to get more involved, these pathways make it easier to find the place that fits this season of life.
-        </p>
-
-        <div class="connect-home-grid">
-          <a class="connect-card" href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">
-            <div class="connect-card-image" style="background-image:url('vumc-media/building.jpg');">
-              <div class="connect-card-title">The Academy</div>
-            </div>
-            <div class="connect-card-body">
-              <p>A joyful preschool experience where children are guided in learning, kindness, and the love of Jesus.</p>
-            </div>
-            <div class="connect-card-footer">
-              <span class="connect-card-button">Learn More</span>
-            </div>
-          </a>
-
-          <a class="connect-card" href="groups.html">
-            <div class="connect-card-image" style="background-image:url('https://plus.unsplash.com/premium_photo-1715588659609-5287adde5478?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzN8fGJpYmxlJTIwc3R1ZHl8ZW58MHx8MHx8fDA%3D');">
-              <div class="connect-card-title">Discipleship</div>
-            </div>
-            <div class="connect-card-body">
-              <p>Take the next step in following Jesus through Bible study, small groups, prayer, and intentional spiritual growth.</p>
-            </div>
-            <div class="connect-card-footer">
-              <span class="connect-card-button">Explore Discipleship</span>
-            </div>
-          </a>
-
-          <a class="connect-card" href="next-steps.html">
-            <div class="connect-card-image" style="background-image:url('https://alcohol.org/wp-content/uploads/2018/06/find-support.jpg');">
-              <div class="connect-card-title">Recovery & Support</div>
-            </div>
-            <div class="connect-card-body">
-              <p>Find hope, healing, and support in a safe and welcoming community. You do not have to walk hard seasons alone.</p>
-            </div>
-            <div class="connect-card-footer">
-              <span class="connect-card-button">Find Support</span>
-            </div>
-          </a>
-
-          <a class="connect-card" href="serve.html">
-            <div class="connect-card-image" style="background-image:url('vumc-media/stage.jpg');">
-              <div class="connect-card-title">Get Involved</div>
-            </div>
-            <div class="connect-card-body">
-              <p>Find ways to serve, connect, and make a difference through the life of the church. There is room for your gifts here.</p>
-            </div>
-            <div class="connect-card-footer">
-              <span class="connect-card-button">Get Connected</span>
-            </div>
-          </a>
-
-          <a class="connect-card" href="kids-families.html">
-            <div class="connect-card-image" style="background-image:url('vumc-media/sprouts.jpg');">
-              <div class="connect-card-title">Kids & Families</div>
-            </div>
-            <div class="connect-card-body">
-              <p>We want children and families to know they are welcome here. Discover opportunities for worship, learning, and belonging.</p>
-            </div>
-            <div class="connect-card-footer">
-              <span class="connect-card-button">Learn More</span>
-            </div>
-          </a>
-
-          <a class="connect-card" href="missions.html">
-            <div class="connect-card-image" style="background-image:url('vumc-media/outdoor-pavilion.jpg');">
-              <div class="connect-card-title">Local Missions & Outreach</div>
-            </div>
-            <div class="connect-card-body">
-              <p>Join us in serving our community through ministries of compassion, generosity, and practical support.</p>
-            </div>
-            <div class="connect-card-footer">
-              <span class="connect-card-button">Explore Opportunities</span>
-            </div>
-          </a>
-        </div>
-      </div>
-    </section>
-
     <section class="section">
       <div class="container">
         <div class="watch-grid">
@@ -1233,22 +1024,6 @@
               <a class="btn btn-primary" href="watch.html">Watch Now</a>
               <a class="btn btn-light" href="plan-your-visit.html">Visit in Person</a>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="cta-band">
-          <div class="eyebrow" style="color:var(--accent-soft);">Take a Next Step</div>
-          <h2 class="section-title" style="color:#fff;max-width:760px;">You do not have to figure it out alone.</h2>
-          <p class="section-copy">
-            Whether you are brand new, returning to church, or ready to grow deeper in faith, we would love to help you find the right next step for this season.
-          </p>
-          <div class="btn-row">
-            <a class="btn btn-primary" href="plan-your-visit.html">Plan Your Visit</a>
-            <a class="btn btn-light" href="new-here.html">Start Here</a>
           </div>
         </div>
       </div>
