@@ -207,6 +207,7 @@
       position: relative;
       display: flex;
       align-items: center;
+      height: 100%;
     }
 
     .dropdown-toggle {
@@ -230,7 +231,7 @@
 
     .dropdown-menu {
       position: absolute;
-      top: calc(100% + 16px);
+      top: 100%;
       left: 0;
       min-width: 240px;
       background: #fff;
@@ -256,7 +257,12 @@
       color: var(--text);
     }
 
-    .nav-item.dropdown:hover .dropdown-menu,
+    @media (min-width: 1101px) {
+      .nav-item.dropdown:hover .dropdown-menu {
+        display: block;
+      }
+    }
+
     .nav-item.dropdown.open .dropdown-menu {
       display: block;
     }
@@ -1539,7 +1545,7 @@
 
     if (desktopDropdownToggle && connectDropdown) {
       desktopDropdownToggle.addEventListener('click', (e) => {
-        if (window.innerWidth > 1100) {
+        if (window.innerWidth <= 1100) {
           e.preventDefault();
           const isOpen = connectDropdown.classList.toggle('open');
           desktopDropdownToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -1547,7 +1553,7 @@
       });
 
       document.addEventListener('click', (e) => {
-        if (!connectDropdown.contains(e.target)) {
+        if (window.innerWidth <= 1100 && !connectDropdown.contains(e.target)) {
           connectDropdown.classList.remove('open');
           desktopDropdownToggle.setAttribute('aria-expanded', 'false');
         }
