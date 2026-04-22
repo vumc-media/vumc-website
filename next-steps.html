@@ -1,522 +1,1017 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Next Steps | Versailles United Methodist Church</title>
-<meta name="description" content="Take your next step at Versailles United Methodist Church. Learn more about baptism, membership, serving, or meeting with a pastor." />
-<!-- Favicon / App Icons -->
-<link rel="icon" href="/favicon.ico">
-
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
-<link rel="manifest" href="/site.webmanifest">
-
-<meta name="theme-color" content="#353f69">
-<script src="https://js.churchcenter.com/modal/v1"></script>
-
-<style>
-  :root {
-    --bg: #f7f4ef;
-    --surface: #ffffff;
-    --surface-soft: #f1ece4;
-    --text: #1f242c;
-    --muted: #5b6470;
-    --dark: #11161d;
-    --dark-soft: #171d25;
-    --accent: #bb8c3f;
-    --accent-soft: #e4cda7;
-    --border: rgba(17, 22, 29, 0.08);
-    --shadow: 0 18px 45px rgba(17, 22, 29, 0.12);
-    --radius-xl: 28px;
-    --radius-lg: 22px;
-    --radius-md: 16px;
-    --max-width: 1240px;
-    --transition: 220ms ease;
-  }
-
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-
-  body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-  }
-
-  a { color: inherit; text-decoration: none; }
-  img { max-width: 100%; display: block; }
-
-  .container {
-    width: min(calc(100% - 32px), var(--max-width));
-    margin: 0 auto;
-  }
-
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: rgba(247, 244, 239, 0.88);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(17, 22, 29, 0.06);
-  }
-
-  .nav-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    min-height: 78px;
-  }
-
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    min-width: 0;
-  }
-
-  .brand-mark {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #ddd;
-  }
-
-  .brand-name {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.2;
-  }
-
-  .brand-tagline {
-    margin: 2px 0 0;
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 22px;
-    font-size: 15px;
-    font-weight: 600;
-  }
-
-  .nav-links a {
-    color: var(--muted);
-    transition: color var(--transition);
-  }
-
-  .nav-links a:hover,
-  .nav-links a.active {
-    color: var(--text);
-  }
-
-  .nav-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .mobile-toggle {
-    display: none;
-    width: 48px;
-    height: 48px;
-    border: none;
-    border-radius: 14px;
-    background: var(--surface);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-    font-size: 22px;
-    cursor: pointer;
-  }
-
-  .mobile-menu {
-    display: none;
-    padding: 0 0 18px;
-  }
-
-  .mobile-menu.show { display: block; }
-
-  .mobile-menu-inner {
-    display: grid;
-    gap: 12px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    padding: 18px;
-    box-shadow: var(--shadow);
-  }
-
-  .mobile-menu a {
-    padding: 10px 2px;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 52px;
-    padding: 0 22px;
-    border-radius: 999px;
-    font-weight: 700;
-    border: 1px solid transparent;
-    transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
-  }
-
-  .btn:hover { transform: translateY(-2px); }
-
-  .btn-primary {
-    background: var(--accent);
-    color: #fff;
-    box-shadow: 0 10px 24px rgba(187, 140, 63, 0.28);
-  }
-
-  .btn-light {
-    background: #fff;
-    color: var(--text);
-    border-color: var(--border);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-  }
-
-  .btn-dark {
-    background: var(--dark);
-    color: #fff;
-  }
-
-  .hero {
-    position: relative;
-    overflow: hidden;
-    background:
-      linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.64)),
-      url('https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
-    color: #fff;
-  }
-
-  .hero::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(circle at top right, rgba(187,140,63,0.28), transparent 34%),
-      radial-gradient(circle at bottom left, rgba(255,255,255,0.06), transparent 28%);
-    pointer-events: none;
-  }
-
-  .hero-inner {
-    position: relative;
-    z-index: 1;
-    padding: 82px 0 68px;
-    display: grid;
-    grid-template-columns: 1.06fr 0.94fr;
-    gap: 28px;
-    align-items: center;
-  }
-
-  .eyebrow {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--accent);
-    font-weight: 700;
-    margin-bottom: 14px;
-  }
-
-  .hero .eyebrow { color: var(--accent-soft); }
-
-  .hero h1 {
-    font-size: clamp(40px, 6vw, 70px);
-    line-height: 0.98;
-    margin: 0 0 16px;
-    letter-spacing: -0.04em;
-  }
-
-  .hero p {
-    font-size: clamp(17px, 2.2vw, 21px);
-    color: rgba(255,255,255,0.86);
-    margin: 0;
-    max-width: 700px;
-  }
-
-  .hero-card {
-    background: rgba(255,255,255,0.10);
-    border: 1px solid rgba(255,255,255,0.16);
-    border-radius: 24px;
-    padding: 24px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.22);
-  }
-
-  .hero-card h3 {
-    margin: 0 0 10px;
-    font-size: 20px;
-  }
-
-  .hero-card p {
-    margin: 0;
-    font-size: 15px;
-    color: rgba(255,255,255,0.80);
-  }
-
-  .hero-list {
-    display: grid;
-    gap: 12px;
-    margin-top: 18px;
-  }
-
-  .hero-list-item {
-    display: flex;
-    justify-content: space-between;
-    gap: 14px;
-    padding: 12px 14px;
-    border-radius: 16px;
-    background: rgba(255,255,255,0.08);
-    font-size: 15px;
-  }
-
-  .section {
-    padding: 64px 0;
-  }
-
-  .section-alt {
-    background: #dfe6e8;
-  }
-
-  .section-title {
-    margin: 0 0 14px;
-    font-size: clamp(30px, 4.2vw, 46px);
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-  }
-
-  .section-copy {
-    font-size: 18px;
-    color: var(--muted);
-    margin: 0;
-    max-width: 820px;
-  }
-
-  .intro-card,
-  .step-card,
-  .cta-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow);
-  }
-
-  .intro-card {
-    padding: 34px;
-  }
-
-  .step-grid {
-    display: grid;
-    gap: 24px;
-    margin-top: 34px;
-  }
-
-  .step-card {
-    overflow: hidden;
-  }
-
-  .step-image {
-    min-height: 260px;
-    background: #ddd center/cover no-repeat;
-    position: relative;
-  }
-
-  .step-image::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(17,22,29,0.72), rgba(17,22,29,0.08));
-  }
-
-  .step-title {
-    position: absolute;
-    left: 24px;
-    bottom: 18px;
-    z-index: 1;
-    color: #fff;
-    font-size: clamp(28px, 4vw, 42px);
-    font-weight: 700;
-    line-height: 1.05;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.22);
-  }
-
-  .step-body {
-    padding: 26px 28px;
-  }
-
-  .step-body h3 {
-    margin: 0 0 10px;
-    font-size: 30px;
-    line-height: 1.08;
-  }
-
-  .step-body p {
-    margin: 0 0 12px;
-    color: var(--text);
-    font-size: 16px;
-  }
-
-  .what-next-card {
-    background:
-      linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.68)),
-      url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
-    color: #fff;
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    box-shadow: var(--shadow);
-  }
-
-  .what-next-hero {
-    min-height: 220px;
-    display: flex;
-    align-items: flex-end;
-    padding: 28px;
-    position: relative;
-  }
-
-  .what-next-hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(17,22,29,0.78), rgba(17,22,29,0.18));
-  }
-
-  .what-next-hero h2 {
-    position: relative;
-    z-index: 1;
-    margin: 0;
-    font-size: clamp(32px, 5vw, 50px);
-    line-height: 1.04;
-  }
-
-  .what-next-body {
-    background: var(--surface);
-    color: var(--text);
-    padding: 30px;
-  }
-
-  .what-next-body ul {
-    margin: 0 0 16px 18px;
-    padding: 0;
-  }
-
-  .what-next-body li {
-    margin-bottom: 8px;
-  }
-
-  .cta-card {
-    padding: 34px;
-    margin-top: 28px;
-  }
-
-  .cta-card p {
-    color: var(--muted);
-    max-width: 760px;
-  }
-
-  .site-footer {
-    background: var(--dark);
-    color: #fff;
-    padding: 24px 0 54px;
-    margin-top: 40px;
-  }
-
-  .footer-grid {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr 0.85fr 0.85fr;
-    gap: 20px;
-    margin-top: 22px;
-  }
-
-  .footer-card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 24px;
-    padding: 24px;
-  }
-
-  .footer-card h4 {
-    margin: 0 0 12px;
-    font-size: 16px;
-  }
-
-  .footer-card p,
-  .footer-card a {
-    margin: 0;
-    color: rgba(255,255,255,0.76);
-    font-size: 14px;
-    display: block;
-    line-height: 1.8;
-  }
-
-  .footer-bottom {
-    margin-top: 26px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.58);
-    text-align: center;
-  }
-
-  @media (max-width: 1100px) {
-    .nav-links,
-    .nav-actions .btn-dark {
+  <meta name="robots" content="noindex, nofollow">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-19L2K5PDLB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-19L2K5PDLB');
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Next Steps | Versailles United Methodist Church</title>
+  <meta name="description" content="Take your next step at Versailles United Methodist Church. Learn more about baptism, membership, serving, or meeting with a pastor." />
+
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#353f69">
+
+  <script src="https://js.churchcenter.com/modal/v1"></script>
+
+  <style>
+    :root {
+      --bg: #f7f4ef;
+      --surface: #ffffff;
+      --surface-soft: #f1ece4;
+      --text: #1f242c;
+      --muted: #5b6470;
+      --dark: #11161d;
+      --dark-soft: #171d25;
+      --accent: #bb8c3f;
+      --accent-soft: #e4cda7;
+      --border: rgba(17, 22, 29, 0.08);
+      --shadow: 0 18px 45px rgba(17, 22, 29, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max-width: 1240px;
+      --transition: 220ms ease;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    body.vumc-modal-open { overflow: hidden; }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      width: min(calc(100% - 32px), var(--max-width));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(247, 244, 239, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(17, 22, 29, 0.06);
+    }
+
+    .nav-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 78px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #ddd;
+    }
+
+    .brand-text { min-width: 0; }
+
+    .brand-name {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .brand-tagline {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .nav-links > a,
+    .dropdown-toggle {
+      color: var(--muted);
+      transition: color var(--transition);
+    }
+
+    .nav-links > a:hover,
+    .dropdown-toggle:hover,
+    .nav-links > a.active {
+      color: var(--text);
+    }
+
+    .nav-item.dropdown {
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+
+    .dropdown-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .dropdown-toggle::after {
+      content: "▾";
+      font-size: 11px;
+      line-height: 1;
+      transform: translateY(1px);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 250px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(17,22,29,0.12);
+      padding: 10px 0;
       display: none;
+      z-index: 1200;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 11px 16px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .dropdown-menu a:hover,
+    .dropdown-menu a.active {
+      background: #f6f3ee;
+      color: var(--text);
+    }
+
+    @media (min-width: 1101px) {
+      .nav-item.dropdown:hover .dropdown-menu {
+        display: block;
+      }
+    }
+
+    .nav-item.dropdown.open .dropdown-menu {
+      display: block;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .mobile-toggle {
+      display: none;
+      width: 48px;
+      height: 48px;
+      border: none;
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .mobile-menu {
+      display: none;
+      padding: 0 0 18px;
+    }
+
+    .mobile-menu.show { display: block; }
+
+    .mobile-menu-inner {
+      display: grid;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .mobile-menu a,
+    .mobile-submenu-toggle {
+      padding: 10px 2px;
+      font-weight: 600;
+      color: var(--text);
+      background: none;
+      border: none;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .mobile-submenu {
+      display: none;
+      padding-left: 14px;
+      border-left: 2px solid rgba(17,22,29,0.08);
+      margin-top: -4px;
+    }
+
+    .mobile-submenu.show {
+      display: grid;
+      gap: 2px;
+    }
+
+    .mobile-submenu a {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 8px 2px;
+    }
+
+    .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+      cursor: pointer;
     }
 
-    .hero-inner,
-    .footer-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
+    .btn:hover { transform: translateY(-2px); }
 
-  @media (max-width: 760px) {
-    .hero-inner,
-    .footer-grid {
-      grid-template-columns: 1fr;
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(187, 140, 63, 0.28);
+    }
+
+    .btn-light {
+      background: #fff;
+      color: var(--text);
+      border-color: var(--border);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    .btn-dark {
+      background: var(--dark);
+      color: #fff;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.64)),
+        url('https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+      color: #fff;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top right, rgba(187,140,63,0.28), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(255,255,255,0.06), transparent 28%);
+      pointer-events: none;
     }
 
     .hero-inner {
-      padding: 58px 0 48px;
+      position: relative;
+      z-index: 1;
+      padding: 82px 0 68px;
+      display: grid;
+      grid-template-columns: 1.06fr 0.94fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .hero .eyebrow { color: var(--accent-soft); }
+
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 70px);
+      line-height: 0.98;
+      margin: 0 0 16px;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      font-size: clamp(17px, 2.2vw, 21px);
+      color: rgba(255,255,255,0.86);
+      margin: 0;
+      max-width: 700px;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 24px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+    }
+
+    .hero-card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .hero-card p {
+      margin: 0;
+      font-size: 15px;
+      color: rgba(255,255,255,0.80);
+    }
+
+    .hero-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .hero-list-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      font-size: 15px;
     }
 
     .section {
-      padding: 54px 0;
+      padding: 64px 0;
+    }
+
+    .section-alt {
+      background: #dfe6e8;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: clamp(30px, 4.2vw, 46px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .section-copy {
+      font-size: 18px;
+      color: var(--muted);
+      margin: 0;
+      max-width: 820px;
     }
 
     .intro-card,
-    .step-body,
-    .what-next-body,
-    .cta-card,
-    .what-next-hero {
-      padding: 24px;
+    .step-card,
+    .cta-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .intro-card {
+      padding: 34px;
+    }
+
+    .step-grid {
+      display: grid;
+      gap: 24px;
+      margin-top: 34px;
+    }
+
+    .step-card {
+      overflow: hidden;
     }
 
     .step-image {
-      min-height: 200px;
+      min-height: 260px;
+      background: #ddd center/cover no-repeat;
+      position: relative;
     }
 
-    .brand-name { font-size: 15px; }
-    .brand-tagline { font-size: 11px; }
-  }
-</style>
+    .step-image::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(17,22,29,0.72), rgba(17,22,29,0.08));
+    }
+
+    .step-title {
+      position: absolute;
+      left: 24px;
+      bottom: 18px;
+      z-index: 1;
+      color: #fff;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      line-height: 1.05;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.22);
+    }
+
+    .step-body {
+      padding: 26px 28px;
+    }
+
+    .step-body h3 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      line-height: 1.08;
+    }
+
+    .step-body p {
+      margin: 0 0 12px;
+      color: var(--text);
+      font-size: 16px;
+    }
+
+    .what-next-card {
+      background:
+        linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.68)),
+        url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+      color: #fff;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .what-next-hero {
+      min-height: 220px;
+      display: flex;
+      align-items: flex-end;
+      padding: 28px;
+      position: relative;
+    }
+
+    .what-next-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(17,22,29,0.78), rgba(17,22,29,0.18));
+    }
+
+    .what-next-hero h2 {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-size: clamp(32px, 5vw, 50px);
+      line-height: 1.04;
+    }
+
+    .what-next-body {
+      background: var(--surface);
+      color: var(--text);
+      padding: 30px;
+    }
+
+    .what-next-body ul {
+      margin: 0 0 16px 18px;
+      padding: 0;
+    }
+
+    .what-next-body li {
+      margin-bottom: 8px;
+    }
+
+    .cta-card {
+      padding: 34px;
+      margin-top: 28px;
+    }
+
+    .cta-card p {
+      color: var(--muted);
+      max-width: 760px;
+    }
+
+    .site-footer {
+      background: var(--dark);
+      color: #fff;
+      padding: 24px 0 54px;
+      margin-top: 40px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr 0.85fr 0.85fr;
+      gap: 20px;
+      margin-top: 22px;
+    }
+
+    .footer-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 24px;
+    }
+
+    .footer-card h4 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .footer-card p,
+    .footer-card a {
+      margin: 0;
+      color: rgba(255,255,255,0.76);
+      font-size: 14px;
+      display: block;
+      line-height: 1.8;
+    }
+
+    .footer-bottom {
+      margin-top: 26px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.58);
+      text-align: center;
+    }
+
+    .vumc-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 14, 20, 0.72);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 99999;
+    }
+
+    .vumc-modal-overlay.open { display: flex; }
+
+    .vumc-modal {
+      width: min(100%, 1040px);
+      height: min(88vh, 860px);
+      background: #ffffff;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .vumc-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      background: #11161d;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .vumc-modal-title-wrap { min-width: 0; }
+
+    .vumc-modal-kicker {
+      margin: 0 0 4px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #e4cda7;
+      font-weight: 700;
+    }
+
+    .vumc-modal-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .vumc-modal-close {
+      border: 0;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .vumc-modal-body {
+      flex: 1;
+      background: #f7f4ef;
+      position: relative;
+    }
+
+    .vumc-modal-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #fff;
+    }
+
+    .vumc-modal-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      color: #5b6470;
+      font-size: 16px;
+      background: #f7f4ef;
+    }
+
+    .vumc-chat-launcher {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      width: 64px;
+      height: 64px;
+      border: none;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #163a70, #2957a4);
+      box-shadow: 0 12px 28px rgba(0,0,0,.25);
+      cursor: pointer;
+      z-index: 999998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .vumc-chat-launcher img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .vumc-chat-widget {
+      position: fixed;
+      right: 20px;
+      bottom: 96px;
+      width: 390px;
+      max-width: calc(100vw - 24px);
+      height: 700px;
+      max-height: calc(100vh - 120px);
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 18px 45px rgba(0,0,0,.18);
+      overflow: hidden;
+      z-index: 999997;
+      border: 1px solid rgba(0,0,0,.08);
+      display: none;
+      flex-direction: column;
+    }
+
+    .vumc-chat-widget.open { display: flex; }
+
+    .vumc-chat-header {
+      background: linear-gradient(135deg, #163a70, #2957a4);
+      color: #fff;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .vumc-chat-header-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: rgba(255,255,255,.18);
+    }
+
+    .vumc-chat-header-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .vumc-chat-header-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .vumc-chat-header-text h2 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+
+    .vumc-chat-header-text p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      opacity: .92;
+    }
+
+    .vumc-chat-close {
+      border: none;
+      background: rgba(255,255,255,.16);
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .vumc-chat-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 14px;
+      background: linear-gradient(to bottom, #f7faff, #ffffff);
+    }
+
+    .vumc-message-row {
+      display: flex;
+      margin-bottom: 12px;
+    }
+
+    .vumc-message-row.bot { justify-content: flex-start; }
+    .vumc-message-row.user { justify-content: flex-end; }
+
+    .vumc-message-group { max-width: 84%; }
+
+    .vumc-bubble {
+      padding: 12px 14px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .vumc-message-row.bot .vumc-bubble {
+      background: #eef3fb;
+      color: #1f2937;
+      border-bottom-left-radius: 6px;
+    }
+
+    .vumc-message-row.user .vumc-bubble {
+      background: #2957a4;
+      color: #fff;
+      border-bottom-right-radius: 6px;
+    }
+
+    .vumc-link-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .vumc-link-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border: 1px solid #d7e2f4;
+      background: #ffffff;
+      color: #2957a4;
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      transition: .2s ease;
+    }
+
+    .vumc-link-btn:hover { background: #edf4ff; }
+
+    .vumc-quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 14px 10px;
+      border-top: 1px solid #edf2f7;
+      background: #fff;
+    }
+
+    .vumc-quick-btn {
+      border: 1px solid #d7e2f4;
+      background: #f7faff;
+      color: #2957a4;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .vumc-quick-btn:hover { background: #edf4ff; }
+
+    .vumc-fallback-form {
+      display: none;
+      padding: 12px 14px 14px;
+      border-top: 1px solid #edf2f7;
+      background: #fcfdff;
+    }
+
+    .vumc-fallback-form.active { display: block; }
+
+    .vumc-fallback-form h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      color: #163a70;
+    }
+
+    .vumc-fallback-form p {
+      margin: 0 0 12px;
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.4;
+    }
+
+    .vumc-field { margin-bottom: 10px; }
+
+    .vumc-field input,
+    .vumc-field textarea {
+      width: 100%;
+      border: 1px solid #dbe4f0;
+      border-radius: 14px;
+      padding: 11px 12px;
+      font-size: 14px;
+      font-family: Arial, Helvetica, sans-serif;
+      outline: none;
+      background: #fff;
+    }
+
+    .vumc-field textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .vumc-send-fallback-btn {
+      width: 100%;
+      border: none;
+      background: #163a70;
+      color: #fff;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .vumc-send-fallback-btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .vumc-status-text {
+      padding: 8px 14px 0;
+      font-size: 12px;
+      color: #6b7280;
+      background: #fff;
+      min-height: 24px;
+    }
+
+    .vumc-composer {
+      display: flex;
+      gap: 10px;
+      padding: 12px;
+      background: #fff;
+      border-top: 1px solid #e8edf5;
+    }
+
+    .vumc-composer input {
+      flex: 1;
+      border: 1px solid #dbe4f0;
+      border-radius: 999px;
+      padding: 12px 14px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .vumc-composer button {
+      border: none;
+      background: #2957a4;
+      color: #fff;
+      border-radius: 999px;
+      padding: 0 18px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media (max-width: 1100px) {
+      .nav-links,
+      .nav-actions .btn-dark,
+      .nav-actions .btn-light.subscribe-desktop {
+        display: none;
+      }
+
+      .mobile-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .mobile-menu.show { display: block; }
+
+      .hero-inner,
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .hero-inner,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-inner {
+        padding: 58px 0 48px;
+      }
+
+      .section {
+        padding: 54px 0;
+      }
+
+      .intro-card,
+      .step-body,
+      .what-next-body,
+      .cta-card,
+      .what-next-hero {
+        padding: 24px;
+      }
+
+      .step-image {
+        min-height: 200px;
+      }
+
+      .brand-name { font-size: 15px; }
+      .brand-tagline { font-size: 11px; }
+
+      .vumc-chat-launcher {
+        right: 14px;
+        bottom: 14px;
+        width: 60px;
+        height: 60px;
+      }
+
+      .vumc-chat-widget {
+        right: 12px;
+        left: 12px;
+        bottom: 86px;
+        width: auto;
+        max-width: none;
+        height: 72vh;
+        max-height: 72vh;
+        border-radius: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
 <header class="site-header">
@@ -524,7 +1019,7 @@
     <div class="nav-wrap">
       <a class="brand" href="index.html">
         <img class="brand-mark" src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s176-c-k-c0x00ffffff-no-rj" alt="Versailles UMC logo" />
-        <div>
+        <div class="brand-text">
           <p class="brand-name">Versailles United Methodist Church</p>
           <p class="brand-tagline">A Church Striving to Love Like Jesus</p>
         </div>
@@ -533,7 +1028,21 @@
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="index.html">Home</a>
         <a href="watch.html">Watch</a>
-        <a href="connect.html" class="active">Connect</a>
+
+        <div class="nav-item dropdown" id="connectDropdown">
+          <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="connectMenuDesktop">
+            Connect
+          </button>
+          <div class="dropdown-menu" id="connectMenuDesktop">
+            <a href="new-here.html">New Here</a>
+            <a href="kids-families.html">Kids & Families</a>
+            <a href="groups.html">Groups</a>
+            <a href="serve.html">Serve</a>
+            <a href="next-steps.html" class="active">Next Steps</a>
+            <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
+          </div>
+        </div>
+
         <a href="events.html">Events</a>
         <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
         <a href="plan-your-visit.html">Plan Your Visit</a>
@@ -541,6 +1050,7 @@
 
       <div class="nav-actions">
         <a class="btn btn-dark" href="plan-your-visit.html">Plan Your Visit</a>
+        <a class="btn btn-light subscribe-desktop" href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
         <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
       </div>
     </div>
@@ -549,10 +1059,25 @@
       <div class="mobile-menu-inner">
         <a href="index.html">Home</a>
         <a href="watch.html">Watch</a>
-        <a href="connect.html">Connect</a>
+
+        <button class="mobile-submenu-toggle" id="mobileConnectToggle" type="button" aria-expanded="false" aria-controls="mobileConnectMenu">
+          Connect
+        </button>
+        <div class="mobile-submenu" id="mobileConnectMenu">
+          <a href="new-here.html">New Here</a>
+          <a href="kids-families.html">Kids & Families</a>
+          <a href="youth.html">Youth</a>
+          <a href="groups.html">Groups</a>
+          <a href="serve.html">Serve</a>
+          <a href="missions.html">Missions</a>
+          <a href="next-steps.html">Next Steps</a>
+          <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
+        </div>
+
         <a href="events.html">Events</a>
         <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
         <a href="plan-your-visit.html">Plan Your Visit</a>
+        <a href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
       </div>
     </div>
   </div>
@@ -722,6 +1247,7 @@
         <a href="watch.html">Watch Worship Online</a>
         <a href="events.html">Events</a>
         <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+        <a href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
         <a href="https://versaillesumc.churchcenter.com/" target="_blank" rel="noopener noreferrer">Church Center</a>
       </div>
     </div>
@@ -732,15 +1258,432 @@
   </div>
 </footer>
 
+<div class="vumc-modal-overlay" id="vumcModalOverlay" aria-hidden="true">
+  <div class="vumc-modal" role="dialog" aria-modal="true" aria-labelledby="vumcModalTitle">
+    <div class="vumc-modal-header">
+      <div class="vumc-modal-title-wrap">
+        <p class="vumc-modal-kicker">Versailles United Methodist Church</p>
+        <h2 class="vumc-modal-title" id="vumcModalTitle">Subscribe to Updates</h2>
+      </div>
+      <button class="vumc-modal-close" id="vumcModalClose" aria-label="Close modal">×</button>
+    </div>
+
+    <div class="vumc-modal-body">
+      <div class="vumc-modal-loading" id="vumcModalLoading">Loading…</div>
+      <iframe class="vumc-modal-frame" id="vumcModalFrame" src="" title="VUMC Modal Content"></iframe>
+    </div>
+  </div>
+</div>
+
+<button class="vumc-chat-launcher" id="vumcChatLauncher" aria-label="Open chat">
+  <img src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s900-c-k-c0x00ffffff-no-rj" alt="VUMC Logo" />
+</button>
+
+<div class="vumc-chat-widget" id="vumcChatWidget">
+  <div class="vumc-chat-header">
+    <div class="vumc-chat-header-logo">
+      <img src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s900-c-k-c0x00ffffff-no-rj" alt="VUMC Logo" />
+    </div>
+    <div class="vumc-chat-header-text">
+      <h2>Ask VUMC</h2>
+      <p>Quick answers and church office support</p>
+    </div>
+    <button class="vumc-chat-close" id="vumcChatClose" aria-label="Close chat">×</button>
+  </div>
+
+  <div class="vumc-chat-body" id="vumcChatBody"></div>
+
+  <div class="vumc-quick-replies">
+    <button class="vumc-quick-btn" data-question="What are the Sunday worship times?">Worship Times</button>
+    <button class="vumc-quick-btn" data-question="Where is Versailles UMC located?">Address</button>
+    <button class="vumc-quick-btn" data-question="How can I contact the church?">Contact</button>
+    <button class="vumc-quick-btn" data-question="Are the services available online?">Watch Online</button>
+    <button class="vumc-quick-btn" data-question="How can I get involved with the church community?">Get Involved</button>
+    <button class="vumc-quick-btn" data-question="How can I give to Versailles UMC?">Giving</button>
+  </div>
+
+  <div class="vumc-fallback-form" id="vumcFallbackForm">
+    <h3>Send us a message</h3>
+    <p>I’m not sure about that one, but I can send your message to our church office.</p>
+
+    <div class="vumc-field">
+      <input type="text" id="vumcFallbackName" placeholder="Your name" />
+    </div>
+
+    <div class="vumc-field">
+      <input type="email" id="vumcFallbackEmail" placeholder="Your email" />
+    </div>
+
+    <div class="vumc-field">
+      <textarea id="vumcFallbackMessage" placeholder="Type your message here"></textarea>
+    </div>
+
+    <button class="vumc-send-fallback-btn" id="vumcSendFallbackBtn">Send Message</button>
+  </div>
+
+  <div class="vumc-status-text" id="vumcStatusText"></div>
+
+  <div class="vumc-composer">
+    <input type="text" id="vumcChatInput" placeholder="Type your question..." />
+    <button id="vumcSendBtn">Send</button>
+  </div>
+</div>
+
 <script>
   const mobileToggle = document.getElementById('mobileToggle');
   const mobileMenu = document.getElementById('mobileMenu');
+  const mobileConnectToggle = document.getElementById('mobileConnectToggle');
+  const mobileConnectMenu = document.getElementById('mobileConnectMenu');
+  const connectDropdown = document.getElementById('connectDropdown');
+  const desktopDropdownToggle = connectDropdown ? connectDropdown.querySelector('.dropdown-toggle') : null;
 
   if (mobileToggle && mobileMenu) {
     mobileToggle.addEventListener('click', () => {
       mobileMenu.classList.toggle('show');
     });
   }
+
+  if (mobileConnectToggle && mobileConnectMenu) {
+    mobileConnectToggle.addEventListener('click', () => {
+      const isOpen = mobileConnectMenu.classList.toggle('show');
+      mobileConnectToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  }
+
+  if (desktopDropdownToggle && connectDropdown) {
+    desktopDropdownToggle.addEventListener('click', (e) => {
+      if (window.innerWidth <= 1100) {
+        e.preventDefault();
+        const isOpen = connectDropdown.classList.toggle('open');
+        desktopDropdownToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 1100 && !connectDropdown.contains(e.target)) {
+        connectDropdown.classList.remove('open');
+        desktopDropdownToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  const overlay = document.getElementById('vumcModalOverlay');
+  const frame = document.getElementById('vumcModalFrame');
+  const loading = document.getElementById('vumcModalLoading');
+  const closeBtn = document.getElementById('vumcModalClose');
+  const titleEl = document.getElementById('vumcModalTitle');
+  let lastTrigger = null;
+
+  function openModal(url, title, triggerEl) {
+    if (!url) return;
+    lastTrigger = triggerEl || null;
+    titleEl.textContent = title || 'Open Form';
+    loading.style.display = 'flex';
+    frame.src = url;
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('vumc-modal-open');
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('vumc-modal-open');
+    frame.src = '';
+    loading.style.display = 'flex';
+    if (lastTrigger) lastTrigger.focus();
+  }
+
+  document.addEventListener('click', function (e) {
+    const trigger = e.target.closest('[data-modal-url]');
+    if (!trigger) return;
+    e.preventDefault();
+    const url = trigger.getAttribute('data-modal-url');
+    const title = trigger.getAttribute('data-modal-title') || 'Open Form';
+    openModal(url, title, trigger);
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) closeModal();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+  });
+
+  frame.addEventListener('load', function () {
+    loading.style.display = 'none';
+  });
+
+  const VUMC_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3RvHWZ0RIiUMZBdjVtgq-4ZJ60AHlYwy2ybZMCUYqoWVsIt1eurqn6gJYywf6gi1SuA/exec';
+
+  const vumcChatLauncher = document.getElementById('vumcChatLauncher');
+  const vumcChatWidget = document.getElementById('vumcChatWidget');
+  const vumcChatClose = document.getElementById('vumcChatClose');
+  const vumcChatBody = document.getElementById('vumcChatBody');
+  const vumcChatInput = document.getElementById('vumcChatInput');
+  const vumcSendBtn = document.getElementById('vumcSendBtn');
+  const vumcQuickButtons = document.querySelectorAll('.vumc-quick-btn');
+  const vumcFallbackForm = document.getElementById('vumcFallbackForm');
+  const vumcFallbackName = document.getElementById('vumcFallbackName');
+  const vumcFallbackEmail = document.getElementById('vumcFallbackEmail');
+  const vumcFallbackMessage = document.getElementById('vumcFallbackMessage');
+  const vumcSendFallbackBtn = document.getElementById('vumcSendFallbackBtn');
+  const vumcStatusText = document.getElementById('vumcStatusText');
+
+  let vumcLastUnmatchedQuestion = '';
+
+  const vumcFaqResponses = [
+    {
+      keywords: ['address', 'location', 'where are you', 'where is the church', 'directions'],
+      response: {
+        text: `Versailles United Methodist Church is located at:\n\n230 Paynes Mill Road\nVersailles, Kentucky.`,
+        buttons: [
+          { label: 'Open Maps', url: 'https://maps.google.com/?q=230+Paynes+Mill+Road+Versailles+KY' }
+        ]
+      }
+    },
+    {
+      keywords: ['office hours', 'hours', 'when are you open', 'office open'],
+      response: {
+        text: `Our church office hours are:\n\nMonday through Friday\n10:00 AM – 2:00 PM.`
+      }
+    },
+    {
+      keywords: ['contact', 'phone', 'telephone', 'call', 'email'],
+      response: {
+        text: `You can contact Versailles UMC by phone or email.`,
+        buttons: [
+          { label: 'Call 859-873-4304', url: 'tel:8598734304' },
+          { label: 'Email Office', url: 'mailto:vumcsecretary@gmail.com' }
+        ]
+      }
+    },
+    {
+      keywords: ['worship', 'service time', 'service times', 'sunday', 'traditional', 'contemporary'],
+      response: {
+        text: `Our Sunday worship schedule:\n\n• Traditional Worship — 9:30 AM\n• Contemporary Worship — 10:30 AM\n\nWe would love for you to join us.`
+      }
+    },
+    {
+      keywords: ['online', 'livestream', 'live stream', 'watch online', 'youtube', 'stream'],
+      response: {
+        text: `Yes, we offer live streaming of our services.`,
+        buttons: [
+          { label: 'Watch Online', url: 'https://www.versaillesumc.org/worship-online' }
+        ]
+      }
+    },
+    {
+      keywords: ['get involved', 'volunteer', 'serve', 'ministries', 'help', 'community'],
+      response: {
+        text: `We offer various ways to get involved, including Life Groups, AA meetings, and volunteer ministries.`
+      }
+    },
+    {
+      keywords: ['life group', 'small group', 'groups', 'bible study'],
+      response: {
+        text: `Life Groups meet on Sundays at:\n\n• 9:15 AM\n• 10:30 AM.`
+      }
+    },
+    {
+      keywords: ['give', 'giving', 'donate', 'offering', 'tithe'],
+      response: {
+        text: `You can make a secure one-time or recurring donation here.`,
+        buttons: [
+          { label: 'Give Online', url: 'https://www.versaillesumc.org/ways-to-serve/give' }
+        ]
+      }
+    }
+  ];
+
+  function vumcCreateLinkButtons(buttons = []) {
+    if (!buttons.length) return null;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'vumc-link-buttons';
+
+    buttons.forEach(btn => {
+      const a = document.createElement('a');
+      a.className = 'vumc-link-btn';
+      a.href = btn.url;
+      a.target = btn.url.startsWith('http') ? '_blank' : '_self';
+      a.rel = btn.url.startsWith('http') ? 'noopener noreferrer' : '';
+      a.textContent = btn.label;
+      wrap.appendChild(a);
+    });
+
+    return wrap;
+  }
+
+  function vumcAddMessage(content, sender = 'bot') {
+    const row = document.createElement('div');
+    row.className = `vumc-message-row ${sender}`;
+
+    const group = document.createElement('div');
+    group.className = 'vumc-message-group';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'vumc-bubble';
+
+    if (typeof content === 'string') {
+      bubble.textContent = content;
+      group.appendChild(bubble);
+    } else {
+      bubble.textContent = content.text || '';
+      group.appendChild(bubble);
+
+      const buttonWrap = vumcCreateLinkButtons(content.buttons || []);
+      if (buttonWrap) group.appendChild(buttonWrap);
+    }
+
+    row.appendChild(group);
+    vumcChatBody.appendChild(row);
+    vumcChatBody.scrollTop = vumcChatBody.scrollHeight;
+  }
+
+  function vumcNormalizeText(text) {
+    return text.toLowerCase().trim();
+  }
+
+  function vumcFindFaqMatch(userText) {
+    const cleanText = vumcNormalizeText(userText);
+
+    for (const item of vumcFaqResponses) {
+      for (const keyword of item.keywords) {
+        if (cleanText.includes(keyword)) {
+          return item.response;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  function vumcShowFallbackForm(originalQuestion) {
+    vumcFallbackForm.classList.add('active');
+    vumcFallbackMessage.value = originalQuestion || '';
+    vumcLastUnmatchedQuestion = originalQuestion || '';
+    vumcStatusText.textContent = 'Your question did not match one of our quick answers. Please send us a message below.';
+    vumcChatBody.scrollTop = vumcChatBody.scrollHeight;
+  }
+
+  function vumcHideFallbackForm() {
+    vumcFallbackForm.classList.remove('active');
+    vumcStatusText.textContent = '';
+  }
+
+  function vumcHandleUserMessage(messageText) {
+    if (!messageText.trim()) return;
+
+    vumcAddMessage(messageText, 'user');
+
+    const match = vumcFindFaqMatch(messageText);
+
+    if (match) {
+      setTimeout(() => {
+        vumcAddMessage(match, 'bot');
+        vumcHideFallbackForm();
+      }, 250);
+    } else {
+      setTimeout(() => {
+        vumcAddMessage('I’m not sure about that, but I can send your message to our church office.', 'bot');
+        vumcShowFallbackForm(messageText);
+      }, 250);
+    }
+  }
+
+  function vumcSendCurrentMessage() {
+    const text = vumcChatInput.value;
+    if (!text.trim()) return;
+    vumcHandleUserMessage(text);
+    vumcChatInput.value = '';
+  }
+
+  async function vumcSubmitFallback() {
+    const name = vumcFallbackName.value.trim();
+    const email = vumcFallbackEmail.value.trim();
+    const message = vumcFallbackMessage.value.trim();
+
+    if (!name || !email || !message) {
+      vumcStatusText.textContent = 'Please fill out your name, email, and message.';
+      return;
+    }
+
+    vumcSendFallbackBtn.disabled = true;
+    vumcStatusText.textContent = 'Sending your message...';
+
+    try {
+      const response = await fetch(VUMC_APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          originalQuestion: vumcLastUnmatchedQuestion,
+          source: 'Ask VUMC Floating Website Chat'
+        }),
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        }
+      });
+
+      const result = await response.json();
+
+      if (result.ok) {
+        vumcAddMessage('Thanks! Your message has been sent to our church office. Someone will be in contact with you.', 'bot');
+        vumcFallbackName.value = '';
+        vumcFallbackEmail.value = '';
+        vumcFallbackMessage.value = '';
+        vumcHideFallbackForm();
+        vumcStatusText.textContent = 'Message sent successfully.';
+      } else {
+        vumcStatusText.textContent = 'There was a problem sending your message. Please try again.';
+      }
+    } catch (error) {
+      vumcStatusText.textContent = 'There was a problem sending your message. Please try again.';
+    } finally {
+      vumcSendFallbackBtn.disabled = false;
+    }
+  }
+
+  function vumcOpenChat() {
+    vumcChatWidget.classList.add('open');
+  }
+
+  function vumcCloseChat() {
+    vumcChatWidget.classList.remove('open');
+  }
+
+  vumcChatLauncher.addEventListener('click', vumcOpenChat);
+  vumcChatClose.addEventListener('click', vumcCloseChat);
+
+  vumcQuickButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const question = button.getAttribute('data-question');
+      vumcHandleUserMessage(question);
+    });
+  });
+
+  vumcSendBtn.addEventListener('click', vumcSendCurrentMessage);
+
+  vumcChatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      vumcSendCurrentMessage();
+    }
+  });
+
+  vumcSendFallbackBtn.addEventListener('click', vumcSubmitFallback);
+
+  vumcAddMessage({
+    text: `Hi! Welcome to Versailles UMC.\n\nI can help with common questions like worship times, office hours, contact information, online worship, Life Groups, and giving.\n\nIf I can’t answer your question, I can send your message to our church office.`,
+    buttons: [
+      { label: 'Worship Online', url: 'https://www.versaillesumc.org/worship-online' },
+      { label: 'Give Online', url: 'https://www.versaillesumc.org/ways-to-serve/give' }
+    ]
+  }, 'bot');
 </script>
 </body>
 </html>
