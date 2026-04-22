@@ -449,20 +449,38 @@
       border-radius: 28px;
       overflow: hidden;
       box-shadow: var(--shadow);
-      background: #ddd center/cover no-repeat;
+      background: #ddd;
       isolation: isolate;
+    }
+
+    .feature-card.image-mode {
+      background: none !important;
+    }
+
+    .feature-card-media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .feature-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .feature-card::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(17,22,29,0.82), rgba(17,22,29,0.22));
+      z-index: 1;
+      background: linear-gradient(to top, rgba(17,22,29,0.72), rgba(17,22,29,0.18));
       transition: background var(--transition), transform var(--transition);
     }
 
     .feature-card:hover::before {
-      background: linear-gradient(to top, rgba(17,22,29,0.90), rgba(17,22,29,0.14));
+      background: linear-gradient(to top, rgba(17,22,29,0.84), rgba(17,22,29,0.10));
     }
 
     .feature-card:hover .feature-card-inner {
@@ -472,7 +490,7 @@
     .feature-card-inner {
       position: absolute;
       inset: auto 0 0 0;
-      z-index: 1;
+      z-index: 2;
       padding: 22px;
       color: #fff;
       transition: transform var(--transition);
@@ -1243,28 +1261,40 @@
         </p>
 
         <div class="cards-grid">
-          <a class="feature-card" href="watch.html" style="background-image:url('vumc-media/worship-on-laptop.png');">
+          <a class="feature-card image-mode" href="watch.html">
+            <div class="feature-card-media">
+              <img src="https://church.versaillesumc.org/vumc-media/worship-on-laptop.png" alt="Watch worship online">
+            </div>
             <div class="feature-card-inner">
               <h3>Watch</h3>
               <p>Join worship live, catch recent services, and experience our interactive watch page.</p>
             </div>
           </a>
 
-          <a class="feature-card" href="new-here.html" style="background-image:url('vumc-media/plan a visit.png');">
+          <a class="feature-card image-mode" href="new-here.html">
+            <div class="feature-card-media">
+              <img src="https://church.versaillesumc.org/vumc-media/plan%20a%20visit.png" alt="New here">
+            </div>
             <div class="feature-card-inner">
               <h3>New Here</h3>
               <p>Start here if you are visiting, exploring faith, or looking for your first next step.</p>
             </div>
           </a>
 
-          <a class="feature-card" href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true" style="background-image:url('vumc-media/building2.jpg');">
+          <a class="feature-card image-mode" href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">
+            <div class="feature-card-media">
+              <img src="https://www.churchleadership.com/wp-content/uploads/2021/02/promise-of-digital-giving.png" alt="Give online">
+            </div>
             <div class="feature-card-inner">
               <h3>Give</h3>
               <p>Support the mission of the church through simple and secure online giving.</p>
             </div>
           </a>
 
-          <a class="feature-card" href="events.html" style="background-image:url('vumc-media/atrium.jpg');">
+          <a class="feature-card image-mode" href="events.html">
+            <div class="feature-card-media">
+              <img src="https://church.versaillesumc.org/vumc-media/atrium.jpg" alt="Events">
+            </div>
             <div class="feature-card-inner">
               <h3>Events</h3>
               <p>See what is happening this week and discover upcoming church and community events.</p>
