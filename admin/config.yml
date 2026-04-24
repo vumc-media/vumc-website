@@ -2,6 +2,7 @@ backend:
   name: github
   repo: vumc-media/vumc-website
   branch: main
+  base_url: https://sveltia-cms-auth.vercel.app
 
 media_folder: "vumc-media"
 public_folder: "/vumc-media"
@@ -10,11 +11,22 @@ collections:
   - name: "homepage"
     label: "Homepage Content"
     files:
-      - label: "Home"
+      - label: "Home Page"
         name: "home"
         file: "content/home.json"
         fields:
-          - { label: "Hero Title", name: "hero_title", widget: "string" }
-          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string" }
-          - { label: "Button Text", name: "button_text", widget: "string" }
-          - { label: "Button Link", name: "button_link", widget: "string" }
+          - label: "Hero Title"
+            name: "hero_title"
+            widget: "string"
+
+          - label: "Hero Subtitle"
+            name: "hero_subtitle"
+            widget: "text"
+
+          - label: "Button Text"
+            name: "button_text"
+            widget: "string"
+
+          - label: "Button Link"
+            name: "button_link"
+            widget: "string"
