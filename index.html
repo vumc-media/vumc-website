@@ -1636,14 +1636,14 @@
         <div class="eyebrow">Latest Messages</div>
         <h2 class="section-title">Watch recent worship and messages.</h2>
         <p class="section-copy">
-          Stay connected with Versailles UMC through recent sermons, worship moments, and past livestreams from our YouTube channel.
+          Stay connected with recent messages and contemporary worship livestreams from our YouTube channel.
         </p>
 
         <div class="video-loading-card" id="youtubeLoading">Loading recent videos…</div>
         <div class="video-grid" id="youtubeVideoGrid" aria-live="polite"></div>
 
         <div class="btn-row">
-          <a class="btn btn-dark" href="https://www.youtube.com/@versaillesumc/videos" target="_blank" rel="noopener noreferrer">View More Videos</a>
+          <a class="btn btn-dark" href="https://www.youtube.com/@versaillesumc/videos" target="_blank" rel="noopener noreferrer">View More on YouTube</a>
           <a class="btn btn-light" href="watch.html">Watch Live Worship</a>
         </div>
       </div>
@@ -1912,13 +1912,34 @@
         const data = await response.json();
         const items = Array.isArray(data.items) ? data.items : [];
 
-        const worshipWords = ['service', 'worship', 'traditional', 'contemporary', 'message', 'sermon', 'live'];
-        const filtered = items.filter(item => {
+        const excludeWords = [
+          'traditional worship',
+          'traditional service',
+          '9:30',
+          '9:30am',
+          '9:30 am'
+        ];
+
+        const preferWords = [
+          'sermon',
+          'message',
+          'contemporary',
+          '10:30',
+          '10:30am',
+          '10:30 am'
+        ];
+
+        const nonTraditionalVideos = items.filter(item => {
           const title = (item.title || '').toLowerCase();
-          return worshipWords.some(word => title.includes(word));
+          return !excludeWords.some(word => title.includes(word));
         });
 
-        const videos = (filtered.length ? filtered : items).slice(0, 4);
+        const preferredVideos = nonTraditionalVideos.filter(item => {
+          const title = (item.title || '').toLowerCase();
+          return preferWords.some(word => title.includes(word));
+        });
+
+        const videos = (preferredVideos.length ? preferredVideos : nonTraditionalVideos).slice(0, 4);
 
         grid.innerHTML = '';
         videos.forEach(video => grid.appendChild(vumcCreateVideoCard(video)));
