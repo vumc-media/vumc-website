@@ -1,4 +1,3 @@
-
 backend:
   name: github
   repo: vumc-media/vumc-website
