@@ -829,6 +829,95 @@
       background: #f7f4ef;
     }
 
+
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 34px;
+    }
+
+    .video-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 22px 42px rgba(17, 22, 29, 0.14);
+    }
+
+    .video-thumb {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #11161d;
+      overflow: hidden;
+    }
+
+    .video-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-play {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 54px;
+      height: 54px;
+      border-radius: 999px;
+      background: rgba(17,22,29,0.78);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      padding-left: 3px;
+      border: 1px solid rgba(255,255,255,0.24);
+      backdrop-filter: blur(6px);
+    }
+
+    .video-card-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .video-card h3 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .video-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .video-loading-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      margin-top: 34px;
+    }
+
     .vumc-chat-launcher {
       position: fixed;
       right: 20px;
@@ -1123,6 +1212,8 @@
 
       .hero-grid,
       .cards-grid,
+      .video-grid,
+      .video-grid,
       .two-column,
       .watch-grid,
       .next-steps-grid,
@@ -1138,6 +1229,8 @@
 
       .hero-grid,
       .cards-grid,
+      .video-grid,
+      .video-grid,
       .two-column,
       .watch-grid,
       .next-steps-grid,
@@ -1166,7 +1259,96 @@
       .brand-tagline { font-size: 11px; }
       .btn-row { align-items: stretch; }
 
-      .vumc-chat-launcher {
+  
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 34px;
+    }
+
+    .video-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 22px 42px rgba(17, 22, 29, 0.14);
+    }
+
+    .video-thumb {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #11161d;
+      overflow: hidden;
+    }
+
+    .video-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-play {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 54px;
+      height: 54px;
+      border-radius: 999px;
+      background: rgba(17,22,29,0.78);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      padding-left: 3px;
+      border: 1px solid rgba(255,255,255,0.24);
+      backdrop-filter: blur(6px);
+    }
+
+    .video-card-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .video-card h3 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .video-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .video-loading-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      margin-top: 34px;
+    }
+
+    .vumc-chat-launcher {
         right: 14px;
         bottom: 14px;
         width: 60px;
@@ -1454,24 +1636,14 @@
         <div class="eyebrow">Latest Messages</div>
         <h2 class="section-title">Watch recent worship and messages.</h2>
         <p class="section-copy">
-          Stay connected with Versailles UMC through recent sermons, worship moments, and online ministry updates from our YouTube channel.
+          Stay connected with Versailles UMC through recent sermons, worship moments, and past livestreams from our YouTube channel.
         </p>
 
-        <div style="margin-top:34px;border-radius:28px;overflow:hidden;box-shadow:var(--shadow);background:#000;border:1px solid var(--border);">
-          <iframe
-            width="100%"
-            height="520"
-            src="https://www.youtube.com/embed?listType=playlist&list=UU_svgodM3blLqWEBQ5yNjmA"
-            title="Latest videos from Versailles United Methodist Church"
-            frameborder="0"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen>
-          </iframe>
-        </div>
+        <div class="video-loading-card" id="youtubeLoading">Loading recent videos…</div>
+        <div class="video-grid" id="youtubeVideoGrid" aria-live="polite"></div>
 
         <div class="btn-row">
-          <a class="btn btn-dark" href="https://www.youtube.com/@versaillesumc" target="_blank" rel="noopener noreferrer">Visit Our YouTube Channel</a>
+          <a class="btn btn-dark" href="https://www.youtube.com/@versaillesumc/videos" target="_blank" rel="noopener noreferrer">View More Videos</a>
           <a class="btn btn-light" href="watch.html">Watch Live Worship</a>
         </div>
       </div>
@@ -1680,6 +1852,88 @@
     frame.addEventListener('load', function () {
       loading.style.display = 'none';
     });
+
+
+    const VUMC_YOUTUBE_CHANNEL_ID = 'UC_svgodM3blLqWEBQ5yNjmA';
+    const VUMC_YOUTUBE_FEED = `https://www.youtube.com/feeds/videos.xml?channel_id=${VUMC_YOUTUBE_CHANNEL_ID}`;
+    const VUMC_RSS_PROXY = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(VUMC_YOUTUBE_FEED)}`;
+
+    function vumcFormatVideoDate(pubDate) {
+      if (!pubDate) return 'Recent message';
+      const date = new Date(pubDate);
+      if (Number.isNaN(date.getTime())) return 'Recent message';
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function vumcVideoIdFromLink(link) {
+      try {
+        const url = new URL(link);
+        return url.searchParams.get('v');
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function vumcCreateVideoCard(video) {
+      const videoId = video.videoId || vumcVideoIdFromLink(video.link);
+      const thumbnail = video.thumbnail || (videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : '');
+      const title = video.title || 'Recent worship video';
+      const link = video.link || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : 'https://www.youtube.com/@versaillesumc/videos');
+
+      const card = document.createElement('a');
+      card.className = 'video-card';
+      card.href = link;
+      card.target = '_blank';
+      card.rel = 'noopener noreferrer';
+
+      card.innerHTML = `
+        <div class="video-thumb">
+          ${thumbnail ? `<img src="${thumbnail}" alt="${title.replace(/"/g, '&quot;')}">` : ''}
+          <span class="video-play" aria-hidden="true">▶</span>
+        </div>
+        <div class="video-card-body">
+          <h3>${title}</h3>
+          <p>${vumcFormatVideoDate(video.pubDate)}</p>
+        </div>
+      `;
+
+      return card;
+    }
+
+    async function vumcLoadLatestYouTubeVideos() {
+      const grid = document.getElementById('youtubeVideoGrid');
+      const loading = document.getElementById('youtubeLoading');
+      if (!grid || !loading) return;
+
+      try {
+        const response = await fetch(VUMC_RSS_PROXY);
+        if (!response.ok) throw new Error('Unable to load YouTube feed');
+
+        const data = await response.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+
+        const worshipWords = ['service', 'worship', 'traditional', 'contemporary', 'message', 'sermon', 'live'];
+        const filtered = items.filter(item => {
+          const title = (item.title || '').toLowerCase();
+          return worshipWords.some(word => title.includes(word));
+        });
+
+        const videos = (filtered.length ? filtered : items).slice(0, 4);
+
+        grid.innerHTML = '';
+        videos.forEach(video => grid.appendChild(vumcCreateVideoCard(video)));
+
+        if (videos.length) {
+          loading.style.display = 'none';
+        } else {
+          loading.textContent = 'Recent videos are available on our YouTube channel.';
+        }
+      } catch (error) {
+        loading.innerHTML = 'Recent videos are available on our YouTube channel. <a href="https://www.youtube.com/@versaillesumc/videos" target="_blank" rel="noopener noreferrer" style="font-weight:700;color:var(--accent);">View videos here →</a>';
+      }
+    }
+
+    vumcLoadLatestYouTubeVideos();
 
     const VUMC_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3RvHWZ0RIiUMZBdjVtgq-4ZJ60AHlYwy2ybZMCUYqoWVsIt1eurqn6gJYywf6gi1SuA/exec';
 
