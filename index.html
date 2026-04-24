@@ -1444,13 +1444,13 @@
         <div class="hero-grid">
           <div class="hero-panel">
             <div class="hero-kicker">Versailles, Kentucky • In Person & Online</div>
-            <h1>You Belong Here.</h1>
-            <p>
+            <h1 id="hero-title">You Belong Here.</h1>
+            <p id="hero-subtitle">
               We are a church seeking to love like Jesus through worship, connection, service, and spiritual growth.
               Whether you are exploring faith, returning to church, or looking for a church home, there is a place for you here.
             </p>
             <div class="btn-row">
-              <a class="btn btn-primary" href="plan-your-visit.html">Plan Your Visit</a>
+              <a id="hero-button" class="btn btn-primary" href="plan-your-visit.html">Plan Your Visit</a>
               <a class="btn btn-secondary" href="watch.html">Watch Worship Online</a>
               <a class="btn btn-light" href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
             </div>
@@ -2224,5 +2224,41 @@
       ]
     }, 'bot');
   </script>
+
+  <script>
+    async function loadVumcHomepageContent() {
+      try {
+        const response = await fetch('/content/home.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Unable to load CMS content');
+
+        const data = await response.json();
+
+        const heroTitle = document.getElementById('hero-title');
+        const heroSubtitle = document.getElementById('hero-subtitle');
+        const heroButton = document.getElementById('hero-button');
+
+        if (heroTitle && data.hero_title) {
+          heroTitle.textContent = data.hero_title;
+        }
+
+        if (heroSubtitle && data.hero_subtitle) {
+          heroSubtitle.textContent = data.hero_subtitle;
+        }
+
+        if (heroButton && data.button_text) {
+          heroButton.textContent = data.button_text;
+        }
+
+        if (heroButton && data.button_link) {
+          heroButton.href = data.button_link;
+        }
+      } catch (error) {
+        console.log('CMS load error:', error);
+      }
+    }
+
+    loadVumcHomepageContent();
+  </script>
+
 </body>
 </html>
