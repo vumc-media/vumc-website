@@ -49,24 +49,29 @@
   "openingHoursSpecification": [
     {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday"
-      ],
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
       "opens": "10:00",
       "closes": "14:00"
     }
+  ],
+  "sameAs": [
+    "https://www.facebook.com/versaillesumc",
+    "https://www.youtube.com/@versaillesumc",
+    "https://versaillesumc.churchcenter.com"
   ],
   "event": [
     {
       "@type": "Event",
       "name": "Traditional Worship",
-      "startDate": "2026-05-03T09:30:00-04:00",
       "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
       "eventStatus": "https://schema.org/EventScheduled",
+      "eventSchedule": {
+        "@type": "Schedule",
+        "repeatFrequency": "P1W",
+        "byDay": "https://schema.org/Sunday",
+        "startTime": "09:30",
+        "endTime": "10:30"
+      },
       "location": {
         "@type": "Place",
         "name": "Versailles United Methodist Church",
@@ -78,19 +83,20 @@
           "postalCode": "40383",
           "addressCountry": "US"
         }
-      },
-      "organizer": {
-        "@type": "Church",
-        "name": "Versailles United Methodist Church",
-        "url": "https://versaillesumc.org/"
       }
     },
     {
       "@type": "Event",
       "name": "Contemporary Worship",
-      "startDate": "2026-05-03T10:30:00-04:00",
       "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
       "eventStatus": "https://schema.org/EventScheduled",
+      "eventSchedule": {
+        "@type": "Schedule",
+        "repeatFrequency": "P1W",
+        "byDay": "https://schema.org/Sunday",
+        "startTime": "10:30",
+        "endTime": "11:30"
+      },
       "location": {
         "@type": "Place",
         "name": "Versailles United Methodist Church",
@@ -102,17 +108,8 @@
           "postalCode": "40383",
           "addressCountry": "US"
         }
-      },
-      "organizer": {
-        "@type": "Church",
-        "name": "Versailles United Methodist Church",
-        "url": "https://versaillesumc.org/"
       }
     }
-  ],
-  "sameAs": [
-    "https://www.youtube.com/@versaillesumc",
-    "https://versaillesumc.churchcenter.com"
   ]
 }
 </script>
@@ -133,69 +130,7 @@
   <meta name="twitter:description" content="Visit Versailles United Methodist Church in Versailles, KY. Join us for traditional and contemporary worship, watch online, and connect with a church striving to Love Like Jesus." />
   <meta name="twitter:image" content="https://versaillesumc.org/vumc-media/worship.jpg" />
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Church",
-    "name": "Versailles United Methodist Church",
-    "alternateName": "VUMC",
-    "url": "https://versaillesumc.org/",
-    "logo": "https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s900-c-k-c0x00ffffff-no-rj",
-    "image": "https://versaillesumc.org/vumc-media/worship.jpg",
-    "description": "Visit Versailles United Methodist Church in Versailles, KY. Join us for traditional and contemporary worship, watch online, and connect with a church striving to Love Like Jesus.",
-    "telephone": "+1-859-873-4304",
-    "email": "vumcsecretary@gmail.com",
-    "slogan": "A Church Striving to Love Like Jesus",
-    "hashtag": "#LoveLikeJesus",
-    "openingHours": "Mo-Fr 10:00-14:00",
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": 38.0522,
-      "longitude": -84.7299
-    },
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "230 Paynes Mill Road",
-      "addressLocality": "Versailles",
-      "addressRegion": "KY",
-      "postalCode": "40383",
-      "addressCountry": "US"
-    },
-    "event": [
-      {
-        "@type": "Event",
-        "name": "Traditional Worship",
-        "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
-        "eventStatus": "https://schema.org/EventScheduled",
-        "location": {
-          "@type": "Place",
-          "name": "Versailles United Methodist Church",
-          "address": "230 Paynes Mill Road, Versailles, KY 40383"
-        },
-        "description": "Traditional worship at Versailles United Methodist Church each Sunday at 9:30 AM Eastern."
-      },
-      {
-        "@type": "Event",
-        "name": "Contemporary Worship",
-        "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
-        "eventStatus": "https://schema.org/EventScheduled",
-        "location": {
-          "@type": "Place",
-          "name": "Versailles United Methodist Church",
-          "address": "230 Paynes Mill Road, Versailles, KY 40383"
-        },
-        "description": "Contemporary worship at Versailles United Methodist Church each Sunday at 10:30 AM Eastern."
-      }
-    ],
-    "sameAs": [
-      "https://www.facebook.com/versaillesumc",
-      "https://www.youtube.com/@versaillesumc",
-      "https://versaillesumc.churchcenter.com/"
-    ]
-  }
-  </script>
-
-  <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -1537,10 +1472,10 @@
           <div class="mobile-submenu" id="mobileConnectMenu">
             <a href='/new-here'>New Here</a>
             <a href='/kids-families'>Kids & Families</a>
-            <a href="youth.html">Youth</a>
+            <a href="/youth">Youth</a>
             <a href='/groups'>Groups</a>
             <a href='/serve'>Serve</a>
-            <a href="missions.html">Missions</a>
+            <a href="/missions">Missions</a>
             <a href='/next-steps'>Next Steps</a>
             <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
           </div>
@@ -2181,7 +2116,7 @@
     'groceries', 'gas', 'fuel',
     'electric bill', 'water bill', 'gas bill',
     'help with bills', 'financial assistance', 'financial help',
-    'help paying bills', 'need help paying', 'need help',
+    'help paying bills', 'need help paying',
     'bluegrass community action'
   ],
   response: {
