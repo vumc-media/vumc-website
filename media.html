@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -169,6 +170,8 @@
       background: #ddd;
     }
 
+    .brand-text { min-width: 0; }
+
     .brand-name {
       margin: 0;
       font-size: 16px;
@@ -190,13 +193,79 @@
       font-weight: 600;
     }
 
-    .nav-links a {
+    .nav-links > a,
+    .dropdown-toggle {
       color: var(--muted);
+      transition: color var(--transition);
     }
 
-    .nav-links a:hover,
-    .nav-links a.active {
+    .nav-links > a:hover,
+    .dropdown-toggle:hover {
       color: var(--text);
+    }
+
+    .nav-item.dropdown {
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+
+    .dropdown-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .dropdown-toggle::after {
+      content: "▾";
+      font-size: 11px;
+      line-height: 1;
+      transform: translateY(1px);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 250px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(17,22,29,0.12);
+      padding: 10px 0;
+      display: none;
+      z-index: 1200;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 11px 16px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .dropdown-menu a:hover {
+      background: #f6f3ee;
+      color: var(--text);
+    }
+
+    @media (min-width: 1101px) {
+      .nav-item.dropdown:hover .dropdown-menu {
+        display: block;
+      }
+    }
+
+    .nav-item.dropdown.open .dropdown-menu {
+      display: block;
     }
 
     .nav-actions {
@@ -234,11 +303,36 @@
       box-shadow: var(--shadow);
     }
 
-    .mobile-menu a {
+    .mobile-menu a,
+    .mobile-submenu-toggle {
       padding: 10px 2px;
       font-weight: 600;
       color: var(--text);
+      background: none;
+      border: none;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
     }
+
+    .mobile-submenu {
+      display: none;
+      padding-left: 14px;
+      border-left: 2px solid rgba(17,22,29,0.08);
+      margin-top: -4px;
+    }
+
+    .mobile-submenu.show {
+      display: grid;
+      gap: 2px;
+    }
+
+    .mobile-submenu a {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 8px 2px;
+    }
+
 
     .hero {
       position: relative;
@@ -619,7 +713,8 @@
 
     @media (max-width: 1100px) {
       .nav-links,
-      .nav-actions .btn-dark {
+      .nav-actions .btn-dark,
+      .nav-actions .btn-light.subscribe-desktop {
         display: none;
       }
 
@@ -681,7 +776,7 @@
   <header class="site-header">
     <div class="container">
       <div class="nav-wrap">
-        <a class="brand" href="/">
+        <a class='brand' href='/'>
           <img class="brand-mark" src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s176-c-k-c0x00ffffff-no-rj" alt="Versailles UMC logo" />
           <div class="brand-text">
             <p class="brand-name">Versailles United Methodist Church</p>
@@ -690,33 +785,58 @@
         </a>
 
         <nav class="nav-links" aria-label="Primary navigation">
-          <a href="/">Home</a>
-          <a href="/watch">Watch</a>
-          <a href="/new-here">New Here</a>
-          <a href="/serve">Serve</a>
-          <a class="active" href="/media">Media</a>
-          <a href="/events">Events</a>
+          <a href='/'>Home</a>
+          <a href='/watch'>Watch</a>
+
+          <div class="nav-item dropdown" id="connectDropdown">
+            <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="connectMenuDesktop">
+              Connect
+            </button>
+            <div class="dropdown-menu" id="connectMenuDesktop">
+              <a href='/new-here'>New Here</a>
+              <a href='/kids-families'>Kids & Families</a>
+              <a href='/groups'>Groups</a>
+              <a href='/serve'>Serve</a>
+              <a href='/next-steps'>Next Steps</a>
+              <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
+            </div>
+          </div>
+          <a href='/media'>Media</a>
+          <a href='/events'>Events</a>
           <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
-          <a href="/plan-your-visit">Plan Your Visit</a>
+          <a href='/plan-your-visit'>Plan Your Visit</a>
         </nav>
 
         <div class="nav-actions">
-          <a class="btn btn-dark" href="https://versaillesumc.churchcenter.com/people/forms/605579" data-open-in-church-center-modal="true">Get Involved</a>
+          <a class='btn btn-dark' href='/watch'>Watch Live</a>
+          <a class="btn btn-light subscribe-desktop" href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
           <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
         </div>
       </div>
 
       <div class="mobile-menu" id="mobileMenu">
         <div class="mobile-menu-inner">
-          <a href="/">Home</a>
-          <a href="/watch">Watch</a>
-          <a href="/new-here">New Here</a>
-          <a href="/serve">Serve</a>
-          <a href="/media">Media</a>
-          <a href="/events">Events</a>
+          <a href='/'>Home</a>
+          <a href='/watch'>Watch</a>
+
+          <button class="mobile-submenu-toggle" id="mobileConnectToggle" type="button" aria-expanded="false" aria-controls="mobileConnectMenu">
+            Connect
+          </button>
+          <div class="mobile-submenu" id="mobileConnectMenu">
+            <a href='/new-here'>New Here</a>
+            <a href='/kids-families'>Kids & Families</a>
+            <a href="/youth">Youth</a>
+            <a href='/groups'>Groups</a>
+            <a href='/serve'>Serve</a>
+            <a href="/missions">Missions</a>
+            <a href='/next-steps'>Next Steps</a>
+            <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
+          </div>
+          <a href='/media'>Media</a>
+          <a href='/events'>Events</a>
           <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
-          <a href="/plan-your-visit">Plan Your Visit</a>
-          <a href="https://versaillesumc.churchcenter.com/people/forms/605579" data-open-in-church-center-modal="true">Get Involved</a>
+          <a href='/plan-your-visit'>Plan Your Visit</a>
+          <a href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
         </div>
       </div>
     </div>
@@ -891,10 +1011,38 @@
 
     const mobileToggle = document.getElementById('mobileToggle');
     const mobileMenu = document.getElementById('mobileMenu');
+    const mobileConnectToggle = document.getElementById('mobileConnectToggle');
+    const mobileConnectMenu = document.getElementById('mobileConnectMenu');
+    const connectDropdown = document.getElementById('connectDropdown');
+    const desktopDropdownToggle = connectDropdown ? connectDropdown.querySelector('.dropdown-toggle') : null;
 
     if (mobileToggle && mobileMenu) {
       mobileToggle.addEventListener('click', () => {
         mobileMenu.classList.toggle('show');
+      });
+    }
+
+    if (mobileConnectToggle && mobileConnectMenu) {
+      mobileConnectToggle.addEventListener('click', () => {
+        const isOpen = mobileConnectMenu.classList.toggle('show');
+        mobileConnectToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    }
+
+    if (desktopDropdownToggle && connectDropdown) {
+      desktopDropdownToggle.addEventListener('click', (e) => {
+        if (window.innerWidth <= 1100) {
+          e.preventDefault();
+          const isOpen = connectDropdown.classList.toggle('open');
+          desktopDropdownToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 1100 && !connectDropdown.contains(e.target)) {
+          connectDropdown.classList.remove('open');
+          desktopDropdownToggle.setAttribute('aria-expanded', 'false');
+        }
       });
     }
 
@@ -941,6 +1089,20 @@
         audioBtn.getAttribute('data-audio-open'),
         audioBtn.getAttribute('data-title') || 'Podcast Player',
         'audio'
+      );
+    });
+
+
+
+    document.addEventListener('click', function(e) {
+      const formBtn = e.target.closest('[data-modal-url]');
+      if (!formBtn) return;
+
+      e.preventDefault();
+      openMediaModal(
+        formBtn.getAttribute('data-modal-url'),
+        formBtn.getAttribute('data-modal-title') || 'Open Form',
+        'form'
       );
     });
 
