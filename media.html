@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <title>Media | Versailles UMC</title>
-
-<meta name="description" content="Watch past sermons and listen to podcast messages from Versailles United Methodist Church in Versailles, Kentucky." />
+<meta name="description" content="Watch past worship services and listen to messages from Versailles United Methodist Church in Versailles, Kentucky.">
 
 <style>
 :root {
@@ -14,9 +13,14 @@
   --blue:#1e4f8f;
   --gold:#d6a84f;
   --cream:#f7f2e8;
+  --white:#ffffff;
   --text:#1f2937;
   --muted:#6b7280;
-  --radius:20px;
+  --radius:22px;
+}
+
+* {
+  box-sizing:border-box;
 }
 
 body {
@@ -26,131 +30,176 @@ body {
   color:var(--text);
 }
 
-/* HERO */
+a {
+  color:inherit;
+  text-decoration:none;
+}
+
 .hero {
   text-align:center;
   color:white;
-  padding:80px 20px 50px;
+  padding:78px 20px 54px;
   background:
-    linear-gradient(rgba(16,35,63,.7), rgba(16,35,63,.85)),
+    linear-gradient(rgba(16,35,63,.72), rgba(16,35,63,.88)),
     url("https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1600&q=80");
   background-size:cover;
   background-position:center;
 }
 
 .hero h1 {
-  font-size:clamp(2.2rem,6vw,4rem);
-  margin-bottom:10px;
+  margin:0 0 14px;
+  font-size:clamp(2.3rem,6vw,4.3rem);
 }
 
 .hero p {
-  max-width:700px;
+  max-width:720px;
   margin:0 auto;
-  font-size:1.1rem;
-  opacity:.9;
+  font-size:1.15rem;
+  line-height:1.6;
+  opacity:.94;
 }
 
-/* MAIN */
 main {
-  max-width:1100px;
-  margin:-30px auto 0;
+  max-width:1180px;
+  margin:-28px auto 0;
   padding:0 18px 60px;
 }
 
-/* CARD */
 .card {
-  background:white;
+  background:rgba(255,255,255,.96);
   border-radius:var(--radius);
-  padding:25px;
+  padding:26px;
   margin-bottom:28px;
-  box-shadow:0 15px 40px rgba(0,0,0,.15);
+  box-shadow:0 18px 45px rgba(0,0,0,.18);
 }
 
-/* TITLE */
 .section-title h2 {
-  margin:0 0 10px;
+  margin:0 0 8px;
   color:var(--navy);
+  font-size:clamp(1.7rem,4vw,2.3rem);
 }
 
 .section-title p {
-  margin:0 0 20px;
+  margin:0 0 22px;
   color:var(--muted);
+  line-height:1.6;
 }
 
-/* VIDEO GRID */
-.video-grid {
+.stream-grid {
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:18px;
+  gap:22px;
 }
 
-.video {
-  position:relative;
-  padding-top:56.25%;
-  border-radius:14px;
+.stream-card {
+  background:var(--cream);
+  border-radius:18px;
   overflow:hidden;
-  background:black;
+  border:1px solid rgba(0,0,0,.07);
+  transition:transform .2s ease, box-shadow .2s ease;
 }
 
-.video iframe {
-  position:absolute;
-  top:0;left:0;
+.stream-card:hover {
+  transform:translateY(-4px);
+  box-shadow:0 16px 34px rgba(0,0,0,.15);
+}
+
+.thumb {
+  width:100%;
+  aspect-ratio:16/9;
+  background:#111;
+  overflow:hidden;
+}
+
+.thumb img {
   width:100%;
   height:100%;
-  border:0;
+  object-fit:cover;
+  display:block;
 }
 
-/* MEDIA LINKS GRID */
-.media-grid {
+.stream-body {
+  padding:17px;
+}
+
+.stream-body h3 {
+  margin:0 0 10px;
+  color:var(--navy);
+  font-size:1.05rem;
+  line-height:1.35;
+}
+
+.stream-body p {
+  margin:0 0 14px;
+  color:var(--muted);
+  font-size:.92rem;
+}
+
+.button {
+  display:inline-block;
+  background:var(--gold);
+  color:#111827;
+  padding:10px 16px;
+  border-radius:999px;
+  font-weight:700;
+}
+
+.utility-links {
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:18px;
 }
 
-.media-card {
+.utility-card {
   background:var(--cream);
-  border-radius:16px;
-  padding:20px;
-  text-align:center;
-  transition:.2s;
-  border:1px solid rgba(0,0,0,.06);
+  border-radius:18px;
+  padding:22px;
+  border:1px solid rgba(0,0,0,.07);
 }
 
-.media-card:hover {
-  transform:translateY(-5px);
-}
-
-.media-card h3 {
+.utility-card h3 {
   margin:0 0 10px;
   color:var(--navy);
 }
 
-.media-card p {
+.utility-card p {
+  margin:0 0 16px;
   color:var(--muted);
-  font-size:.95rem;
+  line-height:1.5;
 }
 
-/* BUTTON */
-.button {
-  display:inline-block;
-  margin-top:12px;
-  padding:10px 16px;
-  background:var(--gold);
-  border-radius:999px;
-  font-weight:600;
-}
-
-/* SPOTIFY */
 .spotify iframe {
   width:100%;
-  border-radius:12px;
+  border:0;
+  border-radius:14px;
 }
 
-/* MOBILE */
-@media(max-width:900px){
-  .video-grid,
-  .media-grid {
+.loading,
+.error {
+  padding:22px;
+  background:var(--cream);
+  border-radius:18px;
+  color:var(--muted);
+}
+
+footer {
+  text-align:center;
+  color:rgba(255,255,255,.75);
+  padding:0 20px 28px;
+}
+
+@media(max-width:900px) {
+  .stream-grid,
+  .utility-links {
     grid-template-columns:1fr;
+  }
+
+  .card {
+    padding:20px;
+  }
+
+  .hero {
+    padding:62px 18px 44px;
   }
 }
 </style>
@@ -158,84 +207,135 @@ main {
 
 <body>
 
-<!-- HERO -->
 <header class="hero">
   <h1>Media Library</h1>
-  <p>Watch past messages and listen to sermons anytime.</p>
+  <p>
+    Watch past worship services and listen to messages from Versailles United Methodist Church.
+  </p>
 </header>
 
 <main>
 
-<!-- VIDEO GRID -->
 <section class="card">
   <div class="section-title">
-    <h2>Recent Messages</h2>
-    <p>Watch recent worship services and sermons.</p>
+    <h2>Past Worship Services</h2>
+    <p>Recent completed livestreams from our YouTube channel.</p>
   </div>
 
-  <div class="video-grid">
-
-    <div class="video">
-      <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=versaillesumc"></iframe>
-    </div>
-
-    <div class="video">
-      <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=versaillesumc"></iframe>
-    </div>
-
-    <div class="video">
-      <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=versaillesumc"></iframe>
-    </div>
-
+  <div id="streamsGrid" class="stream-grid">
+    <div class="loading">Loading past services...</div>
   </div>
 </section>
 
-<!-- MEDIA LINKS -->
 <section class="card">
   <div class="section-title">
     <h2>Explore More</h2>
-    <p>Browse full collections of messages and services.</p>
+    <p>Browse more messages and video collections.</p>
   </div>
 
-  <div class="media-grid">
-
-    <div class="media-card">
-      <h3>Worship Services</h3>
-      <p>Full past livestream services.</p>
-      <a class="button" href="https://www.youtube.com/@versaillesumc/streams" target="_blank">View</a>
+  <div class="utility-links">
+    <div class="utility-card">
+      <h3>All Past Streams</h3>
+      <p>Browse the full archive of worship services.</p>
+      <a class="button" href="https://www.youtube.com/@versaillesumc/streams" target="_blank" rel="noopener">View Streams</a>
     </div>
 
-    <div class="media-card">
+    <div class="utility-card">
       <h3>Latest Videos</h3>
-      <p>Newest sermons and content.</p>
-      <a class="button" href="https://www.youtube.com/@versaillesumc/videos" target="_blank">View</a>
+      <p>See recent sermons, videos, and church updates.</p>
+      <a class="button" href="https://www.youtube.com/@versaillesumc/videos" target="_blank" rel="noopener">View Videos</a>
     </div>
 
-    <div class="media-card">
+    <div class="utility-card">
       <h3>Playlists</h3>
-      <p>Sermon series and collections.</p>
-      <a class="button" href="https://www.youtube.com/@versaillesumc/playlists" target="_blank">View</a>
+      <p>Find sermon series and message collections.</p>
+      <a class="button" href="https://www.youtube.com/@versaillesumc/playlists" target="_blank" rel="noopener">View Playlists</a>
     </div>
-
   </div>
 </section>
 
-<!-- SPOTIFY -->
 <section class="card">
   <div class="section-title">
     <h2>Podcast</h2>
-    <p>Listen to messages on Spotify.</p>
+    <p>Prefer audio? Listen to messages through Spotify.</p>
   </div>
 
   <div class="spotify">
-    <iframe src="https://open.spotify.com/embed/show/5euyxMvYOhMD9cD6tHa2Dd"
+    <iframe
+      src="https://open.spotify.com/embed/show/5euyxMvYOhMD9cD6tHa2Dd?utm_source=generator"
       height="352"
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen">
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
     </iframe>
   </div>
 </section>
 
 </main>
+
+<footer>
+  Versailles United Methodist Church · Versailles, Kentucky · Love Like Jesus
+</footer>
+
+<script>
+const STREAMS_API_URL = "https://script.google.com/macros/s/AKfycbyx7KqARg0pktmZiARG0i8eiUnhVjNfBYn6jElLIaHYsOuB0tmzr7OEJ-_mihKgh3yXCg/exec";
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  });
+}
+
+async function loadPastStreams() {
+  const grid = document.getElementById("streamsGrid");
+
+  try {
+    const response = await fetch(STREAMS_API_URL);
+    const data = await response.json();
+
+    if (!data.ok || !data.videos || data.videos.length === 0) {
+      grid.innerHTML = `
+        <div class="error">
+          No past streams were found right now.
+          <br><br>
+          <a class="button" href="https://www.youtube.com/@versaillesumc/streams" target="_blank" rel="noopener">
+            View on YouTube
+          </a>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = data.videos.map(video => `
+      <a class="stream-card" href="${video.url}" target="_blank" rel="noopener">
+        <div class="thumb">
+          <img src="${video.thumbnail}" alt="${video.title}">
+        </div>
+        <div class="stream-body">
+          <h3>${video.title}</h3>
+          <p>${formatDate(video.publishedAt)}</p>
+          <span class="button">Watch Service</span>
+        </div>
+      </a>
+    `).join("");
+
+  } catch (error) {
+    grid.innerHTML = `
+      <div class="error">
+        We could not load the stream grid right now.
+        <br><br>
+        <a class="button" href="https://www.youtube.com/@versaillesumc/streams" target="_blank" rel="noopener">
+          View Past Services on YouTube
+        </a>
+      </div>
+    `;
+  }
+}
+
+loadPastStreams();
+</script>
 
 </body>
 </html>
