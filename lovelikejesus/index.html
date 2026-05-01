@@ -1,3 +1,6 @@
+<!-- FULL LOVE LIKE JESUS PAGE REBUILT WITH SAME DESIGN + MAIN SITE NAV -->
+<!-- Save as /lovelikejesus/index.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,13 +20,9 @@
       --cream: #f7f3ec;
       --white: #ffffff;
       --muted: #6b7280;
-      --card: rgba(255,255,255,0.88);
-      --border: rgba(255,255,255,0.28);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -38,7 +37,7 @@
       text-decoration: none;
     }
 
-    .topbar {
+    .site-header {
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -47,7 +46,7 @@
       border-bottom: 1px solid rgba(0,0,0,0.08);
     }
 
-    .nav {
+    .nav-wrap {
       max-width: 1280px;
       margin: 0 auto;
       padding: 14px 24px;
@@ -55,6 +54,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 24px;
+      position: relative;
     }
 
     .brand {
@@ -81,7 +81,7 @@
       font-weight: 600;
     }
 
-    .menu {
+    .nav-links {
       display: flex;
       align-items: center;
       gap: 24px;
@@ -90,9 +90,107 @@
       color: #4b5563;
     }
 
+    .nav-links a,
+    .dropdown-toggle {
+      font: inherit;
+      font-weight: 700;
+      color: #4b5563;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 140%;
+      left: 0;
+      min-width: 220px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.14);
+      padding: 12px;
+      display: none;
+      z-index: 1200;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: #374151;
+    }
+
+    .dropdown-menu a:hover {
+      background: #f3f4f6;
+    }
+
+    .nav-item.dropdown:hover .dropdown-menu,
+    .nav-item.dropdown.open .dropdown-menu {
+      display: block;
+    }
+
     .nav-actions {
       display: flex;
+      align-items: center;
       gap: 12px;
+    }
+
+    .mobile-toggle {
+      display: none;
+      border: none;
+      background: #101418;
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .mobile-menu {
+      display: none;
+      background: rgba(247,243,236,0.98);
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
+    .mobile-menu-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 18px 24px 24px;
+      display: grid;
+      gap: 12px;
+      font-weight: 800;
+    }
+
+    .mobile-menu-inner a,
+    .mobile-submenu-toggle {
+      border: 0;
+      background: #fff;
+      color: #111827;
+      padding: 13px 16px;
+      border-radius: 16px;
+      text-align: left;
+      font: inherit;
+      font-weight: 800;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+
+    .mobile-submenu {
+      display: none;
+      padding-left: 12px;
+      gap: 8px;
+    }
+
+    .mobile-submenu.open {
+      display: grid;
     }
 
     .btn {
@@ -105,9 +203,7 @@
       transition: transform .2s ease, opacity .2s ease;
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
-    }
+    .btn:hover { transform: translateY(-2px); }
 
     .btn-dark {
       background: #101418;
@@ -321,12 +417,18 @@
       font-size: 0.95rem;
     }
 
-    @media (max-width: 900px) {
-      .menu,
-      .nav-actions {
+    @media (max-width: 1050px) {
+      .nav-links,
+      .subscribe-desktop {
         display: none;
       }
 
+      .mobile-toggle {
+        display: inline-flex;
+      }
+    }
+
+    @media (max-width: 900px) {
       .hero-inner,
       .split {
         grid-template-columns: 1fr;
@@ -339,6 +441,14 @@
 
       .hero {
         padding: 70px 20px;
+      }
+
+      .brand-title {
+        font-size: 0.88rem;
+      }
+
+      .brand-subtitle {
+        font-size: 0.7rem;
       }
     }
   </style>
@@ -366,8 +476,8 @@
 
 <body>
 
-<header class="topbar">
-  <nav class="nav">
+<header class="site-header">
+  <div class="nav-wrap">
     <a class="brand" href="/">
       <img src="/android-chrome-512x512.png" alt="Versailles UMC Logo">
       <div>
@@ -376,21 +486,63 @@
       </div>
     </a>
 
-    <div class="menu">
+    <nav class="nav-links" aria-label="Primary navigation">
       <a href="/">Home</a>
       <a href="/watch">Watch</a>
-      <a href="/connect">Connect</a>
+
+      <div class="nav-item dropdown" id="connectDropdown">
+        <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="connectMenuDesktop">
+          Connect
+        </button>
+        <div class="dropdown-menu" id="connectMenuDesktop">
+          <a href="/new-here">New Here</a>
+          <a href="/kids-families">Kids & Families</a>
+          <a href="/groups">Groups</a>
+          <a href="/serve">Serve</a>
+          <a href="/next-steps">Next Steps</a>
+          <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
+        </div>
+      </div>
+
       <a href="/media">Media</a>
       <a href="/events">Events</a>
-      <a href="/give">Give</a>
+      <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
       <a href="/plan-your-visit">Plan Your Visit</a>
-    </div>
+    </nav>
 
     <div class="nav-actions">
       <a class="btn btn-dark" href="/watch">Watch Live</a>
-      <a class="btn btn-light" href="https://www.youtube.com/@versaillesumc?sub_confirmation=1">Subscribe</a>
+      <a class="btn btn-light subscribe-desktop" href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
     </div>
-  </nav>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-inner">
+      <a href="/">Home</a>
+      <a href="/watch">Watch</a>
+
+      <button class="mobile-submenu-toggle" id="mobileConnectToggle" type="button" aria-expanded="false" aria-controls="mobileConnectMenu">
+        Connect
+      </button>
+      <div class="mobile-submenu" id="mobileConnectMenu">
+        <a href="/new-here">New Here</a>
+        <a href="/kids-families">Kids & Families</a>
+        <a href="/youth">Youth</a>
+        <a href="/groups">Groups</a>
+        <a href="/serve">Serve</a>
+        <a href="/missions">Missions</a>
+        <a href="/next-steps">Next Steps</a>
+        <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
+      </div>
+
+      <a href="/media">Media</a>
+      <a href="/events">Events</a>
+      <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+      <a href="/plan-your-visit">Plan Your Visit</a>
+      <a href="#" data-modal-url="https://script.google.com/macros/s/AKfycby3JIgMN-r9F5p786s_VRCgSJKI9G3zrjGwpr--8oOkL7MA82E7Iv5Y2JSUfrB9kJMC-Q/exec" data-modal-title="Subscribe to Updates">Subscribe</a>
+    </div>
+  </div>
 </header>
 
 <main>
@@ -406,9 +558,9 @@
         </p>
 
         <div class="hero-buttons">
-          <a class="btn btn-gold" href="/plan-your-visit">Plan Your Visit</a>
+          <a class="btn btn-gold" href="/new-here">Plan Your Visit</a>
           <a class="btn btn-glass" href="/watch">Watch Worship Online</a>
-          <a class="btn btn-light" href="/new-here">Get Connected</a>
+          <a class="btn btn-light" href="/new-here">Start Here</a>
         </div>
       </div>
 
@@ -550,9 +702,9 @@
       </p>
 
       <div class="hero-buttons" style="justify-content:center; margin-top:30px;">
-        <a class="btn btn-gold" href="/plan-your-visit">Plan Your Visit</a>
+        <a class="btn btn-gold" href="/new-here">Plan Your Visit</a>
         <a class="btn btn-light" href="/watch">Watch Online</a>
-        <a class="btn btn-glass" href="/connect">Connect With Us</a>
+        <a class="btn btn-glass" href="/new-here">Start Here</a>
       </div>
     </div>
   </section>
@@ -565,6 +717,44 @@
     A Church Striving to Love Like Jesus • #LoveLikeJesus
   </p>
 </footer>
+
+<script src="https://js.churchcenter.com/modal/v1"></script>
+
+<script>
+  const mobileToggle = document.getElementById("mobileToggle");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const mobileConnectToggle = document.getElementById("mobileConnectToggle");
+  const mobileConnectMenu = document.getElementById("mobileConnectMenu");
+  const connectDropdown = document.getElementById("connectDropdown");
+  const connectToggle = connectDropdown ? connectDropdown.querySelector(".dropdown-toggle") : null;
+
+  if (mobileToggle && mobileMenu) {
+    mobileToggle.addEventListener("click", () => {
+      mobileMenu.classList.toggle("open");
+    });
+  }
+
+  if (mobileConnectToggle && mobileConnectMenu) {
+    mobileConnectToggle.addEventListener("click", () => {
+      const isOpen = mobileConnectMenu.classList.toggle("open");
+      mobileConnectToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  if (connectToggle && connectDropdown) {
+    connectToggle.addEventListener("click", () => {
+      const isOpen = connectDropdown.classList.toggle("open");
+      connectToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!connectDropdown.contains(event.target)) {
+        connectDropdown.classList.remove("open");
+        connectToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+</script>
 
 </body>
 </html>
