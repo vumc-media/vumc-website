@@ -1,341 +1,1032 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-19L2K5PDLB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-19L2K5PDLB');
+  </script>
 
-<title>Media | Versailles UMC</title>
-<meta name="description" content="Watch past worship services and listen to messages from Versailles United Methodist Church in Versailles, Kentucky.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<style>
-:root {
-  --navy:#10233f;
-  --blue:#1e4f8f;
-  --gold:#d6a84f;
-  --cream:#f7f2e8;
-  --white:#ffffff;
-  --text:#1f2937;
-  --muted:#6b7280;
-  --radius:22px;
-}
+  <title>Media | Versailles United Methodist Church</title>
+  <meta name="description" content="Watch past messages, worship services, and listen to podcast episodes from Versailles United Methodist Church in Versailles, Kentucky." />
 
-* {
-  box-sizing:border-box;
-}
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#353f69">
 
-body {
-  margin:0;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:linear-gradient(135deg,var(--navy),var(--blue));
-  color:var(--text);
-}
+  <script src="https://js.churchcenter.com/modal/v1"></script>
 
-a {
-  color:inherit;
-  text-decoration:none;
-}
+  <style>
+    :root {
+      --bg: #f7f4ef;
+      --surface: #ffffff;
+      --surface-soft: #f1ece4;
+      --text: #1f242c;
+      --muted: #5b6470;
+      --dark: #11161d;
+      --dark-soft: #171d25;
+      --accent: #bb8c3f;
+      --accent-soft: #e4cda7;
+      --border: rgba(17, 22, 29, 0.08);
+      --shadow: 0 18px 45px rgba(17, 22, 29, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max-width: 1240px;
+      --transition: 220ms ease;
+    }
 
-.hero {
-  text-align:center;
-  color:white;
-  padding:78px 20px 54px;
-  background:
-    linear-gradient(rgba(16,35,63,.72), rgba(16,35,63,.88)),
-    url("https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1600&q=80");
-  background-size:cover;
-  background-position:center;
-}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
-.hero h1 {
-  margin:0 0 14px;
-  font-size:clamp(2.3rem,6vw,4.3rem);
-}
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
 
-.hero p {
-  max-width:720px;
-  margin:0 auto;
-  font-size:1.15rem;
-  line-height:1.6;
-  opacity:.94;
-}
+    body.vumc-modal-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
 
-main {
-  max-width:1180px;
-  margin:-28px auto 0;
-  padding:0 18px 60px;
-}
+    .container {
+      width: min(calc(100% - 32px), var(--max-width));
+      margin: 0 auto;
+    }
 
-.card {
-  background:rgba(255,255,255,.96);
-  border-radius:var(--radius);
-  padding:26px;
-  margin-bottom:28px;
-  box-shadow:0 18px 45px rgba(0,0,0,.18);
-}
+    .section { padding: 68px 0; }
 
-.section-title h2 {
-  margin:0 0 8px;
-  color:var(--navy);
-  font-size:clamp(1.7rem,4vw,2.3rem);
-}
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
 
-.section-title p {
-  margin:0 0 22px;
-  color:var(--muted);
-  line-height:1.6;
-}
+    .section-title {
+      margin: 0 0 14px;
+      font-size: clamp(30px, 4.4vw, 48px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
 
-.stream-grid {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:22px;
-}
+    .section-copy {
+      font-size: 18px;
+      color: var(--muted);
+      margin: 0;
+      max-width: 780px;
+    }
 
-.stream-card {
-  background:var(--cream);
-  border-radius:18px;
-  overflow:hidden;
-  border:1px solid rgba(0,0,0,.07);
-  transition:transform .2s ease, box-shadow .2s ease;
-}
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
 
-.stream-card:hover {
-  transform:translateY(-4px);
-  box-shadow:0 16px 34px rgba(0,0,0,.15);
-}
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+      cursor: pointer;
+    }
 
-.thumb {
-  width:100%;
-  aspect-ratio:16/9;
-  background:#111;
-  overflow:hidden;
-}
+    .btn:hover { transform: translateY(-2px); }
 
-.thumb img {
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(187, 140, 63, 0.28);
+    }
 
-.stream-body {
-  padding:17px;
-}
+    .btn-secondary {
+      background: rgba(255,255,255,0.16);
+      color: #fff;
+      border-color: rgba(255,255,255,0.32);
+      backdrop-filter: blur(6px);
+    }
 
-.stream-body h3 {
-  margin:0 0 10px;
-  color:var(--navy);
-  font-size:1.05rem;
-  line-height:1.35;
-}
+    .btn-dark {
+      background: var(--dark);
+      color: #fff;
+    }
 
-.stream-body p {
-  margin:0 0 14px;
-  color:var(--muted);
-  font-size:.92rem;
-}
+    .btn-light {
+      background: #fff;
+      color: var(--text);
+      border-color: var(--border);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
 
-.button {
-  display:inline-block;
-  background:var(--gold);
-  color:#111827;
-  padding:10px 16px;
-  border-radius:999px;
-  font-weight:700;
-}
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(247, 244, 239, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(17, 22, 29, 0.06);
+    }
 
-.utility-links {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px;
-}
+    .nav-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 78px;
+    }
 
-.utility-card {
-  background:var(--cream);
-  border-radius:18px;
-  padding:22px;
-  border:1px solid rgba(0,0,0,.07);
-}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
 
-.utility-card h3 {
-  margin:0 0 10px;
-  color:var(--navy);
-}
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #ddd;
+    }
 
-.utility-card p {
-  margin:0 0 16px;
-  color:var(--muted);
-  line-height:1.5;
-}
+    .brand-name {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
 
-.spotify iframe {
-  width:100%;
-  border:0;
-  border-radius:14px;
-}
+    .brand-tagline {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
 
-.loading,
-.error {
-  padding:22px;
-  background:var(--cream);
-  border-radius:18px;
-  color:var(--muted);
-}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-size: 15px;
+      font-weight: 600;
+    }
 
-footer {
-  text-align:center;
-  color:rgba(255,255,255,.75);
-  padding:0 20px 28px;
-}
+    .nav-links a {
+      color: var(--muted);
+    }
 
-@media(max-width:900px) {
-  .stream-grid,
-  .utility-links {
-    grid-template-columns:1fr;
-  }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--text);
+    }
 
-  .card {
-    padding:20px;
-  }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-  .hero {
-    padding:62px 18px 44px;
-  }
-}
-</style>
+    .mobile-toggle {
+      display: none;
+      width: 48px;
+      height: 48px;
+      border: none;
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .mobile-menu {
+      display: none;
+      padding: 0 0 18px;
+    }
+
+    .mobile-menu.show { display: block; }
+
+    .mobile-menu-inner {
+      display: grid;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .mobile-menu a {
+      padding: 10px 2px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.64)),
+        url('vumc-media/media-hero.jpg') center/cover no-repeat;
+      color: #fff;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top right, rgba(187,140,63,0.28), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(255,255,255,0.06), transparent 28%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      padding: 78px 0 64px;
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .hero .eyebrow { color: var(--accent-soft); }
+
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 68px);
+      line-height: 0.98;
+      margin: 0 0 16px;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      font-size: clamp(17px, 2.2vw, 21px);
+      color: rgba(255,255,255,0.85);
+      margin: 0;
+      max-width: 700px;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 24px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+    }
+
+    .hero-card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .hero-card p {
+      margin: 0;
+      font-size: 15px;
+      color: rgba(255,255,255,0.78);
+    }
+
+    .hero-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .hero-list-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      font-size: 15px;
+    }
+
+    .anchor-nav {
+      margin-top: 34px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .anchor-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 700;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+      transition: transform var(--transition);
+    }
+
+    .anchor-link:hover {
+      transform: translateY(-2px);
+    }
+
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 34px;
+    }
+
+    .media-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: pointer;
+      text-align: left;
+      padding: 0;
+      font: inherit;
+      color: inherit;
+    }
+
+    .media-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 55px rgba(17, 22, 29, 0.16);
+    }
+
+    .media-image {
+      aspect-ratio: 16 / 9;
+      background: #ddd center/cover no-repeat;
+      position: relative;
+    }
+
+    .play-badge {
+      position: absolute;
+      inset: auto 16px 16px auto;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: rgba(17,22,29,0.86);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+    }
+
+    .media-content {
+      padding: 22px;
+    }
+
+    .media-content h3 {
+      margin: 0 0 10px;
+      font-size: 21px;
+      line-height: 1.18;
+    }
+
+    .media-content p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .loading,
+    .error {
+      margin-top: 34px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 26px;
+      color: var(--muted);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 34px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 26px 24px;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      line-height: 1.12;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .spotify-card {
+      margin-top: 34px;
+      background:
+        linear-gradient(135deg, rgba(17,22,29,0.92), rgba(17,22,29,0.74)),
+        url('vumc-media/media-hero.jpg') center/cover no-repeat;
+      color: #fff;
+      border-radius: 28px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spotify-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(187,140,63,0.24), transparent 36%);
+      pointer-events: none;
+    }
+
+    .spotify-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .spotify-card p {
+      color: rgba(255,255,255,0.82);
+      max-width: 760px;
+    }
+
+    .site-footer {
+      background: var(--dark);
+      color: #fff;
+      padding: 24px 0 54px;
+      margin-top: 40px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr 0.85fr 0.85fr;
+      gap: 20px;
+      margin-top: 22px;
+    }
+
+    .footer-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 28px;
+      padding: 24px;
+    }
+
+    .footer-card h4 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .footer-card p,
+    .footer-card a {
+      margin: 0;
+      color: rgba(255,255,255,0.76);
+      font-size: 14px;
+      display: block;
+      line-height: 1.8;
+    }
+
+    .footer-bottom {
+      margin-top: 26px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.58);
+      text-align: center;
+    }
+
+    .vumc-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 14, 20, 0.72);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 99999;
+    }
+
+    .vumc-modal-overlay.open {
+      display: flex;
+    }
+
+    .vumc-modal {
+      width: min(100%, 1040px);
+      height: min(88vh, 860px);
+      background: #ffffff;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .vumc-modal.audio {
+      width: min(100%, 760px);
+      height: auto;
+      min-height: 460px;
+    }
+
+    .vumc-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      background: #11161d;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .vumc-modal-kicker {
+      margin: 0 0 4px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #e4cda7;
+      font-weight: 700;
+    }
+
+    .vumc-modal-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .vumc-modal-close {
+      border: 0;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .vumc-modal-body {
+      flex: 1;
+      background: #000;
+      position: relative;
+    }
+
+    .vumc-modal-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #fff;
+    }
+
+    .audio .vumc-modal-body {
+      background: #f7f4ef;
+      padding: 20px;
+    }
+
+    .audio .vumc-modal-frame {
+      border-radius: 16px;
+      height: 360px;
+    }
+
+    @media (max-width: 1100px) {
+      .nav-links,
+      .nav-actions .btn-dark {
+        display: none;
+      }
+
+      .mobile-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hero-inner,
+      .media-grid,
+      .feature-grid,
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .hero-inner,
+      .media-grid,
+      .feature-grid,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-inner {
+        padding: 58px 0 48px;
+      }
+
+      .section {
+        padding: 54px 0;
+      }
+
+      .hero-card,
+      .spotify-card {
+        padding: 24px;
+      }
+
+      .brand-name { font-size: 15px; }
+      .brand-tagline { font-size: 11px; }
+
+      .vumc-modal-overlay {
+        padding: 12px;
+      }
+
+      .vumc-modal {
+        height: 82vh;
+        border-radius: 22px;
+      }
+
+      .vumc-modal.audio {
+        min-height: 430px;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <header class="site-header">
+    <div class="container">
+      <div class="nav-wrap">
+        <a class="brand" href="/">
+          <img class="brand-mark" src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s176-c-k-c0x00ffffff-no-rj" alt="Versailles UMC logo" />
+          <div class="brand-text">
+            <p class="brand-name">Versailles United Methodist Church</p>
+            <p class="brand-tagline">A Church Striving to Love Like Jesus</p>
+          </div>
+        </a>
 
-<header class="hero">
-  <h1>Media Library</h1>
-  <p>
-    Watch past worship services and listen to messages from Versailles United Methodist Church.
-  </p>
-</header>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="/">Home</a>
+          <a href="/watch">Watch</a>
+          <a href="/new-here">New Here</a>
+          <a href="/serve">Serve</a>
+          <a class="active" href="/media">Media</a>
+          <a href="/events">Events</a>
+          <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+          <a href="/plan-your-visit">Plan Your Visit</a>
+        </nav>
 
-<main>
-
-<section class="card">
-  <div class="section-title">
-    <h2>Past Worship Services</h2>
-    <p>Recent completed livestreams from our YouTube channel.</p>
-  </div>
-
-  <div id="streamsGrid" class="stream-grid">
-    <div class="loading">Loading past services...</div>
-  </div>
-</section>
-
-<section class="card">
-  <div class="section-title">
-    <h2>Explore More</h2>
-    <p>Browse more messages and video collections.</p>
-  </div>
-
-  <div class="utility-links">
-    <div class="utility-card">
-      <h3>All Past Streams</h3>
-      <p>Browse the full archive of worship services.</p>
-      <a class="button" href="https://www.youtube.com/@versaillesumc/streams" target="_blank" rel="noopener">View Streams</a>
-    </div>
-
-    <div class="utility-card">
-      <h3>Latest Videos</h3>
-      <p>See recent sermons, videos, and church updates.</p>
-      <a class="button" href="https://www.youtube.com/@versaillesumc/videos" target="_blank" rel="noopener">View Videos</a>
-    </div>
-
-    <div class="utility-card">
-      <h3>Playlists</h3>
-      <p>Find sermon series and message collections.</p>
-      <a class="button" href="https://www.youtube.com/@versaillesumc/playlists" target="_blank" rel="noopener">View Playlists</a>
-    </div>
-  </div>
-</section>
-
-<section class="card">
-  <div class="section-title">
-    <h2>Podcast</h2>
-    <p>Prefer audio? Listen to messages through Spotify.</p>
-  </div>
-
-  <div class="spotify">
-    <iframe
-      src="https://open.spotify.com/embed/show/5euyxMvYOhMD9cD6tHa2Dd?utm_source=generator"
-      height="352"
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      loading="lazy">
-    </iframe>
-  </div>
-</section>
-
-</main>
-
-<footer>
-  Versailles United Methodist Church · Versailles, Kentucky · Love Like Jesus
-</footer>
-
-<script>
-const STREAMS_API_URL = "https://script.google.com/macros/s/AKfycbyx7KqARg0pktmZiARG0i8eiUnhVjNfBYn6jElLIaHYsOuB0tmzr7OEJ-_mihKgh3yXCg/exec";
-
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric"
-  });
-}
-
-async function loadPastStreams() {
-  const grid = document.getElementById("streamsGrid");
-
-  try {
-    const response = await fetch(STREAMS_API_URL);
-    const data = await response.json();
-
-    if (!data.ok || !data.videos || data.videos.length === 0) {
-      grid.innerHTML = `
-        <div class="error">
-          No past streams were found right now.
-          <br><br>
-          <a class="button" href="https://www.youtube.com/@versaillesumc/streams" target="_blank" rel="noopener">
-            View on YouTube
-          </a>
+        <div class="nav-actions">
+          <a class="btn btn-dark" href="https://versaillesumc.churchcenter.com/people/forms/605579" data-open-in-church-center-modal="true">Get Involved</a>
+          <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
         </div>
-      `;
-      return;
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-inner">
+          <a href="/">Home</a>
+          <a href="/watch">Watch</a>
+          <a href="/new-here">New Here</a>
+          <a href="/serve">Serve</a>
+          <a href="/media">Media</a>
+          <a href="/events">Events</a>
+          <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+          <a href="/plan-your-visit">Plan Your Visit</a>
+          <a href="https://versaillesumc.churchcenter.com/people/forms/605579" data-open-in-church-center-modal="true">Get Involved</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-inner">
+          <div>
+            <div class="eyebrow">VUMC Media</div>
+            <h1>Watch. Listen. Stay connected.</h1>
+            <p>
+              Catch up on past worship services, listen to sermon audio, and explore messages from Versailles United Methodist Church anytime.
+            </p>
+
+            <div class="btn-row">
+              <a class="btn btn-primary" href="#past-services">Past Services</a>
+              <a class="btn btn-secondary" href="#podcast">Podcast</a>
+            </div>
+
+            <div class="anchor-nav">
+              <a class="anchor-link" href="#past-services">Past Worship Services</a>
+              <a class="anchor-link" href="#explore-more">Explore More</a>
+              <a class="anchor-link" href="#podcast">Podcast</a>
+            </div>
+          </div>
+
+          <div class="hero-card">
+            <h3>One message. Many ways to engage.</h3>
+            <p>Whether you missed Sunday, want to rewatch a sermon, or prefer listening during the week, our media library helps you stay connected.</p>
+            <div class="hero-list">
+              <div class="hero-list-item"><strong>Watch</strong><span>Past worship services</span></div>
+              <div class="hero-list-item"><strong>Listen</strong><span>Podcast messages</span></div>
+              <div class="hero-list-item"><strong>Share</strong><span>Encouragement with others</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="past-services">
+      <div class="container">
+        <div class="eyebrow">Past Services</div>
+        <h2 class="section-title">Recent worship services.</h2>
+        <p class="section-copy">
+          Select a service below and it will open in a popup window without sending you away from the website.
+        </p>
+
+        <div id="streamsGrid" class="media-grid">
+          <div class="loading">Loading past services...</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="explore-more">
+      <div class="container">
+        <div class="eyebrow">Explore More</div>
+        <h2 class="section-title">More ways to watch and connect.</h2>
+        <p class="section-copy">
+          Browse the full YouTube archive, playlists, and message collections.
+        </p>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>All Past Streams</h3>
+            <p>Browse the complete archive of past worship services on YouTube.</p>
+            <div class="btn-row">
+              <a class="btn btn-dark" href="https://www.youtube.com/@versaillesumc/streams" target="_blank" rel="noopener">View Streams</a>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <h3>Latest Videos</h3>
+            <p>See recent messages, church updates, and other video content.</p>
+            <div class="btn-row">
+              <a class="btn btn-dark" href="https://www.youtube.com/@versaillesumc/videos" target="_blank" rel="noopener">View Videos</a>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <h3>Playlists</h3>
+            <p>Find sermon series, worship collections, and special services.</p>
+            <div class="btn-row">
+              <a class="btn btn-dark" href="https://www.youtube.com/@versaillesumc/playlists" target="_blank" rel="noopener">View Playlists</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="podcast">
+      <div class="container">
+        <div class="eyebrow">Podcast</div>
+        <h2 class="section-title">Prefer to listen?</h2>
+        <p class="section-copy">
+          Open the Versailles UMC podcast player without leaving the page.
+        </p>
+
+        <div class="spotify-card">
+          <div class="eyebrow" style="color:var(--accent-soft);">Spotify Podcast</div>
+          <h2 class="section-title" style="color:#fff; max-width:760px;">Listen to sermons and messages on the go.</h2>
+          <p>
+            The podcast is a simple way to stay connected during the week, share a message with someone, or revisit a sermon that spoke to you.
+          </p>
+          <div class="btn-row">
+            <button class="btn btn-primary" type="button" data-audio-open="https://open.spotify.com/embed/show/5euyxMvYOhMD9cD6tHa2Dd?utm_source=generator" data-title="VUMC Podcast">
+              Open Podcast Player
+            </button>
+            <a class="btn btn-secondary" href="https://open.spotify.com/show/5euyxMvYOhMD9cD6tHa2Dd" target="_blank" rel="noopener">Open in Spotify</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="eyebrow" style="color:var(--accent-soft);">Versailles United Methodist Church</div>
+      <div class="footer-grid">
+        <div class="footer-card">
+          <h4>About</h4>
+          <p>A Church Striving to Love Like Jesus.</p>
+          <p>Worship, connection, discipleship, and service in Versailles, Kentucky.</p>
+        </div>
+
+        <div class="footer-card">
+          <h4>Media</h4>
+          <p>Past services, sermons, podcast messages, and online worship resources.</p>
+        </div>
+
+        <div class="footer-card">
+          <h4>Visit</h4>
+          <p>230 Paynes Mill Road</p>
+          <p>Versailles, KY 40383</p>
+          <a href="/plan-your-visit">Plan Your Visit</a>
+        </div>
+
+        <div class="footer-card">
+          <h4>Quick Links</h4>
+          <a href="/watch">Watch Worship Online</a>
+          <a href="/serve">Serve</a>
+          <a href="/kids-families">Kids & Families</a>
+          <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        © 2026 Versailles United Methodist Church • VUMC Media Designs
+      </div>
+    </div>
+  </footer>
+
+  <div class="vumc-modal-overlay" id="mediaModalOverlay" aria-hidden="true">
+    <div class="vumc-modal" id="mediaModal" role="dialog" aria-modal="true" aria-labelledby="mediaModalTitle">
+      <div class="vumc-modal-header">
+        <div>
+          <p class="vumc-modal-kicker">Versailles United Methodist Church</p>
+          <h2 class="vumc-modal-title" id="mediaModalTitle">Media Player</h2>
+        </div>
+        <button class="vumc-modal-close" id="mediaModalClose" aria-label="Close modal">×</button>
+      </div>
+
+      <div class="vumc-modal-body">
+        <iframe class="vumc-modal-frame" id="mediaModalFrame" src="" title="VUMC Media Player" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STREAMS_API_URL = "https://script.google.com/macros/s/AKfycbyx7KqARg0pktmZiARG0i8eiUnhVjNfBYn6jElLIaHYsOuB0tmzr7OEJ-_mihKgh3yXCg/exec";
+
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (mobileToggle && mobileMenu) {
+      mobileToggle.addEventListener('click', () => {
+        mobileMenu.classList.toggle('show');
+      });
     }
 
-    grid.innerHTML = data.videos.map(video => `
-      <a class="stream-card" href="${video.url}" target="_blank" rel="noopener">
-        <div class="thumb">
-          <img src="${video.thumbnail}" alt="${video.title}">
-        </div>
-        <div class="stream-body">
-          <h3>${video.title}</h3>
-          <p>${formatDate(video.publishedAt)}</p>
-          <span class="button">Watch Service</span>
-        </div>
-      </a>
-    `).join("");
+    const modalOverlay = document.getElementById('mediaModalOverlay');
+    const mediaModal = document.getElementById('mediaModal');
+    const modalFrame = document.getElementById('mediaModalFrame');
+    const modalTitle = document.getElementById('mediaModalTitle');
+    const modalClose = document.getElementById('mediaModalClose');
 
-  } catch (error) {
-    grid.innerHTML = `
-      <div class="error">
-        We could not load the stream grid right now.
-        <br><br>
-        <a class="button" href="https://www.youtube.com/@versaillesumc/streams" target="_blank" rel="noopener">
-          View Past Services on YouTube
-        </a>
-      </div>
-    `;
-  }
-}
+    function openMediaModal(url, title, type) {
+      modalTitle.textContent = title || 'Media Player';
+      modalFrame.src = url;
+      mediaModal.classList.toggle('audio', type === 'audio');
+      modalOverlay.classList.add('open');
+      modalOverlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('vumc-modal-open');
+    }
 
-loadPastStreams();
-</script>
+    function closeMediaModal() {
+      modalOverlay.classList.remove('open');
+      modalOverlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('vumc-modal-open');
+      modalFrame.src = '';
+      mediaModal.classList.remove('audio');
+    }
 
+    modalClose.addEventListener('click', closeMediaModal);
+
+    modalOverlay.addEventListener('click', function(e) {
+      if (e.target === modalOverlay) closeMediaModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modalOverlay.classList.contains('open')) {
+        closeMediaModal();
+      }
+    });
+
+    document.addEventListener('click', function(e) {
+      const audioBtn = e.target.closest('[data-audio-open]');
+      if (!audioBtn) return;
+
+      openMediaModal(
+        audioBtn.getAttribute('data-audio-open'),
+        audioBtn.getAttribute('data-title') || 'Podcast Player',
+        'audio'
+      );
+    });
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+      });
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    async function loadPastStreams() {
+      const grid = document.getElementById("streamsGrid");
+
+      try {
+        const response = await fetch(STREAMS_API_URL);
+        const data = await response.json();
+
+        if (!data.ok || !data.videos || data.videos.length === 0) {
+          grid.innerHTML = `
+            <div class="error">
+              No past streams were found right now.
+              <div class="btn-row">
+                <a class="btn btn-dark" href="https://www.youtube.com/@versaillesumc/streams" target="_blank" rel="noopener">
+                  View Past Services on YouTube
+                </a>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = data.videos.map(video => {
+          const title = escapeHtml(video.title);
+          const thumb = escapeHtml(video.thumbnail);
+          const published = escapeHtml(formatDate(video.publishedAt));
+          const embedUrl = `https://www.youtube.com/embed/${video.videoId}?autoplay=1&rel=0`;
+
+          return `
+            <button class="media-card" type="button" data-video-open="${embedUrl}" data-title="${title}">
+              <div class="media-image" style="background-image:url('${thumb}');">
+                <span class="play-badge">▶</span>
+              </div>
+              <div class="media-content">
+                <h3>${title}</h3>
+                <p>${published}</p>
+              </div>
+            </button>
+          `;
+        }).join("");
+
+        document.querySelectorAll('[data-video-open]').forEach(button => {
+          button.addEventListener('click', () => {
+            openMediaModal(
+              button.getAttribute('data-video-open'),
+              button.getAttribute('data-title') || 'Past Worship Service',
+              'video'
+            );
+          });
+        });
+
+      } catch (error) {
+        grid.innerHTML = `
+          <div class="error">
+            We could not load the stream grid right now.
+            <div class="btn-row">
+              <a class="btn btn-dark" href="https://www.youtube.com/@versaillesumc/streams" target="_blank" rel="noopener">
+                View Past Services on YouTube
+              </a>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    loadPastStreams();
+  </script>
 </body>
 </html>
