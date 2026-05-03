@@ -8,80 +8,92 @@
 <script src="https://js.churchcenter.com/modal/v1"></script>
 
 <style>
-/* === YOUR ORIGINAL STYLES (UNCHANGED) === */
-body{margin:0;background:#0f1115;color:#fff;font-family:Arial;}
-#playerWrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;}
-iframe{width:100%;height:100%;border:0;}
-
-.playerOverlay{
-  position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.85);
-  z-index:2;
-  transition:.5s;
-}
-.playerOverlay.hidden{
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
+body{
+  margin:0;
+  background:#0f1115;
+  color:#fff;
+  font-family:Arial, Helvetica, sans-serif;
 }
 
-/* Chat hidden state */
-.vumcHidden{display:none!important;}
+#playerWrap{
+  width:100%;
+  aspect-ratio:16/9;
+  background:#000;
+}
+
+/* PLAYER */
+iframe{
+  width:100%;
+  height:100%;
+  border:0;
+}
+
+/* SIDEBAR */
+#chatLiveWrap,
+#chatClosedWrap{
+  padding:20px;
+}
+
+.vumcHidden{
+  display:none!important;
+}
+
+button{
+  background:#d4af37;
+  border:0;
+  padding:10px;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
+<!-- VIDEO PLAYER (NO OVERLAY AT ALL) -->
 <div id="playerWrap">
-
   <iframe
-    src="https://www.youtube.com/embed/live_stream?channel=UC_svgodM3blLqWEBQ5yNjmA&autoplay=1&mute=1"
-    allow="autoplay; encrypted-media"
+    src="https://www.youtube.com/embed/live_stream?channel=UC_svgodM3blLqWEBQ5yNjmA&autoplay=1&mute=1&rel=0"
+    allow="autoplay; encrypted-media; picture-in-picture"
     allowfullscreen>
   </iframe>
-
-  <div id="playerOverlay" class="playerOverlay">
-    <div style="text-align:center">
-      <h2>Worship With Us</h2>
-      <p>Sundays • 9:30 AM & 10:30 AM</p>
-    </div>
-  </div>
-
 </div>
 
+<!-- CHAT -->
 <div id="chatLiveWrap" class="vumcHidden">
-  <h3>Live Chat</h3>
+  <h2>Live Chat</h2>
   <div id="chatMessages"></div>
+
+  <input id="chatName" placeholder="Your name" style="width:100%;margin-top:10px;padding:8px;">
+  <textarea id="chatMessage" placeholder="Type message..." style="width:100%;margin-top:10px;padding:8px;"></textarea>
+  <button onclick="sendChat()">Send</button>
 </div>
 
 <div id="chatClosedWrap">
-  <h3>Chat Opens During Worship</h3>
+  <h2>Chat Opens During Worship</h2>
 </div>
 
 <script>
 const CHAT_BACKEND_URL = "https://script.google.com/macros/s/AKfycbzWN8Xi7xUFa_gjg4XHuD_yEEkaKLwrnXFI8d_XQMW4-KQRUlVPVmxcjfcgC0gMNMewsg/exec";
 
-/* 🔥 SAFETY SWITCH */
-const FORCE_CHAT_OPEN_FOR_TESTING = false;
-
 let isActuallyLive = false;
 
-/* === TIME WINDOW FALLBACK === */
+/* SUNDAY FALLBACK */
 function isSundayServiceWindow(){
   const now = new Date();
   const day = now.getDay();
   const minutes = now.getHours()*60 + now.getMinutes();
-  return day === 0 && minutes >= 570 && minutes <= 720; // 9:30–12:00
+  return day === 0 && minutes >= 570 && minutes <= 720;
 }
 
-/* 🔥 FIXED LOGIC */
+/* ALWAYS WORK */
 function shouldOpenLiveChat(){
-  return FORCE_CHAT_OPEN_FOR_TESTING || isActuallyLive || isSundayServiceWindow();
+  return isActuallyLive || isSundayServiceWindow();
 }
 
-/* === YOUTUBE CHECK === */
-async function checkYouTubeLiveStatus(){
+/* CHECK LIVE */
+async function checkLive(){
   try{
     const res = await fetch(CHAT_BACKEND_URL + "?action=status&t=" + Date.now());
     const data = await res.json();
@@ -91,33 +103,67 @@ async function checkYouTubeLiveStatus(){
   }
 }
 
-/* === OVERLAY CONTROL === */
-function updateOverlay(){
-  const overlay = document.getElementById("playerOverlay");
-  if(shouldOpenLiveChat()){
-    overlay.classList.add("hidden");
-  } else {
-    overlay.classList.remove("hidden");
-  }
-}
-
-/* === CHAT VISIBILITY === */
-function updateChat(){
+/* CHAT UI */
+function updateUI(){
   const open = shouldOpenLiveChat();
 
   document.getElementById("chatLiveWrap").classList.toggle("vumcHidden", !open);
   document.getElementById("chatClosedWrap").classList.toggle("vumcHidden", open);
 }
 
-/* === MAIN LOOP === */
+/* LOAD MESSAGES */
+async function loadChat(){
+  if(!shouldOpenLiveChat()) return;
+
+  try{
+    const res = await fetch(CHAT_BACKEND_URL + "?action=getMessages&t=" + Date.now());
+    const data = await res.json();
+
+    const box = document.getElementById("chatMessages");
+    box.innerHTML = "";
+
+    (data.messages || []).forEach(m=>{
+      const div = document.createElement("div");
+      div.style.marginBottom = "10px";
+      div.innerHTML = "<strong>"+(m.name||"Guest")+"</strong>: "+(m.message||"");
+      box.appendChild(div);
+    });
+
+  }catch(e){}
+}
+
+/* SEND MESSAGE */
+async function sendChat(){
+  const name = document.getElementById("chatName").value || "Guest";
+  const message = document.getElementById("chatMessage").value;
+
+  if(!message) return;
+
+  document.getElementById("chatMessage").value = "";
+
+  await fetch(CHAT_BACKEND_URL,{
+    method:"POST",
+    mode:"no-cors",
+    body:JSON.stringify({
+      action:"postMessage",
+      name,
+      message
+    })
+  });
+
+  setTimeout(loadChat,500);
+}
+
+/* LOOP */
 async function refresh(){
-  await checkYouTubeLiveStatus();
-  updateOverlay();
-  updateChat();
+  await checkLive();
+  updateUI();
+  loadChat();
 }
 
 refresh();
-setInterval(refresh, 60000);
+setInterval(refresh,60000);
+setInterval(loadChat,10000);
 </script>
 
 </body>
