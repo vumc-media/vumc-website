@@ -609,20 +609,45 @@
     .hero {
       position: relative;
       overflow: hidden;
-      background:
-        linear-gradient(135deg, rgba(17,22,29,0.86), rgba(17,22,29,0.64)),
-        url('/vumc-media/worship.jpg') center/cover no-repeat;
       color: #fff;
     }
 
-    .hero::after {
-      content: "";
+    .hero-slideshow {
       position: absolute;
       inset: 0;
+      z-index: 0;
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transform: scale(1.03);
+      transition: opacity 1.5s ease-in-out, transform 7s ease;
+    }
+
+    .hero-slide.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
       background:
+        linear-gradient(135deg, rgba(17,22,29,0.86), rgba(17,22,29,0.64)),
         radial-gradient(circle at top right, rgba(187, 140, 63, 0.28), transparent 35%),
         radial-gradient(circle at bottom left, rgba(255,255,255,0.08), transparent 28%);
       pointer-events: none;
+    }
+
+    .hero .container {
+      position: relative;
+      z-index: 2;
     }
 
     .hero-grid {
@@ -1651,6 +1676,26 @@
 
   <main>
     <section class="hero">
+      <div class="hero-slideshow" aria-hidden="true">
+        <!-- HERO IMAGE 1: Change this URL to your first selected image -->
+        <div class="hero-slide active" style="background-image: url('/vumc-media/worship.jpg');"></div>
+
+        <!-- HERO IMAGE 2: Change this URL to your second selected image -->
+        <div class="hero-slide" style="background-image: url('/vumc-media/Rooted-Youth-Ministry.jpg');"></div>
+
+        <!-- HERO IMAGE 3: Change this URL to your third selected image -->
+        <div class="hero-slide" style="background-image: url('/vumc-media/candlelight.png');"></div>
+         <div class="hero-slide" style="background-image: url('/vumc-media/IMG_4011.jpg');"></div>
+
+        <!-- HERO IMAGE 4: Change this URL to your fourth selected image -->
+        <div class="hero-slide" style="background-image: url('/vumc-media/image.png');"></div>
+        <div class="hero-slide" style="background-image: url('/vumc-media/Sprouts.jpg');"></div>
+
+        <!-- To add more images, copy one hero-slide line above and change the image URL. -->
+      </div>
+
+      <div class="hero-overlay" aria-hidden="true"></div>
+
       <div class="container">
         <div class="hero-grid">
           <div class="hero-panel">
@@ -2061,6 +2106,17 @@
   </div>
 
   <script>
+    const heroSlides = document.querySelectorAll('.hero-slide');
+    let heroSlideIndex = 0;
+
+    if (heroSlides.length > 1) {
+      setInterval(() => {
+        heroSlides[heroSlideIndex].classList.remove('active');
+        heroSlideIndex = (heroSlideIndex + 1) % heroSlides.length;
+        heroSlides[heroSlideIndex].classList.add('active');
+      }, 6000);
+    }
+
     const mobileToggle = document.getElementById('mobileToggle');
     const mobileMenu = document.getElementById('mobileMenu');
     const mobileConnectToggle = document.getElementById('mobileConnectToggle');
