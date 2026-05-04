@@ -1,1 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+<title>Facility Rentals | Versailles United Methodist Church</title>
+<meta name="description" content="Explore facility rental spaces at Versailles United Methodist Church in Versailles, Kentucky, including gathering areas, classrooms, fellowship space, pavilion options, and event request information.">
+
+<style>
+:root {
+  --teal: #52787c;
+  --teal-dark: #365c60;
+  --gold: #d8b25c;
+  --light: #f7f7f4;
+  --dark: #1f2a2c;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--dark);
+  background: var(--light);
+  line-height: 1.6;
+}
+
+.hero {
+  min-height: 360px;
+  background:
+    linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
+    url("YOUR-HERO-IMAGE.jpg") center/cover no-repeat;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  margin: 0;
+  font-weight: 800;
+}
+
+.hero p {
+  max-width: 760px;
+  margin: 18px auto 0;
+  font-size: 1.15rem;
+}
+
+.section {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 60px 22px;
+}
+
+.intro {
+  text-align: center;
+}
+
+.intro h2,
+.section-title {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  margin-bottom: 14px;
+}
+
+.intro p {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.button-row {
+  margin-top: 30px;
+}
+
+.btn {
+  display: inline-block;
+  background: var(--teal);
+  color: white;
+  text-decoration: none;
+  padding: 13px 24px;
+  border-radius: 6px;
+  font-weight: 700;
+  transition: .2s ease;
+}
+
+.btn:hover {
+  background: var(--teal-dark);
+  transform: translateY(-1px);
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 32px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+
+.card img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  display: block;
+  background: #ddd;
+}
+
+.card-content {
+  padding: 20px;
+}
+
+.card h3 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+}
+
+.feature-band {
+  background: var(--teal);
+  color: white;
+  text-align: center;
+  padding: 55px 22px;
+}
+
+.feature-band h2 {
+  margin-top: 0;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.feature-list {
+  max-width: 900px;
+  margin: 25px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.feature {
+  background: rgba(255,255,255,.12);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.gallery img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #ddd;
+}
+
+.cta {
+  background: #ffffff;
+  text-align: center;
+  padding: 65px 22px;
+}
+
+.cta h2 {
+  margin-top: 0;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+}
+
+.cta p {
+  max-width: 760px;
+  margin: 0 auto 28px;
+}
+
+.footer-note {
+  font-size: .9rem;
+  opacity: .75;
+  margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+  .photo-grid,
+  .feature-list {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card img,
+  .gallery img {
+    height: 220px;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero {
+    min-height: 300px;
+  }
+
+  .section {
+    padding: 45px 18px;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="hero">
+  <div>
+    <h1>Host Your Event</h1>
+    <p>Welcoming spaces for gatherings, celebrations, meetings, meals, ministries, and community events in the heart of Versailles.</p>
+  </div>
+</header>
+
+<section class="section intro">
+  <h2>Our Facility</h2>
+  <p>
+    Versailles United Methodist Church offers flexible spaces for a variety of gatherings.
+    Whether you are planning a family celebration, community meeting, ministry event, class,
+    or special occasion, our facility provides room to gather, connect, and serve.
+  </p>
+
+  <div class="button-row">
+    <a class="btn" href="YOUR_GAS_FORM_URL_HERE" target="_blank" rel="noopener">
+      Start Facility Rental Request
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Available Spaces</h2>
+
+  <div class="photo-grid">
+
+    <div class="card">
+      <img src="YOUR-BALLROOM-IMAGE.jpg" alt="Ballroom event space at Versailles United Methodist Church">
+      <div class="card-content">
+        <h3>Ballroom / Fellowship Space</h3>
+        <p>A larger gathering area suitable for receptions, meals, celebrations, meetings, and community events.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="YOUR-SANCTUARY-IMAGE.jpg" alt="Sanctuary at Versailles United Methodist Church">
+      <div class="card-content">
+        <h3>Sanctuary</h3>
+        <p>A beautiful worship space available for approved services, ceremonies, and special gatherings.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="YOUR-CLASSROOM-IMAGE.jpg" alt="Classroom space at Versailles United Methodist Church">
+      <div class="card-content">
+        <h3>Classrooms</h3>
+        <p>Smaller rooms available for meetings, breakout sessions, classes, and group gatherings.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="YOUR-PAVILION-IMAGE.jpg" alt="Outdoor pavilion at Versailles United Methodist Church">
+      <div class="card-content">
+        <h3>Outdoor Pavilion</h3>
+        <p>An outdoor option for casual gatherings, picnics, ministry events, and seasonal activities.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="YOUR-KITCHEN-IMAGE.jpg" alt="Kitchen area at Versailles United Methodist Church">
+      <div class="card-content">
+        <h3>Kitchen Access</h3>
+        <p>Kitchen availability may be requested depending on the type of event and approved facility use.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="YOUR-LOBBY-IMAGE.jpg" alt="Lobby and gathering area at Versailles United Methodist Church">
+      <div class="card-content">
+        <h3>Gathering Areas</h3>
+        <p>Welcoming entry and gathering areas help guests feel comfortable as they arrive and connect.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="feature-band">
+  <h2>Designed for Connection</h2>
+  <p>Our facility can support many types of gatherings while helping guests feel welcomed and cared for.</p>
+
+  <div class="feature-list">
+    <div class="feature">
+      <strong>Flexible Spaces</strong>
+      <p>Options for large and small gatherings.</p>
+    </div>
+
+    <div class="feature">
+      <strong>Audio / Video</strong>
+      <p>Available by request for approved events.</p>
+    </div>
+
+    <div class="feature">
+      <strong>Accessible Facility</strong>
+      <p>Designed to welcome guests of all ages.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Facility Photo Gallery</h2>
+  <p>Add more facility photos here so families and community groups can see the space before submitting a request.</p>
+
+  <div class="gallery">
+    <img src="YOUR-GALLERY-IMAGE-1.jpg" alt="Facility photo 1">
+    <img src="YOUR-GALLERY-IMAGE-2.jpg" alt="Facility photo 2">
+    <img src="YOUR-GALLERY-IMAGE-3.jpg" alt="Facility photo 3">
+    <img src="YOUR-GALLERY-IMAGE-4.jpg" alt="Facility photo 4">
+    <img src="YOUR-GALLERY-IMAGE-5.jpg" alt="Facility photo 5">
+    <img src="YOUR-GALLERY-IMAGE-6.jpg" alt="Facility photo 6">
+    <img src="YOUR-GALLERY-IMAGE-7.jpg" alt="Facility photo 7">
+    <img src="YOUR-GALLERY-IMAGE-8.jpg" alt="Facility photo 8">
+  </div>
+</section>
+
+<section class="cta">
+  <h2>Interested in Using Our Facility?</h2>
+  <p>
+    Complete the facility rental request form and our church office will review your request,
+    check availability, and follow up with next steps.
+  </p>
+
+  <a class="btn" href="YOUR_GAS_FORM_URL_HERE" target="_blank" rel="noopener">
+    Request Event Date
+  </a>
+
+  <div class="footer-note">
+    Submitting a request does not guarantee approval or availability.
+  </div>
+</section>
+
+</body>
+</html>
