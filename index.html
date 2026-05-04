@@ -2305,7 +2305,7 @@
     </section>
 
     <div class="sr-ai-context" style="display:none;">
-      Versailles United Methodist Church is a Christian church located at 230 Paynes Mill Road in Versailles, Kentucky. VUMC offers Sunday worship, online worship, prayer, discipleship, community ministry, and opportunities for people and families to connect and grow in faith. The church is part of the United Methodist Church and is known locally for the mission language Love Like Jesus.
+      Versailles United Methodist Church is a Christian church located at 230 Paynes Mill Road in Versailles, Kentucky. VUMC offers Sunday worship, online worship, prayer, discipleship, community ministry, and opportunities for people and families to connect and grow in faith. The church is part of the United Methodist Church and is known locally for the mission language Love Like Jesus. The FAQ page answers visitor questions about worship times, what to expect, what to wear, children and youth, online worship, giving, and getting connected.
     </div>
 
   </main>
@@ -2339,6 +2339,7 @@
           <a href='/watch'>Watch Worship Online</a>
           <a href='/lovelikejesus'>Who We Are</a>
           <a href='/new-here'>New Here</a>
+          <a href='/faq'>FAQ</a>
           <a href='/next-steps'>Next Steps</a>
           <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
           <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
@@ -2417,6 +2418,7 @@
       <button class="vumc-quick-btn" data-question="How can I contact the church?">Contact</button>
       <button class="vumc-quick-btn" data-question="Are the services available online?">Watch Online</button>
       <button class="vumc-quick-btn" data-question="How can I get involved with the church community?">Get Involved</button>
+      <button class="vumc-quick-btn" data-question="Where can I find frequently asked questions?">FAQ</button>
       <button class="vumc-quick-btn" data-question="How can I give to Versailles UMC?">Giving</button>
     </div>
 
@@ -2679,41 +2681,49 @@
 
     const vumcFaqResponses = [
       {
-        keywords: ['address', 'location', 'where are you','located', 'where is the church', 'directions'],
+        keywords: ['address', 'location', 'where are you', 'located', 'where is the church', 'directions', 'map', 'parking'],
         response: {
-          text: `Versailles UMC is located at:\n\n230 Paynes Mill Road\nVersailles, Kentucky.`,
+          text: `Versailles United Methodist Church is located at:
+
+230 Paynes Mill Road
+Versailles, Kentucky 40383.
+
+When you arrive, come to the main entrance and someone will be glad to help you find worship, restrooms, children’s ministry, or a place to sit.`,
           buttons: [
-            { label: 'Open Maps', url: 'https://maps.google.com/?q=230+Paynes+Mill+Road+Versailles+KY' }
+            { label: 'Open Maps', url: 'https://maps.google.com/?q=230+Paynes+Mill+Road+Versailles+KY' },
+            { label: 'Plan Your Visit', url: '/plan-your-visit' }
           ]
         }
       },
       {
         keywords: ['office hours', 'hours', 'when are you open', 'office open'],
         response: {
-          text: `Our church office hours are:\n\nMonday through Friday\n10:00 AM – 2:00 PM.`
+          text: `Our church office hours are:
+
+Monday through Friday
+10:00 AM – 2:00 PM.`,
+          buttons: [
+            { label: 'Call the Office', url: 'tel:8598734304' },
+            { label: 'Email Office', url: 'mailto:vumcsecretary@gmail.com' }
+          ]
         }
       },
-  {
-  keywords: [
-    'rent', 'assistance', 'rental', 'utility', 'utilities',
-    'utility bill', 'utility bills', 'water', 'electric',
-    'groceries', 'gas', 'fuel',
-    'electric bill', 'water bill', 'gas bill',
-    'help with bills', 'financial assistance', 'financial help',
-    'help paying bills', 'need help paying',
-    'bluegrass community action'
-  ],
-  response: {
-    text: `For rent assistance, utility bill help, or other financial assistance, Versailles UMC partners with Bluegrass Community Action in Versailles, KY. Please contact them directly for the most up-to-date available resources.`,
-    buttons: [
-      { label: 'Call Bluegrass Community Action', url: 'tel:8598738182' }
-    ]
-  }
-},
       {
-        keywords: ['contact', 'phone', 'telephone', 'call', 'email'],
+        keywords: ['rent', 'assistance', 'rental', 'utility', 'utilities', 'utility bill', 'utility bills', 'water', 'electric', 'groceries', 'gas', 'fuel', 'electric bill', 'water bill', 'gas bill', 'help with bills', 'financial assistance', 'financial help', 'help paying bills', 'need help paying', 'bluegrass community action'],
         response: {
-          text: `You can contact Versailles UMC by phone or email.`,
+          text: `For rent assistance, utility bill help, or other financial assistance, Versailles UMC partners with Bluegrass Community Action in Versailles, KY. Please contact them directly for the most up-to-date available resources.`,
+          buttons: [
+            { label: 'Call Bluegrass Community Action', url: 'tel:8598738182' }
+          ]
+        }
+      },
+      {
+        keywords: ['contact', 'phone', 'telephone', 'call', 'email', 'office'],
+        response: {
+          text: `You can contact Versailles UMC by phone or email.
+
+Phone: (859) 873-4304
+Email: vumcsecretary@gmail.com`,
           buttons: [
             { label: 'Call 859-873-4304', url: 'tel:8598734304' },
             { label: 'Email Office', url: 'mailto:vumcsecretary@gmail.com' }
@@ -2721,38 +2731,128 @@
         }
       },
       {
-        keywords: ['worship', 'service time', 'service times', 'sunday', 'traditional', 'contemporary'],
+        keywords: ['worship', 'service time', 'service times', 'sunday', 'traditional', 'contemporary', 'what time', 'church time'],
         response: {
-          text: `Our Sunday worship schedule:\n\n• Traditional Worship — 9:30 AM\n• Contemporary Worship — 10:30 AM\n\nThrough May 3 - June 28, we have combined our 2 worship services to blended for the summer. Service begins at 10:30 AM.\n\nWe would love for you to join us.`
-        }
-      },
-      {
-        keywords: ['online', 'livestream', 'live stream', 'watch online', 'youtube', 'stream'],
-        response: {
-          text: `Yes, we offer live streaming of our services.`,
+          text: `Our regular Sunday worship schedule is:
+
+• Traditional Worship — 9:30 AM
+• Contemporary Worship — 10:30 AM
+
+Through May 3 – June 28, we are combining our two worship services into one blended summer service at 10:30 AM.
+
+We would love for you to join us in person or online.`,
           buttons: [
-            { label: 'Watch Online', url: 'https://versaillesumc.org/watch' }
+            { label: 'Plan Your Visit', url: '/plan-your-visit' },
+            { label: 'Watch Online', url: '/watch' }
           ]
         }
       },
       {
-        keywords: ['get involved', 'volunteer', 'serve', 'ministries', 'help', 'community'],
+        keywords: ['online', 'livestream', 'live stream', 'watch online', 'youtube', 'stream', 'watch', 'media', 'missed sunday'],
         response: {
-          text: `We offer various ways to get involved, including Life Groups, AA meetings, and volunteer ministries.`
+          text: `Yes. VUMC livestreams worship online so you can worship from home, while traveling, or when you are unable to attend in person. You can also catch recent messages on our Media page.`,
+          buttons: [
+            { label: 'Watch Online', url: '/watch' },
+            { label: 'Recent Messages', url: '/media' }
+          ]
+        }
+      },
+      {
+        keywords: ['visit', 'new', 'first time', 'guest', 'what to expect', 'plan', 'first visit', 'visitor'],
+        response: {
+          text: `We know visiting a church can feel like a big step. At VUMC, you can expect a welcoming church family, meaningful worship, biblical teaching, prayer, music, and people who want to help you feel at home.`,
+          buttons: [
+            { label: 'Plan Your Visit', url: '/plan-your-visit' },
+            { label: 'New Here', url: '/new-here' },
+            { label: 'FAQ', url: '/faq' }
+          ]
+        }
+      },
+      {
+        keywords: ['wear', 'clothes', 'dress', 'attire', 'what should i wear'],
+        response: {
+          text: `Come as you are. Some people dress casually, some dress more traditionally, and many are somewhere in between. You do not need to look a certain way to be welcomed here.`,
+          buttons: [
+            { label: 'Visitor FAQ', url: '/faq' }
+          ]
+        }
+      },
+      {
+        keywords: ['kids', 'children', 'family', 'families', 'youth', 'students', 'childcare', 'nursery'],
+        response: {
+          text: `VUMC cares deeply about children, students, and families. We want kids and youth to know they are loved by God and have a place in the church family.`,
+          buttons: [
+            { label: 'Kids & Families', url: '/kids-families' },
+            { label: 'Youth', url: '/youth' },
+            { label: 'FAQ', url: '/faq' }
+          ]
+        }
+      },
+      {
+        keywords: ['love like jesus', 'mission', 'values', 'welcome', 'who are you', 'identity'],
+        response: {
+          text: `Love Like Jesus is more than a slogan for VUMC. It means showing grace, serving others, welcoming people, and reflecting the heart of Christ in our church and community.`,
+          buttons: [
+            { label: 'What Does That Mean?', url: '/lovelikejesus' }
+          ]
+        }
+      },
+      {
+        keywords: ['denomination', 'methodist', 'united methodist', 'umc', 'beliefs', 'believe'],
+        response: {
+          text: `Versailles United Methodist Church is part of the United Methodist Church. We are rooted in Christian faith, Wesleyan tradition, worship, service, discipleship, and community.`,
+          buttons: [
+            { label: 'Who We Are', url: '/lovelikejesus' },
+            { label: 'FAQ', url: '/faq' }
+          ]
+        }
+      },
+      {
+        keywords: ['get involved', 'volunteer', 'serve', 'ministries', 'help', 'community', 'connect', 'next step', 'next steps'],
+        response: {
+          text: `There are several ways to get connected at VUMC: worship in person or online, join a group, serve in a ministry, attend events, or take a next step through Church Center.`,
+          buttons: [
+            { label: 'Next Steps', url: '/next-steps' },
+            { label: 'Groups', url: '/groups' },
+            { label: 'Serve', url: '/serve' },
+            { label: 'Church Center', url: 'https://versaillesumc.churchcenter.com/pages/vumc-hub' }
+          ]
         }
       },
       {
         keywords: ['life group', 'small group', 'groups', 'bible study'],
         response: {
-          text: `Life Groups meet on Sundays at:\n\n• 9:15 AM\n• 10:30 AM.`
+          text: `Life Groups are one way to build community, study Scripture, and grow in faith with others at VUMC.`,
+          buttons: [
+            { label: 'View Groups', url: '/groups' }
+          ]
         }
       },
       {
-        keywords: ['give', 'giving', 'donate', 'offering', 'tithe'],
+        keywords: ['pray', 'prayer', 'prayer request', 'need prayer'],
         response: {
-          text: `You can make a secure one-time or recurring donation here.`,
+          text: `We would be honored to pray with you. You can submit a prayer request online and our church will care for it prayerfully.`,
           buttons: [
-            { label: 'Give Online', url: 'https://versaillesumc.churchcenter.com/giving' }
+            { label: 'Prayer Request', url: 'https://versaillesumc.churchcenter.com/people/forms/554033' }
+          ]
+        }
+      },
+      {
+        keywords: ['give', 'giving', 'donate', 'offering', 'tithe', 'church center'],
+        response: {
+          text: `You can give online through Church Center or during worship. Giving supports the mission and ministry of VUMC as we worship, serve, care, and reach our community with the love of Jesus.`,
+          buttons: [
+            { label: 'Give Online', url: 'https://versaillesumc.churchcenter.com/giving' },
+            { label: 'Church Center', url: 'https://versaillesumc.churchcenter.com/pages/vumc-hub' }
+          ]
+        }
+      },
+      {
+        keywords: ['faq', 'question', 'questions', 'answers', 'frequently asked', 'help'],
+        response: {
+          text: `Our FAQ page answers common questions about worship times, what to expect, what to wear, kids and youth, online worship, giving, and how to get connected.`,
+          buttons: [
+            { label: 'Visit FAQ', url: '/faq' }
           ]
         }
       }
@@ -2973,6 +3073,7 @@
             <a class="btn btn-primary" href="/plan-your-visit">Plan Your Visit</a>
             <a class="btn btn-secondary" href="/watch">Watch Online</a>
             <a class="btn btn-light" href="/new-here">New Here</a>
+            <a class="btn btn-light" href="/faq">FAQ</a>
           </div>
         `);
       } else if (visits === 2) {
@@ -3015,8 +3116,10 @@
     })();
 
     vumcAddMessage({
-      text: `Hi! Welcome to Versailles UMC.\n\nI can help with common questions like worship times, office hours, contact information, online worship, Life Groups, and giving.\n\nIf I can’t answer your question, I can send your message to our church office.`,
+      text: `Hi! Welcome to Versailles UMC.\n\nI can help with common questions from our VUMC knowledge base, including worship times, visiting for the first time, what to wear, kids and families, online worship, giving, prayer, Church Center, and our FAQ page.\n\nIf I can’t answer your question, I can send your message to our church office.`,
       buttons: [
+        { label: 'FAQ', url: '/faq' },
+        { label: 'Plan Your Visit', url: '/plan-your-visit' },
         { label: 'Worship Online', url: 'https://versaillesumc.org/watch' },
         { label: 'Give Online', url: 'https://versaillesumc.churchcenter.com/giving' }
       ]
