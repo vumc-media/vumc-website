@@ -1310,6 +1310,84 @@
       margin-top: 34px;
     }
 
+
+    /* VUMC HOMEPAGE STICKY BOTTOM BAR */
+    .vumc-bottom-bar {
+      display: none;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding-bottom: 92px;
+      }
+
+      .vumc-bottom-bar {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        z-index: 999996;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        padding: 9px;
+        background: rgba(17, 22, 29, 0.92);
+        border: 1px solid rgba(255,255,255,0.16);
+        border-radius: 24px;
+        box-shadow: 0 18px 45px rgba(0,0,0,0.28);
+        backdrop-filter: blur(14px);
+      }
+
+      .vumc-bottom-bar a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        min-height: 52px;
+        padding: 7px 4px;
+        border-radius: 18px;
+        color: rgba(255,255,255,0.86);
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        transition: background var(--transition), color var(--transition), transform var(--transition);
+      }
+
+      .vumc-bottom-bar a:hover,
+      .vumc-bottom-bar a:focus {
+        background: rgba(255,255,255,0.11);
+        color: #fff;
+        transform: translateY(-1px);
+        outline: none;
+      }
+
+      .vumc-bottom-bar .bar-icon {
+        width: 25px;
+        height: 25px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.10);
+        color: var(--accent-soft);
+        font-size: 14px;
+        line-height: 1;
+      }
+
+      .vumc-bottom-bar .primary-action {
+        background: var(--accent);
+        color: #fff;
+        box-shadow: 0 10px 24px rgba(187, 140, 63, 0.26);
+      }
+
+      .vumc-bottom-bar .primary-action .bar-icon {
+        background: rgba(255,255,255,0.18);
+        color: #fff;
+      }
+    }
+
     .vumc-chat-launcher {
       position: fixed;
       right: 20px;
@@ -1662,7 +1740,7 @@
 
     .vumc-chat-launcher {
         right: 14px;
-        bottom: 14px;
+        bottom: 102px;
         width: 60px;
         height: 60px;
       }
@@ -1670,7 +1748,7 @@
       .vumc-chat-widget {
         right: 12px;
         left: 12px;
-        bottom: 86px;
+        bottom: 174px;
         width: auto;
         max-width: none;
         height: 72vh;
@@ -2117,6 +2195,27 @@
       </div>
     </div>
   </footer>
+
+
+  <!-- VUMC HOMEPAGE STICKY BOTTOM BAR -->
+  <nav class="vumc-bottom-bar" aria-label="Homepage quick actions">
+    <a href="/watch">
+      <span class="bar-icon" aria-hidden="true">▶</span>
+      <span>Watch</span>
+    </a>
+    <a class="primary-action" href="/plan-your-visit">
+      <span class="bar-icon" aria-hidden="true">✦</span>
+      <span>Visit</span>
+    </a>
+    <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">
+      <span class="bar-icon" aria-hidden="true">♡</span>
+      <span>Give</span>
+    </a>
+    <a href="https://versaillesumc.churchcenter.com/pages/vumc-hub">
+      <span class="bar-icon" aria-hidden="true">☰</span>
+      <span>Connect</span>
+    </a>
+  </nav>
 
   <div class="vumc-modal-overlay" id="vumcModalOverlay" aria-hidden="true">
     <div class="vumc-modal" role="dialog" aria-modal="true" aria-labelledby="vumcModalTitle">
