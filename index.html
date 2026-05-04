@@ -2,6 +2,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -182,7 +183,8 @@
       "sameAs": [
         "https://www.facebook.com/versaillesumc",
         "https://www.youtube.com/@versaillesumc",
-        "https://versaillesumc.churchcenter.com"
+        "https://versaillesumc.churchcenter.com",
+        "https://www.wikidata.org/wiki/Q139660256"
       ],
       "event": [
         {
@@ -1311,6 +1313,94 @@
     }
 
 
+    .latest-service-wrap {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 28px;
+      align-items: stretch;
+      margin-top: 34px;
+    }
+
+    .latest-service-video {
+      position: relative;
+      min-height: 360px;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: var(--dark);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      isolation: isolate;
+    }
+
+    .latest-service-video img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .latest-service-video::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(17,22,29,0.62), rgba(17,22,29,0.10));
+      z-index: 1;
+    }
+
+    .latest-service-play {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      width: 76px;
+      height: 76px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.92);
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      padding-left: 4px;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    }
+
+    .latest-service-caption {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 22px;
+      z-index: 2;
+      color: #fff;
+    }
+
+    .latest-service-caption h3 {
+      margin: 0 0 6px;
+      font-size: clamp(22px, 3vw, 32px);
+      line-height: 1.12;
+    }
+
+    .latest-service-caption p {
+      margin: 0;
+      color: rgba(255,255,255,0.82);
+      font-size: 15px;
+    }
+
+    .latest-service-info {
+      border-radius: var(--radius-xl);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+
     /* VUMC HOMEPAGE STICKY BOTTOM BAR */
     .vumc-bottom-bar {
       display: none;
@@ -1685,6 +1775,7 @@
       .video-grid,
       .two-column,
       .watch-grid,
+      .latest-service-wrap,
       .next-steps-grid,
       .seo-local-grid,
       .footer-grid {
@@ -1702,6 +1793,7 @@
       .video-grid,
       .two-column,
       .watch-grid,
+      .latest-service-wrap,
       .next-steps-grid,
       .seo-local-grid,
       .footer-grid {
@@ -1937,7 +2029,7 @@
         <div class="cards-grid">
           <a class='feature-card image-mode' href='/watch'>
             <div class="feature-card-media">
-              <img src="/vumc-media/worship-on-laptop.png" alt="Watch worship online">
+              <img src="/vumc-media/worship-on-laptop.png" alt="Watch worship online" loading="lazy" decoding="async">
             </div>
             <div class="feature-card-inner">
               <h3>Watch</h3>
@@ -1947,7 +2039,7 @@
 
           <a class='feature-card image-mode' href='/new-here'>
             <div class="feature-card-media">
-              <img src="/vumc-media/plan%20a%20visit.png" alt="New here">
+              <img src="/vumc-media/plan%20a%20visit.png" alt="New here" loading="lazy" decoding="async">
             </div>
             <div class="feature-card-inner">
               <h3>New Here</h3>
@@ -1957,7 +2049,7 @@
 
           <a class="feature-card image-mode" href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">
             <div class="feature-card-media">
-              <img src="/vumc-media/give-online.png" alt="Give online">
+              <img src="/vumc-media/give-online.png" alt="Give online" loading="lazy" decoding="async">
             </div>
             <div class="feature-card-inner">
               <h3>Give</h3>
@@ -1967,7 +2059,7 @@
 
           <a class='feature-card image-mode' href='/events'>
             <div class="feature-card-media">
-              <img src="/vumc-media/atrium.jpg" alt="Events">
+              <img src="/vumc-media/atrium.jpg" alt="Events" loading="lazy" decoding="async">
             </div>
             <div class="feature-card-inner">
               <h3>Events</h3>
@@ -2131,23 +2223,42 @@
       </div>
     </section>
 
-    <section class="section" id="latest-messages">
+    <section class="section" id="latest-message">
       <div class="container">
-        <div class="eyebrow">Latest Messages</div>
-        <h2 class="section-title">Watch recent worship and messages.</h2>
+        <div class="eyebrow">Watch</div>
+        <h2 class="section-title">Missed Sunday?</h2>
         <p class="section-copy">
-          Stay connected with recent messages and contemporary worship livestreams from our YouTube channel.
+          Catch the most recent worship service and stay connected throughout the week.
         </p>
 
-        <div class="video-loading-card" id="youtubeLoading">Loading recent videos…</div>
-        <div class="video-grid" id="youtubeVideoGrid" aria-live="polite"></div>
+        <div class="latest-service-wrap">
+          <div class="latest-service-video" id="latestServiceVideo" role="button" tabindex="0" aria-label="Watch the latest worship service">
+            <img id="latestServiceThumb" src="/vumc-media/worship-on-laptop.png" alt="Latest worship service" loading="lazy" decoding="async">
+            <span class="latest-service-play" aria-hidden="true">▶</span>
+            <div class="latest-service-caption">
+              <h3 id="latestServiceTitle">Latest Worship Service</h3>
+              <p id="latestServiceDate">Tap to watch</p>
+            </div>
+          </div>
 
-        <div class="btn-row">
-          <a class="btn btn-dark" href="https://www.youtube.com/@versaillesumc/videos" target="_blank" rel="noopener noreferrer">View More on YouTube</a>
-          <a class='btn btn-light' href='/watch'>Watch Live Worship</a>
+          <div class="latest-service-info">
+            <div class="eyebrow">Online Worship</div>
+            <h2 style="margin:0 0 12px;font-size:34px;line-height:1.1;">Worship wherever you are.</h2>
+            <p class="section-copy" style="font-size:17px;">
+              Join us online when you are traveling, homebound, or catching up during the week.
+            </p>
+            <div class="btn-row">
+              <a class="btn btn-dark" href="/watch">Watch Live</a>
+              <a class="btn btn-light" href="/media">More Messages</a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+
+    <div class="sr-ai-context" style="display:none;">
+      Versailles United Methodist Church is a Christian church located at 230 Paynes Mill Road in Versailles, Kentucky. VUMC offers Sunday worship, online worship, prayer, discipleship, community ministry, and opportunities for people and families to connect and grow in faith. The church is part of the United Methodist Church and is known locally for the mission language Love Like Jesus.
+    </div>
 
   </main>
 
@@ -2391,78 +2502,72 @@
     const VUMC_YOUTUBE_CHANNEL_ID = 'UC_svgodM3blLqWEBQ5yNjmA';
     const VUMC_YOUTUBE_FEED = `https://www.youtube.com/feeds/videos.xml?channel_id=${VUMC_YOUTUBE_CHANNEL_ID}`;
     const VUMC_RSS_PROXY = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(VUMC_YOUTUBE_FEED)}`;
+    let vumcLatestVideoId = '';
+    let vumcLatestVideoTitle = 'Latest Worship Service';
 
     function vumcFormatVideoDate(pubDate) {
-      if (!pubDate) return 'Recent message';
+      if (!pubDate) return 'Tap to watch';
       const date = new Date(pubDate);
-      if (Number.isNaN(date.getTime())) return 'Recent message';
+      if (Number.isNaN(date.getTime())) return 'Tap to watch';
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
 
     function vumcVideoIdFromLink(link) {
       try {
         const url = new URL(link);
-        return url.searchParams.get('v');
+        return url.searchParams.get('v') || '';
       } catch (e) {
         return '';
       }
     }
 
-    function vumcCreateVideoCard(video) {
+    function vumcSetLatestVideo(video) {
+      const card = document.getElementById('latestServiceVideo');
+      const thumb = document.getElementById('latestServiceThumb');
+      const titleEl = document.getElementById('latestServiceTitle');
+      const dateEl = document.getElementById('latestServiceDate');
+      if (!card || !thumb || !titleEl || !dateEl || !video) return;
+
       const videoId = video.videoId || vumcVideoIdFromLink(video.link);
-      const thumbnail = video.thumbnail || (videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : '');
-      const title = video.title || 'Recent worship video';
-      const link = video.link || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : 'https://www.youtube.com/@versaillesumc/videos');
+      if (!videoId) return;
 
-      const card = document.createElement('div');
-      card.className = 'video-card';
-      card.style.cursor = 'pointer';
-      card.setAttribute('role', 'button');
-      card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', `Watch ${title}`);
+      vumcLatestVideoId = videoId;
+      vumcLatestVideoTitle = video.title || 'Latest Worship Service';
+      thumb.src = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+      thumb.alt = vumcLatestVideoTitle;
+      titleEl.textContent = vumcLatestVideoTitle;
+      dateEl.textContent = vumcFormatVideoDate(video.pubDate);
+    }
 
-      function openVideoModal() {
-        if (!videoId) {
-          window.open(link, '_blank', 'noopener,noreferrer');
-          return;
-        }
-        const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-        openModal(embedUrl, title || 'Watch Video', card);
+    function vumcOpenLatestVideo() {
+      if (!vumcLatestVideoId) {
+        window.location.href = '/media';
+        return;
       }
+      const embedUrl = `https://www.youtube.com/embed/${vumcLatestVideoId}?autoplay=1&rel=0`;
+      openModal(embedUrl, vumcLatestVideoTitle, document.getElementById('latestServiceVideo'));
+    }
 
-      card.addEventListener('click', openVideoModal);
+    function vumcWireLatestVideoCard() {
+      const card = document.getElementById('latestServiceVideo');
+      if (!card) return;
+      card.addEventListener('click', vumcOpenLatestVideo);
       card.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          openVideoModal();
+          vumcOpenLatestVideo();
         }
       });
-
-      card.innerHTML = `
-        <div class="video-thumb">
-          ${thumbnail ? `<img src="${thumbnail}" alt="${title.replace(/"/g, '&quot;')}">` : ''}
-          <span class="video-play" aria-hidden="true">▶</span>
-        </div>
-        <div class="video-card-body">
-          <h3>${title}</h3>
-          <p>${vumcFormatVideoDate(video.pubDate)}</p>
-        </div>
-      `;
-
-      return card;
     }
 
-    async function vumcLoadLatestYouTubeVideos() {
-      const grid = document.getElementById('youtubeVideoGrid');
-      const loading = document.getElementById('youtubeLoading');
-      if (!grid || !loading) return;
-
+    async function vumcLoadLatestYouTubeVideo() {
       try {
         const response = await fetch(VUMC_RSS_PROXY);
         if (!response.ok) throw new Error('Unable to load YouTube feed');
 
         const data = await response.json();
         const items = Array.isArray(data.items) ? data.items : [];
+        if (!items.length) return;
 
         const excludeWords = [
           'traditional worship',
@@ -2491,22 +2596,20 @@
           return preferWords.some(word => title.includes(word));
         });
 
-        const videos = (preferredVideos.length ? preferredVideos : nonTraditionalVideos).slice(0, 4);
-
-        grid.innerHTML = '';
-        videos.forEach(video => grid.appendChild(vumcCreateVideoCard(video)));
-
-        if (videos.length) {
-          loading.style.display = 'none';
-        } else {
-          loading.textContent = 'Recent videos are available on our YouTube channel.';
-        }
+        const latestVideo = (preferredVideos[0] || nonTraditionalVideos[0] || items[0]);
+        vumcSetLatestVideo(latestVideo);
       } catch (error) {
-        loading.innerHTML = 'Recent videos are available on our YouTube channel. <a href="https://www.youtube.com/@versaillesumc/videos" target="_blank" rel="noopener noreferrer" style="font-weight:700;color:var(--accent);">View videos here →</a>';
+        // Keep the fallback card visible and send visitors to the media page if the feed is unavailable.
       }
     }
 
-    vumcLoadLatestYouTubeVideos();
+    vumcWireLatestVideoCard();
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(vumcLoadLatestYouTubeVideo, { timeout: 2500 });
+    } else {
+      window.addEventListener('load', vumcLoadLatestYouTubeVideo);
+    }
 
     const VUMC_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3RvHWZ0RIiUMZBdjVtgq-4ZJ60AHlYwy2ybZMCUYqoWVsIt1eurqn6gJYywf6gi1SuA/exec';
 
