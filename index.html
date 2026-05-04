@@ -952,6 +952,81 @@
       color: var(--accent);
     }
 
+    /* ===== SMART VISITOR WELCOME SYSTEM ===== */
+    .smart-welcome-box {
+      background:
+        linear-gradient(135deg, rgba(17,22,29,0.96), rgba(23,29,37,0.94)),
+        radial-gradient(circle at top right, rgba(187, 140, 63, 0.22), transparent 36%);
+      color: #fff;
+      padding: 38px;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.10);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .smart-welcome-box::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at bottom left, rgba(255,255,255,0.08), transparent 30%);
+      pointer-events: none;
+    }
+
+    .smart-welcome-box > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .smart-welcome-box .eyebrow {
+      color: var(--accent-soft);
+      margin-bottom: 10px;
+    }
+
+    .smart-welcome-box h2 {
+      margin: 0 0 10px;
+      font-size: clamp(30px, 5vw, 44px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .smart-welcome-box p {
+      margin: 0 auto;
+      color: rgba(255,255,255,0.78);
+      font-size: 17px;
+      max-width: 720px;
+    }
+
+    .smart-actions {
+      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .smart-actions .btn-light {
+      background: rgba(255,255,255,0.95);
+    }
+
+    @media (max-width: 760px) {
+      .smart-welcome-box {
+        padding: 28px 20px;
+      }
+
+      .smart-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .smart-actions .btn {
+        width: 100%;
+      }
+    }
+
+
 
 
     .seo-local-section {
@@ -1731,6 +1806,13 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- SMART VISITOR WELCOME SECTION -->
+    <section class="section" id="smart-visitor-welcome">
+      <div class="container">
+        <div id="smartWelcome" aria-live="polite"></div>
       </div>
     </section>
 
@@ -2603,6 +2685,84 @@
     });
 
     vumcSendFallbackBtn.addEventListener('click', vumcSubmitFallback);
+
+
+
+    // SMART VISITOR SYSTEM
+    (function() {
+      const el = document.getElementById('smartWelcome');
+      if (!el) return;
+
+      const visitKey = 'vumc_homepage_visits';
+      const lastVisitKey = 'vumc_homepage_last_visit';
+      const now = Date.now();
+      const resetAfterDays = 90;
+      const resetAfterMs = resetAfterDays * 24 * 60 * 60 * 1000;
+
+      let visits = parseInt(localStorage.getItem(visitKey) || '0', 10);
+      const lastVisit = parseInt(localStorage.getItem(lastVisitKey) || '0', 10);
+
+      if (lastVisit && now - lastVisit > resetAfterMs) {
+        visits = 0;
+      }
+
+      visits += 1;
+      localStorage.setItem(visitKey, String(visits));
+      localStorage.setItem(lastVisitKey, String(now));
+
+      function render(html) {
+        el.innerHTML = `<div class="smart-welcome-box">${html}</div>`;
+      }
+
+      if (visits === 1) {
+        render(`
+          <div class="eyebrow">First Time Here?</div>
+          <h2>Welcome to Versailles UMC</h2>
+          <p>We’re glad you found us. Whether you are exploring faith, looking for a church home, or just curious, here are the best places to begin.</p>
+          <div class="smart-actions">
+            <a class="btn btn-primary" href="/plan-your-visit">Plan Your Visit</a>
+            <a class="btn btn-secondary" href="/watch">Watch Online</a>
+            <a class="btn btn-light" href="/new-here">New Here</a>
+          </div>
+        `);
+      } else if (visits === 2) {
+        render(`
+          <div class="eyebrow">Welcome Back</div>
+          <h2>Want to learn more about VUMC?</h2>
+          <p>Since you’ve been here before, here are a few deeper places to explore our mission, our ministries, and how families connect at Versailles UMC.</p>
+          <div class="smart-actions">
+            <a class="btn btn-primary" href="/lovelikejesus">Our Mission</a>
+            <a class="btn btn-secondary" href="/kids-families">Kids & Families</a>
+            <a class="btn btn-secondary" href="/media">Recent Messages</a>
+            <a class="btn btn-light" href="/watch">Watch Again</a>
+          </div>
+        `);
+      } else if (visits === 3) {
+        render(`
+          <div class="eyebrow">Take a Next Step</div>
+          <h2>Ready to get connected?</h2>
+          <p>Church becomes more meaningful when you move from watching to belonging. Here are simple ways to take a next step with VUMC.</p>
+          <div class="smart-actions">
+            <a class="btn btn-primary" href="/groups">Groups</a>
+            <a class="btn btn-secondary" href="/serve">Serve</a>
+            <a class="btn btn-secondary" href="/events">Events</a>
+            <a class="btn btn-light" href="https://versaillesumc.churchcenter.com/people/forms/554033" data-open-in-church-center-modal="true">Prayer Request</a>
+          </div>
+        `);
+      } else {
+        render(`
+          <div class="eyebrow">VUMC Family</div>
+          <h2>Welcome back</h2>
+          <p>Thanks for staying connected. Here are quick links for worship, giving, events, and the VUMC Hub.</p>
+          <div class="smart-actions">
+            <a class="btn btn-primary" href="/watch">Watch</a>
+            <a class="btn btn-secondary" href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+            <a class="btn btn-secondary" href="https://versaillesumc.churchcenter.com/pages/vumc-hub">VUMC Hub</a>
+            <a class="btn btn-light" href="/events">Events</a>
+          </div>
+        `);
+      }
+    })();
 
     vumcAddMessage({
       text: `Hi! Welcome to Versailles UMC.\n\nI can help with common questions like worship times, office hours, contact information, online worship, Life Groups, and giving.\n\nIf I can’t answer your question, I can send your message to our church office.`,
