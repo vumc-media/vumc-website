@@ -441,6 +441,67 @@
       transform: translateY(-2px);
     }
 
+    .inline-video-player {
+      display: none;
+      margin-top: 34px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .inline-video-player.active {
+      display: block;
+    }
+
+    .inline-video-frame-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    .inline-video-frame-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000;
+    }
+
+    .inline-video-info {
+      padding: 22px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .inline-video-info h3 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .inline-video-info p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .inline-video-close {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
     .media-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -756,6 +817,18 @@
       .brand-name { font-size: 15px; }
       .brand-tagline { font-size: 11px; }
 
+      .inline-video-info {
+        padding: 18px;
+      }
+
+      .inline-video-info h3 {
+        font-size: 18px;
+      }
+
+      .inline-video-close {
+        width: 100%;
+      }
+
       .vumc-modal-overlay {
         padding: 12px;
       }
@@ -883,8 +956,21 @@
         <div class="eyebrow">Past Services</div>
         <h2 class="section-title">Recent worship services.</h2>
         <p class="section-copy">
-          Select a service below and it will open in a popup window without sending you away from the website.
+          Select a service below and it will play right here on the page without sending you away from the website.
         </p>
+
+        <div class="inline-video-player" id="inlineVideoPlayer" aria-live="polite">
+          <div class="inline-video-frame-wrap">
+            <iframe id="inlineVideoFrame" src="" title="Selected VUMC worship service" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="inline-video-info">
+            <div>
+              <h3 id="inlineVideoTitle">Selected Worship Service</h3>
+              <p id="inlineVideoDate">Playing on this page</p>
+            </div>
+            <button class="inline-video-close" type="button" id="inlineVideoClose">Close Video</button>
+          </div>
+        </div>
 
         <div id="streamsGrid" class="media-grid">
           <div class="loading">Loading past services...</div>
@@ -1052,6 +1138,31 @@
     const modalTitle = document.getElementById('mediaModalTitle');
     const modalClose = document.getElementById('mediaModalClose');
 
+    const inlineVideoPlayer = document.getElementById('inlineVideoPlayer');
+    const inlineVideoFrame = document.getElementById('inlineVideoFrame');
+    const inlineVideoTitle = document.getElementById('inlineVideoTitle');
+    const inlineVideoDate = document.getElementById('inlineVideoDate');
+    const inlineVideoClose = document.getElementById('inlineVideoClose');
+
+    function openInlineVideo(url, title, published) {
+      if (!inlineVideoPlayer || !inlineVideoFrame) return;
+      inlineVideoTitle.textContent = title || 'Past Worship Service';
+      inlineVideoDate.textContent = published || 'Playing on this page';
+      inlineVideoFrame.src = url;
+      inlineVideoPlayer.classList.add('active');
+      inlineVideoPlayer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function closeInlineVideo() {
+      if (!inlineVideoPlayer || !inlineVideoFrame) return;
+      inlineVideoPlayer.classList.remove('active');
+      inlineVideoFrame.src = '';
+    }
+
+    if (inlineVideoClose) {
+      inlineVideoClose.addEventListener('click', closeInlineVideo);
+    }
+
     function openMediaModal(url, title, type) {
       modalTitle.textContent = title || 'Media Player';
       modalFrame.src = url;
@@ -1152,7 +1263,7 @@
           const embedUrl = `https://www.youtube.com/embed/${video.videoId}?autoplay=1&rel=0`;
 
           return `
-            <button class="media-card" type="button" data-video-open="${embedUrl}" data-title="${title}">
+            <button class="media-card" type="button" data-video-open="${embedUrl}" data-title="${title}" data-published="${published}">
               <div class="media-image" style="background-image:url('${thumb}');">
                 <span class="play-badge">▶</span>
               </div>
@@ -1166,10 +1277,10 @@
 
         document.querySelectorAll('[data-video-open]').forEach(button => {
           button.addEventListener('click', () => {
-            openMediaModal(
+            openInlineVideo(
               button.getAttribute('data-video-open'),
               button.getAttribute('data-title') || 'Past Worship Service',
-              'video'
+              button.getAttribute('data-published') || 'Playing on this page'
             );
           });
         });
