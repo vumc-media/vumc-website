@@ -2435,7 +2435,7 @@
       </div>
       <div class="vumc-chat-header-text">
         <h2>Ask VUMC</h2>
-        <p>Quick answers and church office support</p>
+        <p>Warm answers from the VUMC knowledge base</p>
       </div>
       <button class="vumc-chat-close" id="vumcChatClose" aria-label="Close chat">×</button>
     </div>
@@ -2454,7 +2454,7 @@
 
     <div class="vumc-fallback-form" id="vumcFallbackForm">
       <h3>Send us a message</h3>
-      <p>I’m not sure about that one, but I can send your message to our church office.</p>
+      <p>I don’t want to guess on that one, but I can send your question to our church office so someone can help you personally.</p>
 
       <div class="vumc-field">
         <input type="text" id="vumcFallbackName" placeholder="Your name" />
@@ -2474,7 +2474,7 @@
     <div class="vumc-status-text" id="vumcStatusText"></div>
 
     <div class="vumc-composer">
-      <input type="text" id="vumcChatInput" placeholder="Type your question..." />
+      <input type="text" id="vumcChatInput" placeholder="Ask about visiting, worship, kids, giving..." />
       <button id="vumcSendBtn">Send</button>
     </div>
   </div>
@@ -2691,16 +2691,22 @@
 
     let vumcLastUnmatchedQuestion = '';
 
+    /*
+      VUMC ASSISTANT VOICE
+      Keep Ask VUMC warm, clear, welcoming, and mission-centered.
+      Use simple language, avoid pressure, and point people toward a helpful next step.
+    */
+
     const vumcFaqResponses = [
       {
         keywords: ['address', 'location', 'where are you', 'located', 'where is the church', 'directions', 'map', 'parking'],
         response: {
-          text: `Versailles United Methodist Church is located at:
+          text: `We’d love to welcome you. Versailles United Methodist Church is located at:
 
 230 Paynes Mill Road
 Versailles, Kentucky 40383.
 
-When you arrive, come to the main entrance and someone will be glad to help you find worship, restrooms, children’s ministry, or a place to sit.`,
+When you arrive, come to the main entrance and someone will be glad to help you find worship, restrooms, children’s ministry, or a place to sit. You belong here.`,
           buttons: [
             { label: 'Open Maps', url: 'https://maps.google.com/?q=230+Paynes+Mill+Road+Versailles+KY' },
             { label: 'Plan Your Visit', url: '/plan-your-visit' }
@@ -2710,10 +2716,12 @@ When you arrive, come to the main entrance and someone will be glad to help you 
       {
         keywords: ['office hours', 'hours', 'when are you open', 'office open'],
         response: {
-          text: `Our church office hours are:
+          text: `Our church office would be glad to help you. Office hours are:
 
 Monday through Friday
-10:00 AM – 2:00 PM.`,
+10:00 AM – 2:00 PM.
+
+You can also call or email, and we’ll help you find the right next step.`,
           buttons: [
             { label: 'Call the Office', url: 'tel:8598734304' },
             { label: 'Email Office', url: 'mailto:vumcsecretary@gmail.com' }
@@ -2723,7 +2731,7 @@ Monday through Friday
       {
         keywords: ['rent', 'assistance', 'rental', 'utility', 'utilities', 'utility bill', 'utility bills', 'water', 'electric', 'groceries', 'gas', 'fuel', 'electric bill', 'water bill', 'gas bill', 'help with bills', 'financial assistance', 'financial help', 'help paying bills', 'need help paying', 'bluegrass community action'],
         response: {
-          text: `For rent assistance, utility bill help, or other financial assistance, Versailles UMC partners with Bluegrass Community Action in Versailles, KY. Please contact them directly for the most up-to-date available resources.`,
+          text: `We’re sorry you’re carrying that need right now. For rent assistance, utility bill help, or other financial assistance, Versailles UMC partners with Bluegrass Community Action in Versailles, KY. Please contact them directly for the most current available resources.`,
           buttons: [
             { label: 'Call Bluegrass Community Action', url: 'tel:8598738182' }
           ]
@@ -2732,7 +2740,7 @@ Monday through Friday
       {
         keywords: ['contact', 'phone', 'telephone', 'call', 'email', 'office'],
         response: {
-          text: `You can contact Versailles UMC by phone or email.
+          text: `We’d be glad to hear from you. You can contact Versailles UMC by phone or email.
 
 Phone: (859) 873-4304
 Email: vumcsecretary@gmail.com`,
@@ -2745,14 +2753,14 @@ Email: vumcsecretary@gmail.com`,
       {
         keywords: ['worship', 'service time', 'service times', 'sunday', 'traditional', 'contemporary', 'what time', 'church time'],
         response: {
-          text: `Our regular Sunday worship schedule is:
+          text: `We’d love to worship with you. Our regular Sunday worship schedule is:
 
 • Traditional Worship — 9:30 AM
 • Contemporary Worship — 10:30 AM
 
 Through May 3 – June 28, we are combining our two worship services into one blended summer service at 10:30 AM.
 
-We would love for you to join us in person or online.`,
+You are welcome in person or online.`,
           buttons: [
             { label: 'Plan Your Visit', url: '/plan-your-visit' },
             { label: 'Watch Online', url: '/watch' }
@@ -2762,7 +2770,7 @@ We would love for you to join us in person or online.`,
       {
         keywords: ['online', 'livestream', 'live stream', 'watch online', 'youtube', 'stream', 'watch', 'media', 'missed sunday'],
         response: {
-          text: `Yes. VUMC livestreams worship online so you can worship from home, while traveling, or when you are unable to attend in person. You can also catch recent messages on our Media page.`,
+          text: `Yes. VUMC livestreams worship so you can stay connected from home, while traveling, or whenever you are unable to attend in person. You can also catch recent messages on our Media page.`,
           buttons: [
             { label: 'Watch Online', url: '/watch' },
             { label: 'Recent Messages', url: '/media' }
@@ -2772,7 +2780,7 @@ We would love for you to join us in person or online.`,
       {
         keywords: ['visit', 'new', 'first time', 'guest', 'what to expect', 'plan', 'first visit', 'visitor'],
         response: {
-          text: `We know visiting a church can feel like a big step. At VUMC, you can expect a welcoming church family, meaningful worship, biblical teaching, prayer, music, and people who want to help you feel at home.`,
+          text: `We know visiting a church can feel like a big step. At VUMC, you can expect a welcoming church family, meaningful worship, biblical teaching, prayer, music, and people who want to help you feel at home. No pressure. Just a place to begin.`,
           buttons: [
             { label: 'Plan Your Visit', url: '/plan-your-visit' },
             { label: 'New Here', url: '/new-here' },
@@ -2783,7 +2791,7 @@ We would love for you to join us in person or online.`,
       {
         keywords: ['wear', 'clothes', 'dress', 'attire', 'what should i wear'],
         response: {
-          text: `Come as you are. Some people dress casually, some dress more traditionally, and many are somewhere in between. You do not need to look a certain way to be welcomed here.`,
+          text: `Come as you are. Some people dress casually, some dress more traditionally, and many are somewhere in between. You do not need to look a certain way to be welcomed here. We care more about welcoming you than what you wear.`,
           buttons: [
             { label: 'Visitor FAQ', url: '/faq' }
           ]
@@ -2792,7 +2800,7 @@ We would love for you to join us in person or online.`,
       {
         keywords: ['kids', 'children', 'family', 'families', 'youth', 'students', 'childcare', 'nursery'],
         response: {
-          text: `VUMC cares deeply about children, students, and families. We want kids and youth to know they are loved by God and have a place in the church family.`,
+          text: `VUMC cares deeply about children, students, and families. We want kids and youth to know they are loved by God, seen by the church, and part of the church family.`,
           buttons: [
             { label: 'Kids & Families', url: '/kids-families' },
             { label: 'Youth', url: '/youth' },
@@ -2803,7 +2811,7 @@ We would love for you to join us in person or online.`,
       {
         keywords: ['love like jesus', 'mission', 'values', 'welcome', 'who are you', 'identity'],
         response: {
-          text: `Love Like Jesus is more than a slogan for VUMC. It means showing grace, serving others, welcoming people, and reflecting the heart of Christ in our church and community.`,
+          text: `Love Like Jesus is more than a slogan for VUMC. It is our calling. It means showing grace, serving others, welcoming people, and reflecting the heart of Christ in our church and community.`,
           buttons: [
             { label: 'What Does That Mean?', url: '/lovelikejesus' }
           ]
@@ -2812,7 +2820,7 @@ We would love for you to join us in person or online.`,
       {
         keywords: ['denomination', 'methodist', 'united methodist', 'umc', 'beliefs', 'believe'],
         response: {
-          text: `Versailles United Methodist Church is part of the United Methodist Church. We are rooted in Christian faith, Wesleyan tradition, worship, service, discipleship, and community.`,
+          text: `Versailles United Methodist Church is part of the United Methodist Church. We are rooted in Christian faith, Wesleyan tradition, worship, service, discipleship, and community as we seek to follow Jesus together.`,
           buttons: [
             { label: 'Who We Are', url: '/lovelikejesus' },
             { label: 'FAQ', url: '/faq' }
@@ -2822,7 +2830,7 @@ We would love for you to join us in person or online.`,
       {
         keywords: ['get involved', 'volunteer', 'serve', 'ministries', 'help', 'community', 'connect', 'next step', 'next steps'],
         response: {
-          text: `There are several ways to get connected at VUMC: worship in person or online, join a group, serve in a ministry, attend events, or take a next step through Church Center.`,
+          text: `There are several simple ways to get connected at VUMC: worship in person or online, join a group, serve in a ministry, attend events, or take a next step through Church Center. We’d love to help you find your place.`,
           buttons: [
             { label: 'Next Steps', url: '/next-steps' },
             { label: 'Groups', url: '/groups' },
@@ -2834,7 +2842,7 @@ We would love for you to join us in person or online.`,
       {
         keywords: ['life group', 'small group', 'groups', 'bible study'],
         response: {
-          text: `Life Groups are one way to build community, study Scripture, and grow in faith with others at VUMC.`,
+          text: `Life Groups are one way to build community, study Scripture, and grow in faith with others at VUMC. Church feels more like family when we take time to know one another.`,
           buttons: [
             { label: 'View Groups', url: '/groups' }
           ]
@@ -2843,7 +2851,7 @@ We would love for you to join us in person or online.`,
       {
         keywords: ['pray', 'prayer', 'prayer request', 'need prayer'],
         response: {
-          text: `We would be honored to pray with you. You can submit a prayer request online and our church will care for it prayerfully.`,
+          text: `We would be honored to pray with you. You can submit a prayer request online, and our church will care for it prayerfully and respectfully.`,
           buttons: [
             { label: 'Prayer Request', url: 'https://versaillesumc.churchcenter.com/people/forms/554033' }
           ]
@@ -2852,7 +2860,7 @@ We would love for you to join us in person or online.`,
       {
         keywords: ['give', 'giving', 'donate', 'offering', 'tithe', 'church center'],
         response: {
-          text: `You can give online through Church Center or during worship. Giving supports the mission and ministry of VUMC as we worship, serve, care, and reach our community with the love of Jesus.`,
+          text: `You can give online through Church Center or during worship. Giving supports the mission and ministry of VUMC as we worship, serve, care, and reach our community with the love of Jesus. Thank you for helping ministry happen.`,
           buttons: [
             { label: 'Give Online', url: 'https://versaillesumc.churchcenter.com/giving' },
             { label: 'Church Center', url: 'https://versaillesumc.churchcenter.com/pages/vumc-hub' }
@@ -2862,7 +2870,7 @@ We would love for you to join us in person or online.`,
       {
         keywords: ['faq', 'question', 'questions', 'answers', 'frequently asked', 'help'],
         response: {
-          text: `Our FAQ page answers common questions about worship times, what to expect, what to wear, kids and youth, online worship, giving, and how to get connected.`,
+          text: `Our FAQ page is a helpful place to start. It answers common questions about worship times, what to expect, what to wear, kids and youth, online worship, giving, and how to get connected at VUMC.`,
           buttons: [
             { label: 'Visit FAQ', url: '/faq' }
           ]
@@ -2937,7 +2945,7 @@ We would love for you to join us in person or online.`,
       vumcFallbackForm.classList.add('active');
       vumcFallbackMessage.value = originalQuestion || '';
       vumcLastUnmatchedQuestion = originalQuestion || '';
-      vumcStatusText.textContent = 'Your question did not match one of our quick answers. Please send us a message below.';
+      vumcStatusText.textContent = 'I want to make sure we care for that question well. Send us a message below and our church office can follow up with you.';
       vumcChatBody.scrollTop = vumcChatBody.scrollHeight;
     }
 
@@ -2960,7 +2968,7 @@ We would love for you to join us in person or online.`,
         }, 250);
       } else {
         setTimeout(() => {
-          vumcAddMessage('I’m not sure about that, but I can send your message to our church office.', 'bot');
+          vumcAddMessage('That’s a thoughtful question. I don’t want to guess, but I can send your message to our church office so someone can help you personally.', 'bot');
           vumcShowFallbackForm(messageText);
         }, 250);
       }
@@ -3004,12 +3012,12 @@ We would love for you to join us in person or online.`,
         const result = await response.json();
 
         if (result.ok) {
-          vumcAddMessage('Thanks! Your message has been sent to our church office. Someone will be in contact with you.', 'bot');
+          vumcAddMessage('Thank you. Your message has been sent to our church office, and someone from VUMC will follow up with you. We’re grateful you reached out.', 'bot');
           vumcFallbackName.value = '';
           vumcFallbackEmail.value = '';
           vumcFallbackMessage.value = '';
           vumcHideFallbackForm();
-          vumcStatusText.textContent = 'Message sent successfully.';
+          vumcStatusText.textContent = 'Message sent successfully. Thank you for reaching out to VUMC.';
         } else {
           vumcStatusText.textContent = 'There was a problem sending your message. Please try again.';
         }
