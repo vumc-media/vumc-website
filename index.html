@@ -1325,8 +1325,31 @@
       background: var(--dark);
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
-      cursor: pointer;
       isolation: isolate;
+    }
+
+    .latest-service-frame {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: var(--dark);
+      z-index: 2;
+    }
+
+    .latest-service-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      color: rgba(255,255,255,0.78);
+      background: linear-gradient(135deg, rgba(17,22,29,0.92), rgba(17,22,29,0.78));
+      z-index: 1;
+      font-weight: 700;
     }
 
     .latest-service-video img {
@@ -2042,18 +2065,25 @@
         </p>
 
         <div class="latest-service-wrap">
-          <div class="latest-service-video" id="latestServiceVideo" role="button" tabindex="0" aria-label="Watch the latest worship service">
-            <img id="latestServiceThumb" src="/vumc-media/worship-on-laptop.png" alt="Latest worship service" loading="lazy" decoding="async">
-            <span class="latest-service-play" aria-hidden="true">▶</span>
-            <div class="latest-service-caption">
-              <h3 id="latestServiceTitle">Latest Worship Service</h3>
-              <p id="latestServiceDate">Tap to watch</p>
-            </div>
+          <div class="latest-service-video" id="latestServiceVideo" aria-label="Latest worship service video player">
+            <iframe
+              id="latestServiceFrame"
+              class="latest-service-frame"
+              src=""
+              title="Latest worship service"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen>
+            </iframe>
+            <div class="latest-service-loading" id="latestServiceLoading">Loading latest worship service…</div>
           </div>
 
           <div class="latest-service-info">
             <div class="eyebrow">Online Worship</div>
             <h2 style="margin:0 0 12px;font-size:34px;line-height:1.1;">Worship wherever you are.</h2>
+            <p id="latestServiceTitle" style="margin:0 0 6px;font-weight:700;color:var(--text);">Latest Worship Service</p>
+            <p id="latestServiceDate" class="section-copy" style="font-size:15px;margin-bottom:14px;">Loading latest video…</p>
             <p class="section-copy" style="font-size:17px;">
               Join us online when you are traveling, homebound, or catching up during the week.
             </p>
@@ -2572,42 +2602,22 @@
     }
 
     function vumcSetLatestVideo(video) {
-      const card = document.getElementById('latestServiceVideo');
-      const thumb = document.getElementById('latestServiceThumb');
+      const frame = document.getElementById('latestServiceFrame');
+      const loadingEl = document.getElementById('latestServiceLoading');
       const titleEl = document.getElementById('latestServiceTitle');
       const dateEl = document.getElementById('latestServiceDate');
-      if (!card || !thumb || !titleEl || !dateEl || !video) return;
+      if (!frame || !titleEl || !dateEl || !video) return;
 
       const videoId = video.videoId || vumcVideoIdFromLink(video.link);
       if (!videoId) return;
 
       vumcLatestVideoId = videoId;
       vumcLatestVideoTitle = video.title || 'Latest Worship Service';
-      thumb.src = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-      thumb.alt = vumcLatestVideoTitle;
+      frame.src = `https://www.youtube.com/embed/${videoId}?rel=0`;
+      frame.title = vumcLatestVideoTitle;
       titleEl.textContent = vumcLatestVideoTitle;
       dateEl.textContent = vumcFormatVideoDate(video.pubDate);
-    }
-
-    function vumcOpenLatestVideo() {
-      if (!vumcLatestVideoId) {
-        window.location.href = '/media';
-        return;
-      }
-      const embedUrl = `https://www.youtube.com/embed/${vumcLatestVideoId}?autoplay=1&rel=0`;
-      openModal(embedUrl, vumcLatestVideoTitle, document.getElementById('latestServiceVideo'));
-    }
-
-    function vumcWireLatestVideoCard() {
-      const card = document.getElementById('latestServiceVideo');
-      if (!card) return;
-      card.addEventListener('click', vumcOpenLatestVideo);
-      card.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          vumcOpenLatestVideo();
-        }
-      });
+      if (loadingEl) loadingEl.style.display = 'none';
     }
 
     async function vumcLoadLatestYouTubeVideo() {
@@ -2649,11 +2659,13 @@
         const latestVideo = (preferredVideos[0] || nonTraditionalVideos[0] || items[0]);
         vumcSetLatestVideo(latestVideo);
       } catch (error) {
-        // Keep the fallback card visible and send visitors to the media page if the feed is unavailable.
+        const loadingEl = document.getElementById('latestServiceLoading');
+        const dateEl = document.getElementById('latestServiceDate');
+        if (loadingEl) loadingEl.textContent = 'Latest video is unavailable right now. Use More Messages below.';
+        if (dateEl) dateEl.textContent = 'Use More Messages to view recent worship services.';
       }
     }
 
-    vumcWireLatestVideoCard();
 
     if ('requestIdleCallback' in window) {
       requestIdleCallback(vumcLoadLatestYouTubeVideo, { timeout: 2500 });
