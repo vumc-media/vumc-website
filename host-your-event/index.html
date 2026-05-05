@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <title>Host Your Event | Facility Rentals at Versailles United Methodist Church</title>
+<meta name="description" content="Host your event at Versailles United Methodist Church in Versailles, Kentucky. Explore facility spaces for gatherings, meetings, receptions, celebrations, ministry events, and community use.">
 
 <style>
 :root {
@@ -26,7 +27,6 @@ body {
   line-height:1.6;
 }
 
-/* HERO */
 .hero {
   min-height:520px;
   display:flex;
@@ -40,10 +40,13 @@ body {
     url("/vumc-media/A06671CF-818B-4791-A36F-8A171C53A824.png") center/cover no-repeat;
 }
 
-.hero-inner { max-width:900px; }
+.hero-inner {
+  max-width:900px;
+}
 
 .hero h1 {
   font-size:clamp(2.7rem, 7vw, 5.5rem);
+  line-height:1;
   margin:0;
   font-weight:900;
 }
@@ -70,6 +73,12 @@ body {
   padding:15px 26px;
   border-radius:999px;
   font-weight:800;
+  transition:.2s ease;
+}
+
+.btn:hover {
+  transform:translateY(-2px);
+  filter:brightness(.96);
 }
 
 .btn.secondary {
@@ -77,19 +86,29 @@ body {
   color:white;
 }
 
-/* SECTIONS */
 .section {
   max-width:1180px;
   margin:0 auto;
   padding:70px 22px;
 }
 
-.section-title {
-  font-size:clamp(2rem, 4vw, 3rem);
-  margin-bottom:18px;
+.intro {
+  text-align:center;
 }
 
-/* INFO CARDS */
+.intro h2,
+.section-title {
+  font-size:clamp(2rem, 4vw, 3rem);
+  line-height:1.1;
+  margin:0 0 18px;
+}
+
+.intro p {
+  max-width:850px;
+  margin:0 auto;
+  font-size:1.08rem;
+}
+
 .info-cards {
   display:grid;
   grid-template-columns:repeat(3, 1fr);
@@ -105,8 +124,14 @@ body {
   border-top:5px solid var(--teal);
 }
 
-/* SPACES */
-.spaces { background:white; }
+.info-card h3 {
+  margin:0 0 10px;
+  font-size:1.35rem;
+}
+
+.spaces {
+  background:white;
+}
 
 .space-grid {
   display:grid;
@@ -126,38 +151,58 @@ body {
   width:100%;
   height:240px;
   object-fit:cover;
+  display:block;
+  background:#d8d8d8;
 }
 
-/* BAND */
+.space-card-content {
+  padding:24px;
+}
+
+.space-card h3 {
+  margin:0 0 10px;
+  color:var(--teal-dark);
+  font-size:1.35rem;
+}
+
 .band {
-  background:linear-gradient(135deg, rgba(54,92,96,.96), rgba(82,120,124,.96));
+  background:
+    linear-gradient(135deg, rgba(54,92,96,.96), rgba(82,120,124,.96)),
+    url("YOUR-BAND-FACILITY-IMAGE.jpg") center/cover no-repeat;
   color:white;
   text-align:center;
   padding:80px 22px;
 }
 
-/* 🔥 CANVA EMBED */
-.canva-container {
-  position:relative;
-  width:100%;
-  padding-top:56.25%;
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 12px 30px rgba(0,0,0,.12);
-  background:#ddd;
+.band h2 {
+  font-size:clamp(2rem, 4vw, 3.2rem);
+  margin:0 0 18px;
+}
+
+.band p {
+  max-width:800px;
+  margin:0 auto 30px;
+  font-size:1.08rem;
+}
+
+.gallery-grid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:14px;
   margin-top:30px;
 }
 
-.canva-container iframe {
-  position:absolute;
-  inset:0;
+.gallery-grid img {
   width:100%;
-  height:100%;
-  border:none;
+  height:190px;
+  object-fit:cover;
+  border-radius:16px;
+  background:#d8d8d8;
 }
 
-/* PROCESS */
-.process { background:#eef4f4; }
+.process {
+  background:#eef4f4;
+}
 
 .steps {
   display:grid;
@@ -173,134 +218,248 @@ body {
   box-shadow:0 12px 30px rgba(0,0,0,.06);
 }
 
-/* CTA */
+.step-number {
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:var(--gold);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  margin-bottom:14px;
+}
+
 .cta {
   text-align:center;
   background:white;
   padding:80px 22px;
 }
 
-/* MOBILE */
+.cta h2 {
+  font-size:clamp(2rem, 4vw, 3rem);
+  margin:0 0 18px;
+}
+
+.cta p {
+  max-width:760px;
+  margin:0 auto 30px;
+}
+
+.small-note {
+  font-size:.9rem;
+  color:#667;
+  margin-top:18px;
+}
+
 @media(max-width:900px) {
   .info-cards,
   .space-grid,
   .steps {
     grid-template-columns:1fr;
   }
+
+  .gallery-grid {
+    grid-template-columns:repeat(2, 1fr);
+  }
+
+  .hero {
+    min-height:440px;
+  }
 }
 
 @media(max-width:560px) {
-  .section { padding:52px 18px; }
+  .section {
+    padding:52px 18px;
+  }
+
+  .gallery-grid {
+    grid-template-columns:1fr;
+  }
+
+  .space-card img,
+  .gallery-grid img {
+    height:220px;
+  }
+
+  .btn {
+    width:100%;
+    max-width:330px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- HERO -->
 <header class="hero">
   <div class="hero-inner">
     <h1>Host Your Event</h1>
     <div class="accent"></div>
-    <p>Welcoming spaces for gatherings, meetings, and celebrations in Versailles, Kentucky.</p>
-    <a class="btn" href="/facility-request/">Start Facility Rental Request</a>
+    <p>
+      Welcoming spaces for family gatherings, meetings, celebrations, ministry events,
+      receptions, and community use in the heart of Versailles, Kentucky.
+    </p>
+    <a class="btn" href="/facility-request/">
+      Start Facility Rental Request
+    </a>
   </div>
 </header>
 
-<!-- INTRO -->
-<section class="section">
-  <h2 class="section-title">A Place to Gather, Celebrate, and Connect</h2>
+<section class="section intro">
+  <h2>A Place to Gather, Celebrate, and Connect</h2>
+  <p>
+    Versailles United Methodist Church offers a variety of spaces that can serve families,
+    ministries, community groups, and organizations. Whether you are planning a reception,
+    meeting, shower, class, meal, or special event, our facility provides flexible options
+    in a welcoming church environment.
+  </p>
 
   <div class="info-cards">
     <div class="info-card">
       <h3>Flexible Spaces</h3>
-      <p>Choose from gathering areas, classrooms, and outdoor spaces.</p>
+      <p>Choose from larger gathering areas, classrooms, meeting rooms, outdoor space, and more.</p>
     </div>
 
     <div class="info-card">
       <h3>Community Focused</h3>
-      <p>Designed for connection, ministry, and meaningful moments.</p>
+      <p>Our facility is used for ministry, connection, service, celebration, and community care.</p>
     </div>
 
     <div class="info-card">
-      <h3>Simple Process</h3>
-      <p>Submit a request and our team will guide you.</p>
+      <h3>Simple Request Process</h3>
+      <p>Submit a request online, and our church office will review availability and next steps.</p>
     </div>
   </div>
 </section>
 
-<!-- SPACES -->
 <section class="spaces">
   <div class="section">
     <h2 class="section-title">Available Facility Spaces</h2>
 
     <div class="space-grid">
+
       <div class="space-card">
-        <img src="/vumc-media/CBA4FE5C-CC65-44F4-851E-8500BCCFF8E1.png">
+        <img src="/vumc-media/CBA4FE5C-CC65-44F4-851E-8500BCCFF8E1.png
+" alt="Ballroom and fellowship space at Versailles United Methodist Church">
+        <div class="space-card-content">
+          <h3>Ballroom / Fellowship Space</h3>
+          <p>A larger space suitable for meals, receptions, showers, meetings, trainings, and community gatherings.</p>
+        </div>
       </div>
 
       <div class="space-card">
-        <img src="/vumc-media/327CF4B3-3008-4004-96E9-75EA29E9FF21.png">
+        <img src="/vumc-media/327CF4B3-3008-4004-96E9-75EA29E9FF21.png" alt="Sanctuary at Versailles United Methodist Church">
+        <div class="space-card-content">
+          <h3>Sanctuary</h3>
+          <p>A beautiful worship space available for approved services, ceremonies, and special gatherings.</p>
+        </div>
       </div>
 
       <div class="space-card">
-        <img src="/vumc-media/FF3C5BE3-BD84-460F-BDF7-351AC43B7136.png">
+        <img src="/vumc-media/FF3C5BE3-BD84-460F-BDF7-351AC43B7136.png" alt="Classroom space at Versailles United Methodist Church">
+        <div class="space-card-content">
+          <h3>Classrooms</h3>
+          <p>Smaller rooms for classes, breakout groups, planning meetings, and training sessions.</p>
+        </div>
       </div>
+
+      <div class="space-card">
+        <img src="/vumc-media/8F0AF108-D7EB-461B-B138-C5E4D77DA9AB.png" alt="Outdoor pavilion at Versailles United Methodist Church">
+        <div class="space-card-content">
+          <h3>Outdoor Pavilion</h3>
+          <p>An outdoor option for casual gatherings, picnics, family events, and seasonal activities.</p>
+        </div>
+      </div>
+
+      <div class="space-card">
+        <img src="YOUR-KITCHEN-IMAGE.jpg" alt="Kitchen space at Versailles United Methodist Church">
+        <div class="space-card-content">
+          <h3>Kitchen Access</h3>
+          <p>Kitchen use may be requested depending on event type, approval, setup, and cleanup needs.</p>
+        </div>
+      </div>
+
+      <div class="space-card">
+        <img src="/vumc-media/77E5195E-2D00-43B8-990E-28C45E0B8AB8.png" alt="Gathering area at Versailles United Methodist Church">
+        <div class="space-card-content">
+          <h3>Gathering Areas</h3>
+          <p>Welcoming spaces that help guests arrive, connect, and feel comfortable during your event.</p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
-<!-- BAND -->
 <section class="band">
   <h2>Welcoming Spaces for Meaningful Moments</h2>
-  <p>From celebrations to community gatherings.</p>
-  <a class="btn" href="/facility-request/">Request Event Date</a>
+  <p>
+    From family celebrations to community meetings, our facility is designed to help people gather well.
+  </p>
+  <a class="btn" href="/facility-request/">
+    Request Event Date
+  </a>
 </section>
 
-<!-- 🔥 GALLERY (UPDATED) -->
 <section class="section">
   <h2 class="section-title">Facility Photo Gallery</h2>
-  <p>Explore our facility through our live photo gallery.</p>
+  <p>
+    Browse photos of our facility. More images may be added as spaces are updated or prepared for events.
+  </p>
 
-  <div class="canva-container">
-    <iframe
-      src="https://www.canva.com/design/DAHIzH8ojQ4/hpsYNEViVKZy7GEVhpc_lg/view?embed"
-      loading="lazy"
-      allowfullscreen
-      allow="fullscreen">
-    </iframe>
+  <div class="gallery-grid">
+    <img src="YOUR-GALLERY-IMAGE-1.jpg" alt="Facility photo 1">
+    <img src="YOUR-GALLERY-IMAGE-2.jpg" alt="Facility photo 2">
+    <img src="YOUR-GALLERY-IMAGE-3.jpg" alt="Facility photo 3">
+    <img src="YOUR-GALLERY-IMAGE-4.jpg" alt="Facility photo 4">
+    <img src="YOUR-GALLERY-IMAGE-5.jpg" alt="Facility photo 5">
+    <img src="YOUR-GALLERY-IMAGE-6.jpg" alt="Facility photo 6">
+    <img src="YOUR-GALLERY-IMAGE-7.jpg" alt="Facility photo 7">
+    <img src="YOUR-GALLERY-IMAGE-8.jpg" alt="Facility photo 8">
   </div>
 </section>
 
-<!-- PROCESS -->
 <section class="process">
   <div class="section">
     <h2 class="section-title">How Facility Requests Work</h2>
 
     <div class="steps">
       <div class="step">
-        <h3>1. Submit Request</h3>
-        <p>Fill out the form with event details.</p>
+        <div class="step-number">1</div>
+        <h3>Submit a Request</h3>
+        <p>Complete the facility request form with your event details, preferred date, and space needs.</p>
       </div>
 
       <div class="step">
-        <h3>2. Review</h3>
-        <p>We check availability and needs.</p>
+        <div class="step-number">2</div>
+        <h3>Office Review</h3>
+        <p>Our church office will review availability, requested spaces, and any setup or technology needs.</p>
       </div>
 
       <div class="step">
-        <h3>3. Follow Up</h3>
-        <p>We connect with next steps.</p>
+        <div class="step-number">3</div>
+        <h3>Follow-Up</h3>
+        <p>A member of our team will contact you with next steps, approval status, and any additional details.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
 <section class="cta">
   <h2>Ready to Request Space?</h2>
-  <p>Submit your request and we’ll follow up with availability.</p>
-  <a class="btn secondary" href="/facility-request/">Start Request</a>
+  <p>
+    Complete the facility rental request form and our church office will review your request.
+    Submitting a request does not guarantee approval or availability.
+  </p>
+
+  <a class="btn secondary" href="/facility-request/">
+    Start Facility Rental Request
+  </a>
+
+  <div class="small-note">
+    Versailles United Methodist Church · Versailles, Kentucky
+  </div>
 </section>
 
 </body>
