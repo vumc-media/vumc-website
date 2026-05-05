@@ -4,190 +4,467 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Facility Rental Request | Versailles UMC</title>
+<title>Facility Rental Request | Versailles United Methodist Church</title>
+<meta name="robots" content="noindex, nofollow">
 
 <style>
+:root {
+  --teal:#52787c;
+  --teal-dark:#365c60;
+  --gold:#d8b25c;
+  --cream:#f7f4ed;
+  --dark:#1f2a2c;
+  --white:#ffffff;
+}
+
+* { box-sizing:border-box; }
+
 body {
-  font-family: Arial;
   margin:0;
-  background:#f7f4ed;
+  font-family:Arial, Helvetica, sans-serif;
+  background:linear-gradient(135deg,#f7f4ed,#eef4f4);
+  color:var(--dark);
+  line-height:1.55;
 }
 
 .hero {
-  background:#52787c;
+  background:linear-gradient(135deg,var(--teal-dark),var(--teal));
   color:white;
-  padding:40px;
+  padding:54px 20px;
   text-align:center;
 }
 
+.hero h1 {
+  margin:0;
+  font-size:clamp(2rem,6vw,3.6rem);
+}
+
+.hero p {
+  max-width:760px;
+  margin:12px auto 0;
+}
+
 .wrap {
-  max-width:900px;
-  margin:auto;
-  padding:20px;
+  max-width:940px;
+  margin:-28px auto 60px;
+  padding:0 18px;
 }
 
 form {
   background:white;
-  padding:25px;
-  border-radius:12px;
+  border-radius:22px;
+  padding:32px;
+  box-shadow:0 18px 50px rgba(0,0,0,.14);
 }
 
-label { display:block; margin-top:15px; font-weight:bold; }
+.notice {
+  background:#eef5f5;
+  border-left:5px solid var(--teal);
+  padding:16px;
+  border-radius:12px;
+  margin-bottom:24px;
+}
+
+h2 {
+  color:var(--teal-dark);
+  border-bottom:2px solid #e4eeee;
+  padding-bottom:8px;
+  margin-top:34px;
+}
+
+label {
+  display:block;
+  font-weight:700;
+  margin:16px 0 7px;
+}
+
 input, textarea, select {
   width:100%;
-  padding:10px;
-  margin-top:5px;
+  padding:13px;
+  border:1px solid #cbd8da;
+  border-radius:10px;
+  font-size:1rem;
+  font-family:inherit;
+}
+
+textarea {
+  min-height:105px;
+  resize:vertical;
 }
 
 .grid {
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:10px;
+  gap:18px;
 }
 
-button {
-  margin-top:25px;
-  padding:15px;
-  background:#52787c;
-  color:white;
-  border:none;
-  width:100%;
-  font-size:18px;
+.check-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px 18px;
+  margin-top:8px;
 }
+
+.check-item {
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  font-weight:400;
+  background:#f8fbfb;
+  border:1px solid #e1eeee;
+  padding:12px;
+  border-radius:10px;
+  margin:0;
+}
+
+.check-item input {
+  width:auto;
+  margin-top:3px;
+}
+
+.conditional {
+  display:none;
+  margin-top:16px;
+  padding:16px;
+  background:#f8fbfb;
+  border:1px solid #dfeeee;
+  border-radius:14px;
+}
+
+.av-box {
+  display:none;
+  margin-top:16px;
+  padding:16px;
+  background:#fff8e8;
+  border-left:5px solid var(--gold);
+  border-radius:12px;
+}
+
+.required { color:#a33; }
 
 .success, .error {
   display:none;
-  padding:15px;
+  padding:16px;
+  border-radius:12px;
   margin-bottom:20px;
+  font-weight:700;
 }
 
-.success { background:#d4edda; }
-.error { background:#f8d7da; }
+.success {
+  background:#e7f7ed;
+  color:#176b36;
+}
 
-@media(max-width:600px){
-  .grid { grid-template-columns:1fr; }
+.error {
+  background:#fdeaea;
+  color:#8a1f1f;
+}
+
+button {
+  width:100%;
+  margin-top:28px;
+  border:0;
+  border-radius:999px;
+  background:var(--teal);
+  color:white;
+  padding:16px;
+  font-size:1.08rem;
+  font-weight:800;
+  cursor:pointer;
+}
+
+button:hover {
+  background:var(--teal-dark);
+}
+
+.small-note {
+  font-size:.9rem;
+  color:#667;
+}
+
+@media(max-width:700px) {
+  .grid,
+  .check-grid {
+    grid-template-columns:1fr;
+  }
+
+  form {
+    padding:24px 20px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="hero">
+<header class="hero">
   <h1>Facility Use Reservation Form</h1>
-</div>
+  <p>Request space at Versailles United Methodist Church for your gathering, meeting, celebration, or community event.</p>
+</header>
 
 <div class="wrap">
 
-<div id="success" class="success">Request submitted successfully.</div>
-<div id="error" class="error">Something went wrong.</div>
+<div id="successMsg" class="success">
+  Thank you! Your facility request has been submitted. Our church office will follow up soon.
+</div>
+
+<div id="errorMsg" class="error">
+  Something went wrong. Please contact the church office directly.
+</div>
 
 <form
-action="https://script.google.com/macros/s/AKfycbysdlnyT75KPMR-KSU9mwMuoQdKs6NehWGEwGmw5Z85BW211HvPi8yVO6yAauZz62E38Q/exec"
-method="POST"
-target="hidden_iframe"
+  id="facilityForm"
+  action="https://script.google.com/macros/s/AKfycbysdlnyT75KPMR-KSU9mwMuoQdKs6NehWGEwGmw5Z85BW211HvPi8yVO6yAauZz62E38Q/exec"
+  method="POST"
+  target="hidden_iframe"
 >
 
-<label>Name of Responsible Party</label>
-<input name="responsibleName" required>
+  <div class="notice">
+    Please complete this request form as fully as possible. Submitting this form does not guarantee approval or availability.
+    Our church office will review your request and contact you with next steps.
+  </div>
 
-<label>Name of Organization</label>
-<input name="organization">
+  <h2>Contact Information</h2>
 
-<label>VUMC Member</label>
-<select name="member">
-<option>Yes</option>
-<option>No</option>
-</select>
+  <div class="grid">
+    <div>
+      <label>Name of Responsible Party <span class="required">*</span></label>
+      <input name="responsibleName" required>
+    </div>
 
-<label>Address</label>
-<input name="address">
+    <div>
+      <label>VUMC Member? <span class="required">*</span></label>
+      <select name="member" required>
+        <option value="">Select one</option>
+        <option>Yes</option>
+        <option>No</option>
+      </select>
+    </div>
+  </div>
 
-<div class="grid">
-<div>
-<label>Phone</label>
-<input name="phone">
-</div>
-<div>
-<label>Email</label>
-<input name="email">
-</div>
-</div>
+  <label>Name of Organization</label>
+  <input name="organization" placeholder="Leave blank if this is a personal/family event">
 
-<label>Purpose</label>
-<textarea name="purpose"></textarea>
+  <label>Address</label>
+  <input name="address">
 
-<label>Date(s)</label>
-<input name="eventDates">
+  <div class="grid">
+    <div>
+      <label>Phone Number <span class="required">*</span></label>
+      <input type="tel" name="phone" required>
+    </div>
 
-<div class="grid">
-<div>
-<label>Start Time</label>
-<input name="startTime">
-</div>
-<div>
-<label>End Time</label>
-<input name="endTime">
-</div>
-</div>
+    <div>
+      <label>Email <span class="required">*</span></label>
+      <input type="email" name="email" required>
+    </div>
+  </div>
 
-<label>Time Facility Should Be Ready</label>
-<input name="readyTime">
+  <h2>Event Information</h2>
 
-<label>Number Attending</label>
-<input name="attendance">
+  <label>Purpose / Event Type <span class="required">*</span></label>
+  <input name="purpose" required placeholder="Example: baby shower, meeting, reception, training, family gathering">
 
-<h3>Pavilion</h3>
-<input name="pavilion" placeholder="Yes / No">
-<input name="pavilionKitchen" placeholder="Kitchen">
-<input name="tables" placeholder="Tables">
-<input name="tableQty" placeholder="Table Quantity">
-<input name="tableSize" placeholder="8ft / 6ft">
-<input name="chairsQty" placeholder="Chairs Quantity">
+  <label>Please briefly describe the event</label>
+  <textarea name="eventDescription" placeholder="Tell us what the event is and any important details."></textarea>
 
-<h3>Church Areas</h3>
-<input name="sanctuary" placeholder="Sanctuary">
-<input name="kitchen" placeholder="Kitchen">
-<input name="atrium" placeholder="Atrium">
-<input name="conference" placeholder="Conference Room">
-<input name="youth" placeholder="Youth Room">
-<input name="children" placeholder="Children's Room">
-<input name="classrooms" placeholder="Classrooms">
-<input name="roomNumbers" placeholder="Room Numbers">
+  <div class="grid">
+    <div>
+      <label>Date of Event <span class="required">*</span></label>
+      <input type="date" name="eventDate" required>
+    </div>
 
-<h3>Tables</h3>
-<input name="roundTables" placeholder="Round Tables Quantity">
-<input name="rectTables" placeholder="Rectangular Tables Quantity">
-<input name="rectSize" placeholder="8ft / 6ft">
+    <div>
+      <label>Number of Persons Attending <span class="required">*</span></label>
+      <input type="number" name="attendance" min="1" required>
+    </div>
+  </div>
 
-<label>Sound System</label>
-<input name="sound">
+  <div class="grid">
+    <div>
+      <label>Beginning Time <span class="required">*</span></label>
+      <input type="time" name="startTime" required>
+    </div>
 
-<label>Other</label>
-<textarea name="other"></textarea>
+    <div>
+      <label>Ending Time <span class="required">*</span></label>
+      <input type="time" name="endTime" required>
+    </div>
+  </div>
 
-<label>
-<input type="checkbox" name="agreement" required>
- I agree this is a request, not a confirmed reservation
-</label>
+  <label>What time does the facility need to be ready and available?</label>
+  <input type="time" name="readyTime">
 
-<button type="submit">Submit Request</button>
+  <h2>Facilities / Items to Be Used</h2>
+
+  <label>Which area(s) are you requesting? <span class="required">*</span></label>
+  <div class="check-grid">
+    <label class="check-item"><input type="checkbox" name="spacesRequested" value="Pavilion" data-toggle="pavilionDetails"> Pavilion</label>
+    <label class="check-item"><input type="checkbox" name="spacesRequested" value="Church Building" data-toggle="churchDetails"> Church Building</label>
+  </div>
+
+  <div id="pavilionDetails" class="conditional">
+    <h3>Pavilion Details</h3>
+    <div class="check-grid">
+      <label class="check-item"><input type="checkbox" name="pavilionNeeds" value="Pavilion Kitchen"> Kitchen</label>
+      <label class="check-item"><input type="checkbox" name="pavilionNeeds" value="Pavilion Tables"> Tables</label>
+      <label class="check-item"><input type="checkbox" name="pavilionNeeds" value="Pavilion Chairs"> Chairs</label>
+    </div>
+  </div>
+
+  <div id="churchDetails" class="conditional">
+    <h3>Church Building Details</h3>
+    <div class="check-grid">
+      <label class="check-item"><input type="checkbox" name="churchAreas" value="Sanctuary"> Sanctuary</label>
+      <label class="check-item"><input type="checkbox" name="churchAreas" value="Kitchen"> Kitchen</label>
+      <label class="check-item"><input type="checkbox" name="churchAreas" value="Atrium"> Atrium</label>
+      <label class="check-item"><input type="checkbox" name="churchAreas" value="Conference Room"> Conference Room</label>
+      <label class="check-item"><input type="checkbox" name="churchAreas" value="Youth Room"> Youth Room</label>
+      <label class="check-item"><input type="checkbox" name="churchAreas" value="Children’s Room"> Children’s Room</label>
+      <label class="check-item"><input type="checkbox" name="churchAreas" value="Classrooms" data-toggle="classroomDetails"> Classrooms</label>
+    </div>
+
+    <div id="classroomDetails" class="conditional">
+      <label>Classroom details / room numbers</label>
+      <input name="classroomDetails" placeholder="Example: 2 classrooms, room numbers if known">
+    </div>
+  </div>
+
+  <h2>Setup Needs</h2>
+
+  <label>Do you need tables?</label>
+  <select name="tablesNeeded" id="tablesNeeded">
+    <option value="">Select one</option>
+    <option>No</option>
+    <option>Yes</option>
+    <option>Not sure</option>
+  </select>
+
+  <div id="tableDetails" class="conditional">
+    <div class="grid">
+      <div>
+        <label>Round tables quantity</label>
+        <input type="number" name="tableRoundQty" min="0">
+      </div>
+
+      <div>
+        <label>Rectangular tables quantity</label>
+        <input type="number" name="tableRectQty" min="0">
+      </div>
+    </div>
+
+    <label>Table size needed</label>
+    <div class="check-grid">
+      <label class="check-item"><input type="checkbox" name="tableSizes" value="8ft"> 8ft</label>
+      <label class="check-item"><input type="checkbox" name="tableSizes" value="6ft"> 6ft</label>
+      <label class="check-item"><input type="checkbox" name="tableSizes" value="Not sure"> Not sure</label>
+    </div>
+  </div>
+
+  <label>Chairs quantity</label>
+  <input type="number" name="chairsQty" min="0" placeholder="Approximate number of chairs needed">
+
+  <h2>Sound / Video</h2>
+
+  <label>Do you need sound or video support?</label>
+  <select name="avNeeded" id="avNeeded">
+    <option value="">Select one</option>
+    <option>No</option>
+    <option>Yes</option>
+    <option>Not sure</option>
+  </select>
+
+  <div id="avNotice" class="av-box">
+    <strong>Audio/Video Notice</strong>
+    <p>
+      Audio and video support is not included in standard facility use and may require an additional fee.
+      All sound and media systems at Versailles United Methodist Church must be operated by trained and approved individuals only.
+      Requests for audio/video support will be reviewed and confirmed by the church office based on availability.
+    </p>
+
+    <label class="check-item">
+      <input type="checkbox" name="avAgreement" id="avAgreement" value="Applicant acknowledged A/V policy">
+      I understand and agree to the Audio/Video policy.
+    </label>
+  </div>
+
+  <h2>Other Information</h2>
+
+  <label>Other needs or special instructions</label>
+  <textarea name="otherNeeds" placeholder="Please list anything else we should know about your event."></textarea>
+
+  <div class="notice">
+    The Church and/or Pavilion Use Guidelines must be received and agreed to before the reservation is finalized.
+    Submitting this form indicates your request to use the facility and your willingness to abide by these policies if approved.
+  </div>
+
+  <label class="check-item">
+    <input type="checkbox" name="guidelinesAgreement" value="Applicant agrees to abide by facility use guidelines if approved" required>
+    I understand this is a request and agree to abide by the facility use guidelines if approved. <span class="required">*</span>
+  </label>
+
+  <p class="small-note">After submitting, please wait for the confirmation message before closing this page.</p>
+
+  <button type="submit" id="submitBtn">Submit Facility Request</button>
 
 </form>
 
-<iframe name="hidden_iframe" style="display:none;"></iframe>
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
 </div>
 
 <script>
 const params = new URLSearchParams(window.location.search);
 
-if(params.get("submitted")) {
-  document.getElementById("success").style.display = "block";
+if (params.get("submitted") === "true") {
+  document.getElementById("successMsg").style.display = "block";
 }
 
-if(params.get("error")) {
-  document.getElementById("error").style.display = "block";
+if (params.get("error") === "true") {
+  document.getElementById("errorMsg").style.display = "block";
 }
+
+document.querySelectorAll("[data-toggle]").forEach(function(input) {
+  input.addEventListener("change", function() {
+    const target = document.getElementById(this.dataset.toggle);
+    if (!target) return;
+    target.style.display = this.checked ? "block" : "none";
+  });
+});
+
+document.getElementById("tablesNeeded").addEventListener("change", function() {
+  document.getElementById("tableDetails").style.display =
+    this.value === "Yes" || this.value === "Not sure" ? "block" : "none";
+});
+
+document.getElementById("avNeeded").addEventListener("change", function() {
+  const notice = document.getElementById("avNotice");
+  const agree = document.getElementById("avAgreement");
+
+  if (this.value === "Yes" || this.value === "Not sure") {
+    notice.style.display = "block";
+    agree.required = this.value === "Yes";
+  } else {
+    notice.style.display = "none";
+    agree.required = false;
+    agree.checked = false;
+  }
+});
+
+document.getElementById("facilityForm").addEventListener("submit", function() {
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+  btn.textContent = "Submitting...";
+
+  setTimeout(function() {
+    document.getElementById("successMsg").style.display = "block";
+    document.getElementById("facilityForm").reset();
+    document.querySelectorAll(".conditional, .av-box").forEach(el => el.style.display = "none");
+    btn.disabled = false;
+    btn.textContent = "Submit Facility Request";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, 1800);
+});
 </script>
 
 </body>
