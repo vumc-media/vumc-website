@@ -1,10 +1,11 @@
 <section class="canva-test">
-  <div class="canva-iframe-wrap">
+  <div class="canva-card">
     <iframe
-      src="https://vumc.my.canva.site/care-ministry"
-      title="Care Ministry"
       loading="lazy"
-      allowfullscreen>
+      src="https://www.canva.com/design/DAHIyoXQBHs/OrCh2tM_yb7at-EjnFTPCQ/view?embed&ui=0"
+      allowfullscreen
+      allow="fullscreen"
+      title="Care Ministry">
     </iframe>
   </div>
 </section>
@@ -16,17 +17,17 @@
     padding: 16px;
   }
 
-  .canva-iframe-wrap {
+  .canva-card {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
-    border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 24px 60px rgba(0,0,0,.28);
+    border-radius: 24px;
     background: #0d1b2a;
+    box-shadow: 0 24px 60px rgba(0,0,0,.28);
   }
 
-  .canva-iframe-wrap iframe {
+  .canva-card iframe {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -40,9 +41,8 @@
       margin: 24px auto;
     }
 
-    .canva-iframe-wrap {
+    .canva-card {
       border-radius: 16px;
-      aspect-ratio: 16 / 9;
     }
   }
 </style>
