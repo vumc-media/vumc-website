@@ -1025,7 +1025,88 @@
 
 
 
+/* ===== HOST YOUR EVENT COMMUNITY HOSPITALITY BLOCK ===== */
+.host-event-section {
+  padding: 72px 0 28px;
+  background: var(--bg);
+}
 
+.host-event-hero {
+  position: relative;
+  min-height: 440px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background:
+    linear-gradient(135deg, rgba(17,22,29,0.82), rgba(17,22,29,0.45)),
+    url('/vumc-media/HOST-YOUR-EVENT-HERO.jpg') center/cover no-repeat;
+  color: #fff;
+  display: flex;
+  align-items: flex-end;
+  isolation: isolate;
+}
+
+.host-event-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, rgba(187,140,63,0.30), transparent 36%),
+    radial-gradient(circle at bottom left, rgba(255,255,255,0.10), transparent 28%);
+  pointer-events: none;
+}
+
+.host-event-content {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  padding: 42px;
+}
+
+.host-event-content h2 {
+  margin: 0 0 12px;
+  font-size: clamp(32px, 5vw, 54px);
+  line-height: 1.04;
+}
+
+.host-event-content p {
+  margin: 0;
+  color: rgba(255,255,255,0.84);
+  font-size: 18px;
+}
+
+@media (max-width: 760px) {
+  .host-event-section {
+    padding: 56px 0 22px;
+  }
+
+  .host-event-hero {
+    min-height: 380px;
+    border-radius: 24px;
+  }
+
+  .host-event-content {
+    padding: 28px;
+  }
+}<section class="section seo-local-section" id="about-versailles-umc">
+    <section class="host-event-section" id="host-your-event-preview">
+  <div class="container">
+    <div class="host-event-hero">
+      <div class="host-event-content">
+        <div class="eyebrow" style="color:var(--accent-soft);">Community Hospitality</div>
+        <h2>Host your event at VUMC.</h2>
+        <p>
+          Our facility is one way we serve and welcome our community. Explore available spaces for gatherings,
+          meetings, celebrations, receptions, ministry events, and community use in Versailles, Kentucky.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/host-your-event">Explore Facility Use</a>
+          <a class="btn btn-secondary" href="/facility-request">Start a Request</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
     .seo-local-section {
       background: linear-gradient(135deg, #ffffff, #f1ece4);
       border-top: 1px solid var(--border);
@@ -1945,6 +2026,7 @@
               <a href='/kids-families'>Kids & Families</a>
               <a href='/groups'>Groups</a>
               <a href='/serve'>Serve</a>
+              <a href='/host-your-event'>Host Your Event</a>
               <a href='/next-steps'>Next Steps</a>
               <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
             </div>
@@ -1976,6 +2058,7 @@
             <a href="/youth">Youth</a>
             <a href='/groups'>Groups</a>
             <a href='/serve'>Serve</a>
+            <a href='/host-your-event'>Host Your Event</a>
             <a href="/missions">Missions</a>
             <a href='/next-steps'>Next Steps</a>
             <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
@@ -2377,6 +2460,7 @@
           <a href="https://www.facebook.com/versaillesumc" target="_blank" rel="noopener noreferrer">Facebook</a>
           <a href="https://www.youtube.com/@versaillesumc" target="_blank" rel="noopener noreferrer">YouTube</a>
           <a href="https://versaillesumc.churchcenter.com/" target="_blank" rel="noopener noreferrer">Church Center</a>
+          <a href='/host-your-event'>Host Your Event</a>
         </div>
       </div>
 
