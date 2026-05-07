@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,12 +12,12 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Groups | Versailles United Methodist Church</title>
-  <meta name="description" content="Explore groups and opportunities to connect at Versailles United Methodist Church in Versailles, Kentucky.">
 
-  
+  <title>Groups | Versailles United Methodist Church</title>
+  <meta name="description" content="Explore Life Groups, Sunday groups, kids, youth, parents, widows, older adults, men, women, and young adult connection opportunities at Versailles United Methodist Church in Versailles, Kentucky.">
+
   <link rel="canonical" href="https://www.versaillesumc.org/groups">
-<link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -88,6 +87,12 @@
       box-shadow: 0 10px 24px rgba(187, 140, 63, 0.28);
     }
 
+    .btn-secondary {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border-color: rgba(255,255,255,0.22);
+    }
+
     .btn-dark {
       background: var(--dark);
       color: #fff;
@@ -131,8 +136,6 @@
       object-fit: cover;
       background: #ddd;
     }
-
-    .brand-text { min-width: 0; }
 
     .brand-name {
       margin: 0;
@@ -188,7 +191,6 @@
     .dropdown-toggle::after {
       content: "▾";
       font-size: 11px;
-      line-height: 1;
       transform: translateY(1px);
     }
 
@@ -212,22 +214,16 @@
       color: var(--text);
       font-size: 14px;
       font-weight: 600;
-      transition: background var(--transition), color var(--transition);
+      transition: background var(--transition);
     }
 
-    .dropdown-menu a:hover {
-      background: #f6f3ee;
-    }
+    .dropdown-menu a:hover { background: #f6f3ee; }
 
     @media (min-width: 1101px) {
-      .nav-item.dropdown:hover .dropdown-menu {
-        display: block;
-      }
+      .nav-item.dropdown:hover .dropdown-menu { display: block; }
     }
 
-    .nav-item.dropdown.open .dropdown-menu {
-      display: block;
-    }
+    .nav-item.dropdown.open .dropdown-menu { display: block; }
 
     .nav-actions {
       display: flex;
@@ -322,9 +318,7 @@
       padding: 88px 0;
     }
 
-    .hero-panel {
-      max-width: 760px;
-    }
+    .hero-panel { max-width: 760px; }
 
     .hero-kicker {
       display: inline-flex;
@@ -382,6 +376,133 @@
       flex-wrap: wrap;
       gap: 14px;
       margin-top: 28px;
+    }
+
+    .section {
+      padding: 78px 0;
+    }
+
+    .section-soft {
+      background: var(--surface-soft);
+    }
+
+    .section-heading {
+      max-width: 780px;
+      margin-bottom: 32px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 12px;
+      font-size: clamp(32px, 4vw, 48px);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .groups-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .group-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(17,22,29,0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 245px;
+    }
+
+    .group-card.featured {
+      background: linear-gradient(135deg, #11161d, #232b36);
+      color: #fff;
+    }
+
+    .group-card.featured p,
+    .group-card.featured .group-meta {
+      color: rgba(255,255,255,0.76);
+    }
+
+    .group-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: rgba(187,140,63,0.13);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex: 0 0 auto;
+    }
+
+    .group-card.featured .group-icon {
+      background: rgba(255,255,255,0.12);
+      color: var(--accent-soft);
+    }
+
+    .group-card h3 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.2;
+    }
+
+    .group-meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .group-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .cta-band {
+      background: var(--dark);
+      color: #fff;
+      border-radius: var(--radius-xl);
+      padding: 34px;
+      display: grid;
+      grid-template-columns: 1.4fr auto;
+      align-items: center;
+      gap: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .cta-band h2 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .cta-band p {
+      margin: 0;
+      color: rgba(255,255,255,0.76);
+      font-size: 17px;
     }
 
     .site-footer {
@@ -463,8 +584,6 @@
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
-    .vumc-modal-title-wrap { min-width: 0; }
-
     .vumc-modal-kicker {
       margin: 0 0 4px;
       font-size: 11px;
@@ -489,7 +608,6 @@
       height: 42px;
       border-radius: 999px;
       font-size: 24px;
-      line-height: 1;
       cursor: pointer;
       flex: 0 0 auto;
     }
@@ -615,7 +733,6 @@
       border-radius: 50%;
       cursor: pointer;
       font-size: 18px;
-      line-height: 1;
       flex-shrink: 0;
     }
 
@@ -810,22 +927,25 @@
         justify-content: center;
       }
 
-      .mobile-menu.show { display: block; }
-
-      .hero-inner,
+      .groups-grid,
       .footer-grid {
         grid-template-columns: 1fr 1fr;
+      }
+
+      .cta-band {
+        grid-template-columns: 1fr;
       }
     }
 
     @media (max-width: 760px) {
-      .hero-inner,
+      .groups-grid,
       .footer-grid {
         grid-template-columns: 1fr;
       }
 
       .hero-inner {
         padding: 58px 0 48px;
+        min-height: auto;
       }
 
       .hero-card {
@@ -834,6 +954,14 @@
 
       .brand-name { font-size: 15px; }
       .brand-tagline { font-size: 11px; }
+
+      .section {
+        padding: 54px 0;
+      }
+
+      .cta-band {
+        padding: 26px;
+      }
 
       .vumc-chat-launcher {
         right: 14px;
@@ -855,11 +983,12 @@
     }
   </style>
 </head>
+
 <body>
   <header class="site-header">
     <div class="container">
       <div class="nav-wrap">
-        <a class='brand' href='/'>
+        <a class="brand" href="/">
           <img class="brand-mark" src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s176-c-k-c0x00ffffff-no-rj" alt="Versailles UMC logo" />
           <div class="brand-text">
             <p class="brand-name">Versailles United Methodist Church</p>
@@ -868,31 +997,32 @@
         </a>
 
         <nav class="nav-links" aria-label="Primary navigation">
-          <a href='/'>Home</a>
-          <a href='/watch/'>Watch</a>
+          <a href="/">Home</a>
+          <a href="/watch/">Watch</a>
 
           <div class="nav-item dropdown" id="connectDropdown">
             <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="connectMenuDesktop">
               Connect
             </button>
             <div class="dropdown-menu" id="connectMenuDesktop">
-              <a href='/new-here/'>New Here</a>
-              <a href='/kids-families/'>Kids & Families</a>
-              <a href='/groups/'>Groups</a>
-              <a href='/serve/'>Serve</a>
-               <a href='/host-your-event/'>Host Your Event</a>
-              <a href='/next-steps/'>Next Steps</a>
+              <a href="/new-here/">New Here</a>
+              <a href="/kids-families/">Kids & Families</a>
+              <a href="/groups/">Groups</a>
+              <a href="/serve/">Serve</a>
+              <a href="/host-your-event/">Host Your Event</a>
+              <a href="/next-steps/">Next Steps</a>
               <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
             </div>
           </div>
-          <a href='/media/'>Media</a>
-          <a href='/events/'>Events</a>
+
+          <a href="/media/">Media</a>
+          <a href="/events/">Events</a>
           <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
-          <a href='/plan-your-visit/'>Plan Your Visit</a>
+          <a href="/plan-your-visit/">Plan Your Visit</a>
         </nav>
 
         <div class="nav-actions">
-          <a class='btn btn-dark' href='/watch/'>Watch Live</a>
+          <a class="btn btn-dark" href="/watch/">Watch Live</a>
           <a class="btn btn-light subscribe-desktop" href="https://versaillesumc.churchcenter.com/people/forms/833182" data-open-in-church-center-modal="true">Subscribe</a>
           <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
         </div>
@@ -900,25 +1030,27 @@
 
       <div class="mobile-menu" id="mobileMenu">
         <div class="mobile-menu-inner">
-          <a href='/'>Home</a>
-          <a href='/watch/'>Watch</a>
+          <a href="/">Home</a>
+          <a href="/watch/">Watch</a>
 
           <button class="mobile-submenu-toggle" id="mobileConnectToggle" type="button" aria-expanded="false" aria-controls="mobileConnectMenu">
             Connect
           </button>
+
           <div class="mobile-submenu" id="mobileConnectMenu">
-            <a href='/new-here/'>New Here</a>
-            <a href='/kids-families/'>Kids & Families</a>
-            <a href='/groups/'>Groups</a>
-            <a href='/serve/'>Serve</a>
-             <a href='/host-your-event/'>Host Your Event</a>
-            <a href='/next-steps/'>Next Steps</a>
+            <a href="/new-here/">New Here</a>
+            <a href="/kids-families/">Kids & Families</a>
+            <a href="/groups/">Groups</a>
+            <a href="/serve/">Serve</a>
+            <a href="/host-your-event/">Host Your Event</a>
+            <a href="/next-steps/">Next Steps</a>
             <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
           </div>
-          <a href='/media/'>Media</a>
-          <a href='/events/'>Events</a>
+
+          <a href="/media/">Media</a>
+          <a href="/events/">Events</a>
           <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
-          <a href='/plan-your-visit/'>Plan Your Visit</a>
+          <a href="/plan-your-visit/">Plan Your Visit</a>
           <a href="https://versaillesumc.churchcenter.com/people/forms/833182" data-open-in-church-center-modal="true">Subscribe</a>
         </div>
       </div>
@@ -944,11 +1076,150 @@
             </div>
 
             <div class="btn-row">
-              <a class='btn btn-primary' href='/kids-families/'>Kids & Families</a>
-              <a class='btn btn-light' href='/'>Return Home</a>
-              <a class='btn btn-secondary' href='/watch/'>Watch Online</a>
+              <a class="btn btn-primary" href="https://versaillesumc.churchcenter.com/people/forms/913901" data-open-in-church-center-modal="true">Life Group Interest Form</a>
+              <a class="btn btn-secondary" href="#groups-list">View Groups</a>
+              <a class="btn btn-light" href="/plan-your-visit/">Plan Your Visit</a>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="groups-list">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Life Groups & Connection Groups</p>
+          <h2>There is a place for you.</h2>
+          <p>
+            Some groups meet weekly, some meet monthly, and some gather around a shared season of life. Explore the opportunities below and let us help you take the next step.
+          </p>
+        </div>
+
+        <div class="groups-grid">
+          <article class="group-card featured">
+            <div class="group-icon">✦</div>
+            <p class="group-meta">Interest Form</p>
+            <h3>Not sure where to start?</h3>
+            <p>
+              Fill out our Life Group Interest Form and someone from VUMC will help you find the best group for your season of life.
+            </p>
+            <div style="margin-top:auto;">
+              <a class="btn btn-primary" href="https://versaillesumc.churchcenter.com/people/forms/913901" data-open-in-church-center-modal="true">Open Form</a>
+            </div>
+          </article>
+
+          <article class="group-card">
+            <div class="group-icon">☕</div>
+            <p class="group-meta">First Thursday • 12:00 PM</p>
+            <h3>Cornerstones 55+ Group</h3>
+            <p>
+              A monthly gathering for adults 55 and older to enjoy fellowship, encouragement, and connection.
+            </p>
+          </article>
+
+          <article class="group-card">
+            <div class="group-icon">🌷</div>
+            <p class="group-meta">Every Other Monday • 10:00 AM</p>
+            <h3>JOY Older Ladies Group</h3>
+            <p>
+              A caring group for older ladies to share friendship, prayer, conversation, and community.
+            </p>
+          </article>
+
+          <article class="group-card">
+            <div class="group-icon">👨‍👩‍👧</div>
+            <p class="group-meta">Sundays • 9:15 AM</p>
+            <h3>Parent Connect</h3>
+            <p>
+              A Sunday morning group for young families to connect, grow, and encourage one another.
+            </p>
+          </article>
+
+          <article class="group-card">
+            <div class="group-icon">🔥</div>
+            <p class="group-meta">Sundays • 4:00 PM</p>
+            <h3>Rooted Youth Ministry</h3>
+            <p>
+              A weekly gathering for students to build friendships, grow in faith, and be rooted in Christ.
+            </p>
+          </article>
+
+          <article class="group-card">
+            <div class="group-icon">📖</div>
+            <p class="group-meta">Sundays • 9:15 AM</p>
+            <h3>Seekers 1</h3>
+            <p>
+              A Life Group for men and women who gather for study, conversation, and spiritual growth.
+            </p>
+          </article>
+
+          <article class="group-card">
+            <div class="group-icon">📖</div>
+            <p class="group-meta">Sundays • 10:30 AM</p>
+            <h3>Seekers 2</h3>
+            <p>
+              A Life Group for men and women with the same format as Seekers 1, meeting during the 10:30 hour.
+            </p>
+          </article>
+
+          <article class="group-card">
+            <div class="group-icon">🕊️</div>
+            <p class="group-meta">Monthly • Dates TBD</p>
+            <h3>Soul Survivors Widow Group</h3>
+            <p>
+              A supportive monthly group for widows to find encouragement, friendship, and care.
+            </p>
+          </article>
+
+          <article class="group-card">
+            <div class="group-icon">🌱</div>
+            <p class="group-meta">Sundays • 9:15 AM & 10:30 AM</p>
+            <h3>Sprouts Kids Ministry</h3>
+            <p>
+              A Sunday morning ministry helping children grow in faith through age-appropriate teaching and care.
+            </p>
+          </article>
+
+          <article class="group-card">
+            <div class="group-icon">💬</div>
+            <p class="group-meta">Sundays • 9:15 AM</p>
+            <h3>Sunday Morning Women’s Group</h3>
+            <p>
+              A Sunday morning group for women to connect, study, pray, and grow together.
+            </p>
+          </article>
+
+          <article class="group-card">
+            <div class="group-icon">🤝</div>
+            <p class="group-meta">Sundays • 9:15 AM</p>
+            <h3>Sunday Morning Men’s Group</h3>
+            <p>
+              A Sunday morning group for men to build community, study scripture, and encourage one another.
+            </p>
+          </article>
+
+          <article class="group-card">
+            <div class="group-icon">✨</div>
+            <p class="group-meta">Young Adults</p>
+            <h3>Young Adults Group</h3>
+            <p>
+              A connection opportunity for young adults looking for friendship, faith, and community at VUMC.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2>Ready to get connected?</h2>
+            <p>
+              Tell us a little about yourself and we will help you find the group that feels like the right next step.
+            </p>
+          </div>
+          <a class="btn btn-primary" href="https://versaillesumc.churchcenter.com/people/forms/913901" data-open-in-church-center-modal="true">Fill Out Interest Form</a>
         </div>
       </div>
     </section>
@@ -957,6 +1228,7 @@
   <footer class="site-footer">
     <div class="container">
       <div class="eyebrow" style="color:var(--accent-soft);">Versailles United Methodist Church</div>
+
       <div class="footer-grid">
         <div class="footer-card">
           <h4>About</h4>
@@ -974,14 +1246,14 @@
           <h4>Visit</h4>
           <p>230 Paynes Mill Road</p>
           <p>Versailles, KY 40383</p>
-          <a href='/plan-your-visit/'>Plan Your Visit</a>
+          <a href="/plan-your-visit/">Plan Your Visit</a>
         </div>
 
         <div class="footer-card">
           <h4>Quick Links</h4>
-          <a href='/watch/'>Watch Worship Online</a>
-          <a href='/new-here/'>New Here</a>
-          <a href='/kids-families/'>Kids & Families</a>
+          <a href="/watch/">Watch Worship Online</a>
+          <a href="/new-here/">New Here</a>
+          <a href="/kids-families/">Kids & Families</a>
           <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
           <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
           <a href="https://versaillesumc.churchcenter.com/people/forms/833182" data-open-in-church-center-modal="true">Subscribe</a>
@@ -1000,7 +1272,7 @@
       <div class="vumc-modal-header">
         <div class="vumc-modal-title-wrap">
           <p class="vumc-modal-kicker">Versailles United Methodist Church</p>
-          <h2 class="vumc-modal-title" id="vumcModalTitle">Subscribe to Updates</h2>
+          <h2 class="vumc-modal-title" id="vumcModalTitle">Open Form</h2>
         </div>
         <button class="vumc-modal-close" id="vumcModalClose" aria-label="Close modal">×</button>
       </div>
@@ -1201,7 +1473,7 @@
       {
         keywords: ['worship', 'service time', 'service times', 'sunday', 'traditional', 'contemporary'],
         response: {
-          text: `Our Sunday worship schedule:\n\n• Traditional Worship — 9:30 AM\n• Contemporary Worship — 10:30 AM\n\nThrough May 3 - June 28, we have combined our 2 worship services to blended for the summer. Service begins at 10:30am.\n\nWe would love for you to join us.`
+          text: `Our Sunday worship schedule:\n\n• Traditional Worship — 9:30 AM\n• Contemporary Worship — 10:30 AM\n\nWe would love for you to join us.`
         }
       },
       {
@@ -1216,13 +1488,16 @@
       {
         keywords: ['get involved', 'volunteer', 'serve', 'ministries', 'help', 'community'],
         response: {
-          text: `We offer various ways to get involved, including Life Groups, AA meetings, and volunteer ministries.`
+          text: `We offer various ways to get involved, including Life Groups, kids ministry, youth ministry, and volunteer ministries.`
         }
       },
       {
-        keywords: ['life group', 'small group', 'groups', 'bible study'],
+        keywords: ['life group', 'small group', 'groups', 'bible study', 'seekers', 'parent connect', 'women', 'men', 'young adults'],
         response: {
-          text: `Life Groups meet on Sundays at:\n\n• 9:15 AM\n• 10:30 AM.`
+          text: `VUMC has several groups for adults, families, kids, youth, men, women, older adults, widows, and young adults.`,
+          buttons: [
+            { label: 'Life Group Interest Form', url: 'https://versaillesumc.churchcenter.com/people/forms/913901' }
+          ]
         }
       },
       {
@@ -1418,6 +1693,7 @@
       text: `Hi! Welcome to Versailles UMC.\n\nI can help with common questions like worship times, office hours, contact information, online worship, Life Groups, and giving.\n\nIf I can’t answer your question, I can send your message to our church office.`,
       buttons: [
         { label: 'Worship Online', url: 'https://www.versaillesumc.org/watch/' },
+        { label: 'Life Group Interest Form', url: 'https://versaillesumc.churchcenter.com/people/forms/913901' },
         { label: 'Give Online', url: 'https://versaillesumc.churchcenter.com/giving' }
       ]
     }, 'bot');
