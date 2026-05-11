@@ -2708,6 +2708,64 @@
       if (loadingEl) loadingEl.style.display = 'none';
     }
 
+    function vumcItemText(item) {
+      return [
+        item.title || '',
+        item.description || '',
+        item.content || '',
+        item.author || ''
+      ].join(' ').toLowerCase();
+    }
+
+    function vumcVideoAgeInHours(item) {
+      const published = new Date(item.pubDate || item.published || item.date || '');
+      if (Number.isNaN(published.getTime())) return 999999;
+      return (Date.now() - published.getTime()) / (1000 * 60 * 60);
+    }
+
+    function vumcIsUpcomingOrScheduled(item) {
+      const text = vumcItemText(item);
+
+      const upcomingSignals = [
+        'live in ',
+        'premieres in ',
+        'premiere will begin',
+        'scheduled for',
+        'upcoming live',
+        'upcoming stream',
+        'set reminder',
+        'notify me',
+        'waiting for',
+        'starts at',
+        'starts in'
+      ];
+
+      return upcomingSignals.some(signal => text.includes(signal));
+    }
+
+    function vumcIsLikelyWorshipArchive(item) {
+      const text = vumcItemText(item);
+
+      const archiveSignals = [
+        'worship',
+        'service',
+        'sermon',
+        'message',
+        'sunday morning',
+        'traditional',
+        'contemporary',
+        'scripture',
+        'psalm',
+        'romans',
+        'luke',
+        'john',
+        'matthew',
+        'mark'
+      ];
+
+      return archiveSignals.some(signal => text.includes(signal));
+    }
+
     async function vumcLoadLatestYouTubeVideo() {
       try {
         const response = await fetch(VUMC_RSS_PROXY);
@@ -2715,7 +2773,7 @@
 
         const data = await response.json();
         const items = Array.isArray(data.items) ? data.items : [];
-        if (!items.length) return;
+        if (!items.length) throw new Error('No videos found');
 
         const excludeWords = [
           'traditional worship',
@@ -2731,10 +2789,31 @@
           'contemporary',
           '10:30',
           '10:30am',
-          '10:30 am'
+          '10:30 am',
+          'worship'
         ];
 
-        const nonTraditionalVideos = items.filter(item => {
+        /*
+          IMPORTANT:
+          YouTube RSS can place scheduled livestreams at the top of the feed.
+          This filter keeps the homepage from embedding an upcoming “Notify Me”
+          livestream and instead chooses a completed/past worship video.
+        */
+        const archiveCandidates = items.filter(item => {
+          const title = (item.title || '').toLowerCase();
+          const ageHours = vumcVideoAgeInHours(item);
+
+          if (vumcIsUpcomingOrScheduled(item)) return false;
+
+          // Avoid freshly-created scheduled livestream placeholders.
+          // Completed worship archives will usually have archive/service wording,
+          // or they will be older feed items after Sunday has passed.
+          if (ageHours < 18 && !vumcIsLikelyWorshipArchive(item)) return false;
+
+          return true;
+        });
+
+        const nonTraditionalVideos = archiveCandidates.filter(item => {
           const title = (item.title || '').toLowerCase();
           return !excludeWords.some(word => title.includes(word));
         });
@@ -2744,12 +2823,22 @@
           return preferWords.some(word => title.includes(word));
         });
 
-        const latestVideo = (preferredVideos[0] || nonTraditionalVideos[0] || items[0]);
+        const worshipArchiveVideos = nonTraditionalVideos.filter(vumcIsLikelyWorshipArchive);
+
+        const latestVideo = (
+          preferredVideos[0] ||
+          worshipArchiveVideos[0] ||
+          nonTraditionalVideos[0] ||
+          archiveCandidates[0]
+        );
+
+        if (!latestVideo) throw new Error('No completed worship archive found');
+
         vumcSetLatestVideo(latestVideo);
       } catch (error) {
         const loadingEl = document.getElementById('latestServiceLoading');
         const dateEl = document.getElementById('latestServiceDate');
-        if (loadingEl) loadingEl.textContent = 'Latest video is unavailable right now. Use More Messages below.';
+        if (loadingEl) loadingEl.textContent = 'Latest worship archive is unavailable right now. Use More Messages below.';
         if (dateEl) dateEl.textContent = 'Use More Messages to view recent worship services.';
       }
     }
