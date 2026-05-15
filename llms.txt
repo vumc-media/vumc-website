@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+Site: https://www.versaillesumc.org
+Name: Versailles United Methodist Church
+Description: A United Methodist Church in Versailles, Kentucky offering traditional and contemporary worship, livestreams, ministries, local outreach, and online engagement.
+
+Important Pages:
+https://www.versaillesumc.org/
+https://www.versaillesumc.org/watch/
+https://www.versaillesumc.org/plan-your-visit/
+https://www.versaillesumc.org/contact/
+https://www.versaillesumc.org/media/
