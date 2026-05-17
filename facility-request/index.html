@@ -9,7 +9,7 @@
 <link rel="manifest" href="/site.webmanifest">
 
 <title>Facility Rental Request | Versailles United Methodist Church</title>
-  <link rel="canonical" href="https://www.versaillesumc.org/facility-request/">
+<link rel="canonical" href="https://www.versaillesumc.org/facility-request/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 
 <style>
@@ -182,9 +182,25 @@ button:hover {
   background:var(--teal-dark);
 }
 
+button:disabled {
+  opacity:.7;
+  cursor:not-allowed;
+}
+
 .small-note {
   font-size:.9rem;
   color:#667;
+}
+
+.honeypot {
+  position:absolute;
+  left:-9999px;
+  top:auto;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  opacity:0;
+  pointer-events:none;
 }
 
 @media(max-width:700px) {
@@ -382,8 +398,8 @@ button:hover {
   .brand-mark { width: 40px; height: 40px; }
   .mobile-menu { padding: 0 14px 14px; }
 }
-
 </style>
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-19L2K5PDLB"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -415,7 +431,7 @@ button:hover {
           <a href="/kids-families/">Kids & Families</a>
           <a href="/groups/">Groups</a>
           <a href="/serve/">Serve</a>
-          <a href="/host-your-event/" class="active">Host Your Event</a>
+          <a href="/host-your-event/">Host Your Event</a>
           <a href="/next-steps/">Next Steps</a>
           <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
         </div>
@@ -454,7 +470,6 @@ button:hover {
   </div>
 </header>
 
-
 <header class="hero">
   <h1>Facility Use Reservation Form</h1>
   <p>Request space at Versailles United Methodist Church for your gathering, meeting, celebration, or community event.</p>
@@ -467,7 +482,7 @@ button:hover {
 </div>
 
 <div id="errorMsg" class="error">
-  Something went wrong. Please contact the church office directly.
+  Something went wrong. Please review the form and try again, or contact the church office directly.
 </div>
 
 <form
@@ -476,6 +491,15 @@ button:hover {
   method="POST"
   target="hidden_iframe"
 >
+
+  <!-- Anti-spam fields -->
+  <div class="honeypot" aria-hidden="true">
+    <label for="website">Website</label>
+    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+  </div>
+
+  <input type="hidden" name="formStartedAt" id="formStartedAt">
+  <input type="hidden" name="formSource" value="facility-request-page">
 
   <div class="notice">
     Please complete this request form as fully as possible. Submitting this form does not guarantee approval or availability.
@@ -487,7 +511,7 @@ button:hover {
   <div class="grid">
     <div>
       <label>Name of Responsible Party <span class="required">*</span></label>
-      <input name="responsibleName" required>
+      <input name="responsibleName" id="responsibleName" minlength="3" maxlength="80" required>
     </div>
 
     <div>
@@ -501,30 +525,37 @@ button:hover {
   </div>
 
   <label>Name of Organization</label>
-  <input name="organization" placeholder="Leave blank if this is a personal/family event">
+  <input name="organization" maxlength="100" placeholder="Leave blank if this is a personal/family event">
 
   <label>Address</label>
-  <input name="address">
+  <input name="address" maxlength="160">
 
   <div class="grid">
     <div>
       <label>Phone Number <span class="required">*</span></label>
-      <input type="tel" name="phone" required>
+      <input 
+        type="tel" 
+        name="phone" 
+        id="phone"
+        pattern="[0-9\-\(\)\s\.]{10,20}" 
+        maxlength="20"
+        placeholder="Example: 859-555-1234"
+        required>
     </div>
 
     <div>
       <label>Email <span class="required">*</span></label>
-      <input type="email" name="email" required>
+      <input type="email" name="email" id="email" maxlength="100" required>
     </div>
   </div>
 
   <h2>Event Information</h2>
 
   <label>Purpose / Event Type <span class="required">*</span></label>
-  <input name="purpose" required placeholder="Example: baby shower, meeting, reception, training, family gathering">
+  <input name="purpose" id="purpose" minlength="3" maxlength="100" required placeholder="Example: baby shower, meeting, reception, training, family gathering">
 
   <label>Please briefly describe the event</label>
-  <textarea name="eventDescription" placeholder="Tell us what the event is and any important details."></textarea>
+  <textarea name="eventDescription" id="eventDescription" maxlength="1200" placeholder="Tell us what the event is and any important details."></textarea>
 
   <div class="grid">
     <div>
@@ -534,7 +565,7 @@ button:hover {
 
     <div>
       <label>Number of Persons Attending <span class="required">*</span></label>
-      <input type="number" name="attendance" min="1" required>
+      <input type="number" name="attendance" min="1" max="1000" required>
     </div>
   </div>
 
@@ -578,13 +609,13 @@ button:hover {
       <label class="check-item"><input type="checkbox" name="churchAreas" value="Atrium"> Atrium</label>
       <label class="check-item"><input type="checkbox" name="churchAreas" value="Conference Room"> Conference Room</label>
       <label class="check-item"><input type="checkbox" name="churchAreas" value="Youth Room"> Youth Room</label>
-      <label class="check-item"><input type="checkbox" name="churchAreas" value="Children’s Room"> Ballroom</label>
+      <label class="check-item"><input type="checkbox" name="churchAreas" value="Ballroom"> Ballroom</label>
       <label class="check-item"><input type="checkbox" name="churchAreas" value="Classrooms" data-toggle="classroomDetails"> Classrooms</label>
     </div>
 
     <div id="classroomDetails" class="conditional">
       <label>Classroom details / room numbers</label>
-      <input name="classroomDetails" placeholder="Example: 2 classrooms, room numbers if known">
+      <input name="classroomDetails" maxlength="200" placeholder="Example: 2 classrooms, room numbers if known">
     </div>
   </div>
 
@@ -602,12 +633,12 @@ button:hover {
     <div class="grid">
       <div>
         <label>Round tables quantity</label>
-        <input type="number" name="tableRoundQty" min="0">
+        <input type="number" name="tableRoundQty" min="0" max="200">
       </div>
 
       <div>
         <label>Rectangular tables quantity</label>
-        <input type="number" name="tableRectQty" min="0">
+        <input type="number" name="tableRectQty" min="0" max="200">
       </div>
     </div>
 
@@ -620,7 +651,7 @@ button:hover {
   </div>
 
   <label>Chairs quantity</label>
-  <input type="number" name="chairsQty" min="0" placeholder="Approximate number of chairs needed">
+  <input type="number" name="chairsQty" min="0" max="1000" placeholder="Approximate number of chairs needed">
 
   <h2>Sound / Video</h2>
 
@@ -649,7 +680,7 @@ button:hover {
   <h2>Other Information</h2>
 
   <label>Other needs or special instructions</label>
-  <textarea name="otherNeeds" placeholder="Please list anything else we should know about your event."></textarea>
+  <textarea name="otherNeeds" id="otherNeeds" maxlength="1200" placeholder="Please list anything else we should know about your event."></textarea>
 
   <div class="notice">
     The Church and/or Pavilion Use Guidelines must be received and agreed to before the reservation is finalized.
@@ -672,6 +703,10 @@ button:hover {
 </div>
 
 <script>
+const FORM_MIN_SECONDS = 6;
+const formStartTime = Date.now();
+document.getElementById("formStartedAt").value = String(formStartTime);
+
 const params = new URLSearchParams(window.location.search);
 
 if (params.get("submitted") === "true") {
@@ -709,14 +744,121 @@ document.getElementById("avNeeded").addEventListener("change", function() {
   }
 });
 
-document.getElementById("facilityForm").addEventListener("submit", function() {
+function showError(message) {
+  const errorMsg = document.getElementById("errorMsg");
+  errorMsg.textContent = message;
+  errorMsg.style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function hasSpamContent(value) {
+  if (!value) return false;
+
+  const spamPattern = /(https?:\/\/|www\.|\.ru|\.cn|\.xyz|\.top|\.click|\.rest|\.buzz|bitcoin|crypto|casino|loan|viagra|porn|paypal|graph\.org|telegram|whatsapp|free money|investment|forex)/i;
+
+  return spamPattern.test(value);
+}
+
+function looksLikeGibberish(value) {
+  if (!value) return false;
+
+  const cleaned = value.trim();
+
+  if (cleaned.length >= 8 && !/[aeiouAEIOU]/.test(cleaned)) {
+    return true;
+  }
+
+  const repeatedChars = /(.)\1{5,}/;
+  if (repeatedChars.test(cleaned)) {
+    return true;
+  }
+
+  return false;
+}
+
+function validateFacilityForm() {
+  const honeypot = document.getElementById("website").value.trim();
+
+  if (honeypot !== "") {
+    return {
+      valid: false,
+      message: "Your submission could not be processed. Please contact the church office directly."
+    };
+  }
+
+  const secondsOnPage = (Date.now() - formStartTime) / 1000;
+
+  if (secondsOnPage < FORM_MIN_SECONDS) {
+    return {
+      valid: false,
+      message: "Please take a moment to complete the form before submitting."
+    };
+  }
+
+  const spacesChecked = document.querySelectorAll('input[name="spacesRequested"]:checked').length;
+
+  if (spacesChecked === 0) {
+    return {
+      valid: false,
+      message: "Please select at least one requested space: Pavilion or Church Building."
+    };
+  }
+
+  const fieldsToCheck = [
+    "responsibleName",
+    "organization",
+    "address",
+    "email",
+    "phone",
+    "purpose",
+    "eventDescription",
+    "classroomDetails",
+    "otherNeeds"
+  ];
+
+  for (const fieldName of fieldsToCheck) {
+    const field = document.querySelector(`[name="${fieldName}"]`);
+    if (!field) continue;
+
+    if (hasSpamContent(field.value)) {
+      return {
+        valid: false,
+        message: "Links, payment links, or promotional content are not allowed in this form. Please remove them and try again."
+      };
+    }
+  }
+
+  const name = document.getElementById("responsibleName").value.trim();
+  const purpose = document.getElementById("purpose").value.trim();
+
+  if (looksLikeGibberish(name) || looksLikeGibberish(purpose)) {
+    return {
+      valid: false,
+      message: "Please enter a valid name and event purpose."
+    };
+  }
+
+  return { valid: true };
+}
+
+document.getElementById("facilityForm").addEventListener("submit", function(event) {
+  const validation = validateFacilityForm();
+
+  if (!validation.valid) {
+    event.preventDefault();
+    showError(validation.message);
+    return;
+  }
+
   const btn = document.getElementById("submitBtn");
   btn.disabled = true;
   btn.textContent = "Submitting...";
 
   setTimeout(function() {
     document.getElementById("successMsg").style.display = "block";
+    document.getElementById("errorMsg").style.display = "none";
     document.getElementById("facilityForm").reset();
+    document.getElementById("formStartedAt").value = String(Date.now());
     document.querySelectorAll(".conditional, .av-box").forEach(el => el.style.display = "none");
     btn.disabled = false;
     btn.textContent = "Submit Facility Request";
@@ -724,7 +866,6 @@ document.getElementById("facilityForm").addEventListener("submit", function() {
   }, 1800);
 });
 </script>
-
 
 <script>
   const mobileToggle = document.getElementById('mobileToggle');
@@ -764,6 +905,8 @@ document.getElementById("facilityForm").addEventListener("submit", function() {
     });
   }
 </script>
+
+<script src="https://js.churchcenter.com/modal/v1"></script>
 
 </body>
 </html>
