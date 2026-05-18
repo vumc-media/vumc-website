@@ -2839,7 +2839,7 @@
           // Avoid freshly-created scheduled livestream placeholders.
           // Completed worship archives will usually have archive/service wording,
           // or they will be older feed items after Sunday has passed.
-          if (ageHours < 2 && !vumcIsLikelyWorshipArchive(item)) return false;
+        if (ageHours < 2 && !vumcIsLikelyWorshipArchive(item)) return false;
 
           return true;
         });
