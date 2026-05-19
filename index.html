@@ -2011,176 +2011,6 @@
         border-radius: 20px;
       }
     }
-
-    /* ===== HOMEPAGE TRANSPARENT OVERLAY HEADER ===== */
-    .site-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: transparent;
-      backdrop-filter: none;
-      border-bottom: 1px solid transparent;
-      transition: background 240ms ease, backdrop-filter 240ms ease, border-color 240ms ease, box-shadow 240ms ease;
-    }
-
-    .site-header.header-scrolled,
-    .site-header.menu-open {
-      background: rgba(17, 22, 29, 0.78);
-      backdrop-filter: blur(14px);
-      border-bottom-color: rgba(255,255,255,0.10);
-      box-shadow: 0 16px 42px rgba(0,0,0,0.20);
-    }
-
-    .nav-wrap {
-      min-height: 92px;
-    }
-
-    .brand {
-      color: #fff;
-    }
-
-    .brand-mark {
-      width: 244px;
-      height: auto;
-      max-height: 64px;
-      border-radius: 0;
-      object-fit: contain;
-      background: transparent;
-      filter: drop-shadow(0 8px 18px rgba(0,0,0,0.32));
-    }
-
-    .brand-text {
-      display: none;
-    }
-
-    .nav-links > a,
-    .dropdown-toggle {
-      color: rgba(255,255,255,0.86);
-      text-shadow: 0 1px 10px rgba(0,0,0,0.28);
-    }
-
-    .nav-links > a:hover,
-    .dropdown-toggle:hover {
-      color: #fff;
-    }
-
-    .nav-actions .btn-dark {
-      background: rgba(255,255,255,0.14);
-      color: #fff;
-      border-color: rgba(255,255,255,0.22);
-      backdrop-filter: blur(8px);
-      box-shadow: none;
-    }
-
-    .nav-actions .btn-dark:hover {
-      background: rgba(255,255,255,0.22);
-    }
-
-    .nav-actions .btn-light.subscribe-desktop {
-      background: rgba(255,255,255,0.94);
-      color: var(--text);
-      border-color: rgba(255,255,255,0.28);
-    }
-
-    .dropdown-menu {
-      background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(12px);
-    }
-
-    .mobile-toggle {
-      background: rgba(255,255,255,0.14);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.18);
-      box-shadow: none;
-      backdrop-filter: blur(8px);
-    }
-
-    .mobile-menu {
-      padding: 0 0 18px;
-    }
-
-    .mobile-menu-inner {
-      background: rgba(17,22,29,0.92);
-      border-color: rgba(255,255,255,0.12);
-      box-shadow: 0 18px 45px rgba(0,0,0,0.24);
-      backdrop-filter: blur(14px);
-    }
-
-    .mobile-menu a,
-    .mobile-submenu-toggle {
-      color: #fff;
-    }
-
-    .mobile-submenu a {
-      color: rgba(255,255,255,0.78);
-    }
-
-    .hero {
-      margin-top: 0;
-    }
-
-    .hero-grid {
-      min-height: 88vh;
-      padding: 154px 0 94px;
-    }
-
-    .hero-watermark {
-      position: absolute;
-      top: 118px;
-      right: clamp(24px, 7vw, 118px);
-      width: min(38vw, 520px);
-      opacity: 0.13;
-      z-index: 1;
-      pointer-events: none;
-      filter: drop-shadow(0 18px 38px rgba(0,0,0,0.28));
-    }
-
-    .hero-watermark img {
-      width: 100%;
-      height: auto;
-    }
-
-    @media (max-width: 1240px) {
-      .nav-wrap {
-        min-height: 82px;
-      }
-
-      .brand-mark {
-        width: 214px;
-        max-height: 58px;
-      }
-
-      .hero-grid {
-        padding-top: 132px;
-      }
-    }
-
-    @media (max-width: 760px) {
-      .nav-wrap {
-        min-height: 76px;
-      }
-
-      .brand-mark {
-        width: 176px;
-        max-height: 50px;
-      }
-
-      .hero-grid {
-        padding: 118px 0 62px;
-        min-height: 84vh;
-      }
-
-      .hero-watermark {
-        top: 92px;
-        right: -40px;
-        width: 300px;
-        opacity: 0.10;
-      }
-    }
-
-
   </style>
 </head>
 <body>
@@ -2188,7 +2018,7 @@
     <div class="container">
       <div class="nav-wrap">
         <a class='brand' href='/'>
-          <img class="brand-mark" src="/vumc-media/umc%20logo%20watermark.png" alt="Versailles United Methodist Church" />
+          <img class="brand-mark" src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s176-c-k-c0x00ffffff-no-rj" alt="Versailles UMC logo" />
           <div class="brand-text">
             <p class="brand-name">Versailles United Methodist Church</p>
             <p class="brand-tagline">A Church Striving to Love Like Jesus</p>
@@ -2277,9 +2107,6 @@
       </div>
 
       <div class="hero-overlay" aria-hidden="true"></div>
-      <div class="hero-watermark" aria-hidden="true">
-        <img src="/vumc-media/umc%20logo%20watermark.png" alt="" />
-      </div>
 
       <div class="container">
         <div class="hero-grid">
@@ -2772,20 +2599,6 @@
   </div>
 
   <script>
-    const siteHeader = document.querySelector('.site-header');
-    const mobileMenuForHeader = document.getElementById('mobileMenu');
-
-    function updateHeaderState() {
-      if (!siteHeader) return;
-      const isScrolled = window.scrollY > 24;
-      const menuIsOpen = mobileMenuForHeader && mobileMenuForHeader.classList.contains('show');
-      siteHeader.classList.toggle('header-scrolled', isScrolled);
-      siteHeader.classList.toggle('menu-open', !!menuIsOpen);
-    }
-
-    window.addEventListener('scroll', updateHeaderState, { passive: true });
-    window.addEventListener('load', updateHeaderState);
-
     const heroSlides = document.querySelectorAll('.hero-slide');
     let heroSlideIndex = 0;
 
@@ -2807,7 +2620,6 @@
     if (mobileToggle && mobileMenu) {
       mobileToggle.addEventListener('click', () => {
         mobileMenu.classList.toggle('show');
-        updateHeaderState();
       });
     }
 
