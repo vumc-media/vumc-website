@@ -1242,6 +1242,65 @@
 
     async function loadPastStreams() {
       const grid = document.getElementById("streamsGrid");
+      const INITIAL_STREAM_COUNT = 6;
+      let visibleStreamCount = INITIAL_STREAM_COUNT;
+      let allVideos = [];
+
+      function attachVideoClickHandlers() {
+        document.querySelectorAll('[data-video-open]').forEach(button => {
+          button.addEventListener('click', () => {
+            openInlineVideo(
+              button.getAttribute('data-video-open'),
+              button.getAttribute('data-title') || 'Past Worship Service',
+              button.getAttribute('data-published') || 'Playing on this page'
+            );
+          });
+        });
+      }
+
+      function renderStreams() {
+        const videosToShow = allVideos.slice(0, visibleStreamCount);
+        const hasMoreVideos = visibleStreamCount < allVideos.length;
+
+        grid.innerHTML = `
+          ${videosToShow.map(video => {
+            const title = escapeHtml(video.title);
+            const thumb = escapeHtml(video.thumbnail);
+            const published = escapeHtml(formatDate(video.publishedAt));
+            const embedUrl = `https://www.youtube.com/embed/${video.videoId}?autoplay=1&rel=0`;
+
+            return `
+              <button class="media-card" type="button" data-video-open="${embedUrl}" data-title="${title}" data-published="${published}">
+                <div class="media-image" style="background-image:url('${thumb}');">
+                  <span class="play-badge">▶</span>
+                </div>
+                <div class="media-content">
+                  <h3>${title}</h3>
+                  <p>${published}</p>
+                </div>
+              </button>
+            `;
+          }).join("")}
+
+          ${hasMoreVideos ? `
+            <div style="grid-column:1/-1;text-align:center;margin-top:10px;">
+              <button class="btn btn-dark" type="button" id="loadMoreStreams">
+                Load More Services
+              </button>
+            </div>
+          ` : ""}
+        `;
+
+        attachVideoClickHandlers();
+
+        const loadMoreButton = document.getElementById("loadMoreStreams");
+        if (loadMoreButton) {
+          loadMoreButton.addEventListener("click", () => {
+            visibleStreamCount += INITIAL_STREAM_COUNT;
+            renderStreams();
+          });
+        }
+      }
 
       try {
         const response = await fetch(STREAMS_API_URL);
@@ -1261,34 +1320,8 @@
           return;
         }
 
-        grid.innerHTML = data.videos.map(video => {
-          const title = escapeHtml(video.title);
-          const thumb = escapeHtml(video.thumbnail);
-          const published = escapeHtml(formatDate(video.publishedAt));
-          const embedUrl = `https://www.youtube.com/embed/${video.videoId}?autoplay=1&rel=0`;
-
-          return `
-            <button class="media-card" type="button" data-video-open="${embedUrl}" data-title="${title}" data-published="${published}">
-              <div class="media-image" style="background-image:url('${thumb}');">
-                <span class="play-badge">▶</span>
-              </div>
-              <div class="media-content">
-                <h3>${title}</h3>
-                <p>${published}</p>
-              </div>
-            </button>
-          `;
-        }).join("");
-
-        document.querySelectorAll('[data-video-open]').forEach(button => {
-          button.addEventListener('click', () => {
-            openInlineVideo(
-              button.getAttribute('data-video-open'),
-              button.getAttribute('data-title') || 'Past Worship Service',
-              button.getAttribute('data-published') || 'Playing on this page'
-            );
-          });
-        });
+        allVideos = data.videos;
+        renderStreams();
 
       } catch (error) {
         grid.innerHTML = `
