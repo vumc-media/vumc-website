@@ -979,6 +979,110 @@
       color: var(--accent);
     }
 
+
+
+    /* ===== VBS HOMEPAGE FEATURE BANNER ===== */
+    .vbs-feature-section {
+      padding: 36px 0 72px;
+      background: var(--bg);
+    }
+
+    .vbs-card {
+      position: relative;
+      min-height: 480px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background:
+        linear-gradient(135deg, rgba(17,22,29,0.86), rgba(17,22,29,0.42)),
+        radial-gradient(circle at top right, rgba(187,140,63,0.28), transparent 34%),
+        url('/vumc-media/vbs26-rainforest-falls-theme-mobile-header-bg.webp') center/cover no-repeat;
+      display: flex;
+      align-items: flex-end;
+      isolation: isolate;
+    }
+
+    .vbs-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.35), transparent 45%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .vbs-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      padding: 48px;
+      color: #fff;
+    }
+
+    .vbs-eyebrow {
+      color: var(--accent-soft);
+      margin-bottom: 14px;
+    }
+
+    .vbs-title {
+      margin: 0 0 16px;
+      font-size: clamp(38px, 6vw, 64px);
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+    }
+
+    .vbs-copy {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.84);
+      max-width: 700px;
+    }
+
+    .vbs-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .vbs-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+      backdrop-filter: blur(10px);
+      min-width: 160px;
+    }
+
+    .vbs-detail strong {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-soft);
+    }
+
+    .vbs-detail span {
+      font-size: 15px;
+      color: #fff;
+    }
+
+    .vbs-card .btn-row {
+      margin-top: 30px;
+    }
+
+    .vbs-card .btn-secondary {
+      background: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.24);
+    }
+
+    .vbs-card .btn-secondary:hover {
+      background: rgba(255,255,255,0.22);
+    }
+
     /* ===== SMART VISITOR WELCOME SYSTEM ===== */
     .smart-welcome-box {
       background:
@@ -1900,6 +2004,48 @@
     @media (max-width: 760px) {
       .section { padding: 56px 0; }
 
+
+      .vbs-feature-section {
+        padding: 28px 0 56px;
+      }
+
+      .vbs-card {
+        min-height: 560px;
+        border-radius: 24px;
+        background-position: center;
+      }
+
+      .vbs-content {
+        padding: 30px 26px;
+      }
+
+      .vbs-title {
+        font-size: 40px;
+        line-height: 1.02;
+      }
+
+      .vbs-copy {
+        font-size: 16px;
+      }
+
+      .vbs-details {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .vbs-detail {
+        min-width: 0;
+      }
+
+      .vbs-card .btn-row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .vbs-card .btn {
+        width: 100%;
+      }
+
       .hero-grid,
       .cards-grid,
       .video-grid,
@@ -2140,6 +2286,44 @@
             <div class="glass-card">
               <h3>Take Your Next Step</h3>
               <p>Join us in person, worship online, find your place to connect, or discover ways to serve in ministry and community.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- VBS FEATURE SECTION -->
+    <section class="vbs-feature-section" id="vbs">
+      <div class="container">
+        <div class="vbs-card">
+          <div class="vbs-content">
+            <div class="eyebrow vbs-eyebrow">Vacation Bible School • June 22–26 • 6–8 PM</div>
+            <h2 class="vbs-title">Rainforest Falls VBS is coming to Versailles UMC!</h2>
+            <p class="vbs-copy">
+              Kids are invited to an unforgettable week of Bible stories, music, games, worship,
+              and rainforest adventure as we discover the nature of God and what it means to be rooted in Him.
+            </p>
+
+            <div class="vbs-details" aria-label="Vacation Bible School details">
+              <div class="vbs-detail">
+                <strong>Dates</strong>
+                <span>June 22–26, 2026</span>
+              </div>
+              <div class="vbs-detail">
+                <strong>Time</strong>
+                <span>6:00–8:00 PM</span>
+              </div>
+              <div class="vbs-detail">
+                <strong>Location</strong>
+                <span>Versailles UMC</span>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <a class="btn btn-primary" href="https://vbspro.events/p/674773" target="_blank" rel="noopener noreferrer">Register for VBS</a>
+              <a class="btn btn-secondary" href="https://vbspro.events/p/674773" target="_blank" rel="noopener noreferrer">Volunteer for VBS</a>
             </div>
           </div>
         </div>
