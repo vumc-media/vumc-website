@@ -418,30 +418,12 @@
       font-size: 15px;
     }
 
-    .anchor-nav {
-      margin-top: 34px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+    .hero-actions {
+      margin-top: 30px;
     }
 
-    .anchor-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 46px;
-      padding: 0 16px;
-      border-radius: 999px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-weight: 700;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-      transition: transform var(--transition);
-    }
-
-    .anchor-link:hover {
-      transform: translateY(-2px);
+    .hero-actions .btn {
+      min-width: 176px;
     }
 
     .inline-video-player {
@@ -827,6 +809,10 @@
       .spotify-card {
         padding: 24px;
       }
+      .hero-actions .btn {
+        width: 100%;
+      }
+
 
       .brand-name { font-size: 15px; }
       .brand-tagline { font-size: 11px; }
@@ -942,27 +928,20 @@
               Catch up on past worship services, listen to sermon audio, and explore messages from Versailles United Methodist Church anytime.
             </p>
 
-            <div class="btn-row">
-              <a class="btn btn-primary" href="#past-services">Past Services</a>
-              <a class="btn btn-secondary" href="#podcast">Podcast</a>
-              <a class="btn btn-secondary" href="/resources/">Resources</a>
-            </div>
-
-            <div class="anchor-nav">
-              <a class="anchor-link" href="#past-services">Past Worship Services</a>
-              <a class="anchor-link" href="#explore-more">Explore More</a>
-              <a class="anchor-link" href="#podcast">Podcast</a>
-              <a class="anchor-link" href="/resources/">Resources</a>
+            <div class="btn-row hero-actions" aria-label="Media quick links">
+              <a class="btn btn-primary" href="#past-services">Watch Past Services</a>
+              <a class="btn btn-secondary" href="#podcast">Listen to Podcast</a>
+              <a class="btn btn-secondary" href="/resources/">Explore Resources</a>
             </div>
           </div>
 
           <div class="hero-card">
-            <h3>One message. Many ways to engage.</h3>
-            <p>Whether you missed Sunday, want to rewatch a sermon, or prefer listening during the week, our media library helps you stay connected.</p>
+            <h3>One place for VUMC messages.</h3>
+            <p>Use the buttons on this page to watch recent services, listen during the week, or find resources that help you stay connected.</p>
             <div class="hero-list">
-              <div class="hero-list-item"><strong>Watch</strong><span>Past worship services</span></div>
-              <div class="hero-list-item"><strong>Listen</strong><span>Podcast messages</span></div>
-              <div class="hero-list-item"><strong>Share</strong><span>Encouragement with others</span></div>
+              <div class="hero-list-item"><strong>Recent services</strong><span>Play on this page</span></div>
+              <div class="hero-list-item"><strong>Podcast</strong><span>Listen anytime</span></div>
+              <div class="hero-list-item"><strong>Resources</strong><span>Grow through the week</span></div>
             </div>
           </div>
         </div>
