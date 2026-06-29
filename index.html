@@ -3,6 +3,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1106,6 +1107,147 @@
       }
     }
 
+    /* ===== COMMUNITY STORIES HOMEPAGE FEATURE ===== */
+    .community-stories-section {
+      padding: 0 0 72px;
+      background: var(--bg);
+    }
+
+    .community-story-card {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.48)),
+        radial-gradient(circle at top right, rgba(187,140,63,0.28), transparent 34%),
+        url('/vumc-media/church-picnic.webp') center/cover no-repeat;
+      color: #fff;
+      min-height: 430px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: stretch;
+      isolation: isolate;
+    }
+
+    .community-story-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at bottom left, rgba(255,255,255,0.10), transparent 30%),
+        linear-gradient(to top, rgba(0,0,0,0.24), transparent 48%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .community-story-content {
+      position: relative;
+      z-index: 1;
+      padding: 46px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 760px;
+    }
+
+    .community-story-content h2 {
+      margin: 0 0 14px;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+    }
+
+    .community-story-content p {
+      margin: 0;
+      color: rgba(255,255,255,0.84);
+      font-size: 18px;
+      max-width: 700px;
+    }
+
+    .community-story-highlight {
+      position: relative;
+      z-index: 1;
+      margin: 38px;
+      padding: 28px;
+      align-self: center;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+    }
+
+    .community-story-highlight .story-label {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(187,140,63,0.95);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 14px;
+    }
+
+    .community-story-highlight h3 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      line-height: 1.18;
+    }
+
+    .community-story-highlight p {
+      margin: 0;
+      color: rgba(255,255,255,0.80);
+      font-size: 15px;
+    }
+
+    .community-story-card .btn-row {
+      margin-top: 28px;
+    }
+
+    @media (max-width: 980px) {
+      .community-story-card {
+        grid-template-columns: 1fr;
+      }
+
+      .community-story-highlight {
+        margin: 0 28px 32px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .community-stories-section {
+        padding: 0 0 56px;
+      }
+
+      .community-story-card {
+        min-height: 0;
+        border-radius: 24px;
+      }
+
+      .community-story-content {
+        padding: 32px 26px 24px;
+      }
+
+      .community-story-highlight {
+        margin: 0 20px 24px;
+        padding: 22px;
+      }
+
+      .community-story-card .btn-row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .community-story-card .btn {
+        width: 100%;
+      }
+    }
+
+
 
 
 /* ===== HOST YOUR EVENT COMMUNITY HOSPITALITY BLOCK ===== */
@@ -2131,6 +2273,7 @@
             </button>
             <div class="dropdown-menu" id="connectMenuDesktop">
               <a href='/new-here/'>New Here</a>
+              <a href='/community-stories/'>Community Stories</a>
               <a href='/kids-families/'>Kids & Families</a>
               <a href='/groups/'>Groups</a>
               <a href='/serve/'>Serve</a>
@@ -2163,6 +2306,7 @@
           </button>
           <div class="mobile-submenu" id="mobileConnectMenu">
             <a href='/new-here/'>New Here</a>
+            <a href='/community-stories/'>Community Stories</a>
             <a href='/kids-families/'>Kids & Families</a>
             <a href='/groups/'>Groups</a>
             <a href='/serve/'>Serve</a>
@@ -2247,6 +2391,36 @@
     <section class="section" id="smart-visitor-welcome">
       <div class="container">
         <div id="smartWelcome" aria-live="polite"></div>
+      </div>
+    </section>
+
+
+    <!-- COMMUNITY STORIES HOMEPAGE FEATURE -->
+    <section class="community-stories-section" id="community-stories-preview">
+      <div class="container">
+        <div class="community-story-card">
+          <div class="community-story-content">
+            <div class="eyebrow" style="color:var(--accent-soft);">Community Stories</div>
+            <h2>Real stories from life at VUMC.</h2>
+            <p>
+              Stories from guests, members, and neighbors help show what it means to Love Like Jesus
+              through worship, welcome, fellowship, service, and community in Versailles, Kentucky.
+            </p>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="/community-stories/">Read Community Stories</a>
+              <a class="btn btn-secondary" href="/community-stories/tammy-first-visit.html">Tammy’s First Visit</a>
+            </div>
+          </div>
+
+          <a class="community-story-highlight" href="/community-stories/tammy-first-visit.html">
+            <span class="story-label">Featured Story</span>
+            <h3>A First Visit That Became Fellowship</h3>
+            <p>
+              Tammy visited worship, stayed for the church picnic, checked in on Facebook,
+              and shared a reflection about feeling welcomed at Versailles UMC.
+            </p>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -2549,7 +2723,7 @@
     </section>
 
     <div class="sr-ai-context" style="display:none;">
-      Versailles United Methodist Church is a church located at 230 Paynes Mill Road in Versailles, Kentucky. VUMC offers Sunday worship, online worship, prayer, discipleship, community ministry, and opportunities for people and families to connect and grow in faith. The church is part of the United Methodist Church and is known locally for the mission language Love Like Jesus. The FAQ page answers visitor questions about worship times, what to expect, what to wear, children and youth, online worship, giving, and getting connected.
+      Versailles United Methodist Church is a church located at 230 Paynes Mill Road in Versailles, Kentucky. VUMC offers Sunday worship, online worship, prayer, discipleship, community ministry, and opportunities for people and families to connect and grow in faith. The church is part of the United Methodist Church and is known locally for the mission language Love Like Jesus. The FAQ page answers visitor questions about worship times, what to expect, what to wear, children and youth, online worship, giving, and getting connected. The Community Stories page shares real stories from guests, members, and neighbors, including first visits, worship, fellowship, service, and community life at VUMC.
     </div>
 
   </main>
@@ -2583,6 +2757,7 @@
           <a href='/watch/'>Watch Worship Online</a>
           <a href='/lovelikejesus/'>Who We Are</a>
           <a href='/new-here/'>New Here</a>
+          <a href='/community-stories/'>Community Stories</a>
           <a href='/faq/'>FAQ</a>
           <a href='/contact/'>Contact Us</a>
           <a href='/next-steps/'>Next Steps</a>
