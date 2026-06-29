@@ -1,309 +1,502 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Community Stories | Versailles United Methodist Church</title>
-
-<meta name="description" content="Read real stories from guests, members, and neighbors who have experienced worship, fellowship, and community at Versailles United Methodist Church in Versailles, Kentucky.">
-
-<link rel="canonical" href="https://www.versaillesumc.org/community-stories/">
-
-<meta property="og:title" content="Community Stories | Versailles United Methodist Church">
-<meta property="og:description" content="Real stories of worship, welcome, service, and community at Versailles United Methodist Church.">
-<meta property="og:image" content="/vumc-media/worship.webp">
-<meta property="og:type" content="website">
-
-<style>
-
-body{
-font-family:Arial,Helvetica,sans-serif;
-margin:0;
-background:#f6f3ee;
-color:#222;
-line-height:1.6;
-}
-
-.hero{
-
-background:
-linear-gradient(rgba(15,22,35,.70),rgba(15,22,35,.70)),
-url("/vumc-media/atrium.webp") center/cover;
-
-padding:110px 20px;
-text-align:center;
-color:white;
-
-}
-
-.hero h1{
-font-size:56px;
-margin-bottom:15px;
-}
-
-.hero p{
-max-width:750px;
-margin:auto;
-font-size:20px;
-opacity:.9;
-}
-
-.container{
-max-width:1200px;
-margin:auto;
-padding:70px 20px;
-}
-
-.intro{
-
-max-width:850px;
-margin:auto;
-text-align:center;
-margin-bottom:60px;
-
-}
-
-.intro h2{
-
-font-size:40px;
-margin-bottom:15px;
-
-}
-
-.intro p{
-
-font-size:19px;
-color:#555;
-
-}
-
-.grid{
-
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
-gap:35px;
-
-}
-
-.story{
-
-background:white;
-border-radius:22px;
-overflow:hidden;
-box-shadow:0 12px 30px rgba(0,0,0,.08);
-
-transition:.25s;
-
-}
-
-.story:hover{
-
-transform:translateY(-6px);
-
-}
-
-.story-image{
-
-height:240px;
-background-size:cover;
-background-position:center;
-
-}
-
-.story-content{
-
-padding:30px;
-
-}
-
-.category{
-
-display:inline-block;
-
-background:#bb8c3f;
-color:white;
-
-padding:6px 12px;
-border-radius:30px;
-font-size:13px;
-font-weight:bold;
-letter-spacing:.08em;
-text-transform:uppercase;
-
-margin-bottom:18px;
-
-}
-
-.story h3{
-
-margin-top:0;
-font-size:28px;
-
-}
-
-.story p{
-
-color:#666;
-
-}
-
-.quote{
-
-font-style:italic;
-font-size:17px;
-border-left:4px solid #bb8c3f;
-padding-left:18px;
-margin:25px 0;
-
-}
-
-.button{
-
-display:inline-block;
-
-margin-top:20px;
-
-padding:14px 24px;
-
-background:#bb8c3f;
-color:white;
-text-decoration:none;
-border-radius:999px;
-font-weight:bold;
-
-}
-
-footer{
-
-text-align:center;
-padding:60px 20px;
-color:#666;
-
-}
-
-</style>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Community Stories | Versailles United Methodist Church</title>
+  <meta name="description" content="Read real stories from guests, members, and neighbors who have experienced worship, fellowship, service, and community at Versailles United Methodist Church in Versailles, Kentucky." />
+  <link rel="canonical" href="https://www.versaillesumc.org/community-stories/" />
+
+  <meta property="og:title" content="Community Stories | Versailles United Methodist Church" />
+  <meta property="og:description" content="Real stories of worship, welcome, service, and community at Versailles United Methodist Church." />
+  <meta property="og:image" content="https://www.versaillesumc.org/vumc-media/atrium.webp" />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root {
+      --bg: #f7f4ef;
+      --surface: #ffffff;
+      --text: #1f242c;
+      --muted: #5b6470;
+      --dark: #11161d;
+      --accent: #bb8c3f;
+      --accent-soft: #e4cda7;
+      --border: rgba(17, 22, 29, 0.08);
+      --shadow: 0 18px 45px rgba(17, 22, 29, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --max-width: 1180px;
+      --transition: 220ms ease;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(calc(100% - 32px), var(--max-width));
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      color: #fff;
+      padding: 110px 0;
+      background:
+        linear-gradient(135deg, rgba(17,22,29,0.86), rgba(17,22,29,0.58)),
+        radial-gradient(circle at top right, rgba(187,140,63,0.28), transparent 34%),
+        url('/vumc-media/atrium.webp') center/cover no-repeat;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 850px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .hero .eyebrow {
+      color: var(--accent-soft);
+    }
+
+    .hero h1 {
+      margin: 0 0 18px;
+      font-size: clamp(44px, 7vw, 76px);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 760px;
+      font-size: 20px;
+      color: rgba(255,255,255,0.84);
+    }
+
+    .section {
+      padding: 72px 0;
+    }
+
+    .intro {
+      max-width: 850px;
+      text-align: center;
+      margin: 0 auto 50px;
+    }
+
+    .intro h2,
+    .section-title {
+      margin: 0 0 14px;
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .intro p,
+    .section-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .featured-story {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 0;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .featured-image {
+      min-height: 430px;
+      background:
+        linear-gradient(135deg, rgba(17,22,29,0.20), rgba(17,22,29,0.05)),
+        url('/vumc-media/church-picnic.webp') center/cover no-repeat;
+    }
+
+    .featured-content {
+      padding: 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent);
+      color: #fff;
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .featured-content h2 {
+      margin: 0 0 16px;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+    }
+
+    .featured-content p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .story-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 12px 0 22px;
+    }
+
+    .story-meta span {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #f7f4ef;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(187, 140, 63, 0.24);
+    }
+
+    .btn-light {
+      background: #fff;
+      color: var(--text);
+      border-color: var(--border);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    .stories-header {
+      margin-top: 72px;
+      margin-bottom: 28px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .story-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .story-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 22px 42px rgba(17,22,29,0.14);
+    }
+
+    .story-image {
+      height: 220px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .story-card-content {
+      padding: 26px;
+    }
+
+    .story-card h3 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      line-height: 1.18;
+    }
+
+    .story-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .story-card .text-link {
+      display: inline-flex;
+      margin-top: 18px;
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .share-story {
+      margin-top: 80px;
+      background:
+        linear-gradient(135deg, rgba(17,22,29,0.96), rgba(23,29,37,0.94)),
+        radial-gradient(circle at top right, rgba(187,140,63,0.26), transparent 36%);
+      color: #fff;
+      padding: 54px;
+      border-radius: var(--radius-xl);
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .share-story .eyebrow {
+      color: var(--accent-soft);
+    }
+
+    .share-story h2 {
+      margin: 0 0 14px;
+      font-size: clamp(30px, 5vw, 46px);
+      line-height: 1.08;
+    }
+
+    .share-story p {
+      margin: 0 auto;
+      max-width: 760px;
+      color: rgba(255,255,255,0.78);
+      font-size: 18px;
+    }
+
+    .site-footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.74);
+      padding: 36px 0;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 980px) {
+      .featured-story {
+        grid-template-columns: 1fr;
+      }
+
+      .featured-image {
+        min-height: 320px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .hero {
+        padding: 82px 0;
+      }
+
+      .section {
+        padding: 56px 0;
+      }
+
+      .featured-content,
+      .share-story {
+        padding: 30px 24px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .story-meta {
+        display: grid;
+      }
+
+      .btn-row {
+        display: grid;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<section class="hero">
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="eyebrow">Versailles UMC</div>
+          <h1>Community Stories</h1>
+          <p>
+            Real stories from guests, members, and neighbors who have experienced
+            worship, welcome, fellowship, service, and community at Versailles United Methodist Church.
+          </p>
+        </div>
+      </div>
+    </section>
 
-<h1>Community Stories</h1>
+    <section class="section">
+      <div class="container">
 
-<p>
-Real stories from guests, members, and neighbors who have experienced
-the life of Versailles United Methodist Church.
-</p>
+        <div class="intro">
+          <h2>Life at Versailles UMC</h2>
+          <p>
+            Church is more than a Sunday service. It is a place where strangers become friends,
+            faith grows, and lives are changed. These stories highlight moments of worship,
+            community, service, and the many ways people experience God’s love at Versailles UMC.
+          </p>
+        </div>
 
-</section>
+        <article class="featured-story">
+          <div class="featured-image" aria-hidden="true"></div>
 
-<div class="container">
+          <div class="featured-content">
+            <div class="badge">Featured Story</div>
 
-<div class="intro">
+            <h2>A First Visit That Became Fellowship</h2>
 
-<h2>Every Story Matters</h2>
+            <p>
+              Sometimes the best way to understand a church is through the eyes of someone
+              visiting for the very first time.
+            </p>
 
-<p>
+            <p>
+              Tammy joined us for worship, stayed for our church picnic, checked in on Facebook,
+              and later shared a beautiful reflection about her experience at Versailles UMC.
+            </p>
 
-A church is more than a building or a worship service.
-It is people discovering hope, finding community,
-serving together, and growing in faith.
+            <div class="story-meta">
+              <span>First Visit</span>
+              <span>Church Picnic</span>
+              <span>Facebook Check-In</span>
+            </div>
 
-These stories celebrate the many ways God is at work through
-Versailles United Methodist Church.
+            <div class="btn-row">
+              <a href="tammy-first-visit.html" class="btn btn-primary">Read Tammy’s Story →</a>
+              <a href="/plan-your-visit/" class="btn btn-light">Plan Your Visit</a>
+            </div>
+          </div>
+        </article>
 
-</p>
+        <div class="stories-header">
+          <div class="eyebrow">Story Library</div>
+          <h2 class="section-title">More Community Stories</h2>
+          <p class="section-copy">
+            As new stories are shared, this page will continue to grow as a living record
+            of what God is doing through Versailles UMC.
+          </p>
+        </div>
 
-</div>
+        <div class="grid">
 
-<div class="grid">
+          <a class="story-card" href="tammy-first-visit.html">
+            <div class="story-image" style="background-image:url('/vumc-media/church-picnic.webp');"></div>
+            <div class="story-card-content">
+              <div class="badge">First Visit</div>
+              <h3>A First Visit That Became Fellowship</h3>
+              <p>
+                Tammy visited worship, stayed for the church picnic, checked in on Facebook,
+                and shared a reflection about feeling welcomed.
+              </p>
+              <span class="text-link">Read Story →</span>
+            </div>
+          </a>
 
-<div class="story">
+          <div class="story-card">
+            <div class="story-image" style="background-image:url('/vumc-media/worship.webp');"></div>
+            <div class="story-card-content">
+              <div class="badge">Coming Soon</div>
+              <h3>Your Story Could Encourage Someone</h3>
+              <p>
+                Future stories will highlight worship, mission projects, Vacation Bible School,
+                community outreach, life groups, and moments of faith.
+              </p>
+            </div>
+          </div>
 
-<div class="story-image"
-style="background-image:url('/vumc-media/church-picnic.webp');">
-</div>
+          <div class="story-card">
+            <div class="story-image" style="background-image:url('/vumc-media/atrium.webp');"></div>
+            <div class="story-card-content">
+              <div class="badge">Community</div>
+              <h3>Stories of Welcome, Worship, and Service</h3>
+              <p>
+                Each story helps show what it means to Love Like Jesus in real, everyday ways
+                in Versailles, Woodford County, and beyond.
+              </p>
+            </div>
+          </div>
 
-<div class="story-content">
+        </div>
 
-<div class="category">
-Guest Story
-</div>
+        <div class="share-story">
+          <div class="eyebrow">Share Your Story</div>
+          <h2>Everyone has a story.</h2>
+          <p>
+            Have you experienced God’s love through Versailles UMC? Whether it was your first visit,
+            a mission project, Vacation Bible School, a worship service, or another meaningful moment,
+            we would love to celebrate what God is doing through our church family.
+          </p>
 
-<h3>A First Visit That Became Fellowship</h3>
+          <div class="btn-row" style="justify-content:center;margin-top:28px;">
+            <a class="btn btn-primary" href="/contact/">Share Your Story</a>
+            <a class="btn btn-light" href="/">Back to Homepage</a>
+          </div>
+        </div>
 
-<p>
+      </div>
+    </section>
+  </main>
 
-After visiting worship for the first time,
-Tammy stayed for our church picnic,
-checked in on Facebook,
-and shared a beautiful reflection about her experience.
-
-</p>
-
-<div class="quote">
-
-"Everyone made us feel so welcome..."
-
-</div>
-
-<a href="tammy-first-visit.html" class="button">
-
-Read Tammy's Story →
-
-</a>
-
-</div>
-
-</div>
-
-<!-- Future Stories -->
-
-<div class="story">
-
-<div class="story-image"
-style="background-image:url('/vumc-media/worship.webp');">
-</div>
-
-<div class="story-content">
-
-<div class="category">
-
-Coming Soon
-
-</div>
-
-<h3>Your Story Could Encourage Someone</h3>
-
-<p>
-
-Every week God is doing something new.
-
-Future stories will highlight worship,
-mission projects,
-Vacation Bible School,
-community outreach,
-life groups,
-and the many ways people are experiencing God's love at VUMC.
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<footer>
-
-Love Like Jesus • Versailles United Methodist Church
-
-</footer>
+  <footer class="site-footer">
+    Love Like Jesus • Versailles United Methodist Church
+  </footer>
 
 </body>
 </html>
