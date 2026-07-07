@@ -2367,12 +2367,11 @@
           </div>
 
           <div class="hero-side">
-            <div class="glass-card">
+            <div class="glass-card worship-card" id="homepageWorshipCard">
               <h3>Sunday Worship</h3>
-              <p>Two worship experiences. One mission. One welcoming church family.</p>
+              <p>Loading worship schedule from our church calendar…</p>
               <div class="service-times">
-                <div class="service-time"><strong>Traditional Worship</strong><span>9:30 AM</span></div>
-                <div class="service-time"><strong>Contemporary Worship</strong><span>10:30 AM</span></div>
+                <div class="service-time"><strong>Loading…</strong><span></span></div>
               </div>
             </div>
 
@@ -2582,13 +2581,12 @@
           </a>
 
           <div class="watch-card info">
-            <div class="eyebrow" style="color:var(--accent-soft);">Sunday Worship</div>
+            <div class="eyebrow" style="color:var(--accent-soft);" id="homepageWorshipEyebrow">Worship</div>
             <h2 style="margin:0 0 12px;font-size:34px;line-height:1.1;">Worship in person or online.</h2>
-            <p style="margin:0;">Choose the experience that works best for you and your family each week.</p>
+            <p style="margin:0;" id="homepageWorshipIntro">Choose the experience that works best for you and your family each week.</p>
 
-            <div class="times-list">
-              <div class="times-item"><strong>Traditional Worship</strong><span>9:30 AM</span></div>
-              <div class="times-item"><strong>Contemporary Worship</strong><span>10:30 AM</span></div>
+            <div class="times-list" id="homepageWorshipList">
+              <div class="times-item"><strong>Loading worship schedule…</strong><span></span></div>
             </div>
 
             <div class="btn-row">
@@ -2704,8 +2702,8 @@
                 230 Paynes Mill Road<br />Versailles, KY 40383
               </div>
               <div class="seo-detail-item">
-                <strong>Sunday Worship</strong>
-                Traditional Worship — 9:30 AM<br />Contemporary Worship — 10:30 AM
+                <strong id="seoWorshipHeading">Sunday Worship</strong>
+                <span id="seoWorshipSchedule">Loading worship schedule…</span>
               </div>
               <div class="seo-detail-item">
                 <strong>Online Worship</strong>
@@ -2740,8 +2738,9 @@
 
         <div class="footer-card">
           <h4>Service Times</h4>
-          <p>Traditional Worship — 9:30 AM</p>
-          <p>Contemporary Worship — 10:30 AM</p>
+          <div id="footerWorshipSchedule">
+            <p>Loading worship schedule…</p>
+          </div>
         </div>
 
         <div class="footer-card">
@@ -3031,6 +3030,144 @@
 
     window.addEventListener('DOMContentLoaded', vumcLoadLatestYouTubeVideo);
 
+    const VUMC_WORSHIP_API = 'https://script.google.com/macros/s/AKfycbzOXN6-dZe3yL4xuCXL-gcUkj9clpFSjn5h1nrmwHh6vSMDxX4Dgf75ya47FnYYCxX6/exec';
+    let vumcLatestWorshipSchedule = null;
+
+    function vumcEscapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function vumcFormatWorshipDate(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString + 'T12:00:00');
+      if (Number.isNaN(date.getTime())) return '';
+      return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+
+    function vumcBuildWorshipLines(data) {
+      if (!data || !data.events || !data.events.length) return [];
+      return data.events.map(event => ({
+        title: event.title || 'Worship',
+        time: event.time || ''
+      }));
+    }
+
+    function vumcBuildWorshipChatText(data) {
+      const lines = vumcBuildWorshipLines(data);
+      if (!lines.length) {
+        return `We’d love to worship with you. Our regular Sunday worship schedule is:\n\n• Traditional Worship — 9:30 AM\n• Contemporary Worship — 10:30 AM\n\nYou are welcome in person or online.`;
+      }
+
+      const label = data.label || 'Upcoming Worship';
+      const dateText = vumcFormatWorshipDate(data.date);
+      const scheduleText = lines.map(item => `• ${item.title} — ${item.time}`).join('\n');
+
+      return `We’d love to worship with you. Here is the next worship schedule from our church calendar:\n\n${label}${dateText ? ' — ' + dateText : ''}\n${scheduleText}\n\nYou are welcome in person or online.`;
+    }
+
+    function vumcUpdateChatWorshipResponse(data) {
+      if (!Array.isArray(window.vumcFaqResponses)) return;
+      const worshipResponse = window.vumcFaqResponses.find(item =>
+        item.keywords && item.keywords.includes('worship')
+      );
+      if (!worshipResponse || !worshipResponse.response) return;
+      worshipResponse.response.text = vumcBuildWorshipChatText(data);
+    }
+
+    function vumcRenderWorshipSchedule(data) {
+      const heroCard = document.getElementById('homepageWorshipCard');
+      const lowerList = document.getElementById('homepageWorshipList');
+      const lowerEyebrow = document.getElementById('homepageWorshipEyebrow');
+      const lowerIntro = document.getElementById('homepageWorshipIntro');
+      const seoHeading = document.getElementById('seoWorshipHeading');
+      const seoSchedule = document.getElementById('seoWorshipSchedule');
+      const footerSchedule = document.getElementById('footerWorshipSchedule');
+
+      const fallbackData = {
+        ok: false,
+        label: 'Sunday Worship',
+        date: '',
+        events: [
+          { title: 'Traditional Worship', time: '9:30 AM' },
+          { title: 'Contemporary Worship', time: '10:30 AM' }
+        ]
+      };
+
+      const schedule = data && data.events && data.events.length ? data : fallbackData;
+      const label = schedule.label || 'This Sunday';
+      const dateText = vumcFormatWorshipDate(schedule.date);
+      const lines = vumcBuildWorshipLines(schedule);
+
+      const serviceTimesHtml = lines.map(event => `
+                <div class="service-time"><strong>${vumcEscapeHtml(event.title)}</strong><span>${vumcEscapeHtml(event.time)}</span></div>`).join('');
+
+      const timesListHtml = lines.map(event => `
+              <div class="times-item"><strong>${vumcEscapeHtml(event.title)}</strong><span>${vumcEscapeHtml(event.time)}</span></div>`).join('');
+
+      if (heroCard) {
+        heroCard.innerHTML = `
+              <div class="eyebrow" style="color:var(--accent-soft);margin-bottom:8px;">${vumcEscapeHtml(label)}</div>
+              <h3>${vumcEscapeHtml(dateText || 'Sunday Worship')}</h3>
+              <p>Worship times are updated from our church calendar.</p>
+              <div class="service-times">${serviceTimesHtml}
+              </div>`;
+      }
+
+      if (lowerEyebrow) lowerEyebrow.textContent = dateText ? `${label} • ${dateText}` : 'Worship';
+      if (lowerIntro) lowerIntro.textContent = 'Worship times are updated from our church calendar.';
+      if (lowerList) lowerList.innerHTML = timesListHtml;
+
+      if (seoHeading) seoHeading.textContent = dateText ? `${label} Worship` : 'Sunday Worship';
+      if (seoSchedule) {
+        seoSchedule.innerHTML = lines
+          .map(event => `${vumcEscapeHtml(event.title)} — ${vumcEscapeHtml(event.time)}`)
+          .join('<br />');
+      }
+
+      if (footerSchedule) {
+        footerSchedule.innerHTML = lines
+          .map(event => `<p>${vumcEscapeHtml(event.title)} — ${vumcEscapeHtml(event.time)}</p>`)
+          .join('');
+      }
+
+      vumcLatestWorshipSchedule = schedule;
+      vumcUpdateChatWorshipResponse(schedule);
+    }
+
+    async function vumcLoadWorshipSchedule() {
+      try {
+        const separator = VUMC_WORSHIP_API.includes('?') ? '&' : '?';
+        const response = await fetch(`${VUMC_WORSHIP_API}${separator}t=${Date.now()}`, {
+          method: 'GET',
+          cache: 'no-store'
+        });
+
+        if (!response.ok) throw new Error('Unable to load worship schedule');
+
+        const data = await response.json();
+        if (!data || data.ok !== true || !data.events || !data.events.length) {
+          throw new Error((data && data.message) ? data.message : 'No worship events returned');
+        }
+
+        vumcRenderWorshipSchedule(data);
+      } catch (error) {
+        console.warn('VUMC worship schedule error:', error);
+        vumcRenderWorshipSchedule(null);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', vumcLoadWorshipSchedule);
+
+
     const VUMC_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3RvHWZ0RIiUMZBdjVtgq-4ZJ60AHlYwy2ybZMCUYqoWVsIt1eurqn6gJYywf6gi1SuA/exec';
 
     const vumcChatLauncher = document.getElementById('vumcChatLauncher');
@@ -3055,7 +3192,7 @@
       Use simple language, avoid pressure, and point people toward a helpful next step.
     */
 
-    const vumcFaqResponses = [
+    window.vumcFaqResponses = [
       {
         keywords: ['address', 'location', 'where are you', 'located', 'where is the church', 'directions', 'map', 'parking'],
         response: {
@@ -3288,7 +3425,7 @@ You are welcome in person or online.`,
     function vumcFindFaqMatch(userText) {
       const cleanText = vumcNormalizeText(userText);
 
-      for (const item of vumcFaqResponses) {
+      for (const item of window.vumcFaqResponses) {
         for (const keyword of item.keywords) {
           if (cleanText.includes(keyword)) {
             return item.response;
