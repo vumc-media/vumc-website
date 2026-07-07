@@ -15,7 +15,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Watch Worship Online | Versailles United Methodist Church</title>
-  <meta name="description" content="Watch worship online with Versailles United Methodist Church in Versailles, KY. Join Sunday worship live, view service times, and connect with VUMC online or in person." />
+  <meta name="description" content="Watch worship online with Versailles United Methodist Church in Versailles, KY. Join Sunday worship live, view current worship times from our church calendar, and connect with VUMC online or in person." />
   <link rel="canonical" href="https://www.versaillesumc.org/watch" />
   <meta name="author" content="Versailles United Methodist Church" />
   <meta name="geo.region" content="US-KY" />
@@ -23,7 +23,7 @@
 
   <meta property="og:site_name" content="Versailles United Methodist Church" />
   <meta property="og:title" content="Watch Worship Online | Versailles UMC" />
-  <meta property="og:description" content="Watch Versailles United Methodist Church online from Versailles, Kentucky. Join Sunday worship live at 9:30 AM and 10:30 AM, or connect through VUMC eCampus." />
+  <meta property="og:description" content="Watch Versailles United Methodist Church online from Versailles, Kentucky. Join Sunday worship live, view current worship times from our church calendar, or connect through VUMC eCampus." />
   <meta property="og:url" content="https://www.versaillesumc.org/watch/" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://www.versaillesumc.org/vumc-media/Worship.webp" />
@@ -419,6 +419,22 @@
       display: grid;
       gap: 12px;
       margin-top: 18px;
+    }
+
+
+
+    .service-date-line {
+      margin-top: 8px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.82);
+      font-weight: 700;
+    }
+
+    .schedule-line .schedule-date {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text);
+      font-weight: 800;
     }
 
     .service-item {
@@ -1152,12 +1168,11 @@
           </div>
         </div>
 
-        <div class="hero-card">
-          <h3>Sunday Worship Times</h3>
-          <p>Join us in person or online each Sunday.</p>
+        <div class="hero-card" id="watchWorshipCard">
+          <h3>Worship Schedule</h3>
+          <p>Loading current worship times from our church calendar…</p>
           <div class="service-list">
-            <div class="service-item"><strong>Traditional Worship</strong><span>9:30 AM</span></div>
-            <div class="service-item"><strong>Contemporary Worship</strong><span>10:30 AM</span></div>
+            <div class="service-item"><strong>Loading…</strong><span></span></div>
           </div>
         </div>
       </div>
@@ -1186,11 +1201,11 @@
             <div class="overlayContent">
               <div class="overlayEyebrow">Worship Online</div>
               <div class="overlayTitle">Join Us for Worship</div>
-              <div class="overlayText">
-                Join us online each Sunday for worship and be part of the Versailles UMC community.
+              <div class="overlayText" id="watchOverlayText">
+                Join us online for worship and be part of the Versailles UMC community.
               </div>
-              <div class="overlayTimes">
-                Sundays • 9:30 AM Traditional • 10:30 AM Contemporary
+              <div class="overlayTimes" id="watchOverlayTimes">
+                Loading current worship schedule…
               </div>
             </div>
           </div>
@@ -1201,8 +1216,8 @@
             <div>
               <h3>Want a more interactive experience?</h3>
               <p>Join VUMC eCampus for sermon notes, live chat, check-in, and prayer during worship.</p>
-              <div class="schedule-line">
-                Traditional Worship — 9:30 AM &nbsp; • &nbsp; Contemporary Worship — 10:30 AM
+              <div class="schedule-line" id="watchSupportSchedule">
+                Loading current worship schedule…
               </div>
             </div>
 
@@ -1230,8 +1245,9 @@
 
       <div class="footer-card">
         <h4>Service Times</h4>
-        <p>Traditional Worship — 9:30 AM</p>
-        <p>Contemporary Worship — 10:30 AM</p>
+        <div id="watchFooterSchedule">
+          <p>Loading current worship schedule…</p>
+        </div>
       </div>
 
       <div class="footer-card">
@@ -1388,6 +1404,93 @@ function updateOverlay() {
 updateOverlay();
 setInterval(updateOverlay, 60000);
 
+const VUMC_WORSHIP_API = 'https://script.google.com/macros/s/AKfycbzOXN6-dZe3yL4xuCXL-gcUkj9clpFSjn5h1nrmwHh6vSMDxX4Dgf75ya47FnYYCxX6/exec';
+let vumcCurrentWorshipEvents = [];
+
+function vumcFormatWorshipDate(dateString) {
+  const date = new Date(dateString + 'T12:00:00');
+  if (Number.isNaN(date.getTime())) return '';
+  return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+}
+
+function vumcEscapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function vumcFallbackWorshipData() {
+  return {
+    ok: false,
+    label: 'Sunday Worship',
+    date: '',
+    events: [
+      { title: 'Traditional Worship', time: '9:30 AM' },
+      { title: 'Contemporary Worship', time: '10:30 AM' }
+    ]
+  };
+}
+
+function vumcRenderWatchWorship(data) {
+  const safeData = data && Array.isArray(data.events) && data.events.length ? data : vumcFallbackWorshipData();
+  const events = safeData.events || [];
+  vumcCurrentWorshipEvents = events;
+
+  const label = safeData.label || 'This Sunday';
+  const dateText = safeData.date ? vumcFormatWorshipDate(safeData.date) : '';
+  const eventLine = events.map(event => `${event.title} — ${event.time}`).join(' • ');
+
+  const card = document.getElementById('watchWorshipCard');
+  if (card) {
+    card.innerHTML = `
+      <div class="eyebrow">${vumcEscapeHtml(label)}</div>
+      <h3>${dateText ? vumcEscapeHtml(dateText) : 'Worship Schedule'}</h3>
+      <p>Worship times are updated from our church calendar.</p>
+      <div class="service-list">
+        ${events.map(event => `
+          <div class="service-item">
+            <strong>${vumcEscapeHtml(event.title)}</strong>
+            <span>${vumcEscapeHtml(event.time)}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  const overlayText = document.getElementById('watchOverlayText');
+  const overlayTimes = document.getElementById('watchOverlayTimes');
+  if (overlayText) overlayText.textContent = dateText ? `Join us online for worship on ${dateText}.` : 'Join us online for worship.';
+  if (overlayTimes) overlayTimes.textContent = eventLine || 'Current worship schedule unavailable.';
+
+  const supportSchedule = document.getElementById('watchSupportSchedule');
+  if (supportSchedule) {
+    supportSchedule.innerHTML = `${dateText ? `<span class="schedule-date">${vumcEscapeHtml(dateText)}</span>` : ''}${vumcEscapeHtml(eventLine)}`;
+  }
+
+  const footerSchedule = document.getElementById('watchFooterSchedule');
+  if (footerSchedule) {
+    footerSchedule.innerHTML = events.map(event => `<p>${vumcEscapeHtml(event.title)} — ${vumcEscapeHtml(event.time)}</p>`).join('');
+  }
+}
+
+async function vumcLoadWatchWorshipSchedule() {
+  try {
+    const separator = VUMC_WORSHIP_API.includes('?') ? '&' : '?';
+    const response = await fetch(`${VUMC_WORSHIP_API}${separator}t=${Date.now()}`, { method: 'GET', cache: 'no-store' });
+    if (!response.ok) throw new Error('Unable to load worship schedule');
+    const data = await response.json();
+    vumcRenderWatchWorship(data);
+  } catch (error) {
+    console.warn('VUMC watch worship schedule error:', error);
+    vumcRenderWatchWorship(null);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', vumcLoadWatchWorshipSchedule);
+
 const overlay = document.getElementById('vumcModalOverlay');
 const frame = document.getElementById('vumcModalFrame');
 const loading = document.getElementById('vumcModalLoading');
@@ -1485,7 +1588,7 @@ const vumcFaqResponses = [
   {
     keywords: ['worship', 'service time', 'service times', 'sunday', 'traditional', 'contemporary'],
     response: {
-          text: `Our Sunday worship schedule:\n\n• Traditional Worship — 9:30 AM\n• Contemporary Worship — 10:30 AM\n\nThrough May 3 – June 28, we have combined our two worship services into one blended summer service at 10:30 AM.\n\nWe would love for you to join us.`
+          text: `Our worship schedule is updated from our church calendar. You can see the current worship times on this page, and we would love for you to join us in person or online.`
     }
   },
   {
