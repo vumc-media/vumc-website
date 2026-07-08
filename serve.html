@@ -515,6 +515,31 @@
       font-size: 15px;
     }
 
+    .mission-next-event {
+      margin-top: 16px;
+      padding: 13px 14px;
+      border-radius: 16px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .mission-next-event strong {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .mission-next-event span {
+      display: block;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
     .split-band {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1231,6 +1256,10 @@
             <div class="mission-content">
               <h3>3rd Monday Community Meal</h3>
               <p>Partnering with other local churches to prepare and deliver meals to neighbors in need on the third Monday of each month.</p>
+              <div class="mission-next-event" id="nextThirdMondayMeal">
+                <strong>Next Meal</strong>
+                <span>Loading next date from the church calendar…</span>
+              </div>
             </div>
           </div>
 
@@ -1239,6 +1268,10 @@
             <div class="mission-content">
               <h3>Blessing Box</h3>
               <p>A simple way to provide food and essential items for individuals and families facing hardship through a local compassion resource.</p>
+              <div class="mission-next-event" id="nextBlessingBox">
+                <strong>Next Calendar Item</strong>
+                <span>Loading next date from the church calendar…</span>
+              </div>
             </div>
           </div>
 
@@ -1247,6 +1280,10 @@
             <div class="mission-content">
               <h3>Backpack Buddies</h3>
               <p>Helping provide weekend food for children facing food insecurity while also reminding families that they are seen and cared for.</p>
+              <div class="mission-next-event" id="nextBackpackBuddies">
+                <strong>Next Opportunity</strong>
+                <span>Loading next date from the church calendar…</span>
+              </div>
             </div>
           </div>
 
@@ -1255,6 +1292,10 @@
             <div class="mission-content">
               <h3>Diaper Bank</h3>
               <p>Providing over 20,000 diapers annually for local families while meeting a real and ongoing need in the community.</p>
+              <div class="mission-next-event" id="nextDiaperBank">
+                <strong>Next Distribution</strong>
+                <span>Loading next date from the church calendar…</span>
+              </div>
             </div>
           </div>
 
@@ -1507,6 +1548,59 @@
     });
 
     const VUMC_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3RvHWZ0RIiUMZBdjVtgq-4ZJ60AHlYwy2ybZMCUYqoWVsIt1eurqn6gJYywf6gi1SuA/exec';
+
+    const VUMC_SCHEDULE_LOOKUP_API = 'https://script.google.com/macros/s/AKfycbzOXN6-dZe3yL4xuCXL-gcUkj9clpFSjn5h1nrmwHh6vSMDxX4Dgf75ya47FnYYCxX6/exec';
+
+    function vumcFormatMissionEvent(event) {
+      if (!event) return 'No upcoming date is listed right now.';
+      const timeRange = event.endTime ? `${event.time} – ${event.endTime}` : event.time;
+      return `${event.displayDate} • ${timeRange}`;
+    }
+
+    function vumcSetMissionEvent(elementId, label, event) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+
+      el.innerHTML = `
+        <strong>${label}</strong>
+        <span>${vumcFormatMissionEvent(event)}</span>
+      `;
+    }
+
+    async function vumcLoadMissionTag(elementId, tagName, label) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+
+      try {
+        const separator = VUMC_SCHEDULE_LOOKUP_API.includes('?') ? '&' : '?';
+        const url = `${VUMC_SCHEDULE_LOOKUP_API}${separator}action=tag&name=${encodeURIComponent(tagName)}&t=${Date.now()}`;
+
+        const response = await fetch(url, {
+          method: 'GET',
+          cache: 'no-store'
+        });
+
+        if (!response.ok) throw new Error('Unable to load ' + tagName);
+
+        const data = await response.json();
+        const event = data && data.events && data.events.length ? data.events[0] : null;
+
+        vumcSetMissionEvent(elementId, label, event);
+      } catch (error) {
+        console.warn('VUMC mission schedule error:', tagName, error);
+        vumcSetMissionEvent(elementId, label, null);
+      }
+    }
+
+    function vumcLoadMissionSchedules() {
+      vumcLoadMissionTag('nextDiaperBank', 'diaper bank', 'Next Distribution');
+      vumcLoadMissionTag('nextBlessingBox', 'blessing box', 'Next Calendar Item');
+      vumcLoadMissionTag('nextBackpackBuddies', 'backpack buddies', 'Next Opportunity');
+      vumcLoadMissionTag('nextThirdMondayMeal', '3rd monday meal', 'Next Meal');
+    }
+
+    window.addEventListener('DOMContentLoaded', vumcLoadMissionSchedules);
+
 
     const vumcChatLauncher = document.getElementById('vumcChatLauncher');
     const vumcChatWidget = document.getElementById('vumcChatWidget');
