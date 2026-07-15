@@ -1226,7 +1226,7 @@
             </p>
           </article>
 
-          <article class="group-card" data-calendar-names="Young Adults Group|Young Adult Group|Young Adults|Young Adult|Young Adult College Life|College Life|College & Young Adults|Young Adult Ministry|Young Adults Ministry">
+          <article class="group-card" data-calendar-names="Young Adults Group|Young Adult Group|Young Adults|Young Adult|Young Adult College Life|College Life|College & Young Adults|Young Adult Ministry|Young Adults Ministry" data-calendar-tag="young adult">
             <div class="group-icon">✨</div>
             <p class="group-meta calendar-meta" data-fallback="Young Adults">Young Adults</p>
             <h3>Young Adults Group</h3>
@@ -1547,6 +1547,55 @@
       });
     }
 
+    async function vumcFetchCalendarTag(tagName) {
+      const url = new URL(VUMC_CALENDAR_API_URL);
+      url.searchParams.set('action', 'tag');
+      url.searchParams.set('name', tagName);
+      url.searchParams.set('_', Date.now().toString());
+
+      const response = await fetch(url.toString(), { cache: 'no-store' });
+      if (!response.ok) throw new Error(`Calendar request failed: ${response.status}`);
+
+      const payload = await response.json();
+      if (payload && payload.ok === false) {
+        throw new Error(payload.error || `Calendar API returned an error for ${tagName}.`);
+      }
+
+      return vumcGetCalendarEvents(payload);
+    }
+
+    function vumcApplyCalendarEvent(card, event) {
+      const meta = card.querySelector('.calendar-meta');
+      if (!meta) return;
+
+      const liveText = event ? vumcFormatGroupDate(event) : '';
+      meta.classList.remove('calendar-loading');
+
+      if (liveText) {
+        meta.textContent = liveText;
+        meta.classList.add('calendar-live');
+
+        const eventUrl = event.url || event.churchCenterUrl || event.htmlUrl || '';
+        if (eventUrl) {
+          card.style.cursor = 'pointer';
+          card.setAttribute('role', 'link');
+          card.setAttribute('tabindex', '0');
+
+          const openEvent = () => window.open(eventUrl, '_blank', 'noopener');
+          card.addEventListener('click', openEvent);
+          card.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openEvent();
+            }
+          });
+        }
+      } else {
+        meta.textContent = meta.dataset.fallback || 'Schedule available soon';
+        meta.classList.add('calendar-unavailable');
+      }
+    }
+
     async function vumcLoadGroupCalendar() {
       const cards = [...document.querySelectorAll('.group-card[data-calendar-names]')];
       if (!cards.length) return;
@@ -1560,76 +1609,34 @@
 
       if (!VUMC_CALENDAR_API_URL ||
           VUMC_CALENDAR_API_URL.includes('PASTE_YOUR_EXISTING')) {
-        cards.forEach(card => {
-          const meta = card.querySelector('.calendar-meta');
-          if (!meta) return;
-          meta.textContent = meta.dataset.fallback || 'Schedule available soon';
-          meta.classList.remove('calendar-loading');
-          meta.classList.add('calendar-unavailable');
-        });
+        cards.forEach(card => vumcApplyCalendarEvent(card, null));
         console.warn('VUMC calendar API URL has not been added to the Groups page.');
         return;
       }
 
       try {
-        const url = new URL(VUMC_CALENDAR_API_URL);
-        url.searchParams.set('action', 'tag');
-        url.searchParams.set('name', VUMC_GROUPS_CALENDAR_TAG);
-        url.searchParams.set('_', Date.now().toString());
+        const tagNames = [...new Set(cards.map(card =>
+          card.dataset.calendarTag || VUMC_GROUPS_CALENDAR_TAG
+        ))];
 
-        const response = await fetch(url.toString(), { cache: 'no-store' });
-        if (!response.ok) throw new Error(`Calendar request failed: ${response.status}`);
+        const tagResults = await Promise.all(
+          tagNames.map(async tagName => [
+            tagName,
+            await vumcFetchCalendarTag(tagName)
+          ])
+        );
 
-        const payload = await response.json();
-        if (payload && payload.ok === false) {
-          throw new Error(payload.error || 'Calendar API returned an error.');
-        }
-
-        const events = vumcGetCalendarEvents(payload);
+        const eventsByTag = Object.fromEntries(tagResults);
 
         cards.forEach(card => {
-          const meta = card.querySelector('.calendar-meta');
-          if (!meta) return;
-
-          const event = vumcFindGroupEvent(events, card);
-          const liveText = event ? vumcFormatGroupDate(event) : '';
-
-          meta.classList.remove('calendar-loading');
-
-          if (liveText) {
-            meta.textContent = liveText;
-            meta.classList.add('calendar-live');
-
-            const eventUrl = event.url || event.churchCenterUrl || event.htmlUrl || '';
-            if (eventUrl) {
-              card.style.cursor = 'pointer';
-              card.setAttribute('role', 'link');
-              card.setAttribute('tabindex', '0');
-
-              const openEvent = () => window.open(eventUrl, '_blank', 'noopener');
-              card.addEventListener('click', openEvent);
-              card.addEventListener('keydown', e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  openEvent();
-                }
-              });
-            }
-          } else {
-            meta.textContent = meta.dataset.fallback || 'Schedule available soon';
-            meta.classList.add('calendar-unavailable');
-          }
+          const tagName = card.dataset.calendarTag || VUMC_GROUPS_CALENDAR_TAG;
+          const events = eventsByTag[tagName] || [];
+          const event = vumcFindGroupEvent(events, card) || events[0] || null;
+          vumcApplyCalendarEvent(card, event);
         });
       } catch (error) {
-        console.error('Unable to load discipleship calendar:', error);
-
-        cards.forEach(card => {
-          const meta = card.querySelector('.calendar-meta');
-          if (!meta) return;
-          meta.textContent = meta.dataset.fallback || 'Schedule available soon';
-          meta.classList.remove('calendar-loading');
-          meta.classList.add('calendar-unavailable');
-        });
+        console.error('Unable to load group calendars:', error);
+        cards.forEach(card => vumcApplyCalendarEvent(card, null));
       }
     }
 
