@@ -1226,7 +1226,7 @@
             </p>
           </article>
 
-          <article class="group-card" data-calendar-names="Young Adults Group|Young Adult Group|Young Adults|College Life">
+          <article class="group-card" data-calendar-names="Young Adults Group|Young Adult Group|Young Adults|Young Adult|Young Adult College Life|College Life|College & Young Adults|Young Adult Ministry|Young Adults Ministry">
             <div class="group-icon">✨</div>
             <p class="group-meta calendar-meta" data-fallback="Young Adults">Young Adults</p>
             <h3>Young Adults Group</h3>
@@ -1526,11 +1526,24 @@
 
       return events.find(event => {
         const eventTitle = vumcNormalizeCalendarText(vumcReadEventTitle(event));
-        return aliases.some(alias =>
-          eventTitle === alias ||
-          eventTitle.includes(alias) ||
-          alias.includes(eventTitle)
-        );
+        const eventWords = new Set(eventTitle.split(' ').filter(word => word.length > 2));
+
+        return aliases.some(alias => {
+          if (
+            eventTitle === alias ||
+            eventTitle.includes(alias) ||
+            alias.includes(eventTitle)
+          ) {
+            return true;
+          }
+
+          const aliasWords = alias.split(' ').filter(word => word.length > 2);
+          if (!aliasWords.length) return false;
+
+          const matchedWords = aliasWords.filter(word => eventWords.has(word));
+          return matchedWords.length === aliasWords.length ||
+            (aliasWords.length >= 2 && matchedWords.length >= 2);
+        });
       });
     }
 
