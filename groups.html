@@ -475,6 +475,31 @@
       letter-spacing: 0.08em;
     }
 
+    .group-card[data-calendar-names] .group-meta {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      line-height: 1.35;
+    }
+
+    .group-meta.calendar-loading {
+      color: var(--accent);
+    }
+
+    .group-meta.calendar-live {
+      color: #315f3b;
+    }
+
+    .group-meta.calendar-unavailable {
+      color: var(--muted);
+    }
+
+    .group-card.featured .group-meta.calendar-loading,
+    .group-card.featured .group-meta.calendar-live,
+    .group-card.featured .group-meta.calendar-unavailable {
+      color: rgba(255,255,255,0.76);
+    }
+
     .group-card p {
       margin: 0;
       color: var(--muted);
@@ -1111,99 +1136,99 @@
             </div>
           </article>
 
-          <article class="group-card">
+          <article class="group-card" data-calendar-names="Cornerstones 55+ Group|Cornerstones|Cornerstones 55+">
             <div class="group-icon">☕</div>
-            <p class="group-meta">First Thursday • 12:00 PM</p>
+            <p class="group-meta calendar-meta" data-fallback="First Thursday • 12:00 PM">First Thursday • 12:00 PM</p>
             <h3>Cornerstones 55+ Group</h3>
             <p>
               A monthly gathering for adults 55 and older to enjoy fellowship, encouragement, and connection.
             </p>
           </article>
 
-          <article class="group-card">
+          <article class="group-card" data-calendar-names="JOY Older Ladies Group|JOY Group|JOY">
             <div class="group-icon">🌷</div>
-            <p class="group-meta">Every Other Monday • 10:00 AM</p>
+            <p class="group-meta calendar-meta" data-fallback="Every Other Monday • 10:00 AM">Every Other Monday • 10:00 AM</p>
             <h3>JOY Older Ladies Group</h3>
             <p>
               A caring group for older ladies to share friendship, prayer, conversation, and community.
             </p>
           </article>
 
-          <article class="group-card">
+          <article class="group-card" data-calendar-names="Parent Connect">
             <div class="group-icon">👨‍👩‍👧</div>
-            <p class="group-meta">Sundays • 9:15 AM</p>
+            <p class="group-meta calendar-meta" data-fallback="Sundays • 9:15 AM">Sundays • 9:15 AM</p>
             <h3>Parent Connect</h3>
             <p>
               A Sunday morning group for young families to connect, grow, and encourage one another.
             </p>
           </article>
 
-          <article class="group-card">
+          <article class="group-card" data-calendar-names="Rooted Youth Ministry|Rooted Youth|Youth Ministry|Rooted">
             <div class="group-icon">🔥</div>
-            <p class="group-meta">Sundays • 4:00 PM</p>
+            <p class="group-meta calendar-meta" data-fallback="Sundays • 4:00 PM">Sundays • 4:00 PM</p>
             <h3>Rooted Youth Ministry</h3>
             <p>
               A weekly gathering for students to build friendships, grow in faith, and be rooted in Christ.
             </p>
           </article>
 
-          <article class="group-card">
+          <article class="group-card" data-calendar-names="Seekers 1|Seekers I">
             <div class="group-icon">📖</div>
-            <p class="group-meta">Sundays • 9:15 AM</p>
+            <p class="group-meta calendar-meta" data-fallback="Sundays • 9:15 AM">Sundays • 9:15 AM</p>
             <h3>Seekers 1</h3>
             <p>
               A Life Group for men and women who gather for study, conversation, and spiritual growth.
             </p>
           </article>
 
-          <article class="group-card">
+          <article class="group-card" data-calendar-names="Seekers 2|Seekers II">
             <div class="group-icon">📖</div>
-            <p class="group-meta">Sundays • 10:30 AM</p>
+            <p class="group-meta calendar-meta" data-fallback="Sundays • 10:30 AM">Sundays • 10:30 AM</p>
             <h3>Seekers 2</h3>
             <p>
               A Life Group for men and women with the same format as Seekers 1, meeting during the 10:30 hour.
             </p>
           </article>
 
-          <article class="group-card">
+          <article class="group-card" data-calendar-names="Soul Survivors Widow Group|Soul Survivors|Widow Group">
             <div class="group-icon">🕊️</div>
-            <p class="group-meta">Monthly • Dates TBD</p>
+            <p class="group-meta calendar-meta" data-fallback="Monthly • Dates TBD">Monthly • Dates TBD</p>
             <h3>Soul Survivors Widow Group</h3>
             <p>
               A supportive monthly group for widows to find encouragement, friendship, and care.
             </p>
           </article>
 
-          <article class="group-card">
+          <article class="group-card" data-calendar-names="Sprouts Kids Ministry|Sprouts Kids|Sprouts|Kids Ministry">
             <div class="group-icon">🌱</div>
-            <p class="group-meta">Sundays • 9:15 AM & 10:30 AM</p>
+            <p class="group-meta calendar-meta" data-fallback="Sundays • 9:15 AM & 10:30 AM">Sundays • 9:15 AM & 10:30 AM</p>
             <h3>Sprouts Kids Ministry</h3>
             <p>
               A Sunday morning ministry helping children grow in faith through age-appropriate teaching and care.
             </p>
           </article>
 
-          <article class="group-card">
+          <article class="group-card" data-calendar-names="Sunday Morning Women’s Group|Sunday Morning Women's Group|Women’s Discipleship|Women's Discipleship|Women’s Group|Women's Group">
             <div class="group-icon">💬</div>
-            <p class="group-meta">Sundays • 9:15 AM</p>
+            <p class="group-meta calendar-meta" data-fallback="Sundays • 9:15 AM">Sundays • 9:15 AM</p>
             <h3>Sunday Morning Women’s Group</h3>
             <p>
               A Sunday morning group for women to connect, study, pray, and grow together.
             </p>
           </article>
 
-          <article class="group-card">
+          <article class="group-card" data-calendar-names="Sunday Morning Men’s Group|Sunday Morning Men's Group|Men’s Discipleship|Men's Discipleship|Men’s Group|Men's Group">
             <div class="group-icon">🤝</div>
-            <p class="group-meta">Sundays • 9:15 AM</p>
+            <p class="group-meta calendar-meta" data-fallback="Sundays • 9:15 AM">Sundays • 9:15 AM</p>
             <h3>Sunday Morning Men’s Group</h3>
             <p>
               A Sunday morning group for men to build community, study scripture, and encourage one another.
             </p>
           </article>
 
-          <article class="group-card">
+          <article class="group-card" data-calendar-names="Young Adults Group|Young Adult Group|Young Adults|College Life">
             <div class="group-icon">✨</div>
-            <p class="group-meta">Young Adults</p>
+            <p class="group-meta calendar-meta" data-fallback="Young Adults">Young Adults</p>
             <h3>Young Adults Group</h3>
             <p>
               A connection opportunity for young adults looking for friendship, faith, and community at VUMC.
@@ -1428,6 +1453,174 @@
     frame.addEventListener('load', function () {
       loading.style.display = 'none';
     });
+
+
+    /*
+      GROUP CALENDAR INTEGRATION
+      This uses the same Planning Center Calendar Apps Script endpoint as the Serve page.
+      Paste that deployed Web App URL below once. The feed is requested with:
+      ?action=tag&name=discipleship
+    */
+    const VUMC_CALENDAR_API_URL = 'https://script.google.com/macros/s/AKfycbzOXN6-dZe3yL4xuCXL-gcUkj9clpFSjn5h1nrmwHh6vSMDxX4Dgf75ya47FnYYCxX6/exec';
+    const VUMC_GROUPS_CALENDAR_TAG = 'discipleship';
+
+    function vumcNormalizeCalendarText(value) {
+      return String(value || '')
+        .toLowerCase()
+        .replace(/&/g, 'and')
+        .replace(/[’']/g, '')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+    }
+
+    function vumcReadEventTitle(event) {
+      return event.title || event.name || event.eventName || event.summary || '';
+    }
+
+    function vumcReadEventStart(event) {
+      return event.startsAt || event.start || event.startDateTime ||
+        event.start_at || event.datetime || event.date || '';
+    }
+
+    function vumcFormatGroupDate(event) {
+      const rawStart = vumcReadEventStart(event);
+      const suppliedDate = event.dateLabel || event.formattedDate || '';
+      const suppliedTime = event.timeLabel || event.formattedTime || event.time || '';
+
+      if (suppliedDate && suppliedTime) return `${suppliedDate} • ${suppliedTime}`;
+      if (suppliedDate) return suppliedDate;
+
+      const date = new Date(rawStart);
+      if (Number.isNaN(date.getTime())) {
+        return suppliedTime || '';
+      }
+
+      const dateText = date.toLocaleDateString('en-US', {
+        timeZone: 'America/New_York',
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric'
+      });
+
+      const timeText = suppliedTime || date.toLocaleTimeString('en-US', {
+        timeZone: 'America/New_York',
+        hour: 'numeric',
+        minute: '2-digit'
+      });
+
+      return `${dateText} • ${timeText}`;
+    }
+
+    function vumcGetCalendarEvents(payload) {
+      if (Array.isArray(payload)) return payload;
+      if (Array.isArray(payload.events)) return payload.events;
+      if (Array.isArray(payload.data)) return payload.data;
+      return [];
+    }
+
+    function vumcFindGroupEvent(events, card) {
+      const aliases = (card.dataset.calendarNames || '')
+        .split('|')
+        .map(vumcNormalizeCalendarText)
+        .filter(Boolean);
+
+      return events.find(event => {
+        const eventTitle = vumcNormalizeCalendarText(vumcReadEventTitle(event));
+        return aliases.some(alias =>
+          eventTitle === alias ||
+          eventTitle.includes(alias) ||
+          alias.includes(eventTitle)
+        );
+      });
+    }
+
+    async function vumcLoadGroupCalendar() {
+      const cards = [...document.querySelectorAll('.group-card[data-calendar-names]')];
+      if (!cards.length) return;
+
+      cards.forEach(card => {
+        const meta = card.querySelector('.calendar-meta');
+        if (!meta) return;
+        meta.textContent = 'Checking next meeting…';
+        meta.classList.add('calendar-loading');
+      });
+
+      if (!VUMC_CALENDAR_API_URL ||
+          VUMC_CALENDAR_API_URL.includes('PASTE_YOUR_EXISTING')) {
+        cards.forEach(card => {
+          const meta = card.querySelector('.calendar-meta');
+          if (!meta) return;
+          meta.textContent = meta.dataset.fallback || 'Schedule available soon';
+          meta.classList.remove('calendar-loading');
+          meta.classList.add('calendar-unavailable');
+        });
+        console.warn('VUMC calendar API URL has not been added to the Groups page.');
+        return;
+      }
+
+      try {
+        const url = new URL(VUMC_CALENDAR_API_URL);
+        url.searchParams.set('action', 'tag');
+        url.searchParams.set('name', VUMC_GROUPS_CALENDAR_TAG);
+        url.searchParams.set('_', Date.now().toString());
+
+        const response = await fetch(url.toString(), { cache: 'no-store' });
+        if (!response.ok) throw new Error(`Calendar request failed: ${response.status}`);
+
+        const payload = await response.json();
+        if (payload && payload.ok === false) {
+          throw new Error(payload.error || 'Calendar API returned an error.');
+        }
+
+        const events = vumcGetCalendarEvents(payload);
+
+        cards.forEach(card => {
+          const meta = card.querySelector('.calendar-meta');
+          if (!meta) return;
+
+          const event = vumcFindGroupEvent(events, card);
+          const liveText = event ? vumcFormatGroupDate(event) : '';
+
+          meta.classList.remove('calendar-loading');
+
+          if (liveText) {
+            meta.textContent = liveText;
+            meta.classList.add('calendar-live');
+
+            const eventUrl = event.url || event.churchCenterUrl || event.htmlUrl || '';
+            if (eventUrl) {
+              card.style.cursor = 'pointer';
+              card.setAttribute('role', 'link');
+              card.setAttribute('tabindex', '0');
+
+              const openEvent = () => window.open(eventUrl, '_blank', 'noopener');
+              card.addEventListener('click', openEvent);
+              card.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  openEvent();
+                }
+              });
+            }
+          } else {
+            meta.textContent = meta.dataset.fallback || 'Schedule available soon';
+            meta.classList.add('calendar-unavailable');
+          }
+        });
+      } catch (error) {
+        console.error('Unable to load discipleship calendar:', error);
+
+        cards.forEach(card => {
+          const meta = card.querySelector('.calendar-meta');
+          if (!meta) return;
+          meta.textContent = meta.dataset.fallback || 'Schedule available soon';
+          meta.classList.remove('calendar-loading');
+          meta.classList.add('calendar-unavailable');
+        });
+      }
+    }
+
+    vumcLoadGroupCalendar();
 
     const VUMC_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3RvHWZ0RIiUMZBdjVtgq-4ZJ60AHlYwy2ybZMCUYqoWVsIt1eurqn6gJYywf6gi1SuA/exec';
 
