@@ -1547,7 +1547,7 @@
       });
     }
 
-    async function vumcFetchCalendarTag(tagName) {
+    async function vumcFetchEventsByTag(tagName) {
       const url = new URL(VUMC_CALENDAR_API_URL);
       url.searchParams.set('action', 'tag');
       url.searchParams.set('name', tagName);
@@ -1564,36 +1564,37 @@
       return vumcGetCalendarEvents(payload);
     }
 
-    function vumcApplyCalendarEvent(card, event) {
+    function vumcRenderCardEvent(card, event) {
       const meta = card.querySelector('.calendar-meta');
       if (!meta) return;
 
       const liveText = event ? vumcFormatGroupDate(event) : '';
       meta.classList.remove('calendar-loading');
 
-      if (liveText) {
-        meta.textContent = liveText;
-        meta.classList.add('calendar-live');
-
-        const eventUrl = event.url || event.churchCenterUrl || event.htmlUrl || '';
-        if (eventUrl) {
-          card.style.cursor = 'pointer';
-          card.setAttribute('role', 'link');
-          card.setAttribute('tabindex', '0');
-
-          const openEvent = () => window.open(eventUrl, '_blank', 'noopener');
-          card.addEventListener('click', openEvent);
-          card.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              openEvent();
-            }
-          });
-        }
-      } else {
+      if (!liveText) {
         meta.textContent = meta.dataset.fallback || 'Schedule available soon';
         meta.classList.add('calendar-unavailable');
+        return;
       }
+
+      meta.textContent = liveText;
+      meta.classList.add('calendar-live');
+
+      const eventUrl = event.url || event.churchCenterUrl || event.htmlUrl || '';
+      if (!eventUrl) return;
+
+      card.style.cursor = 'pointer';
+      card.setAttribute('role', 'link');
+      card.setAttribute('tabindex', '0');
+
+      const openEvent = () => window.open(eventUrl, '_blank', 'noopener');
+      card.addEventListener('click', openEvent);
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openEvent();
+        }
+      });
     }
 
     async function vumcLoadGroupCalendar() {
@@ -1609,34 +1610,39 @@
 
       if (!VUMC_CALENDAR_API_URL ||
           VUMC_CALENDAR_API_URL.includes('PASTE_YOUR_EXISTING')) {
-        cards.forEach(card => vumcApplyCalendarEvent(card, null));
+        cards.forEach(card => vumcRenderCardEvent(card, null));
         console.warn('VUMC calendar API URL has not been added to the Groups page.');
         return;
       }
 
       try {
-        const tagNames = [...new Set(cards.map(card =>
-          card.dataset.calendarTag || VUMC_GROUPS_CALENDAR_TAG
-        ))];
+        const discipleshipCards = cards.filter(card => !card.dataset.calendarTag);
+        const dedicatedCards = cards.filter(card => card.dataset.calendarTag);
 
-        const tagResults = await Promise.all(
-          tagNames.map(async tagName => [
-            tagName,
-            await vumcFetchCalendarTag(tagName)
-          ])
-        );
+        const discipleshipEvents = await vumcFetchEventsByTag(VUMC_GROUPS_CALENDAR_TAG);
 
-        const eventsByTag = Object.fromEntries(tagResults);
-
-        cards.forEach(card => {
-          const tagName = card.dataset.calendarTag || VUMC_GROUPS_CALENDAR_TAG;
-          const events = eventsByTag[tagName] || [];
-          const event = vumcFindGroupEvent(events, card) || events[0] || null;
-          vumcApplyCalendarEvent(card, event);
+        discipleshipCards.forEach(card => {
+          const event = vumcFindGroupEvent(discipleshipEvents, card);
+          vumcRenderCardEvent(card, event);
         });
+
+        for (const card of dedicatedCards) {
+          try {
+            const tagName = card.dataset.calendarTag;
+            const taggedEvents = await vumcFetchEventsByTag(tagName);
+
+            // A dedicated tag should contain only that group's events.
+            // Prefer a title match, but safely use the first event from that dedicated tag.
+            const event = vumcFindGroupEvent(taggedEvents, card) || taggedEvents[0] || null;
+            vumcRenderCardEvent(card, event);
+          } catch (tagError) {
+            console.error(`Unable to load ${card.dataset.calendarTag} calendar:`, tagError);
+            vumcRenderCardEvent(card, null);
+          }
+        }
       } catch (error) {
-        console.error('Unable to load group calendars:', error);
-        cards.forEach(card => vumcApplyCalendarEvent(card, null));
+        console.error('Unable to load discipleship calendar:', error);
+        cards.forEach(card => vumcRenderCardEvent(card, null));
       }
     }
 
