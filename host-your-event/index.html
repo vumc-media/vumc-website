@@ -1,3 +1,1213 @@
+ChatGPT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Scanned from a Xerox Multifunction Printer.pdf
+PDF
+Trustees decided on a revised facility request form. I  have uploaded a pdf of the paper form. The online form needs to replicate the pdf. I  have attached the code form the GAS. const RECIPIENTS = [
+  "fletcherfast@gmail.com",
+  "vumcsecretary@gmail.com",
+  "media@versaillesumc.org",
+  "info@versaillesumc.org"
+];
+
+const SHEET_NAME = "Facility Rental Requests";
+
+const SPAM_PATTERNS = [
+  /https?:\/\//i,
+  /www\./i,
+  /\.ru/i,
+  /\.cn/i,
+  /\.xyz/i,
+  /\.top/i,
+  /\.buzz/i,
+  /\.click/i,
+  /\.rest/i,
+  /bitcoin/i,
+  /crypto/i,
+  /paypal/i,
+  /graph\.org/i,
+  /telegram/i,
+  /whatsapp/i,
+  /casino/i,
+  /loan/i,
+  /forex/i,
+  /investment/i,
+  /free money/i,
+  /viagra/i,
+  /porn/i
+];
+
+function doGet() {
+  return HtmlService.createHtmlOutput("Facility Rental Request endpoint is active.");
+}
+
+function doPost(e) {
+  try {
+    const p = e.parameters || {};
+
+    if (rejectSpam_(p)) {
+      return HtmlService.createHtmlOutput("Spam blocked.");
+    }
+
+    const d = normalize_(p);
+
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(SHEET_NAME);
+
+    if (!sheet) {
+      sheet = ss.insertSheet(SHEET_NAME);
+      sheet.appendRow([
+        "Timestamp",
+        "Responsible Party",
+        "Organization",
+        "VUMC Member",
+        "Address",
+        "Phone",
+        "Email",
+        "Purpose / Event Type",
+        "Event Description",
+        "Event Date",
+        "Start Time",
+        "End Time",
+        "Facility Ready Time",
+        "Number Attending",
+        "Spaces Requested",
+        "Pavilion Needs",
+        "Church Areas",
+        "Classroom Details",
+        "Tables Needed",
+        "Table Details",
+        "Chairs Quantity",
+        "Sound / Video Needed",
+        "A/V Agreement",
+        "Other Needs",
+        "Facility Guidelines Agreement"
+      ]);
+    }
+
+    sheet.appendRow([
+      new Date(),
+      d.responsibleName,
+      d.organization,
+      d.member,
+      d.address,
+      d.phone,
+      d.email,
+      d.purpose,
+      d.eventDescription,
+      d.eventDate,
+      d.startTime,
+      d.endTime,
+      d.readyTime,
+      d.attendance,
+      d.spacesRequested,
+      d.pavilionNeeds,
+      d.churchAreas,
+      d.classroomDetails,
+      d.tablesNeeded,
+      d.tableDetails,
+      d.chairsQty,
+      d.avNeeded,
+      d.avAgreement,
+      d.otherNeeds,
+      d.guidelinesAgreement
+    ]);
+
+    const subject = Facility Request: ${d.purpose || "Event"} - ${d.eventDate || "Date TBD"};
+
+    const htmlBody = 
+      <div style="font-family:Arial,sans-serif;line-height:1.6;color:#222;max-width:760px;">
+        <div style="background:#52787c;color:#fff;padding:22px;border-radius:12px 12px 0 0;">
+          <h2 style="margin:0;">New Facility Use Reservation Request</h2>
+          <p style="margin:8px 0 0;">Versailles United Methodist Church</p>
+        </div>
+
+        <div style="border:1px solid #ddd;border-top:0;padding:22px;">
+          <h3>Contact Information</h3>
+          <p><strong>Responsible Party:</strong> ${safe_(d.responsibleName)}</p>
+          <p><strong>Organization:</strong> ${safe_(d.organization)}</p>
+          <p><strong>VUMC Member:</strong> ${safe_(d.member)}</p>
+          <p><strong>Address:</strong> ${safe_(d.address)}</p>
+          <p><strong>Phone:</strong> ${safe_(d.phone)}</p>
+          <p><strong>Email:</strong> ${safe_(d.email)}</p>
+
+          <h3>Event Information</h3>
+          <p><strong>Purpose / Event Type:</strong> ${safe_(d.purpose)}</p>
+          <p><strong>Description:</strong><br>${safe_(d.eventDescription)}</p>
+          <p><strong>Date:</strong> ${safe_(d.eventDate)}</p>
+          <p><strong>Time:</strong> ${safe_(d.startTime)} - ${safe_(d.endTime)}</p>
+          <p><strong>Facility Ready Time:</strong> ${safe_(d.readyTime)}</p>
+          <p><strong>Number Attending:</strong> ${safe_(d.attendance)}</p>
+
+          <h3>Facilities / Items Requested</h3>
+          <p><strong>Spaces Requested:</strong> ${safe_(d.spacesRequested)}</p>
+          <p><strong>Pavilion Needs:</strong> ${safe_(d.pavilionNeeds)}</p>
+          <p><strong>Church Areas:</strong> ${safe_(d.churchAreas)}</p>
+          <p><strong>Classroom Details:</strong> ${safe_(d.classroomDetails)}</p>
+          <p><strong>Tables Needed:</strong> ${safe_(d.tablesNeeded)}</p>
+          <p><strong>Table Details:</strong> ${safe_(d.tableDetails)}</p>
+          <p><strong>Chairs Quantity:</strong> ${safe_(d.chairsQty)}</p>
+
+          <h3>Audio / Video</h3>
+          <p><strong>Sound / Video Needed:</strong> ${safe_(d.avNeeded)}</p>
+          <p><strong>A/V Agreement:</strong> ${safe_(d.avAgreement)}</p>
+
+          <h3>Other</h3>
+          <p>${safe_(d.otherNeeds)}</p>
+
+          <h3>Agreement</h3>
+          <p>${safe_(d.guidelinesAgreement)}</p>
+        </div>
+      </div>
+    ;
+
+    MailApp.sendEmail({
+      to: RECIPIENTS.join(","),
+      subject,
+      htmlBody
+    });
+
+    if (d.email) {
+      MailApp.sendEmail({
+        to: d.email,
+        subject: "We received your facility request",
+        htmlBody: 
+          <div style="font-family:Arial,sans-serif;line-height:1.6;color:#222;">
+            <h2 style="color:#52787c;">We received your facility request</h2>
+            <p>Hi ${safe_(d.responsibleName)},</p>
+            <p>Thank you for submitting a facility use reservation request to Versailles United Methodist Church.</p>
+            <p>Our church office will review your request and follow up with next steps.</p>
+            <p><strong>Event:</strong> ${safe_(d.purpose)}</p>
+            <p><strong>Date:</strong> ${safe_(d.eventDate)}</p>
+            <p><strong>Time:</strong> ${safe_(d.startTime)} - ${safe_(d.endTime)}</p>
+            <p>Please remember this is a request and does not guarantee approval or availability.</p>
+            <p>Blessings,<br>Versailles United Methodist Church</p>
+          </div>
+        
+      });
+    }
+
+    return HtmlService.createHtmlOutput("Success");
+
+  } catch (err) {
+    return HtmlService.createHtmlOutput("Error: " + err);
+  }
+}
+
+function normalize_(p) {
+  function one(name) {
+    return p[name] ? p[name][0] : "";
+  }
+
+  function many(name) {
+    return p[name] ? p[name].join(", ") : "";
+  }
+
+  return {
+    responsibleName: one("responsibleName"),
+    organization: one("organization"),
+    member: one("member"),
+    address: one("address"),
+    phone: one("phone"),
+    email: one("email"),
+    purpose: one("purpose"),
+    eventDescription: one("eventDescription"),
+    eventDate: one("eventDate"),
+    startTime: one("startTime"),
+    endTime: one("endTime"),
+    readyTime: one("readyTime"),
+    attendance: one("attendance"),
+    spacesRequested: many("spacesRequested"),
+    pavilionNeeds: many("pavilionNeeds"),
+    churchAreas: many("churchAreas"),
+    classroomDetails: one("classroomDetails"),
+    tablesNeeded: one("tablesNeeded"),
+    tableDetails: [
+      one("tableRoundQty") ? "Round qty: " + one("tableRoundQty") : "",
+      one("tableRectQty") ? "Rectangular qty: " + one("tableRectQty") : "",
+      many("tableSizes") ? "Sizes: " + many("tableSizes") : ""
+    ].filter(Boolean).join(" | "),
+    chairsQty: one("chairsQty"),
+    avNeeded: one("avNeeded"),
+    avAgreement: one("avAgreement"),
+    otherNeeds: one("otherNeeds"),
+    guidelinesAgreement: one("guidelinesAgreement")
+  };
+}
+
+function rejectSpam_(p) {
+  if (p.website && p.website[0]) {
+    return true;
+  }
+
+  const startedAt = p.formStartedAt ? Number(p.formStartedAt[0]) : 0;
+  if (startedAt) {
+    const secondsToSubmit = (Date.now() - startedAt) / 1000;
+    if (secondsToSubmit < 6) {
+      return true;
+    }
+  }
+
+  const requiredFields = [
+    "responsibleName",
+    "member",
+    "phone",
+    "email",
+    "purpose",
+    "eventDate",
+    "startTime",
+    "endTime",
+    "attendance",
+    "spacesRequested",
+    "guidelinesAgreement"
+  ];
+
+  for (const field of requiredFields) {
+    if (!p[field] || !p[field][0]) {
+      return true;
+    }
+  }
+
+  const email = p.email ? String(p.email[0]).trim() : "";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return true;
+  }
+
+  const phone = p.phone ? String(p.phone[0]).trim() : "";
+  const phoneDigits = phone.replace(/\D/g, "");
+  if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+    return true;
+  }
+
+  const fieldsToCheck = [
+    "responsibleName",
+    "organization",
+    "address",
+    "phone",
+    "email",
+    "purpose",
+    "eventDescription",
+    "classroomDetails",
+    "otherNeeds"
+  ];
+
+  for (const field of fieldsToCheck) {
+    const value = p[field] ? p[field][0] : "";
+
+    if (containsSpam_(value)) {
+      return true;
+    }
+
+    if (field === "responsibleName" || field === "purpose") {
+      if (looksLikeGibberish_(value)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function containsSpam_(value) {
+  if (!value) return false;
+
+  return SPAM_PATTERNS.some(pattern => pattern.test(String(value)));
+}
+
+function looksLikeGibberish_(value) {
+  if (!value) return false;
+
+  const cleaned = String(value).trim();
+
+  if (cleaned.length >= 8 && !/[aeiou]/i.test(cleaned)) {
+    return true;
+  }
+
+  if (/(.)\1{5,}/.test(cleaned)) {
+    return true;
+  }
+
+  return false;
+}
+
+function safe_(value) {
+  if (!value) return "";
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+
+I reviewed both pages of the revised paper form. Page 1 changes the requested information considerably, while page 2 adds bookkeeping, refund, signature, and notes fields. 
+
+
+I rebuilt the Apps Script backend so it now supports:
+
+Organization and VUMC membership information
+
+Multiple dates of use
+
+Beginning, ending, and facility-ready times
+
+Separate Pavilion and Church selections
+
+Pavilion tables, chairs, quantities, and sizes
+
+Individual church areas
+
+Classroom room numbers
+
+Round and rectangular church tables
+
+Sound system and other requests
+
+Typed responsible-party signature and date
+
+All rental fee, deposit, payment, refund, bookkeeper, and notes fields from pages 1–2
+
+Updated spreadsheet columns
+
+Updated staff notification email
+
+Updated applicant confirmation email
+
+Existing spam protection
+
+Download the revised GAS code
+
+One important distinction: the rental-payment, refund, bookkeeper-signature, and notes portions appear to be office-use fields, not information the person requesting the facility should complete. I included backend support for them, but I recommend that the public online form stop after the responsible-party agreement and signature. The office fields could later be entered directly into the spreadsheet or placed in a separate internal form.
+
+To rebuild the visible online form so it precisely matches the PDF, I’ll need the current HTML form code as well. The field names in that HTML must match the new GAS field names exactly. 
+
+
+
+Pasted code.html
+File
+
+Perfect. This is exactly what I needed. 
+
+
+After comparing the HTML form to the revised paper form 
+
+, they're actually quite different. The current online form was designed around an event request, while the Trustees' version is a true facility reservation form.
+
+What needs to change
+The HTML will need to be rebuilt, not just edited.
+
+Remove
+
+First Name / Last Name
+
+Event Type
+
+Event Description
+
+Event Length
+
+Kitchen/Food Needs
+
+Special Instructions
+
+Existing "Spaces Requested" layout
+
+Replace with the paper form fields
+
+Organization Information
+
+Name of Organization
+
+VUMC Member (Yes/No)
+
+Address
+
+Phone Number(s)
+
+Email
+
+Reservation Information
+
+Purpose of Use
+
+Date(s) of Use
+
+Beginning Time
+
+Ending Time
+
+Time Facility Needs to Be Ready
+
+Number of Persons Attending
+
+Facilities / Items
+
+Pavilion
+
+Pavilion
+
+Kitchen
+
+Tables
+
+Quantity
+
+Table Size (8 ft / 6 ft)
+
+Chairs
+
+Quantity
+
+Church
+
+Sanctuary
+
+Kitchen
+
+Atrium
+
+Conference Room
+
+Youth Room
+
+Children's Room
+
+Classrooms
+
+Room Numbers
+
+Tables
+
+Round
+
+Quantity
+
+Rectangular
+
+Quantity
+
+Table Size
+
+Sound System
+
+Other (Specify)
+
+Agreement
+
+Church/Pavilion Guidelines acknowledgement
+
+Responsible Party Signature (typed)
+
+Date
+
+Office-only section
+The bottom half of the paper form (fees, deposits, refunds, bookkeeper signature, notes) should not appear on the public website.
+
+Instead, I recommend:
+
+Public form → Member fills out online.
+
+Spreadsheet → Automatically stores request.
+
+Church office → Completes the rental/payment information later.
+
+That keeps the online form clean while preserving everything the Trustees need.
+
+I also noticed one issue
+The HTML is currently calling:
+
+google.script.run.submitFacilityRequest(data)
+Your Apps Script doesn't contain a function named:
+
+submitFacilityRequest()
+Instead it uses doPost(e), which means the front end and back end are from two different versions of the project. They won't communicate correctly without additional code. 
+
+
+What I recommend
+Rather than patching this piece by piece, I'd rebuild the entire system as Facility Request v2:
+
+✓ Matches the new Trustees paper form exactly
+
+✓ Modern mobile-friendly design
+
+✓ Cleaner two-column layout on desktop
+
+✓ Collapses to one column on phones
+
+✓ Same VUMC teal/gold branding
+
+✓ Office-only fields removed from the public form
+
+✓ Fully synchronized HTML + Apps Script
+
+✓ Better validation
+
+✓ Better email formatting
+
+✓ Cleaner spreadsheet structure
+
+✓ Easier to maintain in the future
+
+I think this is one of those projects that's worth rebuilding correctly instead of trying to retrofit the old form. The end result will be cleaner, easier for members to complete, and much easier for the church office to manage.
+
+
+Go ahead
+
+Done. I rebuilt the form so the HTML and Apps Script now work together and match the revised Trustees form.
+
+Downloads
+Download the complete Facility Request v2 package
+
+Download Code.gs
+
+Index.html
+
+What changed
+The public form now includes the organization, membership, address, contact, purpose, dates, beginning and ending times, facility-ready time, attendance, Pavilion selections, Church room selections, table types and quantities, sound system, other needs, guidelines agreement, typed signature, and date.
+
+The rental fees, deposits, refund information, bookkeeper signature, and notes remain as spreadsheet columns for office use, but they are not shown to the public.
+
+The backend now uses:
+
+doGet()
+to display Index.html, and:
+
+submitFacilityRequest(data)
+to process submissions. That fixes the mismatch in the former version.
+
+Install
+In the Apps Script project:
+
+Replace the existing contents of Code.gs with the new Code.gs.
+
+Open the existing HTML file, or create one named exactly Index.
+
+Paste the contents of Index.html.
+
+Save the project.
+
+Deploy a new web-app version.
+
+Because the script uses:
+
+SpreadsheetApp.getActiveSpreadsheet()
+it should remain attached to the spreadsheet where you want the requests recorded. The existing Facility Rental Requests sheet can remain, but because the revised version has many new columns, using a fresh sheet or renaming the old one before the first submission would prevent column mismatches. 
+
+
+
+one request - for the date, use a toggled Calendar picker/ date picker (if you know what I  mean)
+
+Yes—that makes sense. I changed the Date of Use field to a calendar-style date picker. On desktop, the user can click the calendar icon; on mobile, it opens the phone’s native date selector.
+
+Index.html
+
+Download the complete updated package
+
+Replace only the existing Index.html; Code.gs does not need to change. 
+
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --teal: #52787c;
+      --teal-dark: #365c60;
+      --gold: #d8b25c;
+      --light: #f7f7f4;
+      --dark: #1f2a2c;
+      --border: #ccd6d8;
+      --muted: #5f6c6e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.5;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+      color: white;
+      padding: 38px 22px;
+      text-align: center;
+      border-radius: 0 0 22px 22px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .header p {
+      max-width: 720px;
+      margin: 12px auto 0;
+      font-size: .98rem;
+    }
+
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    form {
+      background: white;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      color: var(--teal-dark);
+      margin: 32px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e8eeee;
+    }
+
+    h2:first-of-type {
+      margin-top: 0;
+    }
+
+    h3 {
+      margin: 20px 0 8px;
+      color: var(--teal-dark);
+      font-size: 1.05rem;
+    }
+
+    label,
+    legend {
+      display: block;
+      font-weight: 700;
+      margin: 16px 0 6px;
+    }
+
+    .required {
+      color: #b00020;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: white;
+    }
+
+    textarea {
+      min-height: 95px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: 3px solid rgba(82,120,124,.18);
+      border-color: var(--teal);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    fieldset {
+      border: 1px solid #dfe7e8;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 14px 0;
+    }
+
+    legend {
+      padding: 0 6px;
+      margin: 0;
+      color: var(--teal-dark);
+    }
+
+    .checks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 18px;
+    }
+
+    .checks label,
+    .inline-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 6px 0;
+      font-weight: 400;
+    }
+
+    .checks input,
+    .inline-check input {
+      width: auto;
+      margin: 0;
+    }
+
+    .notice {
+      background: #eef5f5;
+      border-left: 5px solid var(--teal);
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+      font-size: .95rem;
+    }
+
+    .agreement {
+      background: #faf7ef;
+      border-left: 5px solid var(--gold);
+      padding: 18px;
+      border-radius: 10px;
+      margin-top: 24px;
+      font-size: .95rem;
+    }
+
+    .help {
+      display: block;
+      color: var(--muted);
+      font-size: .86rem;
+      margin-top: 5px;
+    }
+
+    .honeypot {
+      position: absolute !important;
+      left: -9999px !important;
+      height: 1px;
+      width: 1px;
+      overflow: hidden;
+    }
+
+    button {
+      margin-top: 28px;
+      width: 100%;
+      background: var(--teal);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 15px 18px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--teal-dark);
+    }
+
+    button:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    #status {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 10px;
+      display: none;
+      font-weight: 700;
+    }
+
+    .success {
+      background: #e8f7ed;
+      color: #176b36;
+    }
+
+    .error {
+      background: #fdeaea;
+      color: #8a1f1f;
+    }
+
+    @media (max-width: 700px) {
+      .grid,
+      .grid-3,
+      .checks {
+        grid-template-columns: 1fr;
+      }
+
+      form {
+        padding: 22px;
+      }
+
+      .header h1 {
+        font-size: 1.65rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>Facility Rental Request</h1>
+    <p>
+      Please complete this form to request use of the church or pavilion at
+      Versailles United Methodist Church. Submission does not guarantee approval or availability.
+    </p>
+  </div>
+
+  <div class="wrap">
+    <form id="rentalForm">
+      <input type="hidden" name="formStartedAt" id="formStartedAt">
+
+      <div class="honeypot" aria-hidden="true">
+        <label>Website</label>
+        <input type="text" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="notice">
+        The church office will review your request, confirm availability, and contact you regarding approval,
+        applicable fees, facility guidelines, and next steps.
+      </div>
+
+      <h2>Organization & Contact Information</h2>
+
+      <label for="organization">Name of Organization <span class="required">*</span></label>
+      <input id="organization" name="organization" required>
+
+      <label for="member">VUMC Member <span class="required">*</span></label>
+      <select id="member" name="member" required>
+        <option value="">Select one</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+
+      <label for="address">Address <span class="required">*</span></label>
+      <textarea id="address" name="address" required></textarea>
+
+      <div class="grid">
+        <div>
+          <label for="phone">Phone Number(s) <span class="required">*</span></label>
+          <input id="phone" type="tel" name="phone" required>
+        </div>
+
+        <div>
+          <label for="email">Email <span class="required">*</span></label>
+          <input id="email" type="email" name="email" required>
+        </div>
+      </div>
+
+      <h2>Reservation Information</h2>
+
+      <label for="purpose">Purpose of Use <span class="required">*</span></label>
+      <input id="purpose" name="purpose" required>
+
+      <label for="useDates">Date of Use <span class="required">*</span></label>
+      <input id="useDates" type="date" name="useDates" required>
+      <span class="help">Click or tap the calendar icon to select the event date.</span>
+
+      <div class="grid-3">
+        <div>
+          <label for="startTime">Beginning Time <span class="required">*</span></label>
+          <input id="startTime" type="time" name="startTime" required>
+        </div>
+
+        <div>
+          <label for="endTime">Ending Time <span class="required">*</span></label>
+          <input id="endTime" type="time" name="endTime" required>
+        </div>
+
+        <div>
+          <label for="readyTime">Facility Ready Time <span class="required">*</span></label>
+          <input id="readyTime" type="time" name="readyTime" required>
+        </div>
+      </div>
+
+      <label for="attendance">Number of Persons Attending <span class="required">*</span></label>
+      <input id="attendance" type="number" name="attendance" min="1" required>
+
+      <h2>Facilities / Items to Be Used</h2>
+      <span class="help">Select every item that applies. At least one facility or room is required.</span>
+
+      <fieldset>
+        <legend>Pavilion</legend>
+
+        <div class="checks">
+          <label><input type="checkbox" name="pavilion"> Pavilion</label>
+          <label><input type="checkbox" name="pavilionKitchen"> Kitchen</label>
+          <label><input type="checkbox" name="pavilionTables"> Tables</label>
+          <label><input type="checkbox" name="pavilionChairs"> Chairs</label>
+        </div>
+
+        <div class="grid">
+          <div>
+            <label for="pavilionTableQty">Table Quantity</label>
+            <input id="pavilionTableQty" type="number" name="pavilionTableQty" min="0">
+          </div>
+
+          <div>
+            <label for="pavilionChairQty">Chair Quantity</label>
+            <input id="pavilionChairQty" type="number" name="pavilionChairQty" min="0">
+          </div>
+        </div>
+
+        <label>Pavilion Table Size</label>
+        <div class="checks">
+          <label><input type="checkbox" name="pavilionTableSizes" value="8 ft"> 8 ft</label>
+          <label><input type="checkbox" name="pavilionTableSizes" value="6 ft"> 6 ft</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Church</legend>
+
+        <div class="checks">
+          <label><input type="checkbox" name="churchSanctuary"> Sanctuary</label>
+          <label><input type="checkbox" name="churchKitchen"> Kitchen</label>
+          <label><input type="checkbox" name="churchAtrium"> Atrium</label>
+          <label><input type="checkbox" name="churchConferenceRoom"> Conference Room</label>
+          <label><input type="checkbox" name="churchYouthRoom"> Youth Room</label>
+          <label><input type="checkbox" name="churchChildrensRoom"> Children's Room</label>
+          <label><input type="checkbox" name="churchClassrooms"> Classrooms</label>
+        </div>
+
+        <label for="churchRoomNumbers">Classroom Room Number(s)</label>
+        <input id="churchRoomNumbers" name="churchRoomNumbers" placeholder="List specific room numbers, if known">
+
+        <div class="grid">
+          <div>
+            <label class="inline-check">
+              <input type="checkbox" name="roundTables">
+              Round Tables
+            </label>
+            <label for="roundTableQty">Round Table Quantity</label>
+            <input id="roundTableQty" type="number" name="roundTableQty" min="0">
+          </div>
+
+          <div>
+            <label class="inline-check">
+              <input type="checkbox" name="rectangularTables">
+              Rectangular Tables
+            </label>
+            <label for="rectangularTableQty">Rectangular Table Quantity</label>
+            <input id="rectangularTableQty" type="number" name="rectangularTableQty" min="0">
+          </div>
+        </div>
+
+        <label>Church Table Size</label>
+        <div class="checks">
+          <label><input type="checkbox" name="churchTableSizes" value="8 ft"> 8 ft</label>
+          <label><input type="checkbox" name="churchTableSizes" value="6 ft"> 6 ft</label>
+        </div>
+
+        <label class="inline-check">
+          <input type="checkbox" name="soundSystem">
+          Sound System
+        </label>
+
+        <label for="otherNeeds">Other (Specify)</label>
+        <textarea id="otherNeeds" name="otherNeeds"></textarea>
+      </fieldset>
+
+      <h2>Agreement & Signature</h2>
+
+      <div class="agreement">
+        The Church and/or Pavilion Use Guidelines have been received. By signing this reservation request,
+        the responsible party agrees to abide by these policies. Submission of this form is a request only
+        and does not confirm approval, availability, or final rental cost.
+      </div>
+
+      <label class="inline-check">
+        <input
+          type="checkbox"
+          name="guidelinesAgreement"
+          value="I have received and agree to abide by the Church and/or Pavilion Use Guidelines."
+          required
+        >
+        I have received and agree to abide by the Church and/or Pavilion Use Guidelines.
+        <span class="required">*</span>
+      </label>
+
+      <div class="grid">
+        <div>
+          <label for="responsibleSignature">Responsible Party Signature <span class="required">*</span></label>
+          <input
+            id="responsibleSignature"
+            name="responsibleSignature"
+            placeholder="Type your full legal name"
+            required
+          >
+          <span class="help">Typing your name serves as your electronic signature.</span>
+        </div>
+
+        <div>
+          <label for="signatureDate">Date <span class="required">*</span></label>
+          <input id="signatureDate" type="date" name="signatureDate" required>
+        </div>
+      </div>
+
+      <button id="submitBtn" type="submit">Submit Facility Rental Request</button>
+      <div id="status" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("rentalForm");
+    const button = document.getElementById("submitBtn");
+    const statusBox = document.getElementById("status");
+
+    document.getElementById("formStartedAt").value = Date.now();
+
+    const signatureDate = document.getElementById("signatureDate");
+    if (!signatureDate.value) {
+      signatureDate.value = new Date().toISOString().split("T")[0];
+    }
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      if (!form.reportValidity()) return;
+
+      const facilityBoxes = [
+        "pavilion",
+        "pavilionKitchen",
+        "pavilionTables",
+        "pavilionChairs",
+        "churchSanctuary",
+        "churchKitchen",
+        "churchAtrium",
+        "churchConferenceRoom",
+        "churchYouthRoom",
+        "churchChildrensRoom",
+        "churchClassrooms"
+      ];
+
+      const hasFacility = facilityBoxes.some(name => {
+        const field = form.elements[name];
+        return field && field.checked;
+      });
+
+      if (!hasFacility) {
+        showStatus("Please select at least one facility or room.", false);
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Submitting...";
+      statusBox.style.display = "none";
+
+      const data = {};
+      const formData = new FormData(form);
+
+      for (const [key, value] of formData.entries()) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+          if (!Array.isArray(data[key])) data[key] = [data[key]];
+          data[key].push(value);
+        } else {
+          data[key] = value;
+        }
+      }
+
+      facilityBoxes.concat(["roundTables", "rectangularTables", "soundSystem"]).forEach(name => {
+        const field = form.elements[name];
+        data[name] = Boolean(field && field.checked);
+      });
+
+      google.script.run
+        .withSuccessHandler(function(response) {
+          showStatus(response.message, response.success);
+
+          if (response.success) {
+            form.reset();
+            document.getElementById("formStartedAt").value = Date.now();
+            signatureDate.value = new Date().toISOString().split("T")[0];
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+
+          button.disabled = false;
+          button.textContent = "Submit Facility Rental Request";
+        })
+        .withFailureHandler(function() {
+          showStatus(
+            "Something went wrong. Please try again or contact the church office.",
+            false
+          );
+
+          button.disabled = false;
+          button.textContent = "Submit Facility Rental Request";
+        })
+        .submitFacilityRequest(data);
+    });
+
+    function showStatus(message, success) {
+      statusBox.style.display = "block";
+      statusBox.className = success ? "success" : "error";
+      statusBox.textContent = message;
+      statusBox.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  </script>
+</body>
+</html>
+
+
+Pasted text.txt
+Document
+Here is the index to the Host Your Event page. Currently, we are using a PCO form. I  need to change to the GAS form as a pop up (if possible). Here is GAS url - https://script.google.com/macros/s/AKfycbysdlnyT75KPMR-KSU9mwMuoQdKs6NehWGEwGmw5Z85BW211HvPi8yVO6yAauZz62E38Q/exec
+
+Done. I replaced all three Planning Center form buttons with a popup modal that loads your GAS facility form inside the page. 
+
+
+host-your-event-index.html
+
+The popup now:
+
+Opens from all three facility request buttons
+
+Loads the GAS form in an iframe
+
+Works full-screen on mobile
+
+Closes with the X, by clicking outside the form, or by pressing Escape
+
+Prevents the page behind it from scrolling while open
+
+Your Apps Script already uses:
+
+.setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+so the form should be allowed to display inside this popup. Replace the current Host Your Event page code with the updated file. 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -930,6 +2140,1747 @@ body.modal-open {
       closeFacilityModal();
     }
   });
+
+</script>
+
+<script src="https://js.churchcenter.com/modal/v1"></script>
+
+</body>
+</html>
+
+image.png
+Got this
+
+That screenshot tells us the popup itself is working. The problem is the GAS deployment access, not the Host Your Event page.
+
+Google is redirecting the iframe to a Drive error instead of serving the web app. That usually happens when the deployment is not publicly accessible, the deployment URL is stale, or Google is trying to use the wrong signed-in account. Google also notes that being signed into multiple Google accounts can cause Apps Script web-app access problems. 
+
+Fix the GAS deployment
+Open the Apps Script project and go to:
+
+Deploy → Manage deployments
+
+Open the current Web App deployment and confirm:
+
+Execute as: Me
+
+Who has access: Anyone
+
+Then click Deploy and copy the newly displayed /exec URL.
+
+Also confirm your doGet() remains:
+
+function doGet() {
+  return HtmlService
+    .createHtmlOutputFromFile("Index")
+    .setTitle("Facility Rental Request | Versailles UMC")
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+ALLOWALL is the correct setting for displaying the Apps Script page inside your website’s iframe. 
+
+Test the URL directly first
+Paste the GAS /exec URL directly into a private/incognito browser window.
+
+It must open the facility form there without asking you to sign in. If it does not open directly in incognito, it will not work in the website popup either.
+
+The URL you gave me may belong to an older deployment or a deployment that is restricted to your Google account. Once you redeploy and send me the new /exec address, I’ll place the corrected URL into the Host Your Event page.
+
+
+Access is set to Anyone so it should not matter
+
+That explains it.
+
+Your code currently says:
+
+HtmlService.createHtmlOutputFromFile("Index")
+but the file is named lowercase:
+
+index.html
+Apps Script file names are case-sensitive. Change doGet() to:
+
+function doGet() {
+  return HtmlService
+    .createHtmlOutputFromFile("index")
+    .setTitle("Facility Rental Request | Versailles UMC")
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+Then:
+
+Save the project.
+
+Go to Deploy → Manage deployments.
+
+Edit the web app deployment.
+
+Select New version.
+
+Deploy again.
+
+The GAS URL can remain the same after updating the existing deployment.
+
+
+is this in code.gs
+
+Yes. That change is in Code.gs.
+
+Look for your doGet() function near the top of the file. It probably looks like this:
+
+function doGet() {
+  return HtmlService
+    .createHtmlOutputFromFile("Index")
+    .setTitle("Facility Rental Request | Versailles UMC")
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+If your HTML file is actually named index (lowercase), change it to:
+
+function doGet() {
+  return HtmlService
+    .createHtmlOutputFromFile("index")
+    .setTitle("Facility Rental Request | Versailles UMC")
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+Then:
+
+Save the project.
+
+Deploy → Manage deployments.
+
+Edit the deployment.
+
+Select New Version.
+
+Click Deploy.
+
+Before you do that...
+Can you tell me exactly what the HTML file is named in Apps Script?
+
+For example, in the left sidebar, do you see:
+
+Code
+index
+or
+
+Code
+Index
+or something else?
+
+A screenshot of the Apps Script file list would settle this in about 10 seconds. I have a suspicion there may be one more issue besides the filename.
+
+
+still doing it
+
+If it's still showing the Google Drive error, then I don't think the popup code is the problem anymore.
+
+That specific screen usually means Google isn't actually serving your Apps Script web app. It isn't a typical iframe/X-Frame-Options error.
+
+Let's isolate the problem.
+
+First test (most important)
+Open this URL directly in a new Incognito/Private window—not from your website:
+
+https://script.google.com/macros/s/AKfycbysdlnyT75KPMR-KSU9mwMuoQdKs6NehWGEwGmw5Z85BW211HvPi8yVO6yAauZz62E38Q/exec
+Tell me exactly what happens.
+
+A. The facility form opens.
+
+B. The same Google Drive error appears.
+
+C. Something else.
+
+Second test
+In Apps Script, click:
+
+Deploy → Manage deployments
+
+I need to know:
+
+Is it deployed as a Web app?
+
+Or is it deployed as an API Executable?
+
+It must be a Web app.
+
+Third test
+Paste your entire doGet() function exactly as it is now.
+
+Fourth test
+Show me the left panel of Apps Script where the files are listed.
+
+I want to see something like:
+
+Code.gs
+index.html
+or
+
+Code.gs
+Index.html
+My suspicion
+I suspect one of these is true:
+
+The URL you're embedding is not the latest deployment.
+
+The deployment is not actually a Web App.
+
+The Apps Script project is throwing an exception before it renders the HTML.
+
+The /exec URL belongs to a different Apps Script project than the one you're editing.
+
+The screenshot you're getting doesn't look like an HTML rendering problem—it looks like Google never reaches your doGet() successfully.
+
+If you can answer A/B/C from the first test and send me a screenshot of Manage deployments, we should be able to pinpoint this in just a couple of minutes.
+
+
+image(1).png
+index.html
+
+Yes—the file is definitely named index.html in lowercase.
+
+I checked the live /exec URL, and Google is still reporting:
+
+No HTML file named Index was found.
+
+That means the deployed version is still running code that says:
+
+.createHtmlOutputFromFile("Index")
+with an uppercase I, even though your current editor may now show lowercase.
+
+In Code.gs, make sure it is exactly:
+
+function doGet() {
+  return HtmlService
+    .createHtmlOutputFromFile("index")
+    .setTitle("Facility Rental Request | Versailles UMC")
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+Then the crucial step:
+
+Click Save.
+
+Go to Deploy → Manage deployments.
+
+Click the pencil/edit icon beside the web app.
+
+Under Version, choose New version.
+
+Click Deploy.
+
+Simply saving Code.gs does not update the existing /exec deployment. The error confirms the live deployment is still using the older uppercase version. 
+
+
+
+Pasted code(1).html
+File
+
+Pasted code (2).js
+JavaScript
+
+I think I found the problem, and it's not your HTML or Code.gs.
+
+I reviewed both files you uploaded, and they look correct. Your doGet() is calling createHtmlOutputFromFile("index"), and your HTML file is named index.html, so those match. 
+
+ 
+
+
+The issue is likely that Apps Script Web Apps cannot reliably be embedded in an iframe on an external website. Google may allow ALLOWALL in Apps Script, but many web app deployments still send security headers or authentication flows that prevent embedding. The result is often exactly the Google Drive error page you're seeing.
+
+Let's verify in 30 seconds
+Forget the popup for a moment.
+
+Take your web app URL:
+
+https://script.google.com/macros/s/AKfycbysdlnyT75KPMR-KSU9mwMuoQdKs6NehWGEwGmw5Z85BW211HvPi8yVO6yAauZz62E38Q/exec
+Paste it directly into your browser.
+
+Question 1
+Does the facility form open?
+
+or
+
+Does the Google Drive error appear?
+
+If the form opens...
+Then the popup/iframe is the problem.
+
+Instead of a popup, I would do something even nicer:
+
+Create a page like:
+
+/facility-request/
+
+Embed your Apps Script there (or simply redirect to the web app)
+
+The "Host Your Event" buttons open that page instead of an iframe.
+
+Users won't notice much difference, and it avoids Google's iframe restrictions.
+
+If the Google Drive error appears directly...
+Then the deployment itself is still the problem, despite the code looking correct.
+
+I have another idea that I actually like better
+Since your website is already hosted on GitHub Pages, we could eliminate Apps Script's HTML entirely.
+
+Use Apps Script only as an API endpoint:
+
+GitHub hosts the beautiful form.
+
+JavaScript submits to your Apps Script with fetch().
+
+Apps Script writes to the spreadsheet and sends emails.
+
+No iframe.
+
+No popup.
+
+No Google branding.
+
+Faster.
+
+Fully integrated with the VUMC website.
+
+It would look like the form is part of your website, while Apps Script quietly handles the backend.
+
+I think this is the better architecture for VUMC, and it avoids all of Google's embedding quirks. Given how much work we've already put into your website, it's the direction I'd recommend.
+
+
+image(2).png
+browser
+
+That screenshot is actually very helpful.
+
+This means the problem is not your website, popup, or iframe.
+
+The Apps Script Web App itself is not serving.
+
+If you paste the /exec URL directly into a browser and immediately get that Google Drive page, Google never even reaches your doGet() function.
+
+Since I've now seen your Code.gs and index.html, I'm confident the code itself isn't causing this. 
+
+ 
+
+
+I think one of these is happening
+1. You're using the wrong URL
+The URL should look like:
+
+https://script.google.com/macros/s/AKfycb.../exec
+Not
+
+.../dev
+and not a Google Drive URL.
+
+2. The deployment isn't actually a Web App
+Go to:
+
+Deploy → Manage deployments
+
+I want to see the page that lists your deployment.
+
+It should say something like:
+
+Type
+Web app
+
+Execute as
+Me
+
+Who has access
+Anyone
+3. This is the one I'm leaning toward...
+The deployment is pointing to an older Apps Script project.
+
+Remember we've rebuilt this project several times.
+
+It's very easy to accidentally edit one Apps Script project while the URL belongs to another.
+
+That would explain everything:
+
+Your code looks correct. ✅
+
+Your HTML exists. ✅
+
+The URL still fails. ❌
+
+Can you do one thing for me?
+Open:
+
+Deploy → Manage deployments
+
+and send me a screenshot of that page.
+
+I don't need the code anymore—I need to see the deployment itself.
+
+If it were my project...
+I'd probably spend less time chasing this deployment and do something cleaner:
+
+Keep the entire form on your GitHub website (same styling as the rest of VUMC).
+
+Use Apps Script only as the backend to receive the submission, write to Sheets, and send emails.
+
+That removes every Google Apps Script UI limitation:
+
+no iframe,
+
+no Google branding,
+
+no deployment quirks,
+
+no Drive errors,
+
+and the form feels like a native part of your website.
+
+Given how polished the VUMC site has become, I actually think that's the strongest long-term solution. But first, let's see that Manage deployments screen—we may find the issue in a minute or two.
+
+
+you mentioned putting the form as a pop up in GH and using GAS as a fetch. Let's do that
+
+Done. The form now lives directly inside the GitHub page as a popup, while Apps Script works only as the backend.
+
+Downloads
+Download the complete package
+
+host-your-event-fetch-popup.html
+
+Download the new GAS backend
+
+What changed
+The Host Your Event page now:
+
+Opens the full facility request form in a native website popup
+
+Uses the date picker
+
+Works full-screen on mobile
+
+Submits directly to GAS using fetch()
+
+No longer embeds Google or uses an iframe
+
+No longer depends on the GAS page displaying correctly
+
+The GAS code now:
+
+Uses doPost(e) to receive the submission
+
+Writes the request to the spreadsheet
+
+Sends staff notification emails
+
+Sends the applicant confirmation email
+
+Keeps spam filtering and validation
+
+Uses doGet() only as a simple endpoint-status check
+
+Install the GAS backend
+Replace the contents of Code.gs with the new backend file.
+
+Then:
+
+Save the Apps Script project.
+
+Go to Deploy → Manage deployments.
+
+Edit the existing Web App deployment.
+
+Choose New version.
+
+Keep:
+
+Execute as: Me
+
+Who has access: Anyone
+
+Deploy.
+
+The /exec URL can remain the same because I already placed your current URL in the GitHub page code.
+
+Install the website page
+Replace the current Host Your Event index with:
+
+host-your-event-fetch-popup.html
+
+One technical note: the submission uses fetch(..., { mode: "no-cors" }) because Apps Script does not return normal cross-origin browser headers. The form will show success after the request is sent. The most reliable confirmation will be the new spreadsheet row and the confirmation email. 
+
+
+
+Library
+/
+Form Creation
+/
+host-your-event-fetch-popup.html
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="wVQaTSt1mgMr7ubXU5cC+A" async></script>
+  <meta name="robots" content="index, follow, max-image-preview:large">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Host Your Event | Facility Rentals at Versailles United Methodist Church</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="description" content="Host your event at Versailles United Methodist Church in Versailles, Kentucky. Explore facility spaces for gatherings, meetings, receptions, celebrations, ministry events, and community use.">
+
+<link rel="canonical" href="https://www.versaillesumc.org/host-your-event/">
+
+<style>
+:root {
+  --teal:#52787c;
+  --teal-dark:#365c60;
+  --gold:#d8b25c;
+  --cream:#f7f4ed;
+  --dark:#1f2a2c;
+  --white:#ffffff;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  color:var(--dark);
+  background:var(--cream);
+  line-height:1.6;
+}
+
+.hero {
+  min-height:520px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:white;
+  padding:60px 20px;
+  background:
+    linear-gradient(rgba(31,42,44,.72), rgba(31,42,44,.72)),
+    url("/vumc-media/A06671CF-818B-4791-A36F-8A171C53A824.webp") center/cover no-repeat;
+}
+
+.hero-inner {
+  max-width:900px;
+}
+
+.hero h1 {
+  font-size:clamp(2.7rem, 7vw, 5.5rem);
+  line-height:1;
+  margin:0;
+  font-weight:900;
+}
+
+.hero .accent {
+  width:90px;
+  height:5px;
+  background:var(--gold);
+  margin:24px auto;
+  border-radius:99px;
+}
+
+.hero p {
+  font-size:clamp(1.05rem, 2vw, 1.35rem);
+  max-width:760px;
+  margin:0 auto 30px;
+}
+
+.btn {
+  display:inline-block;
+  background:var(--gold);
+  color:#1f2a2c;
+  text-decoration:none;
+  padding:15px 26px;
+  border-radius:999px;
+  font-weight:800;
+  transition:.2s ease;
+}
+
+.btn:hover {
+  transform:translateY(-2px);
+  filter:brightness(.96);
+}
+
+.btn.secondary {
+  background:var(--teal);
+  color:white;
+}
+
+.section {
+  max-width:1180px;
+  margin:0 auto;
+  padding:70px 22px;
+}
+
+.intro {
+  text-align:center;
+}
+
+.intro h2,
+.section-title {
+  font-size:clamp(2rem, 4vw, 3rem);
+  line-height:1.1;
+  margin:0 0 18px;
+}
+
+.intro p {
+  max-width:850px;
+  margin:0 auto;
+  font-size:1.08rem;
+}
+
+.info-cards {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:22px;
+  margin-top:38px;
+}
+
+.info-card {
+  background:white;
+  padding:28px;
+  border-radius:20px;
+  box-shadow:0 12px 35px rgba(0,0,0,.08);
+  border-top:5px solid var(--teal);
+}
+
+.info-card h3 {
+  margin:0 0 10px;
+  font-size:1.35rem;
+}
+
+.spaces {
+  background:white;
+}
+
+.space-grid {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:24px;
+  margin-top:34px;
+}
+
+.space-card {
+  background:var(--cream);
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 12px 34px rgba(0,0,0,.08);
+}
+
+.space-card img {
+  width:100%;
+  height:240px;
+  object-fit:cover;
+  display:block;
+  background:#d8d8d8;
+}
+
+.space-card-content {
+  padding:24px;
+}
+
+.space-card h3 {
+  margin:0 0 10px;
+  color:var(--teal-dark);
+  font-size:1.35rem;
+}
+
+.band {
+  background:
+    linear-gradient(135deg, rgba(54,92,96,.96), rgba(82,120,124,.96)),
+    url("/vumc-media/atrium.webp") center/cover no-repeat;
+  color:white;
+  text-align:center;
+  padding:80px 22px;
+}
+
+.band h2 {
+  font-size:clamp(2rem, 4vw, 3.2rem);
+  margin:0 0 18px;
+}
+
+.band p {
+  max-width:800px;
+  margin:0 auto 30px;
+  font-size:1.08rem;
+}
+
+.gallery-grid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:14px;
+  margin-top:30px;
+}
+
+.gallery-grid img {
+  width:100%;
+  height:190px;
+  object-fit:cover;
+  border-radius:16px;
+  background:#d8d8d8;
+}
+
+.process {
+  background:#eef4f4;
+}
+
+.steps {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:22px;
+  margin-top:34px;
+}
+
+.step {
+  background:white;
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 12px 30px rgba(0,0,0,.06);
+}
+
+.step-number {
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:var(--gold);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  margin-bottom:14px;
+}
+
+.cta {
+  text-align:center;
+  background:white;
+  padding:80px 22px;
+}
+
+.cta h2 {
+  font-size:clamp(2rem, 4vw, 3rem);
+  margin:0 0 18px;
+}
+
+.cta p {
+  max-width:760px;
+  margin:0 auto 30px;
+}
+
+.small-note {
+  font-size:.9rem;
+  color:#667;
+  margin-top:18px;
+}
+
+
+.btn {
+  border:0;
+  cursor:pointer;
+  font:inherit;
+}
+
+.facility-modal {
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  display:none;
+}
+
+.facility-modal.open { display:block; }
+
+.facility-modal-backdrop {
+  position:absolute;
+  inset:0;
+  background:rgba(18,28,30,.78);
+  backdrop-filter:blur(5px);
+}
+
+.facility-modal-dialog {
+  position:relative;
+  width:min(960px, calc(100% - 28px));
+  height:min(94vh, 1000px);
+  margin:3vh auto;
+  background:#f7f7f4;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,.38);
+  display:flex;
+  flex-direction:column;
+}
+
+.facility-modal-header {
+  min-height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:0 18px 0 22px;
+  background:var(--teal-dark);
+  color:#fff;
+}
+
+.facility-modal-title {
+  margin:0;
+  font-size:1.05rem;
+  font-weight:800;
+}
+
+.facility-modal-close {
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:50%;
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  font-size:1.7rem;
+  line-height:1;
+  cursor:pointer;
+}
+
+.facility-modal-close:hover { background:rgba(255,255,255,.24); }
+
+.facility-modal-scroll {
+  overflow:auto;
+  padding:22px;
+  flex:1;
+}
+
+.facility-request-form {
+  max-width:860px;
+  margin:0 auto;
+  background:#fff;
+  padding:26px;
+  border-radius:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.facility-form-notice {
+  background:#eef5f5;
+  border-left:5px solid var(--teal);
+  padding:16px;
+  border-radius:10px;
+  margin-bottom:24px;
+  font-size:.95rem;
+}
+
+.facility-request-form h3 {
+  color:var(--teal-dark);
+  margin:30px 0 14px;
+  padding-bottom:8px;
+  border-bottom:2px solid #e8eeee;
+}
+
+.facility-request-form h3:first-of-type { margin-top:0; }
+
+.facility-request-form label,
+.facility-request-form legend {
+  display:block;
+  font-weight:700;
+  margin:16px 0 6px;
+}
+
+.facility-request-form input,
+.facility-request-form textarea,
+.facility-request-form select {
+  width:100%;
+  padding:12px;
+  border:1px solid #ccd6d8;
+  border-radius:8px;
+  font-size:1rem;
+  font-family:inherit;
+  background:#fff;
+}
+
+.facility-request-form textarea {
+  min-height:90px;
+  resize:vertical;
+}
+
+.facility-form-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+}
+
+.facility-form-grid-3 {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+
+.facility-request-form fieldset {
+  border:1px solid #dfe7e8;
+  border-radius:12px;
+  padding:16px;
+  margin:14px 0;
+}
+
+.facility-form-checks {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px 18px;
+}
+
+.facility-form-checks label,
+.facility-inline-check {
+  display:flex !important;
+  align-items:center;
+  gap:10px;
+  margin:7px 0 !important;
+  font-weight:400 !important;
+}
+
+.facility-form-checks input,
+.facility-inline-check input {
+  width:auto;
+  margin:0;
+}
+
+.facility-form-help {
+  display:block;
+  color:#5f6c6e;
+  font-size:.86rem;
+  margin-top:5px;
+}
+
+.facility-agreement {
+  background:#faf7ef;
+  border-left:5px solid var(--gold);
+  padding:18px;
+  border-radius:10px;
+  margin-top:24px;
+  font-size:.95rem;
+}
+
+.facility-required { color:#b00020; }
+
+.facility-honeypot {
+  position:absolute !important;
+  left:-9999px !important;
+  height:1px;
+  width:1px;
+  overflow:hidden;
+}
+
+.facility-submit {
+  margin-top:28px;
+  width:100%;
+  background:var(--teal);
+  color:#fff;
+  border:0;
+  border-radius:10px;
+  padding:15px 18px;
+  font-size:1.05rem;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.facility-submit:disabled { opacity:.65; cursor:not-allowed; }
+
+.facility-status {
+  margin-top:18px;
+  padding:14px;
+  border-radius:10px;
+  display:none;
+  font-weight:700;
+}
+
+.facility-status.success { display:block; background:#e8f7ed; color:#176b36; }
+.facility-status.error { display:block; background:#fdeaea; color:#8a1f1f; }
+
+body.modal-open { overflow:hidden; }
+
+@media(max-width:700px) {
+  .facility-modal-dialog {
+    width:100%;
+    height:100%;
+    margin:0;
+    border-radius:0;
+  }
+
+  .facility-modal-scroll { padding:12px; }
+  .facility-request-form { padding:20px; }
+
+  .facility-form-grid,
+  .facility-form-grid-3,
+  .facility-form-checks {
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:900px) {
+  .info-cards,
+  .space-grid,
+  .steps {
+    grid-template-columns:1fr;
+  }
+
+  .gallery-grid {
+    grid-template-columns:repeat(2, 1fr);
+  }
+
+  .hero {
+    min-height:440px;
+  }
+}
+
+@media(max-width:560px) {
+  .section {
+    padding:52px 18px;
+  }
+
+  .gallery-grid {
+    grid-template-columns:1fr;
+  }
+
+  .space-card img,
+  .gallery-grid img {
+    height:220px;
+  }
+
+  .btn {
+    width:100%;
+    max-width:330px;
+  }
+}
+
+/* VUMC site navigation */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(247,244,237,0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(31,42,44,0.09);
+}
+.nav-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 14px 22px;
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+.brand-mark {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+.brand-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+.brand-tagline {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #667;
+  font-weight: 600;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 21px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.nav-links a,
+.dropdown-toggle {
+  color: #5b6470;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nav-links a:hover,
+.dropdown-toggle:hover {
+  color: #1f2a2c;
+}
+.nav-item.dropdown {
+  position: relative;
+}
+.dropdown-toggle::after {
+  content: "▾";
+  font-size: 11px;
+  margin-left: 6px;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 245px;
+  background: #fff;
+  border: 1px solid rgba(31,42,44,0.09);
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(31,42,44,0.14);
+  padding: 10px 0;
+  display: none;
+  z-index: 1200;
+}
+.dropdown-menu a {
+  display: block;
+  padding: 11px 16px;
+  color: #1f2a2c;
+  font-size: 14px;
+}
+.dropdown-menu a:hover {
+  background: #f7f4ed;
+}
+@media (min-width: 1001px) {
+  .nav-item.dropdown:hover .dropdown-menu { display: block; }
+}
+.nav-item.dropdown.open .dropdown-menu { display: block; }
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-actions .btn-dark-nav {
+  background: #1f2a2c;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 800;
+}
+.mobile-toggle {
+  display: none;
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  font-size: 22px;
+  cursor: pointer;
+}
+.mobile-menu {
+  display: none;
+  padding: 0 22px 18px;
+}
+.mobile-menu.show { display: block; }
+.mobile-menu-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid rgba(31,42,44,0.09);
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 0 18px 45px rgba(31,42,44,0.12);
+}
+.mobile-menu a,
+.mobile-submenu-toggle {
+  color: #1f2a2c;
+  text-decoration: none;
+  padding: 10px 2px;
+  font: inherit;
+  font-weight: 800;
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+}
+.mobile-submenu {
+  display: none;
+  padding-left: 14px;
+  border-left: 2px solid rgba(31,42,44,0.09);
+}
+.mobile-submenu.show { display: grid; gap: 2px; }
+.mobile-submenu a {
+  color: #5b6470;
+  font-size: 14px;
+  padding: 8px 2px;
+}
+@media (max-width: 1000px) {
+  .nav-links,
+  .nav-actions .btn-dark-nav {
+    display: none;
+  }
+  .mobile-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+@media (max-width: 560px) {
+  .nav-wrap { padding: 10px 14px; }
+  .brand-name { font-size: 14px; }
+  .brand-tagline { font-size: 11px; }
+  .brand-mark { width: 40px; height: 40px; }
+  .mobile-menu { padding: 0 14px 14px; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="/">
+      <img class="brand-mark" src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s176-c-k-c0x00ffffff-no-rj" alt="Versailles UMC logo">
+      <div>
+        <p class="brand-name">Versailles United Methodist Church</p>
+        <p class="brand-tagline">A Church Striving to Love Like Jesus</p>
+      </div>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="/">Home</a>
+      <a href="/watch/">Watch</a>
+      <div class="nav-item dropdown" id="connectDropdown">
+        <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="connectMenuDesktop">Connect</button>
+        <div class="dropdown-menu" id="connectMenuDesktop">
+          <a href="/new-here/">New Here</a>
+          <a href="/kids-families/">Kids & Families</a>
+          <a href="/groups/">Groups</a>
+          <a href="/serve/">Serve</a>
+          <a href="/host-your-event/" class="active">Host Your Event</a>
+          <a href="/next-steps/">Next Steps</a>
+          <a href="/plan-your-visit/">Plan Your Visit</a>
+          <a href="/contact/">Contact Us</a>
+          <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
+        </div>
+      </div>
+      <a href="/media/">Media</a>
+      <a href="/events/">Events</a>
+      <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="btn-dark-nav" href="/watch/">Watch Live</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-inner">
+      <a href="/">Home</a>
+      <a href="/watch/">Watch</a>
+      <button class="mobile-submenu-toggle" id="mobileConnectToggle" type="button" aria-expanded="false" aria-controls="mobileConnectMenu">Connect</button>
+      <div class="mobile-submenu" id="mobileConnectMenu">
+        <a href="/new-here/">New Here</a>
+        <a href="/kids-families/">Kids & Families</a>
+        <a href="/groups/">Groups</a>
+        <a href="/serve/">Serve</a>
+        <a href="/host-your-event/">Host Your Event</a>
+        <a href="/next-steps/">Next Steps</a>
+        <a href="/plan-your-visit/">Plan Your Visit</a>
+        <a href="/contact/">Contact Us</a>
+        <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
+      </div>
+      <a href="/media/">Media</a>
+      <a href="/events/">Events</a>
+      <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+    </div>
+  </div>
+</header>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Host Your Event</h1>
+    <div class="accent"></div>
+    <p>
+      Welcoming spaces for family gatherings, meetings, celebrations, ministry events,
+      receptions, and community use in the heart of Versailles, Kentucky.
+    </p>
+    <button class="btn facility-modal-trigger" type="button">Start Facility Rental Request</button>
+  </div>
+</header>
+
+<section class="section intro">
+  <h2>A Place to Gather, Celebrate, and Connect</h2>
+  <p>
+    Versailles United Methodist Church offers a variety of spaces that can serve families,
+    ministries, community groups, and organizations. Whether you are planning a reception,
+    meeting, shower, class, meal, or special event, our facility provides flexible options
+    in a welcoming church environment.
+  </p>
+
+  <div class="info-cards">
+    <div class="info-card">
+      <h3>Flexible Spaces</h3>
+      <p>Choose from larger gathering areas, classrooms, meeting rooms, outdoor space, and more.</p>
+    </div>
+
+    <div class="info-card">
+      <h3>Community Focused</h3>
+      <p>Our facility is used for ministry, connection, service, celebration, and community care.</p>
+    </div>
+
+    <div class="info-card">
+      <h3>Simple Request Process</h3>
+      <p>Submit a request online, and our church office will review availability and next steps.</p>
+    </div>
+  </div>
+</section>
+
+<section class="spaces">
+  <div class="section">
+    <h2 class="section-title">Available Facility Spaces</h2>
+
+    <div class="space-grid">
+
+      <div class="space-card">
+        <img src="/vumc-media/CBA4FE5C-CC65-44F4-851E-8500BCCFF8E1.webp" alt="Ballroom and fellowship space at Versailles United Methodist Church">
+        <div class="space-card-content">
+          <h3>Ballroom / Fellowship Space</h3>
+          <p>A larger space suitable for meals, receptions, showers, meetings, trainings, and community gatherings.</p>
+        </div>
+      </div>
+
+      <div class="space-card">
+        <img src="/vumc-media/327CF4B3-3008-4004-96E9-75EA29E9FF21.webp" alt="Sanctuary at Versailles United Methodist Church">
+        <div class="space-card-content">
+          <h3>Sanctuary</h3>
+          <p>A beautiful worship space available for approved services, ceremonies, and special gatherings.</p>
+        </div>
+      </div>
+
+      <div class="space-card">
+        <img src="/vumc-media/FF3C5BE3-BD84-460F-BDF7-351AC43B7136.webp" alt="Classroom space at Versailles United Methodist Church">
+        <div class="space-card-content">
+          <h3>Classrooms</h3>
+          <p>Smaller rooms for classes, breakout groups, planning meetings, and training sessions.</p>
+        </div>
+      </div>
+
+      <div class="space-card">
+        <img src="/vumc-media/8F0AF108-D7EB-461B-B138-C5E4D77DA9AB.webp" alt="Outdoor pavilion at Versailles United Methodist Church">
+        <div class="space-card-content">
+          <h3>Outdoor Pavilion</h3>
+          <p>An outdoor option for casual gatherings, picnics, family events, and seasonal activities.</p>
+        </div>
+      </div>
+
+      <div class="space-card">
+        <img src="/vumc-media/kitchen.webp" alt="Kitchen space at Versailles United Methodist Church">
+        <div class="space-card-content">
+          <h3>Kitchen Access</h3>
+          <p>Kitchen use may be requested depending on event type, approval, setup, and cleanup needs.</p>
+        </div>
+      </div>
+
+      <div class="space-card">
+        <img src="/vumc-media/77E5195E-2D00-43B8-990E-28C45E0B8AB8.webp" alt="Gathering area at Versailles United Methodist Church">
+        <div class="space-card-content">
+          <h3>Gathering Areas</h3>
+          <p>Welcoming spaces that help guests arrive, connect, and feel comfortable during your event.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <h2>Welcoming Spaces for Meaningful Moments</h2>
+  <p>
+    From family celebrations to community meetings, our facility is designed to help people gather well.
+  </p>
+  <button class="btn facility-modal-trigger" type="button">Request Event Date</button>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Facility Photo Gallery</h2>
+  <p>
+    Browse photos of our facility. More images may be added as spaces are updated or prepared for events.
+  </p>
+
+  <div class="gallery-grid">
+    <img src="/vumc-media/A06671CF-818B-4791-A36F-8A171C53A824.webp" alt="Facility photo 1">
+    <img src="/vumc-media/CBA4FE5C-CC65-44F4-851E-8500BCCFF8E1.webp" alt="Facility photo 2">
+    <img src="/vumc-media/327CF4B3-3008-4004-96E9-75EA29E9FF21.webp" alt="Facility photo 3">
+    <img src="/vumc-media/FF3C5BE3-BD84-460F-BDF7-351AC43B7136.webp" alt="Facility photo 4">
+    <img src="/vumc-media/8F0AF108-D7EB-461B-B138-C5E4D77DA9AB.webp" alt="Facility photo 5">
+    <img src="/vumc-media/kitchen.webp" alt="Facility photo 6">
+    <img src="/vumc-media/77E5195E-2D00-43B8-990E-28C45E0B8AB8.webp" alt="Facility photo 7">
+    <img src="/vumc-media/atrium.webp" alt="Facility photo 8">
+  </div>
+</section>
+
+<section class="process">
+  <div class="section">
+    <h2 class="section-title">How Facility Requests Work</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Submit a Request</h3>
+        <p>Complete the facility request form with your event details, preferred date, and space needs.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Office Review</h3>
+        <p>Our church office will review availability, requested spaces, and any setup or technology needs.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Follow-Up</h3>
+        <p>A member of our team will contact you with next steps, approval status, and any additional details.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>Ready to Request Space?</h2>
+  <p>
+    Complete the facility rental request form and our church office will review your request.
+    Submitting a request does not guarantee approval or availability.
+  </p>
+
+  <button class="btn secondary facility-modal-trigger" type="button">Start Facility Rental Request</button>
+
+  <div class="small-note">
+    Versailles United Methodist Church · Versailles, Kentucky
+  </div>
+</section>
+
+
+<div class="facility-modal" id="facilityModal" aria-hidden="true">
+  <div class="facility-modal-backdrop" data-close-facility-modal></div>
+  <div class="facility-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="facilityModalTitle">
+    <div class="facility-modal-header">
+      <h2 class="facility-modal-title" id="facilityModalTitle">Facility Rental Request</h2>
+      <button class="facility-modal-close" id="facilityModalClose" type="button" aria-label="Close facility request form">&times;</button>
+    </div>
+
+    <div class="facility-modal-scroll">
+      <form class="facility-request-form" id="facilityRequestForm">
+        <input type="hidden" name="formStartedAt" id="facilityFormStartedAt">
+
+        <div class="facility-honeypot" aria-hidden="true">
+          <label>Website</label>
+          <input type="text" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="facility-form-notice">
+          The church office will review your request, confirm availability, and contact you regarding approval,
+          applicable fees, facility guidelines, and next steps.
+        </div>
+
+        <h3>Organization &amp; Contact Information</h3>
+
+        <label for="facilityOrganization">Name of Organization <span class="facility-required">*</span></label>
+        <input id="facilityOrganization" name="organization" required>
+
+        <label for="facilityMember">VUMC Member <span class="facility-required">*</span></label>
+        <select id="facilityMember" name="member" required>
+          <option value="">Select one</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+
+        <label for="facilityAddress">Address <span class="facility-required">*</span></label>
+        <textarea id="facilityAddress" name="address" required></textarea>
+
+        <div class="facility-form-grid">
+          <div>
+            <label for="facilityPhone">Phone Number(s) <span class="facility-required">*</span></label>
+            <input id="facilityPhone" type="tel" name="phone" required>
+          </div>
+          <div>
+            <label for="facilityEmail">Email <span class="facility-required">*</span></label>
+            <input id="facilityEmail" type="email" name="email" required>
+          </div>
+        </div>
+
+        <h3>Reservation Information</h3>
+
+        <label for="facilityPurpose">Purpose of Use <span class="facility-required">*</span></label>
+        <input id="facilityPurpose" name="purpose" required>
+
+        <label for="facilityUseDate">Date of Use <span class="facility-required">*</span></label>
+        <input id="facilityUseDate" type="date" name="useDates" required>
+        <span class="facility-form-help">Click or tap the calendar icon to select the event date.</span>
+
+        <div class="facility-form-grid-3">
+          <div>
+            <label for="facilityStartTime">Beginning Time <span class="facility-required">*</span></label>
+            <input id="facilityStartTime" type="time" name="startTime" required>
+          </div>
+          <div>
+            <label for="facilityEndTime">Ending Time <span class="facility-required">*</span></label>
+            <input id="facilityEndTime" type="time" name="endTime" required>
+          </div>
+          <div>
+            <label for="facilityReadyTime">Facility Ready Time <span class="facility-required">*</span></label>
+            <input id="facilityReadyTime" type="time" name="readyTime" required>
+          </div>
+        </div>
+
+        <label for="facilityAttendance">Number of Persons Attending <span class="facility-required">*</span></label>
+        <input id="facilityAttendance" type="number" name="attendance" min="1" required>
+
+        <h3>Facilities / Items to Be Used</h3>
+        <span class="facility-form-help">Select every item that applies. At least one facility or room is required.</span>
+
+        <fieldset>
+          <legend>Pavilion</legend>
+          <div class="facility-form-checks">
+            <label><input type="checkbox" name="pavilion" value="Yes"> Pavilion</label>
+            <label><input type="checkbox" name="pavilionKitchen" value="Yes"> Kitchen</label>
+            <label><input type="checkbox" name="pavilionTables" value="Yes"> Tables</label>
+            <label><input type="checkbox" name="pavilionChairs" value="Yes"> Chairs</label>
+          </div>
+
+          <div class="facility-form-grid">
+            <div>
+              <label for="facilityPavilionTableQty">Table Quantity</label>
+              <input id="facilityPavilionTableQty" type="number" name="pavilionTableQty" min="0">
+            </div>
+            <div>
+              <label for="facilityPavilionChairQty">Chair Quantity</label>
+              <input id="facilityPavilionChairQty" type="number" name="pavilionChairQty" min="0">
+            </div>
+          </div>
+
+          <label>Pavilion Table Size</label>
+          <div class="facility-form-checks">
+            <label><input type="checkbox" name="pavilionTableSizes" value="8 ft"> 8 ft</label>
+            <label><input type="checkbox" name="pavilionTableSizes" value="6 ft"> 6 ft</label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Church</legend>
+          <div class="facility-form-checks">
+            <label><input type="checkbox" name="churchSanctuary" value="Yes"> Sanctuary</label>
+            <label><input type="checkbox" name="churchKitchen" value="Yes"> Kitchen</label>
+            <label><input type="checkbox" name="churchAtrium" value="Yes"> Atrium</label>
+            <label><input type="checkbox" name="churchConferenceRoom" value="Yes"> Conference Room</label>
+            <label><input type="checkbox" name="churchYouthRoom" value="Yes"> Youth Room</label>
+            <label><input type="checkbox" name="churchChildrensRoom" value="Yes"> Children's Room</label>
+            <label><input type="checkbox" name="churchClassrooms" value="Yes"> Classrooms</label>
+          </div>
+
+          <label for="facilityRoomNumbers">Classroom Room Number(s)</label>
+          <input id="facilityRoomNumbers" name="churchRoomNumbers" placeholder="List specific room numbers, if known">
+
+          <div class="facility-form-grid">
+            <div>
+              <label class="facility-inline-check"><input type="checkbox" name="roundTables" value="Yes"> Round Tables</label>
+              <label for="facilityRoundQty">Round Table Quantity</label>
+              <input id="facilityRoundQty" type="number" name="roundTableQty" min="0">
+            </div>
+            <div>
+              <label class="facility-inline-check"><input type="checkbox" name="rectangularTables" value="Yes"> Rectangular Tables</label>
+              <label for="facilityRectQty">Rectangular Table Quantity</label>
+              <input id="facilityRectQty" type="number" name="rectangularTableQty" min="0">
+            </div>
+          </div>
+
+          <label>Church Table Size</label>
+          <div class="facility-form-checks">
+            <label><input type="checkbox" name="churchTableSizes" value="8 ft"> 8 ft</label>
+            <label><input type="checkbox" name="churchTableSizes" value="6 ft"> 6 ft</label>
+          </div>
+
+          <label class="facility-inline-check"><input type="checkbox" name="soundSystem" value="Yes"> Sound System</label>
+
+          <label for="facilityOtherNeeds">Other (Specify)</label>
+          <textarea id="facilityOtherNeeds" name="otherNeeds"></textarea>
+        </fieldset>
+
+        <h3>Agreement &amp; Signature</h3>
+
+        <div class="facility-agreement">
+          The Church and/or Pavilion Use Guidelines have been received. By signing this reservation request,
+          the responsible party agrees to abide by these policies. Submission is a request only and does not
+          confirm approval, availability, or final rental cost.
+        </div>
+
+        <label class="facility-inline-check">
+          <input type="checkbox" name="guidelinesAgreement"
+            value="I have received and agree to abide by the Church and/or Pavilion Use Guidelines." required>
+          I have received and agree to abide by the Church and/or Pavilion Use Guidelines.
+          <span class="facility-required">*</span>
+        </label>
+
+        <div class="facility-form-grid">
+          <div>
+            <label for="facilitySignature">Responsible Party Signature <span class="facility-required">*</span></label>
+            <input id="facilitySignature" name="responsibleSignature" placeholder="Type your full legal name" required>
+            <span class="facility-form-help">Typing your name serves as your electronic signature.</span>
+          </div>
+          <div>
+            <label for="facilitySignatureDate">Date <span class="facility-required">*</span></label>
+            <input id="facilitySignatureDate" type="date" name="signatureDate" required>
+          </div>
+        </div>
+
+        <button class="facility-submit" id="facilitySubmitBtn" type="submit">Submit Facility Rental Request</button>
+        <div class="facility-status" id="facilityStatus" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const mobileToggle = document.getElementById('mobileToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileConnectToggle = document.getElementById('mobileConnectToggle');
+  const mobileConnectMenu = document.getElementById('mobileConnectMenu');
+  const connectDropdown = document.getElementById('connectDropdown');
+  const desktopDropdownToggle = connectDropdown ? connectDropdown.querySelector('.dropdown-toggle') : null;
+
+  if (mobileToggle && mobileMenu) {
+    mobileToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('show');
+    });
+  }
+
+  if (mobileConnectToggle && mobileConnectMenu) {
+    mobileConnectToggle.addEventListener('click', () => {
+      const isOpen = mobileConnectMenu.classList.toggle('show');
+      mobileConnectToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  }
+
+  if (desktopDropdownToggle && connectDropdown) {
+    desktopDropdownToggle.addEventListener('click', (e) => {
+      if (window.innerWidth <= 1000) {
+        e.preventDefault();
+        const isOpen = connectDropdown.classList.toggle('open');
+        desktopDropdownToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!connectDropdown.contains(e.target)) {
+        connectDropdown.classList.remove('open');
+        desktopDropdownToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  const FACILITY_GAS_URL = "https://script.google.com/macros/s/AKfycbysdlnyT75KPMR-KSU9mwMuoQdKs6NehWGEwGmw5Z85BW211HvPi8yVO6yAauZz62E38Q/exec";
+  const facilityModal = document.getElementById("facilityModal");
+  const facilityModalClose = document.getElementById("facilityModalClose");
+  const facilityForm = document.getElementById("facilityRequestForm");
+  const facilitySubmitBtn = document.getElementById("facilitySubmitBtn");
+  const facilityStatus = document.getElementById("facilityStatus");
+  const facilityTriggers = document.querySelectorAll(".facility-modal-trigger");
+  const facilityStartedAt = document.getElementById("facilityFormStartedAt");
+  const facilitySignatureDate = document.getElementById("facilitySignatureDate");
+  let lastFacilityTrigger = null;
+
+  function resetFacilityTiming() {
+    facilityStartedAt.value = Date.now();
+    facilitySignatureDate.value = new Date().toISOString().split("T")[0];
+  }
+
+  function openFacilityModal(trigger) {
+    lastFacilityTrigger = trigger || null;
+    facilityModal.classList.add("open");
+    facilityModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    resetFacilityTiming();
+    setTimeout(() => facilityModalClose.focus(), 50);
+  }
+
+  function closeFacilityModal() {
+    facilityModal.classList.remove("open");
+    facilityModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+    if (lastFacilityTrigger) lastFacilityTrigger.focus();
+  }
+
+  function setFacilityStatus(message, success) {
+    facilityStatus.textContent = message;
+    facilityStatus.className = "facility-status " + (success ? "success" : "error");
+    facilityStatus.scrollIntoView({ behavior:"smooth", block:"center" });
+  }
+
+  facilityTriggers.forEach(trigger => {
+    trigger.addEventListener("click", () => openFacilityModal(trigger));
+  });
+
+  facilityModalClose.addEventListener("click", closeFacilityModal);
+  document.querySelectorAll("[data-close-facility-modal]").forEach(el => {
+    el.addEventListener("click", closeFacilityModal);
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && facilityModal.classList.contains("open")) closeFacilityModal();
+  });
+
+  facilityForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    if (!facilityForm.reportValidity()) return;
+
+    const facilityNames = [
+      "pavilion","pavilionKitchen","pavilionTables","pavilionChairs",
+      "churchSanctuary","churchKitchen","churchAtrium","churchConferenceRoom",
+      "churchYouthRoom","churchChildrensRoom","churchClassrooms"
+    ];
+
+    const hasFacility = facilityNames.some(name => {
+      const field = facilityForm.elements[name];
+      return field && field.checked;
+    });
+
+    if (!hasFacility) {
+      setFacilityStatus("Please select at least one facility or room.", false);
+      return;
+    }
+
+    facilitySubmitBtn.disabled = true;
+    facilitySubmitBtn.textContent = "Submitting...";
+    facilityStatus.className = "facility-status";
+    facilityStatus.textContent = "";
+
+    try {
+      const body = new URLSearchParams(new FormData(facilityForm));
+
+      await fetch(FACILITY_GAS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body
+      });
+
+      setFacilityStatus(
+        "Thank you. Your facility request has been submitted. The church office will contact you after reviewing availability and details.",
+        true
+      );
+
+      facilityForm.reset();
+      resetFacilityTiming();
+    } catch (error) {
+      console.error(error);
+      setFacilityStatus(
+        "The request could not be submitted. Please check your connection and try again, or contact the church office.",
+        false
+      );
+    } finally {
+      facilitySubmitBtn.disabled = false;
+      facilitySubmitBtn.textContent = "Submit Facility Rental Request";
+    }
+  });
+
+  resetFacilityTiming();
 
 </script>
 
