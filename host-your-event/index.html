@@ -2603,6 +2603,47 @@ One technical note: the submission uses fetch(..., { mode: "no-cors" }) because 
 
 
 
+image(3).png
+what happen?
+
+You pasted the Apps Script code into the GitHub webpage.
+
+That is why the browser is displaying:
+
+The raw const RECIPIENTS = [...] code
+
+${safe_(d.organization)} as literal text
+
+The email template as a visible webpage
+
+The browser cannot run Apps Script functions such as SpreadsheetApp, MailApp, or the server-side template literals. Those belong only in Google Apps Script, not in GitHub.
+
+Use the files this way:
+
+In GitHub
+Replace the Host Your Event page with only this file:
+
+host-your-event-fetch-popup.html
+
+Do not paste Code.gs into the GitHub page.
+
+In Google Apps Script
+Replace the contents of Code.gs with only this file:
+
+Download the GAS fetch backend
+
+Then save and redeploy the Apps Script as a new version.
+
+Important separation
+GitHub:
+host-your-event-fetch-popup.html
+
+Google Apps Script:
+Code.gs
+The screenshot shows that the old Apps Script source was accidentally placed inside the GitHub HTML file. Replacing that GitHub page with the correct Host Your Event file will restore the page.
+
+
+
 Library
 /
 Form Creation
