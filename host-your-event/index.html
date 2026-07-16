@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -978,8 +979,26 @@ body.modal-open { overflow:hidden; }
           <option value="No">No</option>
         </select>
 
-        <label for="facilityAddress">Address <span class="facility-required">*</span></label>
-        <textarea id="facilityAddress" name="address" required></textarea>
+        <label>Street Address <span class="facility-required">*</span></label>
+        <input id="facilityStreet" name="street" required>
+
+        <div class="facility-form-grid">
+          <div>
+            <label>City <span class="facility-required">*</span></label>
+            <input id="facilityCity" name="city" required>
+          </div>
+          <div>
+            <label>State <span class="facility-required">*</span></label>
+            <input id="facilityState" name="state" value="KY" required>
+          </div>
+        </div>
+
+        <div class="facility-form-grid">
+          <div>
+            <label>ZIP Code <span class="facility-required">*</span></label>
+            <input id="facilityZip" name="zip" required>
+          </div>
+        </div>
 
         <div class="facility-form-grid">
           <div>
