@@ -1083,7 +1083,29 @@ body.modal-open { overflow:hidden; }
             <label><input type="checkbox" name="churchTableSizes" value="6 ft"> 6 ft</label>
           </div>
 
-          <label class="facility-inline-check"><input type="checkbox" name="soundSystem" value="Yes"> Sound System</label>
+          <label for="facilityAvNeeded">Is audio and/or video needed? <span class="facility-required">*</span></label>
+          <select id="facilityAvNeeded" name="avNeeded" required>
+            <option value="">Select one</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Not sure">Not sure</option>
+          </select>
+
+          <div class="facility-agreement">
+            Church audio and video equipment may only be operated by a trained VUMC technician.
+            When audio or video services are requested, a technician/operator fee will be added to the facility rental cost.
+          </div>
+
+          <label class="facility-inline-check">
+            <input
+              type="checkbox"
+              name="avAgreement"
+              value="I understand that requested audio/video services require a trained VUMC technician and an additional operator fee."
+              required
+            >
+            I understand that requested audio/video services require a trained VUMC technician and an additional operator fee.
+            <span class="facility-required">*</span>
+          </label>
 
           <label for="facilityOtherNeeds">Other (Specify)</label>
           <textarea id="facilityOtherNeeds" name="otherNeeds"></textarea>
