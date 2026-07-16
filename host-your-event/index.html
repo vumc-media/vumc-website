@@ -258,6 +258,96 @@ body {
   margin-top:18px;
 }
 
+
+.btn {
+  border:0;
+  cursor:pointer;
+  font:inherit;
+}
+
+.facility-modal {
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  display:none;
+}
+
+.facility-modal.open {
+  display:block;
+}
+
+.facility-modal-backdrop {
+  position:absolute;
+  inset:0;
+  background:rgba(18,28,30,.78);
+  backdrop-filter:blur(5px);
+}
+
+.facility-modal-dialog {
+  position:relative;
+  width:min(960px, calc(100% - 28px));
+  height:min(92vh, 980px);
+  margin:4vh auto;
+  background:#fff;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,.38);
+}
+
+.facility-modal-header {
+  height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:0 18px 0 22px;
+  background:var(--teal-dark);
+  color:#fff;
+}
+
+.facility-modal-title {
+  margin:0;
+  font-size:1.05rem;
+  font-weight:800;
+}
+
+.facility-modal-close {
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:50%;
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  font-size:1.7rem;
+  line-height:1;
+  cursor:pointer;
+}
+
+.facility-modal-close:hover {
+  background:rgba(255,255,255,.24);
+}
+
+.facility-modal-frame {
+  width:100%;
+  height:calc(100% - 62px);
+  border:0;
+  display:block;
+  background:#f7f7f4;
+}
+
+body.modal-open {
+  overflow:hidden;
+}
+
+@media(max-width:700px) {
+  .facility-modal-dialog {
+    width:100%;
+    height:100%;
+    margin:0;
+    border-radius:0;
+  }
+}
+
 @media(max-width:900px) {
   .info-cards,
   .space-grid,
@@ -552,9 +642,9 @@ body {
       Welcoming spaces for family gatherings, meetings, celebrations, ministry events,
       receptions, and community use in the heart of Versailles, Kentucky.
     </p>
-    <a class="btn" href="https://versaillesumc.churchcenter.com/people/forms/779435" data-open-in-church-center-modal="true">
+    <button class="btn facility-modal-trigger" type="button">
       Start Facility Rental Request
-    </a>
+    </button>
   </div>
 </header>
 
@@ -648,9 +738,9 @@ body {
   <p>
     From family celebrations to community meetings, our facility is designed to help people gather well.
   </p>
-  <a class="btn" href="https://versaillesumc.churchcenter.com/people/forms/779435" data-open-in-church-center-modal="true">
+  <button class="btn facility-modal-trigger" type="button">
     Request Event Date
-  </a>
+  </button>
 </section>
 
 <section class="section">
@@ -704,14 +794,50 @@ body {
     Submitting a request does not guarantee approval or availability.
   </p>
 
-  <a class="btn secondary" href="https://versaillesumc.churchcenter.com/people/forms/779435" data-open-in-church-center-modal="true">
+  <button class="btn secondary facility-modal-trigger" type="button">
     Start Facility Rental Request
-  </a>
+  </button>
 
   <div class="small-note">
     Versailles United Methodist Church · Versailles, Kentucky
   </div>
 </section>
+
+
+<div class="facility-modal" id="facilityModal" aria-hidden="true">
+  <div class="facility-modal-backdrop" data-close-facility-modal></div>
+
+  <div
+    class="facility-modal-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="facilityModalTitle"
+  >
+    <div class="facility-modal-header">
+      <h2 class="facility-modal-title" id="facilityModalTitle">
+        Facility Rental Request
+      </h2>
+
+      <button
+        class="facility-modal-close"
+        id="facilityModalClose"
+        type="button"
+        aria-label="Close facility request form"
+      >
+        &times;
+      </button>
+    </div>
+
+    <iframe
+      class="facility-modal-frame"
+      id="facilityModalFrame"
+      title="Versailles United Methodist Church Facility Rental Request"
+      data-src="https://script.google.com/macros/s/AKfycbysdlnyT75KPMR-KSU9mwMuoQdKs6NehWGEwGmw5Z85BW211HvPi8yVO6yAauZz62E38Q/exec"
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+    ></iframe>
+  </div>
+</div>
 
 <script>
   const mobileToggle = document.getElementById('mobileToggle');
@@ -750,6 +876,61 @@ body {
       }
     });
   }
+
+  const facilityModal = document.getElementById('facilityModal');
+  const facilityModalFrame = document.getElementById('facilityModalFrame');
+  const facilityModalClose = document.getElementById('facilityModalClose');
+  const facilityModalTriggers = document.querySelectorAll('.facility-modal-trigger');
+  let lastFacilityTrigger = null;
+
+  function openFacilityModal(trigger) {
+    if (!facilityModal || !facilityModalFrame) return;
+
+    lastFacilityTrigger = trigger || null;
+
+    if (!facilityModalFrame.src) {
+      facilityModalFrame.src = facilityModalFrame.dataset.src;
+    }
+
+    facilityModal.classList.add('open');
+    facilityModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+
+    window.setTimeout(() => {
+      if (facilityModalClose) facilityModalClose.focus();
+    }, 50);
+  }
+
+  function closeFacilityModal() {
+    if (!facilityModal) return;
+
+    facilityModal.classList.remove('open');
+    facilityModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+
+    if (lastFacilityTrigger) {
+      lastFacilityTrigger.focus();
+    }
+  }
+
+  facilityModalTriggers.forEach(trigger => {
+    trigger.addEventListener('click', () => openFacilityModal(trigger));
+  });
+
+  if (facilityModalClose) {
+    facilityModalClose.addEventListener('click', closeFacilityModal);
+  }
+
+  document.querySelectorAll('[data-close-facility-modal]').forEach(element => {
+    element.addEventListener('click', closeFacilityModal);
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && facilityModal && facilityModal.classList.contains('open')) {
+      closeFacilityModal();
+    }
+  });
+
 </script>
 
 <script src="https://js.churchcenter.com/modal/v1"></script>
