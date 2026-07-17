@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -205,6 +204,86 @@ body {
   object-fit:cover;
   border-radius:16px;
   background:#d8d8d8;
+}
+
+.documents {
+  background:var(--cream);
+}
+
+.documents-intro {
+  text-align:center;
+  max-width:820px;
+  margin:0 auto;
+}
+
+.document-grid {
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:22px;
+  margin-top:36px;
+}
+
+.document-card {
+  background:#fff;
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 12px 35px rgba(0,0,0,.08);
+  border-top:5px solid var(--teal);
+  display:flex;
+  flex-direction:column;
+}
+
+.document-card h3 {
+  margin:0 0 10px;
+  color:var(--teal-dark);
+  font-size:1.35rem;
+}
+
+.document-card p {
+  margin:0 0 22px;
+  flex:1;
+}
+
+.document-card .btn {
+  width:100%;
+  text-align:center;
+}
+
+.document-apply {
+  margin-top:34px;
+  text-align:center;
+  background:#fff;
+  border:1px solid rgba(31,42,44,.08);
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 12px 30px rgba(0,0,0,.05);
+}
+
+.document-apply h3 {
+  margin:0 0 8px;
+  font-size:1.45rem;
+}
+
+.document-apply p {
+  max-width:720px;
+  margin:0 auto 20px;
+}
+
+.hero-actions {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.btn.outline {
+  background:transparent;
+  color:#fff;
+  border:2px solid rgba(255,255,255,.85);
+}
+
+.btn.outline:hover {
+  background:rgba(255,255,255,.12);
 }
 
 .process {
@@ -498,7 +577,8 @@ body.modal-open { overflow:hidden; }
 @media(max-width:900px) {
   .info-cards,
   .space-grid,
-  .steps {
+  .steps,
+  .document-grid {
     grid-template-columns:1fr;
   }
 
@@ -789,7 +869,10 @@ body.modal-open { overflow:hidden; }
       Welcoming spaces for family gatherings, meetings, celebrations, ministry events,
       receptions, and community use in the heart of Versailles, Kentucky.
     </p>
-    <button class="btn facility-modal-trigger" type="button">Start Facility Rental Request</button>
+    <div class="hero-actions">
+      <a class="btn" href="#rental-documents">Review Rental Information</a>
+      <button class="btn outline facility-modal-trigger" type="button">Start Facility Request</button>
+    </div>
   </div>
 </header>
 
@@ -883,7 +966,7 @@ body.modal-open { overflow:hidden; }
   <p>
     From family celebrations to community meetings, our facility is designed to help people gather well.
   </p>
-  <button class="btn facility-modal-trigger" type="button">Request Event Date</button>
+  <a class="btn" href="#rental-documents">Review Policies &amp; Fees</a>
 </section>
 
 <section class="section">
@@ -901,6 +984,69 @@ body.modal-open { overflow:hidden; }
     <img src="/vumc-media/kitchen.webp" alt="Facility photo 6">
     <img src="/vumc-media/77E5195E-2D00-43B8-990E-28C45E0B8AB8.webp" alt="Facility photo 7">
     <img src="/vumc-media/atrium.webp" alt="Facility photo 8">
+  </div>
+</section>
+
+<section class="documents" id="rental-documents">
+  <div class="section">
+    <div class="documents-intro">
+      <h2 class="section-title">Before You Submit a Request</h2>
+      <p>
+        Please review the reservation process, rental fees, and applicable use guidelines before
+        submitting a facility request. These documents will help you understand the approval process,
+        expected costs, deposits, and facility responsibilities.
+      </p>
+    </div>
+
+    <div class="document-grid">
+      <article class="document-card">
+        <h3>Reservation Process</h3>
+        <p>
+          Learn how requests are reviewed, tentatively scheduled, approved, and added to the church calendar.
+        </p>
+        <a class="btn secondary"
+           href="/host-your-event/docs/VUMC_Facility_Reservation_Request_Process.pdf"
+           target="_blank"
+           rel="noopener">
+          View Reservation Process
+        </a>
+      </article>
+
+      <article class="document-card">
+        <h3>Rental Fees &amp; Deposits</h3>
+        <p>
+          Review facility rental rates, technician and custodial fees, security deposits, and payment timing.
+        </p>
+        <a class="btn secondary"
+           href="/host-your-event/docs/VUMC_Facility_Rental_Fees_and_Deposits.pdf"
+           target="_blank"
+           rel="noopener">
+          View Rental Fees
+        </a>
+      </article>
+
+      <article class="document-card">
+        <h3>Pavilion Guidelines</h3>
+        <p>
+          Review pavilion reservation requirements, cleanup responsibilities, prohibited activities, and deposit terms.
+        </p>
+        <a class="btn secondary"
+           href="/host-your-event/docs/VUMC_Pavilion_Guidelines.pdf"
+           target="_blank"
+           rel="noopener">
+          View Pavilion Guidelines
+        </a>
+      </article>
+    </div>
+
+    <div class="document-apply">
+      <h3>Ready to Apply?</h3>
+      <p>
+        After reviewing the documents above, submit your request. The church office will confirm availability,
+        review your event details, and contact you regarding approval and next steps.
+      </p>
+      <button class="btn facility-modal-trigger" type="button">Start Facility Rental Request</button>
+    </div>
   </div>
 </section>
 
@@ -933,14 +1079,15 @@ body.modal-open { overflow:hidden; }
 <section class="cta">
   <h2>Ready to Request Space?</h2>
   <p>
-    Complete the facility rental request form and our church office will review your request.
-    Submitting a request does not guarantee approval or availability.
+    After reviewing the reservation process, fees, and applicable guidelines, complete the facility request form.
+    Submitting a request does not guarantee approval, availability, or a final rental cost.
   </p>
 
-  <button class="btn secondary facility-modal-trigger" type="button">Start Facility Rental Request</button>
+  <a class="btn secondary" href="#rental-documents">Review Documents</a>
+  <button class="btn facility-modal-trigger" type="button">Start Facility Rental Request</button>
 
   <div class="small-note">
-    Versailles United Methodist Church · Versailles, Kentucky
+    Versailles United Methodist Church · 230 Paynes Mill Road · Versailles, Kentucky
   </div>
 </section>
 
@@ -963,8 +1110,9 @@ body.modal-open { overflow:hidden; }
         </div>
 
         <div class="facility-form-notice">
-          The church office will review your request, confirm availability, and contact you regarding approval,
-          applicable fees, facility guidelines, and next steps.
+          This form begins the reservation review process. Before submitting, please review the Reservation Process,
+          Rental Fees &amp; Deposits, and any applicable Facility or Pavilion Guidelines available on this page.
+          The church office will contact you regarding availability, approval, final costs, and next steps.
         </div>
 
         <h3>Organization &amp; Contact Information</h3>
@@ -1115,16 +1263,19 @@ body.modal-open { overflow:hidden; }
             When audio or video services are requested, a technician/operator fee will be added to the facility rental cost.
           </div>
 
-          <label class="facility-inline-check">
+          <label class="facility-inline-check" id="facilityAvAgreementRow">
             <input
+              id="facilityAvAgreement"
               type="checkbox"
               name="avAgreement"
               value="I understand that requested audio/video services require a trained VUMC technician and an additional operator fee."
-              required
             >
             I understand that requested audio/video services require a trained VUMC technician and an additional operator fee.
-            <span class="facility-required">*</span>
+            <span class="facility-required" id="facilityAvAgreementRequired" hidden>*</span>
           </label>
+          <span class="facility-form-help">
+            This acknowledgement is required only when “Yes” or “Not sure” is selected above.
+          </span>
 
           <label for="facilityOtherNeeds">Other (Specify)</label>
           <textarea id="facilityOtherNeeds" name="otherNeeds"></textarea>
@@ -1133,15 +1284,14 @@ body.modal-open { overflow:hidden; }
         <h3>Agreement &amp; Signature</h3>
 
         <div class="facility-agreement">
-          The Church and/or Pavilion Use Guidelines have been received. By signing this reservation request,
-          the responsible party agrees to abide by these policies. Submission is a request only and does not
-          confirm approval, availability, or final rental cost.
+          Submission of this form is a request only. It does not confirm approval, availability, or final rental cost.
+          Final requirements, fees, deposits, and signatures will be completed after the request has been reviewed.
         </div>
 
         <label class="facility-inline-check">
           <input type="checkbox" name="guidelinesAgreement"
-            value="I have received and agree to abide by the Church and/or Pavilion Use Guidelines." required>
-          I have received and agree to abide by the Church and/or Pavilion Use Guidelines.
+            value="I certify that I reviewed the Reservation Process, Rental Fees and Deposits, and applicable Facility or Pavilion Guidelines before submitting this request." required>
+          I certify that I reviewed the Reservation Process, Rental Fees &amp; Deposits, and applicable Facility or Pavilion Guidelines before submitting this request.
           <span class="facility-required">*</span>
         </label>
 
@@ -1149,7 +1299,7 @@ body.modal-open { overflow:hidden; }
           <div>
             <label for="facilitySignature">Responsible Party Signature <span class="facility-required">*</span></label>
             <input id="facilitySignature" name="responsibleSignature" placeholder="Type your full legal name" required>
-            <span class="facility-form-help">Typing your name serves as your electronic signature.</span>
+            <span class="facility-form-help">Typing your name certifies that you are the responsible party submitting this request.</span>
           </div>
           <div>
             <label for="facilitySignatureDate">Date <span class="facility-required">*</span></label>
@@ -1211,11 +1361,27 @@ body.modal-open { overflow:hidden; }
   const facilityTriggers = document.querySelectorAll(".facility-modal-trigger");
   const facilityStartedAt = document.getElementById("facilityFormStartedAt");
   const facilitySignatureDate = document.getElementById("facilitySignatureDate");
+  const facilityAvNeeded = document.getElementById("facilityAvNeeded");
+  const facilityAvAgreement = document.getElementById("facilityAvAgreement");
+  const facilityAvAgreementRequired = document.getElementById("facilityAvAgreementRequired");
   let lastFacilityTrigger = null;
+
+  function updateFacilityAvAgreementRequirement() {
+    const avRequiresAgreement =
+      facilityAvNeeded.value === "Yes" || facilityAvNeeded.value === "Not sure";
+
+    facilityAvAgreement.required = avRequiresAgreement;
+    facilityAvAgreementRequired.hidden = !avRequiresAgreement;
+
+    if (!avRequiresAgreement) {
+      facilityAvAgreement.checked = false;
+    }
+  }
 
   function resetFacilityTiming() {
     facilityStartedAt.value = Date.now();
     facilitySignatureDate.value = new Date().toISOString().split("T")[0];
+    updateFacilityAvAgreementRequirement();
   }
 
   function openFacilityModal(trigger) {
@@ -1239,6 +1405,8 @@ body.modal-open { overflow:hidden; }
     facilityStatus.className = "facility-status " + (success ? "success" : "error");
     facilityStatus.scrollIntoView({ behavior:"smooth", block:"center" });
   }
+
+  facilityAvNeeded.addEventListener("change", updateFacilityAvAgreementRequirement);
 
   facilityTriggers.forEach(trigger => {
     trigger.addEventListener("click", () => openFacilityModal(trigger));
