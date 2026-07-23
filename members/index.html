@@ -251,12 +251,7 @@
         alt="Church Center by Planning Center"
       >
     </div>
-
-    <p class="checking" id="checkingMessage" role="status">
-      Checking your secure login
-    </p>
-
-    <a
+<a
       class="login-button"
       id="loginButton"
       href="https://versaillesumc.churchcenter.com/pages/vumc-hub"
@@ -294,13 +289,6 @@
       event.preventDefault();
       openChurchCenter();
     });
-
-    /*
-      Automatically continue after a brief pause.
-      If Church Center remembers this browser, the member will open already signed in.
-      Otherwise, Planning Center will display its secure sign-in screen.
-    */
-    window.setTimeout(openChurchCenter, 1800);
   </script>
 
   <script type="application/ld+json">
