@@ -13,11 +13,9 @@
       --navy: #0b2a52;
       --navy-dark: #071b36;
       --green: #3fa66a;
-      --red: #b5222a;
       --white: #ffffff;
       --ink: #162033;
       --muted: #667085;
-      --line: #dfe5ec;
       --shadow: 0 24px 60px rgba(7, 27, 54, 0.16);
     }
 
@@ -58,35 +56,12 @@
       box-shadow: var(--shadow);
     }
 
-    .brand-mark {
-      width: 58px;
-      height: 69px;
-      position: relative;
+    .church-logo {
+      width: min(100%, 250px);
+      max-height: 105px;
       margin: 0 auto 1.15rem;
-    }
-
-    .brand-mark::before {
-      content: "";
-      position: absolute;
-      left: 25px;
-      top: 2px;
-      width: 5px;
-      height: 64px;
-      border-radius: 5px;
-      background: #111;
-    }
-
-    .brand-mark::after {
-      content: "";
-      position: absolute;
-      left: 7px;
-      top: 16px;
-      width: 39px;
-      height: 38px;
-      border-radius: 60% 40% 60% 25%;
-      background: var(--red);
-      transform: rotate(-28deg);
-      clip-path: polygon(47% 0, 100% 28%, 70% 54%, 91% 100%, 44% 76%, 15% 100%, 25% 53%, 0 28%);
+      display: block;
+      object-fit: contain;
     }
 
     .eyebrow {
@@ -121,10 +96,49 @@
       font-size: 0.96rem;
     }
 
+    .pco-wrap {
+      margin: 1.35rem auto 0;
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: #f7f9fc;
+    }
+
+    .pco-logo {
+      width: min(100%, 230px);
+      max-height: 54px;
+      display: block;
+      object-fit: contain;
+    }
+
+    .checking {
+      margin: 1rem 0 0;
+      color: var(--navy);
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+
+    .checking::after {
+      content: "";
+      display: inline-block;
+      width: 1.4em;
+      text-align: left;
+      animation: dots 1.4s steps(4, end) infinite;
+    }
+
+    @keyframes dots {
+      0% { content: ""; }
+      25% { content: "."; }
+      50% { content: ".."; }
+      75%, 100% { content: "..."; }
+    }
+
     .login-button {
       width: 100%;
       min-height: 56px;
-      margin-top: 1.65rem;
+      margin-top: 1rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -191,14 +205,23 @@
       }
 
       .login-card {
-        padding: 2.1rem 1.35rem;
+        padding: 2rem 1.3rem;
         border-radius: 22px;
+      }
+
+      .church-logo {
+        width: min(100%, 215px);
+      }
+
+      .pco-logo {
+        width: min(100%, 205px);
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
       * {
         transition: none !important;
+        animation: none !important;
       }
     }
   </style>
@@ -206,7 +229,11 @@
 
 <body>
   <main class="login-card" id="loginCard">
-    <div class="brand-mark" aria-hidden="true"></div>
+    <img
+      class="church-logo"
+      src="/vumc-media/VUMC%20Logo.webp"
+      alt="Versailles United Methodist Church"
+    >
 
     <p class="eyebrow">Versailles United Methodist Church</p>
     <h1>VUMC Connect</h1>
@@ -215,6 +242,18 @@
     <p class="description">
       Sign in to access giving, church directory, events,
       bulletin, sermon notes, calendar and member information.
+    </p>
+
+    <div class="pco-wrap">
+      <img
+        class="pco-logo"
+        src="/vumc-media/7f79dab5-1080-4aac-8da2-75b518326653-imported-asset__trust__.webp"
+        alt="Church Center by Planning Center"
+      >
+    </div>
+
+    <p class="checking" id="checkingMessage" role="status">
+      Checking your secure login
     </p>
 
     <a
@@ -242,12 +281,26 @@
   </main>
 
   <script>
+    const CHURCH_CENTER_URL = "https://versaillesumc.churchcenter.com";
     const loginButton = document.getElementById("loginButton");
     const loginCard = document.getElementById("loginCard");
 
-    loginButton.addEventListener("click", function () {
+    function openChurchCenter() {
       loginCard.classList.add("is-loading");
+      window.location.assign(CHURCH_CENTER_URL);
+    }
+
+    loginButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      openChurchCenter();
     });
+
+    /*
+      Automatically continue after a brief pause.
+      If Church Center remembers this browser, the member will open already signed in.
+      Otherwise, Planning Center will display its secure sign-in screen.
+    */
+    window.setTimeout(openChurchCenter, 1800);
   </script>
 
   <script type="application/ld+json">
