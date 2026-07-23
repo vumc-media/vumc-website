@@ -1123,75 +1123,102 @@ rkp("event","PAGE_VIEW");
       }
     }
 
-
-    /* ===== UPCOMING LIVESTREAM HOMEPAGE FEATURE ===== */
+    /* ===== UPCOMING YOUTUBE LIVESTREAM CARDS ===== */
     .livestream-feature-section {
       padding: 0 0 72px;
       background: var(--bg);
     }
 
-    .livestream-feature-card {
+    .livestream-section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .livestream-section-header .section-copy {
+      max-width: 720px;
+    }
+
+    .livestream-grid {
       display: grid;
-      grid-template-columns: 1.08fr 0.92fr;
-      min-height: 430px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .livestream-card {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
       overflow: hidden;
       border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      background: var(--dark);
+      border-radius: 24px;
+      background: var(--surface);
       box-shadow: var(--shadow);
-      color: #fff;
+      transition: transform var(--transition), box-shadow var(--transition);
     }
 
-    .livestream-feature-image {
+    .livestream-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 48px rgba(17, 22, 29, 0.15);
+    }
+
+    .livestream-card-media {
       position: relative;
-      min-height: 430px;
-      background:
-        linear-gradient(135deg, rgba(17,22,29,0.18), rgba(17,22,29,0.62)),
-        url('/vumc-media/worship-on-laptop.webp') center/cover no-repeat;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: var(--dark);
     }
 
-    .livestream-feature-image::after {
+    .livestream-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .livestream-card-media::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(17,22,29,0.76), transparent 58%);
+      background: linear-gradient(to top, rgba(17,22,29,0.42), transparent 55%);
       pointer-events: none;
     }
 
-    .livestream-status {
+    .livestream-badge {
       position: absolute;
-      top: 24px;
-      left: 24px;
+      top: 14px;
+      left: 14px;
       z-index: 2;
       display: inline-flex;
       align-items: center;
-      gap: 9px;
-      padding: 10px 15px;
-      border: 1px solid rgba(255,255,255,0.22);
+      gap: 7px;
+      padding: 8px 11px;
       border-radius: 999px;
-      background: rgba(17,22,29,0.74);
-      backdrop-filter: blur(10px);
+      background: rgba(17,22,29,0.82);
       color: #fff;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.09em;
       text-transform: uppercase;
+      backdrop-filter: blur(8px);
     }
 
-    .livestream-status-dot {
-      width: 10px;
-      height: 10px;
+    .livestream-badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: var(--accent);
-      box-shadow: 0 0 0 5px rgba(187,140,63,0.18);
     }
 
-    .livestream-status.is-live { background: #b42318; }
+    .livestream-badge.is-live {
+      background: #b42318;
+    }
 
-    .livestream-status.is-live .livestream-status-dot {
+    .livestream-badge.is-live::before {
       background: #fff;
-      box-shadow: 0 0 0 5px rgba(255,255,255,0.20);
-      animation: livestreamPulse 1.5s infinite;
+      animation: livestreamPulse 1.4s infinite;
     }
 
     @keyframes livestreamPulse {
@@ -1199,103 +1226,95 @@ rkp("event","PAGE_VIEW");
       50% { transform: scale(0.72); opacity: 0.55; }
     }
 
-    .livestream-image-caption {
-      position: absolute;
-      right: 28px;
-      bottom: 28px;
-      left: 28px;
-      z-index: 2;
-    }
-
-    .livestream-image-caption strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: clamp(25px, 4vw, 38px);
-      line-height: 1.08;
-    }
-
-    .livestream-image-caption span {
-      color: rgba(255,255,255,0.80);
-      font-size: 15px;
-    }
-
-    .livestream-feature-content {
+    .livestream-card-body {
       display: flex;
       flex-direction: column;
+      flex: 1;
+      padding: 21px;
+    }
+
+    .livestream-card-date {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+    }
+
+    .livestream-card h3 {
+      margin: 0 0 10px;
+      font-size: 21px;
+      line-height: 1.25;
+    }
+
+    .livestream-card-description {
+      display: -webkit-box;
+      margin: 0 0 20px;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    .livestream-card-action {
+      width: 100%;
+      margin-top: auto;
+    }
+
+    .livestream-loading,
+    .livestream-empty {
+      grid-column: 1 / -1;
+      padding: 34px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .livestream-loading p,
+    .livestream-empty p {
+      margin: 8px auto 0;
+      max-width: 620px;
+      color: var(--muted);
+    }
+
+    .livestream-empty .btn-row {
       justify-content: center;
-      padding: 44px;
-      background:
-        radial-gradient(circle at top right, rgba(187,140,63,0.23), transparent 37%),
-        linear-gradient(135deg, var(--dark), var(--dark-soft));
     }
 
-    .livestream-feature-content .eyebrow {
-      margin-bottom: 10px;
-      color: var(--accent-soft);
+    @media (max-width: 980px) {
+      .livestream-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
-    .livestream-feature-content h2 {
-      margin: 0 0 14px;
-      font-size: clamp(32px, 5vw, 48px);
-      line-height: 1.02;
-      letter-spacing: -0.03em;
+    @media (max-width: 760px) {
+      .livestream-feature-section {
+        padding-bottom: 56px;
+      }
+
+      .livestream-section-header {
+        display: block;
+      }
+
+      .livestream-section-header .btn {
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      .livestream-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .livestream-card {
+        border-radius: 22px;
+      }
     }
 
-    .livestream-intro {
-      margin: 0;
-      color: rgba(255,255,255,0.76);
-      font-size: 17px;
-    }
 
-    .livestream-next-date {
-      margin: 24px 0 14px;
-      color: var(--accent-soft);
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .livestream-times {
-      display: grid;
-      gap: 12px;
-    }
-
-    .livestream-time {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 15px 17px;
-      border: 1px solid rgba(255,255,255,0.11);
-      border-radius: 17px;
-      background: rgba(255,255,255,0.07);
-    }
-
-    .livestream-time strong { font-size: 15px; }
-    .livestream-time span {
-      flex-shrink: 0;
-      color: var(--accent-soft);
-      font-weight: 800;
-    }
-
-    .livestream-feature-content .btn-row { margin-top: 26px; }
-
-    @media (max-width: 860px) {
-      .livestream-feature-card { grid-template-columns: 1fr; }
-      .livestream-feature-image { min-height: 340px; }
-      .livestream-feature-content { padding: 34px 28px; }
-    }
-
-    @media (max-width: 560px) {
-      .livestream-feature-section { padding-bottom: 52px; }
-      .livestream-feature-card { border-radius: 22px; }
-      .livestream-feature-image { min-height: 280px; }
-      .livestream-status { top: 18px; left: 18px; }
-      .livestream-image-caption { right: 20px; bottom: 20px; left: 20px; }
-      .livestream-feature-content { padding: 30px 20px; }
-      .livestream-time { align-items: flex-start; flex-direction: column; gap: 2px; }
-      .livestream-feature-content .btn-row { display: grid; grid-template-columns: 1fr; }
-      .livestream-feature-content .btn { width: 100%; }
-    }
 
     /* ===== COMMUNITY STORIES HOMEPAGE FEATURE ===== */
     .community-stories-section {
@@ -2146,6 +2165,10 @@ rkp("event","PAGE_VIEW");
     }
 
     .vumc-quick-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
       border: 1px solid #d7e2f4;
       background: #f7faff;
       color: #2957a4;
@@ -2574,8 +2597,6 @@ rkp("event","PAGE_VIEW");
       </div>
     </section>
 
-    </section>
-
     <!-- SMART VISITOR WELCOME SECTION -->
     <section class="section" id="smart-visitor-welcome">
       <div class="container">
@@ -2583,54 +2604,30 @@ rkp("event","PAGE_VIEW");
       </div>
     </section>
 
-
-
-    <!-- UPCOMING LIVESTREAM HOMEPAGE FEATURE -->
-    <section class="livestream-feature-section" id="upcoming-livestream" aria-labelledby="livestreamFeatureTitle">
+    <!-- UPCOMING YOUTUBE LIVESTREAMS -->
+    <section class="livestream-feature-section" id="upcoming-livestream" aria-labelledby="upcomingLivestreamTitle">
       <div class="container">
-        <div class="livestream-feature-card">
-          <a class="livestream-feature-image" href="/watch/" aria-label="Watch Versailles United Methodist Church online">
-            <div class="livestream-status" id="livestreamStatus" aria-live="polite">
-              <span class="livestream-status-dot" aria-hidden="true"></span>
-              <span id="livestreamStatusText">Next Livestream</span>
-            </div>
-            <div class="livestream-image-caption">
-              <strong>Worship wherever you are.</strong>
-              <span>Join the Versailles UMC church family live each Sunday.</span>
-            </div>
-          </a>
-
-          <div class="livestream-feature-content">
-            <div class="eyebrow">Online Worship</div>
-            <h2 id="livestreamFeatureTitle">Live this Sunday.</h2>
-            <p class="livestream-intro">
-              Worship with us from home, while traveling, or whenever you cannot attend in person.
-              You are part of the church family wherever you are watching.
+        <div class="livestream-section-header">
+          <div>
+            <div class="eyebrow">Upcoming Online Worship</div>
+            <h2 class="section-title" id="upcomingLivestreamTitle">Scheduled livestreams</h2>
+            <p class="section-copy">
+              See upcoming worship services scheduled on our YouTube channel. Open a stream to watch live or set a reminder on YouTube.
             </p>
+          </div>
+          <a class="btn btn-dark" href="/watch/">Open Watch Page</a>
+        </div>
 
-            <div class="livestream-next-date" id="livestreamNextDate" aria-live="polite">
-              Loading the next livestream date…
-            </div>
-
-            <div class="livestream-times">
-              <div class="livestream-time">
-                <strong>Traditional Worship</strong>
-                <span>9:30 AM</span>
-              </div>
-              <div class="livestream-time">
-                <strong>Contemporary Worship</strong>
-                <span>10:30 AM</span>
-              </div>
-            </div>
-
-            <div class="btn-row">
-              <a class="btn btn-primary" id="livestreamWatchButton" href="/watch/">Watch Online</a>
-              <a class="btn btn-secondary" href="https://www.youtube.com/@versaillesumc" target="_blank" rel="noopener noreferrer">Visit YouTube</a>
-            </div>
+        <div class="livestream-grid" id="upcomingLivestreamGrid" aria-live="polite">
+          <div class="livestream-loading">
+            <strong>Loading upcoming livestreams…</strong>
+            <p>Checking the Versailles UMC YouTube schedule.</p>
           </div>
         </div>
       </div>
     </section>
+
+
 
     <!-- COMMUNITY STORIES HOMEPAGE FEATURE -->
     <section class="community-stories-section" id="community-stories-preview">
@@ -3078,7 +3075,7 @@ rkp("event","PAGE_VIEW");
       <button class="vumc-quick-btn" data-question="Are the services available online?">Watch Online</button>
       <button class="vumc-quick-btn" data-question="How can I get involved with the church community?">Get Involved</button>
       <button class="vumc-quick-btn" data-question="Where can I find frequently asked questions?">FAQ</button>
-      <button class="vumc-quick-btn" data-question="How can I give to Versailles UMC?">Giving</button>
+      <a class="vumc-quick-btn" href="https://versaillesumc.churchcenter.com/giving" target="_blank" rel="noopener noreferrer">Giving</a>
     </div>
 
     <div class="vumc-fallback-form" id="vumcFallbackForm">
@@ -3881,66 +3878,126 @@ You are welcome in person or online.`,
 
   <script>
     (() => {
-      const status = document.getElementById('livestreamStatus');
-      const statusText = document.getElementById('livestreamStatusText');
-      const nextDate = document.getElementById('livestreamNextDate');
-      const watchButton = document.getElementById('livestreamWatchButton');
-      const title = document.getElementById('livestreamFeatureTitle');
-      if (!status || !statusText || !nextDate || !watchButton || !title) return;
+      const YOUTUBE_STREAMS_API =
+        'https://script.google.com/macros/s/AKfycbz7uxgtPT0UTDuFPEY3YoZyTgmOO1x5cDyc1Y4LaaztBAR9t0tNCp6bmb5hoWX819Cx/exec';
 
-      const TIME_ZONE = 'America/New_York';
+      const grid = document.getElementById('upcomingLivestreamGrid');
+      if (!grid) return;
 
-      function churchParts() {
-        const parts = new Intl.DateTimeFormat('en-US', {
-          timeZone: TIME_ZONE,
-          weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric',
-          hour: 'numeric', minute: 'numeric', hour12: false
-        }).formatToParts(new Date());
-        const values = {};
-        parts.forEach(part => { if (part.type !== 'literal') values[part.type] = part.value; });
-        return {
-          weekday: values.weekday,
-          year: Number(values.year), month: Number(values.month), day: Number(values.day),
-          hour: Number(values.hour), minute: Number(values.minute)
-        };
+      function escapeHtml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
       }
 
-      function isLiveWindow() {
-        const now = churchParts();
-        const minutes = now.hour * 60 + now.minute;
-        return now.weekday === 'Sun' && minutes >= 560 && minutes <= 705;
-      }
+      function formatStreamDate(dateValue) {
+        if (!dateValue) return 'Schedule available on YouTube';
 
-      function nextSunday() {
-        const now = churchParts();
-        const date = new Date(now.year, now.month - 1, now.day, 12, 0, 0);
-        let days = (7 - date.getDay()) % 7;
-        if (date.getDay() === 0 && (now.hour * 60 + now.minute) > 720) days = 7;
-        date.setDate(date.getDate() + days);
-        return date;
-      }
-
-      function updateLivestreamCard() {
-        if (isLiveWindow()) {
-          status.classList.add('is-live');
-          statusText.textContent = 'Live Now';
-          nextDate.textContent = 'Worship is streaming live right now.';
-          title.textContent = 'Join us live.';
-          watchButton.textContent = 'Watch Live Now';
-          return;
+        const date = new Date(dateValue);
+        if (Number.isNaN(date.getTime())) {
+          return 'Schedule available on YouTube';
         }
 
-        status.classList.remove('is-live');
-        statusText.textContent = 'Next Livestream';
-        title.textContent = 'Live this Sunday.';
-        watchButton.textContent = 'Watch Online';
-        nextDate.textContent = 'Next livestream: ' + new Intl.DateTimeFormat('en-US', {
-          weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
-        }).format(nextSunday());
+        return date.toLocaleString('en-US', {
+          timeZone: 'America/New_York',
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          timeZoneName: 'short'
+        });
       }
 
-      updateLivestreamCard();
-      window.setInterval(updateLivestreamCard, 60000);
+      function renderEmpty(message) {
+        grid.innerHTML = `
+          <div class="livestream-empty">
+            <strong>No upcoming livestreams are currently scheduled.</strong>
+            <p>${escapeHtml(message || 'Please check again soon or visit our YouTube channel for recent worship services.')}</p>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="https://www.youtube.com/@versaillesumc" target="_blank" rel="noopener noreferrer">Visit YouTube</a>
+              <a class="btn btn-light" href="/watch/">Watch Page</a>
+            </div>
+          </div>`;
+      }
+
+      function renderStreams(streams) {
+        grid.innerHTML = streams.map(stream => {
+          const isLive = String(stream.broadcastStatus || '').toLowerCase() === 'live';
+          const title = stream.title || 'Upcoming Livestream';
+          const url = stream.url || (stream.videoId
+            ? `https://www.youtube.com/watch?v=${encodeURIComponent(stream.videoId)}`
+            : 'https://www.youtube.com/@versaillesumc');
+          const thumbnail = stream.thumbnail ||
+            '/vumc-media/worship-on-laptop.webp';
+          const dateText = isLive
+            ? 'Streaming live now'
+            : formatStreamDate(stream.scheduledStartTime);
+          const buttonText = isLive ? 'Watch Live Now' : 'Set Reminder';
+          const description = stream.description ||
+            'Join Versailles United Methodist Church for worship online.';
+
+          return `
+            <article class="livestream-card">
+              <a class="livestream-card-media" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(buttonText + ': ' + title)}">
+                <img src="${escapeHtml(thumbnail)}" alt="${escapeHtml(title)}" loading="lazy" decoding="async">
+                <span class="livestream-badge${isLive ? ' is-live' : ''}">${isLive ? 'Live Now' : 'Upcoming'}</span>
+              </a>
+              <div class="livestream-card-body">
+                <p class="livestream-card-date">${escapeHtml(dateText)}</p>
+                <h3>${escapeHtml(title)}</h3>
+                <p class="livestream-card-description">${escapeHtml(description)}</p>
+                <a class="btn ${isLive ? 'btn-primary' : 'btn-dark'} livestream-card-action" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${buttonText}</a>
+              </div>
+            </article>`;
+        }).join('');
+      }
+
+      async function loadUpcomingStreams() {
+        try {
+          const separator = YOUTUBE_STREAMS_API.includes('?') ? '&' : '?';
+          const response = await fetch(
+            `${YOUTUBE_STREAMS_API}${separator}action=upcoming&t=${Date.now()}`,
+            {
+              method: 'GET',
+              cache: 'no-store'
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`Livestream feed returned HTTP ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          if (!data || data.ok !== true) {
+            throw new Error(
+              data && data.error
+                ? data.error
+                : 'The livestream feed did not return a valid response.'
+            );
+          }
+
+          const streams = Array.isArray(data.streams)
+            ? data.streams
+            : [];
+
+          if (!streams.length) {
+            renderEmpty();
+            return;
+          }
+
+          renderStreams(streams);
+        } catch (error) {
+          console.warn('Upcoming YouTube livestream error:', error);
+          renderEmpty('The livestream schedule could not be loaded right now. Please use our YouTube channel or Watch page.');
+        }
+      }
+
+      loadUpcomingStreams();
     })();
   </script>
 
