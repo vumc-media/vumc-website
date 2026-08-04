@@ -102,37 +102,56 @@ async function invokeRelay(action, payload = {}) {
     error: sessionError
   } = await supabaseClient.auth.getSession();
 
-  if (sessionError || !session?.access_token) {
+  if (
+    sessionError ||
+    !session ||
+    !session.access_token
+  ) {
     throw new Error(
       "Your Staff Tools session has expired. Sign out and sign back in."
     );
   }
 
-  const response = await fetch(
-    `${SUPABASE_URL}/functions/v1/communications-relay`,
-    {
-      method: "POST",
+  let response;
 
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_PUBLISHABLE_KEY,
-        "Authorization": `Bearer ${session.access_token}`
-      },
+  try {
+    response = await fetch(
+      `${SUPABASE_URL}/functions/v1/communications-relay`,
+      {
+        method: "POST",
 
-      body: JSON.stringify({
-        action,
-        ...payload
-      })
-    }
-  );
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_PUBLISHABLE_KEY,
+          "Authorization":
+            `Bearer ${session.access_token}`
+        },
 
-  const responseText = await response.text();
+        body: JSON.stringify({
+          action,
+          ...payload
+        })
+      }
+    );
+  } catch (error) {
+    console.error(
+      "Relay network error:",
+      error
+    );
+
+    throw new Error(
+      "The Communications service could not be reached."
+    );
+  }
+
+  const responseText =
+    await response.text();
 
   let data;
 
   try {
     data = JSON.parse(responseText);
-  } catch {
+  } catch (error) {
     console.error(
       "Invalid relay response:",
       responseText
@@ -143,27 +162,16 @@ async function invokeRelay(action, payload = {}) {
     );
   }
 
-  if (!response.ok || data.success === false) {
+  if (!response.ok) {
     throw new Error(
       data.error ||
       `Communications request failed (${response.status}).`
     );
   }
 
-  return data;
-}
-  );
-
-  if (error) {
+  if (data.success === false) {
     throw new Error(
-      error.message ||
-      "The Communications service could not be reached."
-    );
-  }
-
-  if (!data || data.success === false) {
-    throw new Error(
-      data?.error ||
+      data.error ||
       "The Communications service returned an error."
     );
   }
@@ -172,23 +180,38 @@ async function invokeRelay(action, payload = {}) {
 }
 
 async function loadConfiguration() {
-  const data = await invokeRelay("getConfig");
+  const data =
+    await invokeRelay("getConfig");
 
   defaultAudience =
     data.defaultAudience ||
     "All VUMC Contacts Group";
 
   configBox.textContent =
-    `Email: ${data.emailConfigured ? "ready" : "not configured"} · ` +
-    `Facebook: ${data.facebookConfigured ? "configured" : "not configured"}`;
+    `Email: ${
+      data.emailConfigured
+        ? "ready"
+        : "not configured"
+    } · Facebook: ${
+      data.facebookConfigured
+        ? "configured"
+        : "not configured"
+    }`;
 }
 
 async function loadAudiences() {
-  const data = await invokeRelay("getGroups");
+  audienceSelect.innerHTML =
+    `<option value="">
+      Loading Google Contacts labels…
+    </option>`;
 
-  const groups = Array.isArray(data.groups)
-    ? data.groups
-    : [];
+  const data =
+    await invokeRelay("getGroups");
+
+  const groups =
+    Array.isArray(data.groups)
+      ? data.groups
+      : [];
 
   audienceSelect.innerHTML = "";
 
@@ -210,11 +233,14 @@ async function loadAudiences() {
 
     option.value = group.name;
 
-    option.textContent = group.count
-      ? `${group.name} (${group.count})`
-      : group.name;
+    option.textContent =
+      group.count
+        ? `${group.name} (${group.count})`
+        : group.name;
 
-    if (group.name === defaultAudience) {
+    if (
+      group.name === defaultAudience
+    ) {
       option.selected = true;
     }
 
@@ -223,35 +249,51 @@ async function loadAudiences() {
 }
 
 async function initializeApp() {
-  const {
-    data: { session },
-    error
-  } = await supabaseClient.auth.getSession();
-
-  if (error || !session?.user) {
-    window.location.replace("../");
-    return;
-  }
-
-  currentUser = session.user;
-
-  signedInUser.textContent =
-    currentUser.email || "Authorized staff";
-
-  loadingScreen.hidden = true;
-  app.hidden = false;
-
   try {
+    const {
+      data: { session },
+      error
+    } =
+      await supabaseClient.auth.getSession();
+
+    if (
+      error ||
+      !session ||
+      !session.user
+    ) {
+      window.location.replace("../");
+      return;
+    }
+
+    currentUser = session.user;
+
+    signedInUser.textContent =
+      currentUser.email ||
+      "Authorized staff";
+
+    loadingScreen.hidden = true;
+    app.hidden = false;
+
+    updateAudienceVisibility();
+    updatePreview();
+
     await loadConfiguration();
     await loadAudiences();
   } catch (error) {
-    console.error(error);
+    console.error(
+      "Initialization error:",
+      error
+    );
+
+    loadingScreen.hidden = true;
+    app.hidden = false;
 
     configBox.textContent =
       "The Communications backend is not connected yet.";
 
     setStatus(
-      error.message,
+      error.message ||
+      "The Communications Hub could not finish loading.",
       "error"
     );
   }
@@ -295,7 +337,10 @@ async function publishAnnouncement() {
     return;
   }
 
-  if (!sendEmail && !postFacebook) {
+  if (
+    !sendEmail &&
+    !postFacebook
+  ) {
     setStatus(
       "Choose Email, Facebook, or both.",
       "error"
@@ -304,7 +349,10 @@ async function publishAnnouncement() {
     return;
   }
 
-  if (sendEmail && !audience) {
+  if (
+    sendEmail &&
+    !audience
+  ) {
     setStatus(
       "Choose an email audience.",
       "error"
@@ -316,33 +364,50 @@ async function publishAnnouncement() {
   setBusy(true);
 
   try {
-    const data = await invokeRelay(
-      "publish",
-      {
-        payload: {
-          title,
-          body,
-          audience,
-          sendEmail,
-          postFacebook
+    const data =
+      await invokeRelay(
+        "publish",
+        {
+          payload: {
+            title,
+            body,
+            audience,
+            sendEmail,
+            postFacebook
+          }
         }
-      }
-    );
+      );
 
     const completed = [];
 
-    if (data.result?.email?.success) {
+    if (
+      data.result &&
+      data.result.email &&
+      data.result.email.success
+    ) {
       completed.push(
         `email sent to ${data.result.email.recipients} contacts`
       );
     }
 
-    if (data.result?.facebook?.success) {
-      completed.push("Facebook posted");
+    if (
+      data.result &&
+      data.result.facebook &&
+      data.result.facebook.success
+    ) {
+      completed.push(
+        "Facebook posted"
+      );
     }
 
-    if (data.result?.archive?.success) {
-      completed.push("archived");
+    if (
+      data.result &&
+      data.result.archive &&
+      data.result.archive.success
+    ) {
+      completed.push(
+        "archived"
+      );
     }
 
     setStatus(
@@ -352,7 +417,10 @@ async function publishAnnouncement() {
       "success"
     );
   } catch (error) {
-    console.error(error);
+    console.error(
+      "Publishing error:",
+      error
+    );
 
     setStatus(
       error.message ||
@@ -407,18 +475,17 @@ logoutButton.addEventListener(
   "click",
   async () => {
     await supabaseClient.auth.signOut();
+
     window.location.replace("../");
   }
 );
 
 supabaseClient.auth.onAuthStateChange(
   (_event, session) => {
-    if (!session?.user) {
+    if (!session || !session.user) {
       window.location.replace("../");
     }
   }
 );
 
-updatePreview();
-updateAudienceVisibility();
 initializeApp();
