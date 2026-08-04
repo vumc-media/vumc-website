@@ -98,16 +98,60 @@ function setBusy(isBusy) {
 
 async function invokeRelay(action, payload = {}) {
   const {
-    data,
-    error
-  } = await supabaseClient.functions.invoke(
-    "communications-relay",
+    data: { session },
+    error: sessionError
+  } = await supabaseClient.auth.getSession();
+
+  if (sessionError || !session?.access_token) {
+    throw new Error(
+      "Your Staff Tools session has expired. Sign out and sign back in."
+    );
+  }
+
+  const response = await fetch(
+    `${SUPABASE_URL}/functions/v1/communications-relay`,
     {
-      body: {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_PUBLISHABLE_KEY,
+        "Authorization": `Bearer ${session.access_token}`
+      },
+
+      body: JSON.stringify({
         action,
         ...payload
-      }
+      })
     }
+  );
+
+  const responseText = await response.text();
+
+  let data;
+
+  try {
+    data = JSON.parse(responseText);
+  } catch {
+    console.error(
+      "Invalid relay response:",
+      responseText
+    );
+
+    throw new Error(
+      "The Communications service returned an invalid response."
+    );
+  }
+
+  if (!response.ok || data.success === false) {
+    throw new Error(
+      data.error ||
+      `Communications request failed (${response.status}).`
+    );
+  }
+
+  return data;
+}
   );
 
   if (error) {
