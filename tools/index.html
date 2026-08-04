@@ -3,86 +3,277 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>VUMC Staff Tools</title>
+
   <link rel="stylesheet" href="./styles.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    [hidden] {
+      display: none !important;
+    }
+
+    .auth-screen {
+      min-height: calc(100vh - 110px);
+      display: grid;
+      place-items: center;
+      padding: 30px 18px;
+    }
+
+    .auth-card {
+      width: min(470px, 100%);
+      padding: 30px;
+      border: 1px solid #d8e2ea;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 18px 45px rgba(23, 50, 77, 0.12);
+    }
+
+    .auth-card h2 {
+      margin-bottom: 8px;
+      color: #17324d;
+    }
+
+    .auth-card p {
+      color: #687b8f;
+      line-height: 1.55;
+    }
+
+    .auth-card label {
+      display: grid;
+      gap: 8px;
+      margin-top: 22px;
+      color: #29465f;
+      font-weight: 700;
+    }
+
+    .auth-card input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #d8e2ea;
+      border-radius: 10px;
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    .auth-card input:focus {
+      outline: none;
+      border-color: #1f5f8b;
+      box-shadow: 0 0 0 4px rgba(31, 95, 139, 0.1);
+    }
+
+    .auth-button,
+    .logout-button {
+      border: 0;
+      border-radius: 10px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+    }
+
+    .auth-button {
+      width: 100%;
+      margin-top: 16px;
+      padding: 13px 16px;
+      color: #ffffff;
+      background: #1f5f8b;
+    }
+
+    .auth-button:disabled {
+      cursor: wait;
+      opacity: 0.65;
+    }
+
+    .logout-button {
+      padding: 9px 13px;
+      color: #1f5f8b;
+      background: #edf4f8;
+    }
+
+    .auth-message {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      color: #17324d;
+      background: #edf4f8;
+    }
+
+    .auth-message.error {
+      color: #a61b1b;
+      background: #fff0ef;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .signed-in-user {
+      color: #687b8f;
+      font-size: 0.86rem;
+    }
+  </style>
 </head>
+
 <body>
   <header class="topbar">
     <div>
       <p class="eyebrow">Versailles United Methodist Church</p>
       <h1>Staff Tools</h1>
     </div>
-    <span class="badge">Internal</span>
+
+    <div class="topbar-actions">
+      <span id="signedInUser" class="signed-in-user" hidden></span>
+      <button id="logoutButton" class="logout-button" type="button" hidden>
+        Sign out
+      </button>
+      <span id="internalBadge" class="badge">Internal</span>
+    </div>
   </header>
 
-  <main class="shell">
+  <main id="authScreen" class="auth-screen">
+    <section class="auth-card">
+      <p class="eyebrow">Authorized staff only</p>
+      <h2>Sign in to Staff Tools</h2>
+
+      <p>
+        Enter your approved staff email address. Google will send you a secure
+        sign-in link.
+      </p>
+
+      <form id="loginForm">
+        <label>
+          Email address
+
+          <input
+            id="emailInput"
+            type="email"
+            autocomplete="email"
+            placeholder="name@example.com"
+            required
+          />
+        </label>
+
+        <button id="loginButton" class="auth-button" type="submit">
+          Send sign-in link
+        </button>
+      </form>
+
+      <div id="authMessage" class="auth-message" hidden></div>
+    </section>
+  </main>
+
+  <main id="staffPortal" class="shell" hidden>
     <section class="intro">
       <p class="eyebrow">Church staff portal</p>
       <h2>Choose a tool</h2>
-      <p>Use this page to access church-owned administrative and ministry tools.</p>
+
+      <p>
+        Use this page to access church-owned administrative and ministry tools.
+      </p>
     </section>
 
     <section class="grid" aria-label="Staff tools">
-      <a class="tool-card" href="./communications/">
+      <a
+        id="communicationsLink"
+        class="tool-card"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <span class="icon">📣</span>
         <h3>Communications Hub</h3>
-        <p>Create announcements for email, Facebook, the church website, and archive.</p>
+
+        <p>
+          Create announcements for email and the church Facebook Page.
+        </p>
+
         <span class="action">Open tool →</span>
       </a>
 
       <a class="tool-card" href="./cms/">
         <span class="icon">🌐</span>
         <h3>Website Editor</h3>
-        <p>Open the Sveltia CMS editor for approved website content.</p>
+
+        <p>
+          Open the Sveltia CMS editor for approved website content.
+        </p>
+
         <span class="action">Open editor →</span>
       </a>
 
       <a class="tool-card disabled" href="#" aria-disabled="true">
         <span class="icon">📰</span>
         <h3>News & Notes</h3>
-        <p>Manage monthly newsletter files and the public archive.</p>
+
+        <p>
+          Manage monthly newsletter files and the public archive.
+        </p>
+
         <span class="action">Coming soon</span>
       </a>
 
       <a class="tool-card disabled" href="#" aria-disabled="true">
         <span class="icon">👨‍👩‍👧‍👦</span>
         <h3>Church Family Connections</h3>
-        <p>Manage care, connection, and follow-up resources.</p>
+
+        <p>
+          Manage care, connection, and follow-up resources.
+        </p>
+
         <span class="action">Coming soon</span>
       </a>
 
       <a class="tool-card disabled" href="#" aria-disabled="true">
         <span class="icon">✅</span>
         <h3>Kids Check-In Admin</h3>
-        <p>Open check-in administration and attendance tools.</p>
+
+        <p>
+          Open check-in administration and attendance tools.
+        </p>
+
         <span class="action">Coming soon</span>
       </a>
 
       <a class="tool-card disabled" href="#" aria-disabled="true">
         <span class="icon">🏫</span>
         <h3>Academy Tools</h3>
-        <p>Access teacher workspace, menus, forms, and resources.</p>
+
+        <p>
+          Access teacher workspace, menus, forms, and resources.
+        </p>
+
         <span class="action">Coming soon</span>
       </a>
 
       <a class="tool-card disabled" href="#" aria-disabled="true">
         <span class="icon">🛠️</span>
         <h3>Maintenance Requests</h3>
-        <p>Submit and review church facility maintenance requests.</p>
+
+        <p>
+          Submit and review church facility maintenance requests.
+        </p>
+
         <span class="action">Coming soon</span>
       </a>
 
       <a class="tool-card disabled" href="#" aria-disabled="true">
         <span class="icon">📁</span>
         <h3>Staff Resources</h3>
-        <p>Store forms, policies, templates, and internal documents.</p>
+
+        <p>
+          Store forms, policies, templates, and internal documents.
+        </p>
+
         <span class="action">Coming soon</span>
       </a>
     </section>
 
     <p class="security-note">
-      This page is not yet protected by sign-in. Do not place passwords, access tokens,
-      private member information, or confidential files in this folder until authentication is added.
+      Access to this dashboard requires an approved Supabase staff account.
     </p>
   </main>
 
