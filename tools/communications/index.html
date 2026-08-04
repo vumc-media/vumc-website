@@ -3,19 +3,156 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Communications Hub</title>
-  <style>
-    body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;background:#eef3f7;color:#17324d}
-    main{width:min(900px,calc(100% - 32px));margin:40px auto;background:white;padding:30px;border-radius:18px;box-shadow:0 16px 40px rgba(23,50,77,.1)}
-    a{color:#1f5f8b;font-weight:700} .note{padding:16px;background:#fffaf0;border-left:4px solid #d6a63d;border-radius:8px}
-  </style>
+
+  <title>VUMC Communications</title>
+
+  <link rel="stylesheet" href="./styles.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
-  <main>
-    <p><a href="../">← Back to Staff Tools</a></p>
-    <h1>Communications Hub</h1>
-    <p>This module will be connected after staff authentication is in place.</p>
-    <div class="note">Do not add Gmail or Facebook credentials to GitHub Pages. Those connections require a secure backend.</div>
-  </main>
+  <div id="loadingScreen" class="loading-screen">
+    <div class="loading-card">
+      <div class="spinner"></div>
+      <p>Loading Communications Hub…</p>
+    </div>
+  </div>
+
+  <div id="app" hidden>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Versailles United Methodist Church</p>
+        <h1>Communications</h1>
+      </div>
+
+      <div class="topbar-actions">
+        <span id="signedInUser" class="signed-in-user"></span>
+
+        <a class="back-button" href="../">
+          Staff Tools
+        </a>
+
+        <button id="logoutButton" class="logout-button" type="button">
+          Sign out
+        </button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="composer card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Create once</p>
+            <h2>Publish announcement</h2>
+          </div>
+        </div>
+
+        <label>
+          Announcement title
+
+          <input
+            id="title"
+            type="text"
+            placeholder="Example: Community Picnic This Sunday"
+          />
+        </label>
+
+        <label>
+          Message
+
+          <textarea
+            id="body"
+            placeholder="Write the church announcement here."
+          ></textarea>
+        </label>
+
+        <label id="audienceWrap">
+          Email audience
+
+          <select id="audience">
+            <option value="">
+              Loading Google Contacts labels…
+            </option>
+          </select>
+        </label>
+
+        <div class="channels">
+          <label class="channel-option">
+            <input id="sendEmail" type="checkbox" />
+            Send church email
+          </label>
+
+          <label class="channel-option">
+            <input id="postFacebook" type="checkbox" checked />
+            Post to Facebook
+          </label>
+        </div>
+
+        <div class="actions">
+          <button
+            id="clearButton"
+            class="secondary"
+            type="button"
+          >
+            Clear
+          </button>
+
+          <button
+            id="publishButton"
+            class="primary"
+            type="button"
+          >
+            Publish
+          </button>
+        </div>
+
+        <div id="status" class="status" hidden></div>
+      </section>
+
+      <aside class="preview card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Preview</p>
+            <h2>Facebook post</h2>
+          </div>
+        </div>
+
+        <div class="facebook-post">
+          <div class="page-row">
+            <div class="avatar">V</div>
+
+            <div>
+              <strong>
+                Versailles United Methodist Church
+              </strong>
+
+              <span>Just now · Public</span>
+            </div>
+          </div>
+
+          <h3 id="previewTitle">
+            Your announcement title
+          </h3>
+
+          <p id="previewBody">
+            Your announcement message will appear here.
+          </p>
+
+          <div class="engagement">
+            <span>Like</span>
+            <span>Comment</span>
+            <span>Share</span>
+          </div>
+        </div>
+
+        <div id="configBox" class="config-box">
+          Checking connections…
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
 </body>
 </html>
