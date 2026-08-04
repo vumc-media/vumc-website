@@ -4,11 +4,8 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_bzCz7_E6sZTSZOdPpMvc5w_3OdUSndO";
 
-/*
- * Paste the deployed Google Apps Script URL ending in /exec.
- */
 const COMMUNICATIONS_APP_URL =
-  "PASTE_YOUR_GOOGLE_APPS_SCRIPT_EXEC_URL_HERE";
+  "https://script.google.com/macros/s/AKfycbwTB2GffB9HG1esHOOJRqWC1ikxrLEE-TDj5dlDrQ6KiwHxd38NONYVmAmVl_xqvrgmEA/exec";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
@@ -28,6 +25,15 @@ const communicationsLink =
 
 communicationsLink.href = COMMUNICATIONS_APP_URL;
 
+/*
+ * Prevent inactive placeholder cards from navigating.
+ */
+document.querySelectorAll(".tool-card.disabled").forEach(card => {
+  card.addEventListener("click", event => {
+    event.preventDefault();
+  });
+});
+
 function showAuthMessage(message, isError = false) {
   authMessage.textContent = message;
   authMessage.hidden = false;
@@ -43,6 +49,7 @@ function clearAuthMessage() {
 function showSignedOutState() {
   authScreen.hidden = false;
   staffPortal.hidden = true;
+
   logoutButton.hidden = true;
   signedInUser.hidden = true;
   signedInUser.textContent = "";
@@ -51,9 +58,11 @@ function showSignedOutState() {
 function showSignedInState(user) {
   authScreen.hidden = true;
   staffPortal.hidden = false;
+
   logoutButton.hidden = false;
   signedInUser.hidden = false;
-  signedInUser.textContent = user.email || "Signed in";
+  signedInUser.textContent =
+    user.email || "Authorized staff member";
 }
 
 async function refreshSession() {
@@ -63,16 +72,19 @@ async function refreshSession() {
   } = await supabaseClient.auth.getSession();
 
   if (error) {
-    console.error(error);
+    console.error("Session error:", error);
+
     showSignedOutState();
+
     showAuthMessage(
       "Unable to verify your sign-in session.",
       true
     );
+
     return;
   }
 
-  if (session?.user) {
+  if (session && session.user) {
     showSignedInState(session.user);
   } else {
     showSignedOutState();
@@ -83,10 +95,15 @@ loginForm.addEventListener("submit", async event => {
   event.preventDefault();
   clearAuthMessage();
 
-  const email = emailInput.value.trim().toLowerCase();
+  const email =
+    emailInput.value.trim().toLowerCase();
 
   if (!email) {
-    showAuthMessage("Enter your email address.", true);
+    showAuthMessage(
+      "Enter your email address.",
+      true
+    );
+
     return;
   }
 
@@ -102,8 +119,8 @@ loginForm.addEventListener("submit", async event => {
           "https://versaillesumc.org/tools/",
 
         /*
-         * Prevents random visitors from creating new accounts.
-         * The user must already exist in Supabase Authentication.
+         * Only users already created in Supabase Auth
+         * may request a magic-link sign-in.
          */
         shouldCreateUser: false
       }
@@ -113,7 +130,7 @@ loginForm.addEventListener("submit", async event => {
   loginButton.textContent = "Send sign-in link";
 
   if (error) {
-    console.error(error);
+    console.error("Sign-in error:", error);
 
     showAuthMessage(
       "This email is not approved for Staff Tools, or the sign-in request could not be completed.",
@@ -130,14 +147,22 @@ loginForm.addEventListener("submit", async event => {
 
 logoutButton.addEventListener("click", async () => {
   logoutButton.disabled = true;
+  logoutButton.textContent = "Signing out…";
 
   const { error } =
     await supabaseClient.auth.signOut();
 
   logoutButton.disabled = false;
+  logoutButton.textContent = "Sign out";
 
   if (error) {
-    console.error(error);
+    console.error("Sign-out error:", error);
+
+    showAuthMessage(
+      "The sign-out request could not be completed.",
+      true
+    );
+
     return;
   }
 
@@ -146,7 +171,7 @@ logoutButton.addEventListener("click", async () => {
 
 supabaseClient.auth.onAuthStateChange(
   (_event, session) => {
-    if (session?.user) {
+    if (session && session.user) {
       showSignedInState(session.user);
     } else {
       showSignedOutState();
