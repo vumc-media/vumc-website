@@ -44,7 +44,7 @@
     .auth-card label {
       display: grid;
       gap: 8px;
-      margin-top: 22px;
+      margin-top: 18px;
       color: #29465f;
       font-weight: 700;
     }
@@ -75,7 +75,7 @@
 
     .auth-button {
       width: 100%;
-      margin-top: 16px;
+      margin-top: 20px;
       padding: 13px 16px;
       color: #ffffff;
       background: #1f5f8b;
@@ -156,8 +156,7 @@
       <h2>Sign in to Staff Tools</h2>
 
       <p>
-        Enter your approved staff email address. You will receive a secure
-        sign-in link.
+        Enter your approved staff email address and password.
       </p>
 
       <form id="loginForm">
@@ -167,8 +166,20 @@
           <input
             id="emailInput"
             type="email"
-            autocomplete="email"
+            autocomplete="username"
             placeholder="name@example.com"
+            required
+          />
+        </label>
+
+        <label>
+          Password
+
+          <input
+            id="passwordInput"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Enter password"
             required
           />
         </label>
@@ -178,7 +189,7 @@
           class="auth-button"
           type="submit"
         >
-          Send sign-in link
+          Sign in
         </button>
       </form>
 
@@ -205,9 +216,7 @@
       <a
         id="communicationsLink"
         class="tool-card"
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
+        href="./communications/"
       >
         <span class="icon">📣</span>
 
