@@ -27,6 +27,21 @@ const titleInput =
 const bodyInput =
   document.getElementById("body");
 
+const linkUrlInput =
+  document.getElementById("linkUrl");
+
+const imageInput =
+  document.getElementById("imageInput");
+
+const imagePreviewWrap =
+  document.getElementById("imagePreviewWrap");
+
+const imagePreview =
+  document.getElementById("imagePreview");
+
+const removeImageButton =
+  document.getElementById("removeImageButton");
+
 const audienceSelect =
   document.getElementById("audience");
 
@@ -58,15 +73,27 @@ const statusBox =
   document.getElementById("status");
 
 let currentUser = null;
-let defaultAudience = "All VUMC Contacts Group";
+let defaultAudience =
+  "All VUMC Contacts Group";
+
+let selectedImage = null;
+let imagePreviewUrl = "";
 
 function updatePreview() {
   previewTitle.textContent =
     titleInput.value.trim() ||
     "Your announcement title";
 
+  const body =
+    bodyInput.value.trim();
+
+  const link =
+    linkUrlInput.value.trim();
+
   previewBody.textContent =
-    bodyInput.value.trim() ||
+    [body, link]
+      .filter(Boolean)
+      .join("\n\n") ||
     "Your announcement message will appear here.";
 }
 
@@ -75,9 +102,13 @@ function updateAudienceVisibility() {
     !sendEmailCheckbox.checked;
 }
 
-function setStatus(message, type = "success") {
+function setStatus(
+  message,
+  type = "success"
+) {
   statusBox.textContent = message;
-  statusBox.className = `status ${type}`;
+  statusBox.className =
+    `status ${type}`;
   statusBox.hidden = false;
 }
 
@@ -88,19 +119,216 @@ function clearStatus() {
 }
 
 function setBusy(isBusy) {
-  publishButton.disabled = isBusy;
-  clearButton.disabled = isBusy;
-  logoutButton.disabled = isBusy;
+  publishButton.disabled =
+    isBusy;
+
+  clearButton.disabled =
+    isBusy;
+
+  logoutButton.disabled =
+    isBusy;
+
+  imageInput.disabled =
+    isBusy;
+
+  removeImageButton.disabled =
+    isBusy;
 
   publishButton.textContent =
-    isBusy ? "Publishing…" : "Publish";
+    isBusy
+      ? "Publishing…"
+      : "Publish";
 }
 
-async function invokeRelay(action, payload = {}) {
+function normalizeUrl(value) {
+  const trimmed =
+    String(value || "").trim();
+
+  if (!trimmed) {
+    return "";
+  }
+
+  try {
+    const url =
+      new URL(trimmed);
+
+    if (
+      url.protocol !== "http:" &&
+      url.protocol !== "https:"
+    ) {
+      throw new Error();
+    }
+
+    return url.href;
+  } catch {
+    throw new Error(
+      "The optional link must begin with http:// or https://."
+    );
+  }
+}
+
+function readImageFile(file) {
+  return new Promise(
+    (resolve, reject) => {
+      const reader =
+        new FileReader();
+
+      reader.onload = () => {
+        const result =
+          String(reader.result || "");
+
+        const commaIndex =
+          result.indexOf(",");
+
+        if (commaIndex === -1) {
+          reject(
+            new Error(
+              "The selected image could not be read."
+            )
+          );
+
+          return;
+        }
+
+        resolve({
+          name:
+            file.name ||
+            "announcement-image",
+
+          mimeType:
+            file.type,
+
+          base64:
+            result.slice(
+              commaIndex + 1
+            )
+        });
+      };
+
+      reader.onerror = () => {
+        reject(
+          new Error(
+            "The selected image could not be read."
+          )
+        );
+      };
+
+      reader.readAsDataURL(file);
+    }
+  );
+}
+
+function revokeImagePreviewUrl() {
+  if (imagePreviewUrl) {
+    URL.revokeObjectURL(
+      imagePreviewUrl
+    );
+
+    imagePreviewUrl = "";
+  }
+}
+
+async function handleImageSelection() {
+  clearStatus();
+
+  const file =
+    imageInput.files &&
+    imageInput.files[0];
+
+  if (!file) {
+    removeSelectedImage();
+    return;
+  }
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
+
+  if (
+    !allowedTypes.includes(
+      file.type
+    )
+  ) {
+    imageInput.value = "";
+    selectedImage = null;
+
+    setStatus(
+      "Choose a JPG, PNG, or WebP image.",
+      "error"
+    );
+
+    return;
+  }
+
+  const maximumBytes =
+    8 * 1024 * 1024;
+
+  if (
+    file.size > maximumBytes
+  ) {
+    imageInput.value = "";
+    selectedImage = null;
+
+    setStatus(
+      "The image must be smaller than 8 MB.",
+      "error"
+    );
+
+    return;
+  }
+
+  try {
+    selectedImage =
+      await readImageFile(file);
+
+    revokeImagePreviewUrl();
+
+    imagePreviewUrl =
+      URL.createObjectURL(file);
+
+    imagePreview.src =
+      imagePreviewUrl;
+
+    imagePreviewWrap.hidden =
+      false;
+  } catch (error) {
+    imageInput.value = "";
+    selectedImage = null;
+
+    setStatus(
+      error.message ||
+      "The image could not be prepared.",
+      "error"
+    );
+  }
+}
+
+function removeSelectedImage() {
+  imageInput.value = "";
+  selectedImage = null;
+
+  revokeImagePreviewUrl();
+
+  imagePreview.removeAttribute(
+    "src"
+  );
+
+  imagePreviewWrap.hidden =
+    true;
+}
+
+async function invokeRelay(
+  action,
+  payload = {}
+) {
   const {
     data: { session },
     error: sessionError
-  } = await supabaseClient.auth.getSession();
+  } =
+    await supabaseClient.auth
+      .getSession();
 
   if (
     sessionError ||
@@ -121,8 +349,12 @@ async function invokeRelay(action, payload = {}) {
         method: "POST",
 
         headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_PUBLISHABLE_KEY,
+          "Content-Type":
+            "application/json",
+
+          "apikey":
+            SUPABASE_PUBLISHABLE_KEY,
+
           "Authorization":
             `Bearer ${session.access_token}`
         },
@@ -150,7 +382,8 @@ async function invokeRelay(action, payload = {}) {
   let data;
 
   try {
-    data = JSON.parse(responseText);
+    data =
+      JSON.parse(responseText);
   } catch (error) {
     console.error(
       "Invalid relay response:",
@@ -169,7 +402,9 @@ async function invokeRelay(action, payload = {}) {
     );
   }
 
-  if (data.success === false) {
+  if (
+    data.success === false
+  ) {
     throw new Error(
       data.error ||
       "The Communications service returned an error."
@@ -181,7 +416,9 @@ async function invokeRelay(action, payload = {}) {
 
 async function loadConfiguration() {
   const data =
-    await invokeRelay("getConfig");
+    await invokeRelay(
+      "getConfig"
+    );
 
   defaultAudience =
     data.defaultAudience ||
@@ -206,7 +443,9 @@ async function loadAudiences() {
     </option>`;
 
   const data =
-    await invokeRelay("getGroups");
+    await invokeRelay(
+      "getGroups"
+    );
 
   const groups =
     Array.isArray(data.groups)
@@ -217,21 +456,29 @@ async function loadAudiences() {
 
   if (!groups.length) {
     const option =
-      document.createElement("option");
+      document.createElement(
+        "option"
+      );
 
     option.value = "";
     option.textContent =
       "No Google Contacts labels found";
 
-    audienceSelect.appendChild(option);
+    audienceSelect.appendChild(
+      option
+    );
+
     return;
   }
 
   groups.forEach(group => {
     const option =
-      document.createElement("option");
+      document.createElement(
+        "option"
+      );
 
-    option.value = group.name;
+    option.value =
+      group.name;
 
     option.textContent =
       group.count
@@ -239,12 +486,15 @@ async function loadAudiences() {
         : group.name;
 
     if (
-      group.name === defaultAudience
+      group.name ===
+      defaultAudience
     ) {
       option.selected = true;
     }
 
-    audienceSelect.appendChild(option);
+    audienceSelect.appendChild(
+      option
+    );
   });
 }
 
@@ -254,25 +504,33 @@ async function initializeApp() {
       data: { session },
       error
     } =
-      await supabaseClient.auth.getSession();
+      await supabaseClient.auth
+        .getSession();
 
     if (
       error ||
       !session ||
       !session.user
     ) {
-      window.location.replace("../");
+      window.location.replace(
+        "../"
+      );
+
       return;
     }
 
-    currentUser = session.user;
+    currentUser =
+      session.user;
 
     signedInUser.textContent =
       currentUser.email ||
       "Authorized staff";
 
-    loadingScreen.hidden = true;
-    app.hidden = false;
+    loadingScreen.hidden =
+      true;
+
+    app.hidden =
+      false;
 
     updateAudienceVisibility();
     updatePreview();
@@ -285,8 +543,11 @@ async function initializeApp() {
       error
     );
 
-    loadingScreen.hidden = true;
-    app.hidden = false;
+    loadingScreen.hidden =
+      true;
+
+    app.hidden =
+      false;
 
     configBox.textContent =
       "The Communications backend is not connected yet.";
@@ -307,6 +568,23 @@ async function publishAnnouncement() {
 
   const body =
     bodyInput.value.trim();
+
+  let linkUrl = "";
+
+  try {
+    linkUrl =
+      normalizeUrl(
+        linkUrlInput.value
+      );
+  } catch (error) {
+    setStatus(
+      error.message,
+      "error"
+    );
+
+    linkUrlInput.focus();
+    return;
+  }
 
   const audience =
     audienceSelect.value;
@@ -371,6 +649,9 @@ async function publishAnnouncement() {
           payload: {
             title,
             body,
+            linkUrl,
+            image:
+              selectedImage,
             audience,
             sendEmail,
             postFacebook
@@ -396,7 +677,13 @@ async function publishAnnouncement() {
       data.result.facebook.success
     ) {
       completed.push(
-        "Facebook posted"
+        data.result.facebook.type ===
+          "photo"
+          ? "Facebook photo posted"
+          : data.result.facebook.type ===
+              "link"
+            ? "Facebook link posted"
+            : "Facebook posted"
       );
     }
 
@@ -435,10 +722,15 @@ async function publishAnnouncement() {
 function clearForm() {
   titleInput.value = "";
   bodyInput.value = "";
+  linkUrlInput.value = "";
 
-  sendEmailCheckbox.checked = false;
-  postFacebookCheckbox.checked = true;
+  sendEmailCheckbox.checked =
+    false;
 
+  postFacebookCheckbox.checked =
+    true;
+
+  removeSelectedImage();
   updateAudienceVisibility();
   updatePreview();
   clearStatus();
@@ -454,6 +746,21 @@ titleInput.addEventListener(
 bodyInput.addEventListener(
   "input",
   updatePreview
+);
+
+linkUrlInput.addEventListener(
+  "input",
+  updatePreview
+);
+
+imageInput.addEventListener(
+  "change",
+  handleImageSelection
+);
+
+removeImageButton.addEventListener(
+  "click",
+  removeSelectedImage
 );
 
 sendEmailCheckbox.addEventListener(
@@ -474,18 +781,31 @@ clearButton.addEventListener(
 logoutButton.addEventListener(
   "click",
   async () => {
-    await supabaseClient.auth.signOut();
+    await supabaseClient.auth
+      .signOut();
 
-    window.location.replace("../");
+    window.location.replace(
+      "../"
+    );
   }
 );
 
 supabaseClient.auth.onAuthStateChange(
   (_event, session) => {
-    if (!session || !session.user) {
-      window.location.replace("../");
+    if (
+      !session ||
+      !session.user
+    ) {
+      window.location.replace(
+        "../"
+      );
     }
   }
+);
+
+window.addEventListener(
+  "beforeunload",
+  revokeImagePreviewUrl
 );
 
 initializeApp();
