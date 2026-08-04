@@ -67,6 +67,53 @@
           ></textarea>
         </label>
 
+        <label>
+          Optional link
+
+          <input
+            id="linkUrl"
+            type="url"
+            inputmode="url"
+            placeholder="https://funeralhome.com/obituaries/..."
+          />
+
+          <small class="field-help">
+            Paste an obituary, event, or website link. Facebook will attempt to
+            create a preview from the linked page.
+          </small>
+        </label>
+
+        <label>
+          Optional Facebook image
+
+          <input
+            id="imageInput"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+          />
+
+          <small class="field-help">
+            JPG, PNG, or WebP. When an image is selected, Facebook will create a
+            photo post instead of a link-preview post.
+          </small>
+        </label>
+
+        <div id="imagePreviewWrap" class="image-preview-wrap" hidden>
+          <img
+            id="imagePreview"
+            class="image-preview"
+            alt="Selected announcement preview"
+          />
+
+          <button
+            id="removeImageButton"
+            class="remove-image-button"
+            type="button"
+          >
+            Remove image
+          </button>
+        </div>
+
         <label id="audienceWrap">
           Email audience
 
