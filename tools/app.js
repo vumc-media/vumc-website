@@ -5,7 +5,7 @@ const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_bzCz7_E6sZTSZOdPpMvc5w_3OdUSndO";
 
 const COMMUNICATIONS_APP_URL =
-  "https://script.google.com/macros/s/AKfycbwTB2GffB9HG1esHOOJRqWC1ikxrLEE-TDj5dlDrQ6KiwHxd38NONYVmAmVl_xqvrgmEA/exec";
+  "./communications/";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
