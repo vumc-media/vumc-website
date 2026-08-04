@@ -4,9 +4,6 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_bzCz7_E6sZTSZOdPpMvc5w_3OdUSndO";
 
-const COMMUNICATIONS_APP_URL =
-  "./communications/";
-
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
@@ -24,6 +21,9 @@ const loginForm =
 const emailInput =
   document.getElementById("emailInput");
 
+const passwordInput =
+  document.getElementById("passwordInput");
+
 const loginButton =
   document.getElementById("loginButton");
 
@@ -35,12 +35,6 @@ const signedInUser =
 
 const authMessage =
   document.getElementById("authMessage");
-
-const communicationsLink =
-  document.getElementById("communicationsLink");
-
-communicationsLink.href =
-  COMMUNICATIONS_APP_URL;
 
 document
   .querySelectorAll(".tool-card.disabled")
@@ -89,6 +83,9 @@ function showSignedInState(user) {
   signedInUser.textContent =
     user.email ||
     "Authorized staff member";
+
+  passwordInput.value = "";
+  clearAuthMessage();
 }
 
 async function refreshSession() {
@@ -139,34 +136,46 @@ loginForm.addEventListener(
         .trim()
         .toLowerCase();
 
+    const password =
+      passwordInput.value;
+
     if (!email) {
       showAuthMessage(
         "Enter your email address.",
         true
       );
 
+      emailInput.focus();
+      return;
+    }
+
+    if (!password) {
+      showAuthMessage(
+        "Enter your password.",
+        true
+      );
+
+      passwordInput.focus();
       return;
     }
 
     loginButton.disabled = true;
     loginButton.textContent =
-      "Sending…";
+      "Signing in…";
 
-    const { error } =
-      await supabaseClient.auth.signInWithOtp({
-        email,
-
-        options: {
-          emailRedirectTo:
-            "https://versaillesumc.org/tools/",
-
-          shouldCreateUser: false
-        }
-      });
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth
+        .signInWithPassword({
+          email,
+          password
+        });
 
     loginButton.disabled = false;
     loginButton.textContent =
-      "Send sign-in link";
+      "Sign in";
 
     if (error) {
       console.error(
@@ -176,15 +185,27 @@ loginForm.addEventListener(
 
       showAuthMessage(
         error.message ||
-        "The sign-in request could not be completed.",
+        "The email or password was not accepted.",
         true
       );
 
       return;
     }
 
-    showAuthMessage(
-      "Check your email for the secure Staff Tools sign-in link."
+    if (
+      !data ||
+      !data.user
+    ) {
+      showAuthMessage(
+        "The email or password was not accepted.",
+        true
+      );
+
+      return;
+    }
+
+    showSignedInState(
+      data.user
     );
   }
 );
@@ -207,12 +228,6 @@ logoutButton.addEventListener(
       console.error(
         "Sign-out error:",
         error
-      );
-
-      showAuthMessage(
-        error.message ||
-        "The sign-out request could not be completed.",
-        true
       );
 
       return;
