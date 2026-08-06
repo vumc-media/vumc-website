@@ -4,10 +4,20 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_bzCz7_E6sZTSZOdPpMvc5w_3OdUSndO";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+const MAX_IMAGES = 10;
+const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+
+const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp"
+];
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
 
 const loadingScreen =
   document.getElementById("loadingScreen");
@@ -73,11 +83,11 @@ const statusBox =
   document.getElementById("status");
 
 let currentUser = null;
+
 let defaultAudience =
   "All VUMC Contacts Group";
 
-let selectedImage = null;
-let imagePreviewUrl = "";
+let selectedImages = [];
 
 function updatePreview() {
   previewTitle.textContent =
@@ -119,20 +129,11 @@ function clearStatus() {
 }
 
 function setBusy(isBusy) {
-  publishButton.disabled =
-    isBusy;
-
-  clearButton.disabled =
-    isBusy;
-
-  logoutButton.disabled =
-    isBusy;
-
-  imageInput.disabled =
-    isBusy;
-
-  removeImageButton.disabled =
-    isBusy;
+  publishButton.disabled = isBusy;
+  clearButton.disabled = isBusy;
+  logoutButton.disabled = isBusy;
+  imageInput.disabled = isBusy;
+  removeImageButton.disabled = isBusy;
 
   publishButton.textContent =
     isBusy
@@ -183,7 +184,7 @@ function readImageFile(file) {
         if (commaIndex === -1) {
           reject(
             new Error(
-              "The selected image could not be read."
+              `The image "${file.name}" could not be read.`
             )
           );
 
@@ -208,7 +209,7 @@ function readImageFile(file) {
       reader.onerror = () => {
         reject(
           new Error(
-            "The selected image could not be read."
+            `The image "${file.name}" could not be read.`
           )
         );
       };
@@ -218,105 +219,201 @@ function readImageFile(file) {
   );
 }
 
-function revokeImagePreviewUrl() {
-  if (imagePreviewUrl) {
-    URL.revokeObjectURL(
-      imagePreviewUrl
-    );
+function revokeImagePreviewUrls() {
+  selectedImages.forEach(image => {
+    if (image.previewUrl) {
+      URL.revokeObjectURL(
+        image.previewUrl
+      );
+    }
+  });
+}
 
-    imagePreviewUrl = "";
+function renderImagePreviews() {
+  imagePreviewWrap.innerHTML = "";
+
+  if (!selectedImages.length) {
+    imagePreviewWrap.hidden = true;
+    return;
   }
+
+  const grid =
+    document.createElement("div");
+
+  grid.className =
+    "image-preview-grid";
+
+  selectedImages.forEach(
+    (image, index) => {
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "image-preview-item";
+
+      const preview =
+        document.createElement("img");
+
+      preview.className =
+        "image-preview";
+
+      preview.src =
+        image.previewUrl;
+
+      preview.alt =
+        image.name ||
+        `Selected image ${index + 1}`;
+
+      const removeButton =
+        document.createElement("button");
+
+      removeButton.type =
+        "button";
+
+      removeButton.className =
+        "remove-image-button";
+
+      removeButton.textContent =
+        `Remove image ${index + 1}`;
+
+      removeButton.addEventListener(
+        "click",
+        () => {
+          removeSelectedImage(index);
+        }
+      );
+
+      item.appendChild(preview);
+      item.appendChild(removeButton);
+      grid.appendChild(item);
+    }
+  );
+
+  imagePreviewWrap.appendChild(grid);
+  imagePreviewWrap.hidden = false;
 }
 
 async function handleImageSelection() {
   clearStatus();
 
-  const file =
-    imageInput.files &&
-    imageInput.files[0];
+  const files =
+    Array.from(
+      imageInput.files || []
+    );
 
-  if (!file) {
-    removeSelectedImage();
+  if (!files.length) {
     return;
   }
 
-  const allowedTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/webp"
-  ];
-
   if (
-    !allowedTypes.includes(
-      file.type
-    )
+    selectedImages.length +
+      files.length >
+    MAX_IMAGES
   ) {
     imageInput.value = "";
-    selectedImage = null;
 
     setStatus(
-      "Choose a JPG, PNG, or WebP image.",
+      `You may select up to ${MAX_IMAGES} images.`,
       "error"
     );
 
     return;
   }
 
-  const maximumBytes =
-    8 * 1024 * 1024;
+  for (const file of files) {
+    if (
+      !ALLOWED_IMAGE_TYPES.includes(
+        file.type
+      )
+    ) {
+      imageInput.value = "";
 
-  if (
-    file.size > maximumBytes
-  ) {
-    imageInput.value = "";
-    selectedImage = null;
+      setStatus(
+        `"${file.name}" is not a JPG, PNG, or WebP image.`,
+        "error"
+      );
 
-    setStatus(
-      "The image must be smaller than 8 MB.",
-      "error"
-    );
+      return;
+    }
 
-    return;
+    if (
+      file.size >
+      MAX_IMAGE_BYTES
+    ) {
+      imageInput.value = "";
+
+      setStatus(
+        `"${file.name}" must be smaller than 8 MB.`,
+        "error"
+      );
+
+      return;
+    }
   }
 
   try {
-    selectedImage =
-      await readImageFile(file);
+    const preparedImages =
+      [];
 
-    revokeImagePreviewUrl();
+    for (const file of files) {
+      const imageData =
+        await readImageFile(file);
 
-    imagePreviewUrl =
-      URL.createObjectURL(file);
+      preparedImages.push({
+        ...imageData,
 
-    imagePreview.src =
-      imagePreviewUrl;
+        previewUrl:
+          URL.createObjectURL(file)
+      });
+    }
 
-    imagePreviewWrap.hidden =
-      false;
+    selectedImages = [
+      ...selectedImages,
+      ...preparedImages
+    ];
+
+    imageInput.value = "";
+
+    renderImagePreviews();
   } catch (error) {
     imageInput.value = "";
-    selectedImage = null;
 
     setStatus(
       error.message ||
-      "The image could not be prepared.",
+      "One or more images could not be prepared.",
       "error"
     );
   }
 }
 
-function removeSelectedImage() {
-  imageInput.value = "";
-  selectedImage = null;
+function removeSelectedImage(index) {
+  const image =
+    selectedImages[index];
 
-  revokeImagePreviewUrl();
+  if (
+    image &&
+    image.previewUrl
+  ) {
+    URL.revokeObjectURL(
+      image.previewUrl
+    );
+  }
 
-  imagePreview.removeAttribute(
-    "src"
+  selectedImages.splice(
+    index,
+    1
   );
 
-  imagePreviewWrap.hidden =
-    true;
+  renderImagePreviews();
+}
+
+function removeAllSelectedImages() {
+  revokeImagePreviewUrls();
+
+  selectedImages = [];
+  imageInput.value = "";
+
+  renderImagePreviews();
 }
 
 async function invokeRelay(
@@ -461,6 +558,7 @@ async function loadAudiences() {
       );
 
     option.value = "";
+
     option.textContent =
       "No Google Contacts labels found";
 
@@ -526,14 +624,12 @@ async function initializeApp() {
       currentUser.email ||
       "Authorized staff";
 
-    loadingScreen.hidden =
-      true;
-
-    app.hidden =
-      false;
+    loadingScreen.hidden = true;
+    app.hidden = false;
 
     updateAudienceVisibility();
     updatePreview();
+    renderImagePreviews();
 
     await loadConfiguration();
     await loadAudiences();
@@ -543,11 +639,8 @@ async function initializeApp() {
       error
     );
 
-    loadingScreen.hidden =
-      true;
-
-    app.hidden =
-      false;
+    loadingScreen.hidden = true;
+    app.hidden = false;
 
     configBox.textContent =
       "The Communications backend is not connected yet.";
@@ -583,6 +676,7 @@ async function publishAnnouncement() {
     );
 
     linkUrlInput.focus();
+
     return;
   }
 
@@ -602,6 +696,7 @@ async function publishAnnouncement() {
     );
 
     titleInput.focus();
+
     return;
   }
 
@@ -612,6 +707,7 @@ async function publishAnnouncement() {
     );
 
     bodyInput.focus();
+
     return;
   }
 
@@ -642,6 +738,18 @@ async function publishAnnouncement() {
   setBusy(true);
 
   try {
+    const images =
+      selectedImages.map(image => ({
+        name:
+          image.name,
+
+        mimeType:
+          image.mimeType,
+
+        base64:
+          image.base64
+      }));
+
     const data =
       await invokeRelay(
         "publish",
@@ -650,8 +758,7 @@ async function publishAnnouncement() {
             title,
             body,
             linkUrl,
-            image:
-              selectedImage,
+            images,
             audience,
             sendEmail,
             postFacebook
@@ -676,15 +783,35 @@ async function publishAnnouncement() {
       data.result.facebook &&
       data.result.facebook.success
     ) {
-      completed.push(
-        data.result.facebook.type ===
-          "photo"
-          ? "Facebook photo posted"
-          : data.result.facebook.type ===
-              "link"
-            ? "Facebook link posted"
-            : "Facebook posted"
-      );
+      const facebookType =
+        data.result.facebook.type;
+
+      if (
+        facebookType ===
+        "multi-photo"
+      ) {
+        completed.push(
+          `Facebook post published with ${images.length} images`
+        );
+      } else if (
+        facebookType ===
+        "photo"
+      ) {
+        completed.push(
+          "Facebook photo posted"
+        );
+      } else if (
+        facebookType ===
+        "link"
+      ) {
+        completed.push(
+          "Facebook link posted"
+        );
+      } else {
+        completed.push(
+          "Facebook posted"
+        );
+      }
     }
 
     if (
@@ -730,7 +857,7 @@ function clearForm() {
   postFacebookCheckbox.checked =
     true;
 
-  removeSelectedImage();
+  removeAllSelectedImages();
   updateAudienceVisibility();
   updatePreview();
   clearStatus();
@@ -760,7 +887,7 @@ imageInput.addEventListener(
 
 removeImageButton.addEventListener(
   "click",
-  removeSelectedImage
+  removeAllSelectedImages
 );
 
 sendEmailCheckbox.addEventListener(
@@ -805,7 +932,7 @@ supabaseClient.auth.onAuthStateChange(
 
 window.addEventListener(
   "beforeunload",
-  revokeImagePreviewUrl
+  revokeImagePreviewUrls
 );
 
 initializeApp();
