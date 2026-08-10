@@ -2268,6 +2268,291 @@ rkp("event","PAGE_VIEW");
         border-radius: 20px;
       }
     }
+
+    /* ===== HOMEPAGE FEATURED EVENTS FROM PCO CALENDAR ===== */
+    .homepage-featured-events {
+      padding: 12px 0 72px;
+      background:
+        radial-gradient(circle at 92% 8%, rgba(187,140,63,0.10), transparent 26%),
+        var(--bg);
+    }
+
+    .homepage-featured-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .homepage-featured-heading > div {
+      min-width: 0;
+    }
+
+    .homepage-featured-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.74);
+      font-size: 14px;
+      font-weight: 700;
+      transition: transform var(--transition), background var(--transition);
+    }
+
+    .homepage-featured-link:hover {
+      transform: translateY(-2px);
+      background: #fff;
+    }
+
+    .homepage-featured-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 34px;
+      align-items: stretch;
+    }
+
+    .homepage-featured-card {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+      border-radius: 26px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: 0 14px 34px rgba(17,22,29,0.09);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .homepage-featured-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 22px 48px rgba(17,22,29,0.14);
+    }
+
+    .homepage-featured-media {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(17,22,29,0.82), rgba(53,63,105,0.78)),
+        url('/vumc-media/atrium.webp') center/cover no-repeat;
+    }
+
+    .homepage-featured-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 420ms ease;
+    }
+
+    .homepage-featured-card:hover .homepage-featured-media img {
+      transform: scale(1.035);
+    }
+
+    .homepage-featured-date {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      max-width: calc(100% - 32px);
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(17,22,29,0.88);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.14);
+      backdrop-filter: blur(8px);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .homepage-featured-body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 22px;
+    }
+
+    .homepage-featured-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      width: fit-content;
+      margin-bottom: 10px;
+      color: #8d6422;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .homepage-featured-kicker::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .homepage-featured-card h3 {
+      margin: 0 0 10px;
+      font-size: 23px;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+
+    .homepage-featured-meta {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .homepage-featured-meta-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .homepage-featured-meta-icon {
+      width: 18px;
+      flex: 0 0 18px;
+      text-align: center;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .homepage-featured-description {
+      display: -webkit-box;
+      overflow: hidden;
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    .homepage-featured-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 15px;
+      border-top: 1px solid var(--border);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .homepage-featured-action span:last-child {
+      font-size: 18px;
+      transition: transform var(--transition);
+    }
+
+    .homepage-featured-card:hover .homepage-featured-action span:last-child {
+      transform: translateX(4px);
+    }
+
+    .homepage-featured-message {
+      margin-top: 26px;
+      padding: 22px;
+      border-radius: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .homepage-featured-message a {
+      color: var(--text);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .homepage-featured-skeleton {
+      overflow: hidden;
+      border-radius: 26px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .homepage-featured-skeleton-media {
+      aspect-ratio: 16 / 9;
+      background: #e8e3db;
+    }
+
+    .homepage-featured-skeleton-body {
+      display: grid;
+      gap: 10px;
+      padding: 22px;
+    }
+
+    .homepage-featured-skeleton-body span {
+      display: block;
+      height: 14px;
+      border-radius: 999px;
+      background: #ebe6de;
+    }
+
+    .homepage-featured-skeleton-body span:first-child {
+      width: 38%;
+    }
+
+    .homepage-featured-skeleton-body span:nth-child(2) {
+      width: 82%;
+      height: 20px;
+    }
+
+    .homepage-featured-skeleton-body span:last-child {
+      width: 64%;
+    }
+
+    @media (max-width: 980px) {
+      .homepage-featured-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .homepage-featured-card:last-child,
+      .homepage-featured-skeleton:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .homepage-featured-events {
+        padding: 6px 0 56px;
+      }
+
+      .homepage-featured-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .homepage-featured-link {
+        align-self: flex-start;
+      }
+
+      .homepage-featured-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .homepage-featured-card:last-child,
+      .homepage-featured-skeleton:last-child {
+        grid-column: auto;
+      }
+
+      .homepage-featured-card h3 {
+        font-size: 21px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -2481,6 +2766,49 @@ rkp("event","PAGE_VIEW");
       </div>
     </section>
 
+
+
+    <!-- FEATURED EVENTS FROM PCO CALENDAR -->
+    <section class="homepage-featured-events" id="featured-events">
+      <div class="container">
+        <div class="homepage-featured-heading">
+          <div>
+            <div class="eyebrow">Featured Events</div>
+            <h2 class="section-title">What’s coming up at VUMC.</h2>
+            <p class="section-copy">
+              Here are a few upcoming opportunities to connect, gather, serve, and be part of life at Versailles UMC.
+            </p>
+          </div>
+
+          <a class="homepage-featured-link" href="/events/">
+            View all events <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <div class="homepage-featured-grid" id="homepageFeaturedEventsGrid" aria-live="polite" aria-busy="true">
+          <div class="homepage-featured-skeleton" aria-hidden="true">
+            <div class="homepage-featured-skeleton-media"></div>
+            <div class="homepage-featured-skeleton-body">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="homepage-featured-skeleton" aria-hidden="true">
+            <div class="homepage-featured-skeleton-media"></div>
+            <div class="homepage-featured-skeleton-body">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="homepage-featured-skeleton" aria-hidden="true">
+            <div class="homepage-featured-skeleton-media"></div>
+            <div class="homepage-featured-skeleton-body">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="homepage-featured-message" id="homepageFeaturedEventsMessage" hidden></div>
+      </div>
+    </section>
 
     <section class="section" id="who-we-are">
       <div class="container">
@@ -3186,6 +3514,238 @@ rkp("event","PAGE_VIEW");
 
     window.addEventListener('DOMContentLoaded', vumcLoadWorshipSchedule);
 
+
+
+    /* ===== HOMEPAGE FEATURED EVENTS FROM PCO CALENDAR ===== */
+    const VUMC_FEATURED_EVENTS_API =
+      'https://script.google.com/macros/s/AKfycbzckiRd9QoYB_Np1TjZnLw4bj16sOkRiyAD_B91C5RH1XgP5G1u75W9lNo8bmodT8HCJQ/exec';
+
+    const VUMC_FEATURED_FALLBACK_IMAGE = '/vumc-media/atrium.webp';
+
+    function vumcCreateFeaturedMetaLine(icon, text) {
+      const row = document.createElement('div');
+      row.className = 'homepage-featured-meta-line';
+
+      const iconEl = document.createElement('span');
+      iconEl.className = 'homepage-featured-meta-icon';
+      iconEl.setAttribute('aria-hidden', 'true');
+      iconEl.textContent = icon;
+
+      const textEl = document.createElement('span');
+      textEl.textContent = text;
+
+      row.append(iconEl, textEl);
+      return row;
+    }
+
+    function vumcCreateFeaturedEventCard(event) {
+      const card = document.createElement('a');
+      card.className = 'homepage-featured-card';
+      card.href = event.url || 'https://versaillesumc.churchcenter.com/calendar';
+      card.target = '_blank';
+      card.rel = 'noopener noreferrer';
+      card.setAttribute('aria-label', `View details for ${event.name || 'featured event'}`);
+
+      const media = document.createElement('div');
+      media.className = 'homepage-featured-media';
+
+      const image = document.createElement('img');
+      image.src = event.image || VUMC_FEATURED_FALLBACK_IMAGE;
+      image.alt = event.name ? `${event.name} event graphic` : 'VUMC featured event';
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      image.addEventListener('error', () => {
+        image.src = VUMC_FEATURED_FALLBACK_IMAGE;
+      }, { once: true });
+      media.appendChild(image);
+
+      const dateBadge = document.createElement('div');
+      dateBadge.className = 'homepage-featured-date';
+
+      const badgeParts = [];
+      if (event.dateShort) badgeParts.push(event.dateShort);
+      if (event.time) badgeParts.push(event.time);
+      dateBadge.textContent = badgeParts.join(' • ') || event.date || 'Upcoming';
+      media.appendChild(dateBadge);
+
+      const body = document.createElement('div');
+      body.className = 'homepage-featured-body';
+
+      const kicker = document.createElement('div');
+      kicker.className = 'homepage-featured-kicker';
+      kicker.textContent = 'Featured Event';
+
+      const title = document.createElement('h3');
+      title.textContent = event.name || 'Upcoming Event';
+
+      body.append(kicker, title);
+
+      const meta = document.createElement('div');
+      meta.className = 'homepage-featured-meta';
+
+      if (event.date && event.date !== event.dateShort) {
+        meta.appendChild(vumcCreateFeaturedMetaLine('◷', event.date));
+      }
+
+      if (event.location) {
+        meta.appendChild(vumcCreateFeaturedMetaLine('⌖', event.location));
+      }
+
+      if (meta.children.length) {
+        body.appendChild(meta);
+      }
+
+      if (event.description) {
+        const description = document.createElement('p');
+        description.className = 'homepage-featured-description';
+        description.textContent = event.description;
+        body.appendChild(description);
+      }
+
+      const action = document.createElement('div');
+      action.className = 'homepage-featured-action';
+
+      const actionText = document.createElement('span');
+      actionText.textContent = 'Event details';
+
+      const arrow = document.createElement('span');
+      arrow.setAttribute('aria-hidden', 'true');
+      arrow.textContent = '→';
+
+      action.append(actionText, arrow);
+      body.appendChild(action);
+
+      card.append(media, body);
+      return card;
+    }
+
+    function vumcUpdateHomepageEventSchema(events) {
+      const oldScript = document.getElementById('homepageFeaturedEventSchema');
+      if (oldScript) oldScript.remove();
+
+      if (!Array.isArray(events) || !events.length) return;
+
+      const graph = events.map(event => {
+        const schemaEvent = {
+          '@type': 'Event',
+          name: event.name || 'VUMC Event',
+          startDate: event.startISO || undefined,
+          endDate: event.endISO || undefined,
+          eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+          eventStatus: 'https://schema.org/EventScheduled',
+          url: event.url || 'https://versaillesumc.churchcenter.com/calendar',
+          organizer: {
+            '@type': 'Organization',
+            name: 'Versailles United Methodist Church',
+            url: 'https://www.versaillesumc.org/'
+          }
+        };
+
+        if (event.image) schemaEvent.image = [event.image];
+        if (event.description) schemaEvent.description = event.description;
+
+        if (event.location) {
+          schemaEvent.location = {
+            '@type': 'Place',
+            name: event.location,
+            address: {
+              '@type': 'PostalAddress',
+              streetAddress: '230 Paynes Mill Road',
+              addressLocality: 'Versailles',
+              addressRegion: 'KY',
+              postalCode: '40383',
+              addressCountry: 'US'
+            }
+          };
+        }
+
+        Object.keys(schemaEvent).forEach(key => {
+          if (schemaEvent[key] === undefined || schemaEvent[key] === '') {
+            delete schemaEvent[key];
+          }
+        });
+
+        return schemaEvent;
+      });
+
+      const script = document.createElement('script');
+      script.id = 'homepageFeaturedEventSchema';
+      script.type = 'application/ld+json';
+      script.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': graph
+      });
+
+      document.head.appendChild(script);
+    }
+
+    async function vumcLoadFeaturedEvents() {
+      const grid = document.getElementById('homepageFeaturedEventsGrid');
+      const message = document.getElementById('homepageFeaturedEventsMessage');
+
+      if (!grid || !message) return;
+
+      grid.setAttribute('aria-busy', 'true');
+
+      try {
+        const separator = VUMC_FEATURED_EVENTS_API.includes('?') ? '&' : '?';
+        const response = await fetch(
+          `${VUMC_FEATURED_EVENTS_API}${separator}action=featured&limit=3&t=${Date.now()}`,
+          {
+            method: 'GET',
+            cache: 'no-store'
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Featured events feed returned HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data || data.ok !== true) {
+          throw new Error(
+            data && data.error
+              ? data.error
+              : 'Featured events feed returned an invalid response.'
+          );
+        }
+
+        const events = Array.isArray(data.events) ? data.events : [];
+
+        grid.innerHTML = '';
+
+        if (!events.length) {
+          grid.hidden = true;
+          message.hidden = false;
+          message.innerHTML =
+            'There are no featured events posted right now. ' +
+            '<a href="/events/">View the full VUMC calendar.</a>';
+          return;
+        }
+
+        events.forEach(event => {
+          grid.appendChild(vumcCreateFeaturedEventCard(event));
+        });
+
+        message.hidden = true;
+        vumcUpdateHomepageEventSchema(events);
+
+      } catch (error) {
+        console.warn('VUMC featured events error:', error);
+
+        grid.hidden = true;
+        message.hidden = false;
+        message.innerHTML =
+          'Featured events are temporarily unavailable. ' +
+          '<a href="/events/">View the full VUMC events page.</a>';
+
+      } finally {
+        grid.setAttribute('aria-busy', 'false');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', vumcLoadFeaturedEvents);
 
     const VUMC_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3RvHWZ0RIiUMZBdjVtgq-4ZJ60AHlYwy2ybZMCUYqoWVsIt1eurqn6gJYywf6gi1SuA/exec';
 
