@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Youth Volunteer Admin | Versailles UMC</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #20252b;
+      --muted: #6b7480;
+      --border: #dfe4e8;
+      --primary: #244b66;
+      --primary-dark: #183447;
+      --success: #2d6a4f;
+      --success-bg: #eaf5ef;
+      --warn: #9a6700;
+      --warn-bg: #fff5d6;
+      --danger: #a12d2d;
+      --danger-bg: #fdecec;
+      --shadow: 0 8px 24px rgba(0,0,0,.08);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 28px 20px;
+    }
+
+    .header-inner {
+      width: min(1040px, calc(100% - 10px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(26px, 5vw, 40px);
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      opacity: .9;
+      font-size: 14px;
+    }
+
+    .container {
+      width: min(1040px, calc(100% - 24px));
+      margin: 28px auto 60px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .login-wrap {
+      max-width: 480px;
+      margin: 60px auto;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin: 16px 0 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd2d8;
+      border-radius: 9px;
+      font-size: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .primary:hover { background: var(--primary-dark); }
+
+    .secondary {
+      background: #e7eaed;
+      color: #333;
+    }
+
+    .danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .full-width {
+      width: 100%;
+      margin-top: 18px;
+    }
+
+    .message {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 9px;
+      display: none;
+    }
+
+    .message.error {
+      display: block;
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .message.success {
+      display: block;
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .status-summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .summary-box {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .summary-number {
+      font-size: 30px;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+
+    .summary-label {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .date-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .date-header {
+      padding: 18px 22px;
+      background: #e9eef2;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .date-header h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .ministry-section {
+      padding: 22px;
+    }
+
+    .ministry-section + .ministry-section {
+      border-top: 1px solid var(--border);
+    }
+
+    .ministry-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .ministry-heading h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .time {
+      color: var(--muted);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .opportunity {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+
+    .opportunity-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .opportunity-title {
+      font-weight: 800;
+      font-size: 17px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .pill.filled {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .pill.open {
+      background: var(--warn-bg);
+      color: var(--warn);
+    }
+
+    .details {
+      color: var(--muted);
+      line-height: 1.5;
+      margin-top: 6px;
+    }
+
+    .signup-list {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .signup-row {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .signup-name {
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .signup-email {
+      color: var(--muted);
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    .meal {
+      margin-top: 8px;
+      padding: 10px;
+      background: #f7f8f9;
+      border-radius: 8px;
+    }
+
+    .empty-slot {
+      margin-top: 12px;
+      padding: 12px;
+      background: var(--warn-bg);
+      color: var(--warn);
+      border-radius: 9px;
+      font-weight: 700;
+    }
+
+    .loading,
+    .error-box {
+      background: #fff;
+      padding: 26px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .error-box { color: var(--danger); }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 700px) {
+      .header-inner {
+        display: block;
+      }
+
+      #logoutBtn {
+        margin-top: 14px;
+      }
+
+      .status-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .ministry-heading,
+      .opportunity-head {
+        display: block;
+      }
+
+      .time,
+      .pill {
+        margin-top: 8px;
+      }
+
+      .signup-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div>
+        <h1>Youth Volunteer Admin</h1>
+        <div class="subtitle">Versailles United Methodist Church</div>
+      </div>
+      <button id="logoutBtn" class="secondary hidden">Log Out</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section id="loginView" class="login-wrap">
+      <div class="card">
+        <h2 style="margin-top:0;">Youth Admin Login</h2>
+        <p style="color:var(--muted);line-height:1.5;">
+          Sign in to view youth volunteer assignments and meal information.
+        </p>
+
+        <form id="loginForm">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            autocomplete="username"
+            value="leah111100@aol.com"
+            required
+          >
+
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          >
+
+          <button id="loginBtn" class="primary full-width" type="submit">
+            Sign In
+          </button>
+
+          <div id="loginMessage" class="message"></div>
+        </form>
+      </div>
+    </section>
+
+    <section id="adminView" class="hidden">
+      <div class="toolbar">
+        <button id="refreshBtn" class="primary">Refresh Schedule</button>
+      </div>
+
+      <div class="status-summary">
+        <div class="summary-box">
+          <div class="summary-label">Volunteer Spots Filled</div>
+          <div id="filledCount" class="summary-number">0</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-label">Open Volunteer Spots</div>
+          <div id="openCount" class="summary-number">0</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-label">Meal Providers Scheduled</div>
+          <div id="mealCount" class="summary-number">0</div>
+        </div>
+      </div>
+
+      <div id="schedule">
+        <div class="loading">Loading schedule…</div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxdBb6KyDU1K3Tbq1w5hB_N54aZ8o8LV_0l9aysYxFRP0Y_W7MBqsBkhUlvaUERJrSD-w/exec';
+    const SESSION_KEY = 'vumc_youth_admin_token';
+
+    let token = sessionStorage.getItem(SESSION_KEY) || '';
+    let scheduleData = [];
+
+    const loginView = document.getElementById('loginView');
+    const adminView = document.getElementById('adminView');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const scheduleEl = document.getElementById('schedule');
+
+    document.getElementById('loginForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const button = document.getElementById('loginBtn');
+      const message = document.getElementById('loginMessage');
+
+      button.disabled = true;
+      button.textContent = 'Signing In…';
+      message.className = 'message';
+      message.textContent = '';
+
+      try {
+        const data = await post({
+          action: 'adminLogin',
+          email: document.getElementById('email').value.trim(),
+          password: document.getElementById('password').value
+        });
+
+        if (!data.success || !data.admin || !data.admin.token) {
+          throw new Error(data.error || 'Unable to sign in.');
+        }
+
+        token = data.admin.token;
+        sessionStorage.setItem(SESSION_KEY, token);
+
+        showAdmin();
+        await loadSchedule();
+
+      } catch (error) {
+        message.className = 'message error';
+        message.textContent = error.message || 'Invalid email or password.';
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Sign In';
+      }
+    });
+
+    document.getElementById('refreshBtn').addEventListener('click', loadSchedule);
+
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        if (token) {
+          await post({
+            action: 'adminLogout',
+            token: token
+          });
+        }
+      } catch (error) {
+        console.warn(error);
+      }
+
+      clearSession();
+    });
+
+    async function loadSchedule() {
+      scheduleEl.innerHTML = '<div class="loading">Loading schedule…</div>';
+
+      try {
+        const data = await post({
+          action: 'adminSchedule',
+          token: token
+        });
+
+        if (!data.success) {
+          throw new Error(data.error || 'Unable to load schedule.');
+        }
+
+        scheduleData = data.schedule || [];
+        renderSummary();
+        renderSchedule();
+
+      } catch (error) {
+        if (/expired|log in/i.test(error.message || '')) {
+          clearSession();
+          return;
+        }
+
+        scheduleEl.innerHTML =
+          '<div class="error-box">' +
+          escapeHtml(error.message || 'Unable to load the schedule.') +
+          '</div>';
+      }
+    }
+
+    function renderSummary() {
+      let filled = 0;
+      let open = 0;
+      let meals = 0;
+
+      scheduleData.forEach(item => {
+        filled += Number(item.filledSlots || 0);
+        open += Number(item.remainingSlots || 0);
+
+        if (
+          String(item.position).toLowerCase() === 'meal provider' &&
+          Number(item.filledSlots || 0) > 0
+        ) {
+          meals += 1;
+        }
+      });
+
+      document.getElementById('filledCount').textContent = filled;
+      document.getElementById('openCount').textContent = open;
+      document.getElementById('mealCount').textContent = meals;
+    }
+
+    function renderSchedule() {
+      if (!scheduleData.length) {
+        scheduleEl.innerHTML = '<div class="loading">No opportunities found.</div>';
+        return;
+      }
+
+      const grouped = {};
+
+      scheduleData.forEach(item => {
+        if (!grouped[item.date]) {
+          grouped[item.date] = {
+            display: item.dateDisplay,
+            ministries: {}
+          };
+        }
+
+        const key = item.ministry + '|' + item.time;
+
+        if (!grouped[item.date].ministries[key]) {
+          grouped[item.date].ministries[key] = {
+            ministry: item.ministry,
+            time: item.time,
+            opportunities: []
+          };
+        }
+
+        grouped[item.date].ministries[key].opportunities.push(item);
+      });
+
+      scheduleEl.innerHTML = Object.keys(grouped)
+        .sort()
+        .map(dateKey => {
+          const date = grouped[dateKey];
+
+          const ministryHtml = Object.values(date.ministries)
+            .map(section => {
+              const opportunitiesHtml = section.opportunities
+                .map(renderOpportunity)
+                .join('');
+
+              return `
+                <section class="ministry-section">
+                  <div class="ministry-heading">
+                    <h3>${escapeHtml(section.ministry)}</h3>
+                    <div class="time">${escapeHtml(section.time)}</div>
+                  </div>
+                  ${opportunitiesHtml}
+                </section>
+              `;
+            })
+            .join('');
+
+          return `
+            <article class="date-card">
+              <div class="date-header">
+                <h2>${escapeHtml(date.display)}</h2>
+              </div>
+              ${ministryHtml}
+            </article>
+          `;
+        })
+        .join('');
+    }
+
+    function renderOpportunity(item) {
+      const isFilled = Number(item.remainingSlots || 0) === 0;
+      const statusClass = isFilled ? 'filled' : 'open';
+      const statusText = isFilled
+        ? 'Filled'
+        : `${item.remainingSlots} Open`;
+
+      const signupHtml = (item.signups || []).length
+        ? item.signups.map(signup => `
+            <div class="signup-row">
+              <div>
+                <div class="signup-name">${escapeHtml(signup.name)}</div>
+                <div class="signup-email">${escapeHtml(signup.email)}</div>
+                ${
+                  signup.mealDescription
+                    ? `<div class="meal"><strong>Meal:</strong> ${escapeHtml(signup.mealDescription)}</div>`
+                    : ''
+                }
+              </div>
+              <button
+                class="danger"
+                onclick="cancelSignup('${escapeAttribute(signup.signupId)}', '${escapeAttribute(signup.name)}')"
+              >
+                Remove
+              </button>
+            </div>
+          `).join('')
+        : '';
+
+      const emptyHtml = Number(item.remainingSlots || 0) > 0
+        ? `<div class="empty-slot">
+            ${item.remainingSlots} volunteer spot${Number(item.remainingSlots) === 1 ? '' : 's'} still open
+          </div>`
+        : '';
+
+      return `
+        <div class="opportunity">
+          <div class="opportunity-head">
+            <div class="opportunity-title">${escapeHtml(item.position)}</div>
+            <span class="pill ${statusClass}">${escapeHtml(statusText)}</span>
+          </div>
+
+          <div class="details">
+            ${item.filledSlots} of ${item.slotsNeeded} filled
+          </div>
+
+          ${item.notes ? `<div class="details">${escapeHtml(item.notes)}</div>` : ''}
+
+          <div class="signup-list">
+            ${signupHtml}
+          </div>
+
+          ${emptyHtml}
+        </div>
+      `;
+    }
+
+    async function cancelSignup(signupId, name) {
+      const confirmed = confirm(
+        `Remove ${name} from this volunteer assignment?`
+      );
+
+      if (!confirmed) return;
+
+      try {
+        const data = await post({
+          action: 'cancelSignup',
+          token: token,
+          signupId: signupId
+        });
+
+        if (!data.success) {
+          throw new Error(data.error || 'Unable to remove signup.');
+        }
+
+        await loadSchedule();
+
+      } catch (error) {
+        alert(error.message || 'Unable to remove signup.');
+      }
+    }
+
+    async function post(payload) {
+      const response = await fetch(GAS_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.error || 'Request failed.');
+      }
+
+      return data;
+    }
+
+    function showAdmin() {
+      loginView.classList.add('hidden');
+      adminView.classList.remove('hidden');
+      logoutBtn.classList.remove('hidden');
+    }
+
+    function clearSession() {
+      token = '';
+      sessionStorage.removeItem(SESSION_KEY);
+      adminView.classList.add('hidden');
+      logoutBtn.classList.add('hidden');
+      loginView.classList.remove('hidden');
+      document.getElementById('password').value = '';
+      document.getElementById('loginMessage').className = 'message';
+      document.getElementById('loginMessage').textContent = '';
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function escapeAttribute(value) {
+      return String(value ?? '')
+        .replaceAll('\\', '\\\\')
+        .replaceAll("'", "\\'");
+    }
+
+    if (token) {
+      showAdmin();
+      loadSchedule();
+    }
+  </script>
+</body>
+</html>
