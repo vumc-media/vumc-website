@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sprouts Admin Login | Versailles UMC</title>
+<style>
+:root{--ink:#1f2933;--muted:#68727c;--brand:#244b66;--bg:#f5f7f8;--card:#fff;--line:#dce2e6;--bad:#a12622;--good:#176b43}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+.wrap{max-width:1000px;margin:auto;padding:30px 18px 60px} .card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px;margin-bottom:18px;box-shadow:0 3px 12px rgba(0,0,0,.04)}
+h1,h2{margin-top:0} label{display:block;font-weight:700;margin:0 0 6px} input,select{width:100%;padding:12px;border:1px solid #cbd2d8;border-radius:9px;font-size:16px;background:#fff}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px} button{border:0;border-radius:9px;padding:11px 16px;font-weight:700;font-size:15px;cursor:pointer} .primary{background:var(--brand);color:#fff} .secondary{background:#e9eef1} .danger{background:#fbeceb;color:var(--bad)} .message{display:none;padding:12px;border-radius:9px;margin-top:12px} .success{display:block;background:#e9f6ef;color:var(--good)} .error{display:block;background:#fbeceb;color:var(--bad)} .opp{border-top:1px solid #edf0f2;padding:16px 0} .muted{color:var(--muted);line-height:1.5} .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap} .signup{padding:10px 0;border-top:1px dashed #dfe4e8} #adminView{display:none} @media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section id="loginView" class="card" style="max-width:520px;margin:40px auto;">
+  <h1>Sprouts Admin Login</h1>
+  <p class="muted">Authorized Kids Ministry administration only.</p>
+  <label>Email</label>
+  <input id="email" type="email" autocomplete="username">
+  <div style="height:12px"></div>
+  <label>Password</label>
+  <input id="password" type="password" autocomplete="current-password">
+  <div style="margin-top:16px"><button id="loginBtn" class="primary">Log In</button></div>
+  <div id="loginMessage" class="message"></div>
+</section>
+
+<div id="adminView">
+  <div class="top" style="margin-bottom:18px">
+    <div><h1 style="margin-bottom:4px">Sprouts Volunteer Admin</h1><div class="muted">Manage Kids Ministry volunteer schedules and signups.</div></div>
+    <button id="logoutBtn" class="secondary">Log Out</button>
+  </div>
+
+  <section class="card">
+    <h2>Manage Schedule</h2>
+    <p class="muted">Choose a Sprouts ministry, select the first Sunday, and generate as many consecutive Sundays as needed.</p>
+    <div class="grid">
+      <div><label>Sprouts Ministry</label><select id="scheduleType">
+        <option value="SproutsSundaySchool">Sprouts Sunday School — 9:15 AM</option>
+        <option value="SproutsChildrensChurch">Sprouts Children's Church — 10:30 AM</option>
+        <option value="Nursery">Nursery — 9:15 AM</option>
+      </select></div>
+      <div><label>First Sunday</label><input id="startDate" type="date"></div>
+      <div><label>Number of Sundays</label><input id="count" type="number" min="1" max="52" value="12"></div>
+    </div>
+    <div style="margin-top:16px"><button id="generateBtn" class="primary">Generate Schedule</button></div>
+    <div id="manageMessage" class="message"></div>
+  </section>
+
+  <section class="card">
+    <div class="top"><div><h2 style="margin-bottom:4px">Upcoming Schedule</h2><div class="muted">Volunteer contact information is visible only here.</div></div><button id="refreshBtn" class="secondary">Refresh</button></div>
+    <div id="schedule"><p class="muted">Loading…</p></div>
+  </section>
+</div>
+</main>
+
+<script>
+const API='https://script.google.com/macros/s/AKfycbwsQKa5mGmOJQsPmLs2dTOz2DvhgVpdDnSZ0cpGyM_3nf2vR5ceGhSiZlVaTitYXpEp/exec';
+let token=sessionStorage.getItem('sproutsAdminToken')||'';
+
+async function post(payload){
+ const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+ const d=await r.json(); if(!d.success) throw new Error(d.error||'Request failed.'); return d;
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+function msg(id,text,type){const e=document.getElementById(id);e.textContent=text;e.className='message '+type;}
+function nextSunday(){
+ const d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+((7-d.getDay())%7));
+ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function showAdmin(){document.getElementById('loginView').style.display='none';document.getElementById('adminView').style.display='block';}
+function showLogin(){document.getElementById('adminView').style.display='none';document.getElementById('loginView').style.display='block';}
+
+async function login(){
+ const btn=document.getElementById('loginBtn');btn.disabled=true;btn.textContent='Logging in…';
+ try{const d=await post({action:'adminLogin',email:document.getElementById('email').value.trim(),password:document.getElementById('password').value});
+ token=d.admin.token;sessionStorage.setItem('sproutsAdminToken',token);showAdmin();await loadSchedule();
+ }catch(e){msg('loginMessage',e.message,'error')}finally{btn.disabled=false;btn.textContent='Log In'}
+}
+async function logout(){try{await post({action:'adminLogout',token})}catch(e){} token='';sessionStorage.removeItem('sproutsAdminToken');showLogin();}
+
+async function generate(){
+ const btn=document.getElementById('generateBtn');btn.disabled=true;btn.textContent='Generating…';
+ try{
+  const d=await post({action:'generateSproutsSeries',token,scheduleType:document.getElementById('scheduleType').value,startDate:document.getElementById('startDate').value,count:Number(document.getElementById('count').value)});
+  msg('manageMessage',`Created ${d.result.createdSundays} Sunday(s). Skipped ${d.result.skippedSundays} already existing.`,'success');await loadSchedule();
+ }catch(e){msg('manageMessage',e.message,'error')}finally{btn.disabled=false;btn.textContent='Generate Schedule'}
+}
+
+async function loadSchedule(){
+ try{
+  const d=await post({action:'adminSchedule',token});
+  const items=d.schedule||[]; const host=document.getElementById('schedule');
+  if(!items.length){host.innerHTML='<p class="muted">No Sprouts opportunities have been generated yet.</p>';return;}
+  const groups={};items.forEach(x=>(groups[x.date]??=[]).push(x));
+  host.innerHTML=Object.keys(groups).sort().map(date=>{
+    const rows=groups[date]; const closed=rows.every(x=>String(x.status).toLowerCase()==='closed');
+    return `<div class="opp"><div class="top"><div><strong>${esc(rows[0].dateDisplay)}</strong></div>
+    <button class="${closed?'secondary':'danger'}" onclick="setStatus('${date}','${closed?'Open':'Closed'}')">${closed?'Reopen Sunday':'Close Sunday'}</button></div>
+    ${rows.map(x=>`<div style="margin-top:14px"><strong>${esc(x.ministry)}</strong> — ${esc(x.time)} · ${x.filledSlots}/${x.slotsNeeded} filled
+    ${x.signups.length?x.signups.map(s=>`<div class="signup"><strong>${esc(s.name)}</strong> · ${esc(s.email)} <button class="danger" style="float:right;padding:6px 9px" onclick="cancelSignup('${esc(s.signupId)}')">Remove</button></div>`).join(''):'<div class="muted" style="margin-top:6px">No volunteers signed up yet.</div>'}</div>`).join('')}</div>`;
+  }).join('');
+ }catch(e){if(/expired/i.test(e.message)){token='';sessionStorage.removeItem('sproutsAdminToken');showLogin();msg('loginMessage','Your session expired. Please log in again.','error')}else document.getElementById('schedule').innerHTML=`<div class="message error">${esc(e.message)}</div>`;}
+}
+async function setStatus(date,status){try{await post({action:'setSundayStatus',token,date,status});await loadSchedule()}catch(e){alert(e.message)}}
+async function cancelSignup(id){if(!confirm('Remove this volunteer signup?'))return;try{await post({action:'cancelSignup',token,signupId:id});await loadSchedule()}catch(e){alert(e.message)}}
+
+document.getElementById('startDate').value=nextSunday();
+document.getElementById('loginBtn').onclick=login;
+document.getElementById('password').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+document.getElementById('logoutBtn').onclick=logout;
+document.getElementById('generateBtn').onclick=generate;
+document.getElementById('refreshBtn').onclick=loadSchedule;
+if(token){showAdmin();loadSchedule();}
+</script>
+</body>
+</html>
