@@ -316,6 +316,55 @@
 
     .error-box { color: var(--danger); }
 
+
+    .manage-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .manage-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .manage-card h3 { margin: 0 0 6px; }
+    .manage-card p { color: var(--muted); line-height: 1.5; margin-top: 0; }
+
+    .manage-actions {
+      display: flex;
+      align-items: end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .manage-actions .field { flex: 1; min-width: 190px; }
+
+    .date-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .date-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .success-btn { background: var(--success); color: white; }
+
+    .closed-label {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: var(--danger-bg);
+      color: var(--danger);
+      font-size: 12px;
+      font-weight: 800;
+      vertical-align: middle;
+    }
+
+    .pill.closed { background: var(--danger-bg); color: var(--danger); }
+
     .hidden { display: none !important; }
 
     @media (max-width: 700px) {
@@ -327,7 +376,7 @@
         margin-top: 14px;
       }
 
-      .status-summary {
+      .status-summary, .manage-grid {
         grid-template-columns: 1fr;
       }
 
@@ -415,6 +464,43 @@
         </div>
       </div>
 
+
+      <section class="card">
+        <h2 style="margin-top:0;">Manage Schedule</h2>
+        <p style="color:var(--muted);line-height:1.5;">
+          Each Sunday automatically includes two 9:15 AM adult volunteers,
+          two 4:00 PM Rooted Youth adult volunteers, and one meal provider.
+        </p>
+
+        <div class="manage-grid">
+          <div class="manage-card">
+            <h3>Add One Sunday</h3>
+            <p>Choose a Sunday to add the standard youth schedule.</p>
+            <div class="manage-actions">
+              <div class="field">
+                <label for="addSundayDate">Sunday Date</label>
+                <input id="addSundayDate" type="date">
+              </div>
+              <button id="addSundayBtn" class="primary">Add Sunday</button>
+            </div>
+          </div>
+
+          <div class="manage-card">
+            <h3>Generate Upcoming Sundays</h3>
+            <p>Choose an ending date. Existing Sundays will be skipped.</p>
+            <div class="manage-actions">
+              <div class="field">
+                <label for="generateEndDate">Generate Through</label>
+                <input id="generateEndDate" type="date">
+              </div>
+              <button id="generateBtn" class="primary">Generate Sundays</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="manageMessage" class="message"></div>
+      </section>
+
       <div id="schedule">
         <div class="loading">Loading schedule…</div>
       </div>
@@ -472,6 +558,62 @@
     });
 
     document.getElementById('refreshBtn').addEventListener('click', loadSchedule);
+
+
+    document.getElementById('addSundayBtn').addEventListener('click', addSunday);
+    document.getElementById('generateBtn').addEventListener('click', generateSundays);
+
+    async function addSunday() {
+      const date = document.getElementById('addSundayDate').value;
+      if (!date) return showManageMessage('Please choose a Sunday.', 'error');
+
+      const button = document.getElementById('addSundayBtn');
+      button.disabled = true;
+      button.textContent = 'Adding…';
+
+      try {
+        const data = await post({ action: 'addSunday', token, date });
+        showManageMessage(
+          data.result.created ? 'Sunday schedule added successfully.' : 'That Sunday already exists.',
+          'success'
+        );
+        await loadSchedule();
+      } catch (error) {
+        showManageMessage(error.message || 'Unable to add Sunday.', 'error');
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Add Sunday';
+      }
+    }
+
+    async function generateSundays() {
+      const endDate = document.getElementById('generateEndDate').value;
+      if (!endDate) return showManageMessage('Choose an ending date.', 'error');
+
+      const button = document.getElementById('generateBtn');
+      button.disabled = true;
+      button.textContent = 'Generating…';
+
+      try {
+        const data = await post({ action: 'generateSundays', token, endDate });
+        showManageMessage(
+          `Created ${data.result.created} Sunday(s). Skipped ${data.result.skipped} existing Sunday(s).`,
+          'success'
+        );
+        await loadSchedule();
+      } catch (error) {
+        showManageMessage(error.message || 'Unable to generate Sundays.', 'error');
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Generate Sundays';
+      }
+    }
+
+    function showManageMessage(text, type) {
+      const message = document.getElementById('manageMessage');
+      message.className = 'message ' + type;
+      message.textContent = text;
+    }
 
     logoutBtn.addEventListener('click', async () => {
       try {
@@ -552,8 +694,13 @@
         if (!grouped[item.date]) {
           grouped[item.date] = {
             display: item.dateDisplay,
-            ministries: {}
+            ministries: {},
+            isClosed: true
           };
+        }
+
+        if (String(item.status).toLowerCase() === 'open') {
+          grouped[item.date].isClosed = false;
         }
 
         const key = item.ministry + '|' + item.time;
@@ -595,7 +742,16 @@
           return `
             <article class="date-card">
               <div class="date-header">
-                <h2>${escapeHtml(date.display)}</h2>
+                <h2>
+                  ${escapeHtml(date.display)}
+                  ${date.isClosed ? '<span class="closed-label">CLOSED</span>' : ''}
+                </h2>
+                <div class="date-actions">
+                  ${date.isClosed
+                    ? `<button class="success-btn" onclick="setSundayStatus('${dateKey}','Open')">Reopen Sunday</button>`
+                    : `<button class="danger" onclick="setSundayStatus('${dateKey}','Closed')">Close Sunday</button>`
+                  }
+                </div>
               </div>
               ${ministryHtml}
             </article>
@@ -605,11 +761,10 @@
     }
 
     function renderOpportunity(item) {
+      const closed = String(item.status).toLowerCase() !== 'open';
       const isFilled = Number(item.remainingSlots || 0) === 0;
-      const statusClass = isFilled ? 'filled' : 'open';
-      const statusText = isFilled
-        ? 'Filled'
-        : `${item.remainingSlots} Open`;
+      const statusClass = closed ? 'closed' : (isFilled ? 'filled' : 'open');
+      const statusText = closed ? 'Closed' : (isFilled ? 'Filled' : `${item.remainingSlots} Open`);
 
       const signupHtml = (item.signups || []).length
         ? item.signups.map(signup => `
@@ -617,10 +772,9 @@
               <div>
                 <div class="signup-name">${escapeHtml(signup.name)}</div>
                 <div class="signup-email">${escapeHtml(signup.email)}</div>
-                ${
-                  signup.mealDescription
-                    ? `<div class="meal"><strong>Meal:</strong> ${escapeHtml(signup.mealDescription)}</div>`
-                    : ''
+                ${signup.mealDescription
+                  ? `<div class="meal"><strong>Meal:</strong> ${escapeHtml(signup.mealDescription)}</div>`
+                  : ''
                 }
               </div>
               <button
@@ -633,7 +787,7 @@
           `).join('')
         : '';
 
-      const emptyHtml = Number(item.remainingSlots || 0) > 0
+      const emptyHtml = !closed && Number(item.remainingSlots || 0) > 0
         ? `<div class="empty-slot">
             ${item.remainingSlots} volunteer spot${Number(item.remainingSlots) === 1 ? '' : 's'} still open
           </div>`
@@ -659,6 +813,18 @@
           ${emptyHtml}
         </div>
       `;
+    }
+
+    async function setSundayStatus(date, status) {
+      const verb = status === 'Closed' ? 'close' : 'reopen';
+      if (!confirm(`Are you sure you want to ${verb} this Sunday?`)) return;
+
+      try {
+        await post({ action: 'setSundayStatus', token, date, status });
+        await loadSchedule();
+      } catch (error) {
+        alert(error.message || 'Unable to update Sunday.');
+      }
     }
 
     async function cancelSignup(signupId, name) {
