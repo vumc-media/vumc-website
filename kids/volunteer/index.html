@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sprouts Volunteer Sign Up | Versailles UMC</title>
+  <style>
+    :root {
+      --ink:#1f2933; --muted:#66727d; --brand:#244b66;
+      --bg:#f5f7f8; --card:#fff; --line:#dce2e6;
+      --good:#176b43; --bad:#a12622;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; font-family:Arial,Helvetica,sans-serif;
+      color:var(--ink); background:var(--bg);
+    }
+    .wrap { max-width:900px; margin:auto; padding:28px 18px 60px; }
+    .hero {
+      background:var(--brand); color:#fff; border-radius:16px;
+      padding:28px; margin-bottom:22px;
+    }
+    .hero h1 { margin:0 0 8px; font-size:clamp(28px,5vw,42px); }
+    .hero p { margin:0; line-height:1.55; opacity:.95; }
+    .notice {
+      background:#fff; border:1px solid var(--line); border-radius:12px;
+      padding:15px 18px; margin-bottom:20px; color:var(--muted);
+      line-height:1.5;
+    }
+    .schedule { display:grid; gap:16px; }
+    .card {
+      background:var(--card); border:1px solid var(--line);
+      border-radius:14px; padding:20px; box-shadow:0 3px 12px rgba(0,0,0,.04);
+    }
+    .top {
+      display:flex; justify-content:space-between; gap:14px;
+      align-items:flex-start; flex-wrap:wrap;
+    }
+    h2 { margin:0 0 6px; font-size:22px; }
+    .date { font-weight:700; }
+    .details { color:var(--muted); line-height:1.5; margin-top:8px; }
+    .badge {
+      display:inline-block; padding:6px 10px; border-radius:999px;
+      background:#edf3f6; font-size:13px; font-weight:700;
+    }
+    .open { color:var(--good); }
+    .filled { color:var(--muted); }
+    button {
+      border:0; border-radius:9px; padding:11px 16px; font-weight:700;
+      font-size:15px; cursor:pointer;
+    }
+    .primary { background:var(--brand); color:#fff; }
+    button:disabled { opacity:.55; cursor:not-allowed; }
+    .form {
+      display:none; margin-top:18px; padding-top:18px;
+      border-top:1px solid var(--line);
+    }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    label { display:block; font-weight:700; margin-bottom:6px; }
+    input {
+      width:100%; padding:12px; border:1px solid #cbd2d8;
+      border-radius:9px; font-size:16px;
+    }
+    .actions { margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; }
+    .secondary { background:#e9eef1; color:var(--ink); }
+    .message {
+      display:none; margin-top:14px; padding:12px; border-radius:9px;
+      line-height:1.45;
+    }
+    .success { display:block; background:#e9f6ef; color:var(--good); }
+    .error { display:block; background:#fbeceb; color:var(--bad); }
+    .loading { text-align:center; color:var(--muted); padding:28px; }
+    @media(max-width:620px) { .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <h1>Serve with Sprouts Kids Ministry</h1>
+    <p>
+      Help us create a safe, welcoming place where children can learn,
+      grow, and experience the love of Jesus. Choose an upcoming
+      opportunity below to sign up.
+    </p>
+  </section>
+
+  <div class="notice">
+    Volunteer contact information is used for scheduling and reminders
+    and is not displayed publicly.
+  </div>
+
+  <div id="globalMessage" class="message"></div>
+  <div id="schedule" class="schedule">
+    <div class="loading">Loading upcoming opportunities…</div>
+  </div>
+</main>
+
+<script>
+const API = 'https://script.google.com/macros/s/AKfycbwsQKa5mGmOJQsPmLs2dTOz2DvhgVpdDnSZ0cpGyM_3nf2vR5ceGhSiZlVaTitYXpEp/exec';
+
+async function getSchedule() {
+  const response = await fetch(API + '?action=schedule');
+  const data = await response.json();
+  if (!data.success) throw new Error(data.error || 'Unable to load schedule.');
+  return data.schedule || [];
+}
+
+async function post(payload) {
+  const response = await fetch(API, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(payload)
+  });
+  const data = await response.json();
+  if (!data.success) throw new Error(data.error || 'Request failed.');
+  return data;
+}
+
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+  }[c]));
+}
+
+async function loadSchedule() {
+  const host = document.getElementById('schedule');
+  try {
+    const items = await getSchedule();
+    if (!items.length) {
+      host.innerHTML = '<div class="card">There are no open Sprouts volunteer opportunities right now.</div>';
+      return;
+    }
+
+    const grouped = {};
+    items.forEach(item => {
+      const key = item.date;
+      (grouped[key] ||= []).push(item);
+    });
+
+    host.innerHTML = Object.keys(grouped).sort().map(date => `
+      <section class="card">
+        <div class="date">${esc(grouped[date][0].dateDisplay)}</div>
+        ${grouped[date].map(renderOpportunity).join('')}
+      </section>
+    `).join('');
+  } catch(err) {
+    host.innerHTML = `<div class="message error">${esc(err.message)}</div>`;
+  }
+}
+
+function renderOpportunity(item) {
+  const filled = item.remainingSlots <= 0;
+  return `
+    <div style="padding:16px 0;border-bottom:1px solid #eef1f3;">
+      <div class="top">
+        <div>
+          <h2>${esc(item.ministry)}</h2>
+          <div><strong>${esc(item.time)}</strong> · ${esc(item.position)}</div>
+          <div class="details">${esc(item.notes || '')}</div>
+          <div class="details">
+            <span class="badge ${filled ? 'filled' : 'open'}">
+              ${filled ? 'Filled' : `${item.remainingSlots} spot${item.remainingSlots === 1 ? '' : 's'} open`}
+            </span>
+          </div>
+        </div>
+        <button class="primary" ${filled ? 'disabled' : ''}
+          onclick="toggleForm('${esc(item.opportunityId)}')">
+          ${filled ? 'Filled' : 'Sign Up'}
+        </button>
+      </div>
+
+      <div class="form" id="form-${esc(item.opportunityId)}">
+        <div class="grid">
+          <div>
+            <label>Name</label>
+            <input id="name-${esc(item.opportunityId)}" autocomplete="name">
+          </div>
+          <div>
+            <label>Email</label>
+            <input id="email-${esc(item.opportunityId)}" type="email" autocomplete="email">
+          </div>
+        </div>
+        <div class="actions">
+          <button class="primary" id="submit-${esc(item.opportunityId)}"
+            onclick="submitSignup('${esc(item.opportunityId)}')">Confirm Sign Up</button>
+          <button class="secondary" onclick="toggleForm('${esc(item.opportunityId)}')">Cancel</button>
+        </div>
+        <div id="msg-${esc(item.opportunityId)}" class="message"></div>
+      </div>
+    </div>`;
+}
+
+function toggleForm(id) {
+  const el = document.getElementById('form-' + id);
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+
+async function submitSignup(id) {
+  const name = document.getElementById('name-' + id).value.trim();
+  const email = document.getElementById('email-' + id).value.trim();
+  const msg = document.getElementById('msg-' + id);
+  const btn = document.getElementById('submit-' + id);
+
+  if (!name || !email) {
+    msg.className = 'message error';
+    msg.textContent = 'Please enter your name and email.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Signing up…';
+
+  try {
+    await post({action:'signup', opportunityId:id, name, email, pcoPersonId:''});
+    msg.className = 'message success';
+    msg.textContent = 'Thank you! Your volunteer signup has been received.';
+    setTimeout(loadSchedule, 900);
+  } catch(err) {
+    msg.className = 'message error';
+    msg.textContent = err.message;
+    btn.disabled = false;
+    btn.textContent = 'Confirm Sign Up';
+  }
+}
+
+loadSchedule();
+</script>
+</body>
+</html>
