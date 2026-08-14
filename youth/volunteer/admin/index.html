@@ -82,12 +82,15 @@
       margin: 16px 0 6px;
     }
 
-    input {
+    input,
+    select {
       width: 100%;
       padding: 12px;
       border: 1px solid #cbd2d8;
       border-radius: 9px;
       font-size: 16px;
+      background: #fff;
+      font-family: inherit;
     }
 
     button {
@@ -467,35 +470,52 @@
 
       <section class="card">
         <h2 style="margin-top:0;">Manage Schedule</h2>
+
         <p style="color:var(--muted);line-height:1.5;">
-          Each Sunday automatically includes two 9:15 AM adult volunteers,
-          two 4:00 PM Rooted Youth adult volunteers, and one meal provider.
+          Choose the youth schedule you need, select the first Sunday,
+          and enter how many consecutive Sundays to create.
         </p>
 
-        <div class="manage-grid">
-          <div class="manage-card">
-            <h3>Add One Sunday</h3>
-            <p>Choose a Sunday to add the standard youth schedule.</p>
-            <div class="manage-actions">
-              <div class="field">
-                <label for="addSundayDate">Sunday Date</label>
-                <input id="addSundayDate" type="date">
-              </div>
-              <button id="addSundayBtn" class="primary">Add Sunday</button>
+        <div class="manage-card">
+          <div class="manage-grid">
+
+            <div>
+              <label for="scheduleType">Youth Schedule</label>
+              <select id="scheduleType">
+                <option value="SundayMorning">Youth Sunday Morning — 9:15 AM</option>
+                <option value="RootedYouth">Rooted Youth — 4:00 PM</option>
+              </select>
             </div>
+
+            <div>
+              <label for="seriesStartDate">First Sunday</label>
+              <input id="seriesStartDate" type="date">
+            </div>
+
+            <div>
+              <label for="seriesCount">Number of Sundays</label>
+              <input
+                id="seriesCount"
+                type="number"
+                min="1"
+                max="52"
+                step="1"
+                value="12"
+              >
+            </div>
+
           </div>
 
-          <div class="manage-card">
-            <h3>Generate Upcoming Sundays</h3>
-            <p>Choose an ending date. Existing Sundays will be skipped.</p>
-            <div class="manage-actions">
-              <div class="field">
-                <label for="generateEndDate">Generate Through</label>
-                <input id="generateEndDate" type="date">
-              </div>
-              <button id="generateBtn" class="primary">Generate Sundays</button>
-            </div>
+          <div style="margin-top:18px;">
+            <button id="generateSeriesBtn" class="primary">
+              Generate Schedule
+            </button>
           </div>
+
+          <p id="seriesExplanation" class="details" style="margin-top:14px;">
+            Creates two Safe Sanctuaries-trained adult volunteer spots
+            each Sunday at 9:15 AM.
+          </p>
         </div>
 
         <div id="manageMessage" class="message"></div>
@@ -560,54 +580,127 @@
     document.getElementById('refreshBtn').addEventListener('click', loadSchedule);
 
 
-    document.getElementById('addSundayBtn').addEventListener('click', addSunday);
-    document.getElementById('generateBtn').addEventListener('click', generateSundays);
+    document
+      .getElementById('generateSeriesBtn')
+      .addEventListener('click', generateYouthSeries);
 
-    async function addSunday() {
-      const date = document.getElementById('addSundayDate').value;
-      if (!date) return showManageMessage('Please choose a Sunday.', 'error');
+    document
+      .getElementById('scheduleType')
+      .addEventListener('change', updateSeriesExplanation);
 
-      const button = document.getElementById('addSundayBtn');
-      button.disabled = true;
-      button.textContent = 'Adding…';
 
-      try {
-        const data = await post({ action: 'addSunday', token, date });
-        showManageMessage(
-          data.result.created ? 'Sunday schedule added successfully.' : 'That Sunday already exists.',
-          'success'
-        );
-        await loadSchedule();
-      } catch (error) {
-        showManageMessage(error.message || 'Unable to add Sunday.', 'error');
-      } finally {
-        button.disabled = false;
-        button.textContent = 'Add Sunday';
+    function getNextSundayDateString() {
+      const today = new Date();
+
+      const date = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        12, 0, 0, 0
+      );
+
+      const daysUntilSunday =
+        (7 - date.getDay()) % 7;
+
+      date.setDate(
+        date.getDate() + daysUntilSunday
+      );
+
+      const year = date.getFullYear();
+      const month =
+        String(date.getMonth() + 1).padStart(2, '0');
+      const day =
+        String(date.getDate()).padStart(2, '0');
+
+      return `${year}-${month}-${day}`;
+    }
+
+
+    function updateSeriesExplanation() {
+      const type =
+        document.getElementById('scheduleType').value;
+
+      const explanation =
+        document.getElementById('seriesExplanation');
+
+      if (type === 'RootedYouth') {
+        explanation.textContent =
+          'Each Sunday creates Rooted Youth at 4:00 PM with ' +
+          'two adult volunteer spots and one meal provider signup.';
+      } else {
+        explanation.textContent =
+          'Each Sunday creates Youth Sunday Morning at 9:15 AM ' +
+          'with two Safe Sanctuaries-trained adult volunteer spots.';
       }
     }
 
-    async function generateSundays() {
-      const endDate = document.getElementById('generateEndDate').value;
-      if (!endDate) return showManageMessage('Choose an ending date.', 'error');
 
-      const button = document.getElementById('generateBtn');
+    async function generateYouthSeries() {
+      const scheduleType =
+        document.getElementById('scheduleType').value;
+
+      const startDate =
+        document.getElementById('seriesStartDate').value;
+
+      const count =
+        Number(document.getElementById('seriesCount').value);
+
+      if (!startDate) {
+        return showManageMessage(
+          'Choose the first Sunday.',
+          'error'
+        );
+      }
+
+      if (!Number.isInteger(count) || count < 1 || count > 52) {
+        return showManageMessage(
+          'Enter a number of Sundays between 1 and 52.',
+          'error'
+        );
+      }
+
+      const button =
+        document.getElementById('generateSeriesBtn');
+
       button.disabled = true;
       button.textContent = 'Generating…';
 
       try {
-        const data = await post({ action: 'generateSundays', token, endDate });
+        const data = await post({
+          action: 'generateYouthSeries',
+          token: token,
+          scheduleType: scheduleType,
+          startDate: startDate,
+          count: count
+        });
+
+        const result = data.result;
+
+        const scheduleName =
+          scheduleType === 'RootedYouth'
+            ? 'Rooted Youth'
+            : 'Youth Sunday Morning';
+
         showManageMessage(
-          `Created ${data.result.created} Sunday(s). Skipped ${data.result.skipped} existing Sunday(s).`,
+          `${scheduleName}: created ${result.createdSundays} ` +
+          `Sunday(s). Skipped ${result.skippedSundays} ` +
+          `Sunday(s) that already existed.`,
           'success'
         );
+
         await loadSchedule();
+
       } catch (error) {
-        showManageMessage(error.message || 'Unable to generate Sundays.', 'error');
+        showManageMessage(
+          error.message || 'Unable to generate schedule.',
+          'error'
+        );
       } finally {
         button.disabled = false;
-        button.textContent = 'Generate Sundays';
+        button.textContent = 'Generate Schedule';
       }
     }
+
 
     function showManageMessage(text, type) {
       const message = document.getElementById('manageMessage');
@@ -901,6 +994,11 @@
         .replaceAll('\\', '\\\\')
         .replaceAll("'", "\\'");
     }
+
+    document.getElementById('seriesStartDate').value =
+      getNextSundayDateString();
+
+    updateSeriesExplanation();
 
     if (token) {
       showAdmin();
