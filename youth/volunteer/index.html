@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Youth Volunteer Schedule | Versailles UMC</title>
+
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #20252b;
+      --muted: #68717c;
+      --border: #dfe4e8;
+      --primary: #244b66;
+      --primary-dark: #183447;
+      --success: #2d6a4f;
+      --success-bg: #eaf5ef;
+      --warning: #9a6700;
+      --warning-bg: #fff5d6;
+      --danger: #a12d2d;
+      --shadow: 0 8px 24px rgba(0,0,0,.08);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .hero {
+      background: var(--primary);
+      color: white;
+      padding: 42px 20px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 6vw, 44px);
+    }
+
+    .hero p {
+      margin: 0 auto;
+      max-width: 650px;
+      line-height: 1.6;
+      opacity: .95;
+    }
+
+    .container {
+      width: min(920px, calc(100% - 30px));
+      margin: 30px auto 60px;
+    }
+
+    .intro {
+      background: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      line-height: 1.6;
+    }
+
+    .privacy-note {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .loading,
+    .empty,
+    .error {
+      background: white;
+      padding: 30px;
+      border-radius: var(--radius);
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .error {
+      color: var(--danger);
+    }
+
+    .date-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .date-header {
+      padding: 18px 22px;
+      background: #e9eef2;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .date-header h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .ministry-section {
+      padding: 22px;
+    }
+
+    .ministry-section + .ministry-section {
+      border-top: 1px solid var(--border);
+    }
+
+    .ministry-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .ministry-heading h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .time {
+      color: var(--muted);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .opportunity {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+
+    .opportunity-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .opportunity-title {
+      font-weight: 700;
+      font-size: 17px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .status.open {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .status.filled {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .details {
+      margin-top: 8px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .meal {
+      margin-top: 12px;
+      padding: 12px;
+      background: #f7f8f9;
+      border-radius: 9px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .signup-button {
+      background: var(--primary);
+      color: white;
+      margin-top: 13px;
+    }
+
+    .signup-button:hover {
+      background: var(--primary-dark);
+    }
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      width: min(500px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: white;
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+
+    .modal h2 {
+      margin-top: 0;
+    }
+
+    .selected-opportunity {
+      padding: 12px;
+      background: #eef2f5;
+      border-radius: 9px;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin: 16px 0 6px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd2d8;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 95px;
+      resize: vertical;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 22px;
+    }
+
+    .cancel-button {
+      background: #e7eaed;
+      color: #333;
+    }
+
+    .confirm-button {
+      background: var(--primary);
+      color: white;
+    }
+
+    .confirm-button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .message.success {
+      display: block;
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .message.error {
+      display: block;
+      background: #fdecec;
+      color: var(--danger);
+    }
+
+    .meal-field {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .hero {
+        padding: 32px 18px;
+      }
+
+      .container {
+        width: min(100% - 20px, 920px);
+        margin-top: 20px;
+      }
+
+      .ministry-heading,
+      .opportunity-top {
+        display: block;
+      }
+
+      .time,
+      .status {
+        margin-top: 8px;
+      }
+
+      .modal-actions {
+        flex-direction: column-reverse;
+      }
+
+      .modal-actions button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="hero">
+    <h1>Youth Volunteer Schedule</h1>
+    <p>
+      Help support our youth on Sunday mornings and during Rooted Youth.
+      Choose an available Sunday and ministry opportunity below.
+    </p>
+  </header>
+
+  <main class="container">
+
+    <section class="intro">
+      <strong>Thank you for serving our youth!</strong>
+
+      <div class="privacy-note">
+        Your email address is used only for volunteer communication and
+        reminders. It is not displayed on the public schedule.
+      </div>
+    </section>
+
+    <div id="schedule">
+      <div class="loading">Loading volunteer schedule…</div>
+    </div>
+
+  </main>
+
+
+  <div id="signupModal" class="modal-backdrop">
+    <div class="modal">
+
+      <h2>Volunteer Signup</h2>
+
+      <div id="selectedOpportunity" class="selected-opportunity"></div>
+
+      <form id="signupForm">
+
+        <input type="hidden" id="opportunityId">
+
+        <label for="name">Your Name</label>
+        <input
+          id="name"
+          type="text"
+          autocomplete="name"
+          required
+        >
+
+        <label for="email">Email Address</label>
+        <input
+          id="email"
+          type="email"
+          autocomplete="email"
+          required
+        >
+
+        <div id="mealField" class="meal-field">
+          <label for="mealDescription">
+            What food are you planning to provide?
+          </label>
+
+          <textarea
+            id="mealDescription"
+            placeholder="Example: Pizza, chips, fruit and brownies"
+          ></textarea>
+        </div>
+
+        <div id="formMessage" class="message"></div>
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="cancel-button"
+            onclick="closeSignupModal()"
+          >
+            Cancel
+          </button>
+
+          <button
+            id="confirmButton"
+            type="submit"
+            class="confirm-button"
+          >
+            Confirm Signup
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+
+  <script>
+    const GAS_URL =
+      'https://script.google.com/macros/s/AKfycbxdBb6KyDU1K3Tbq1w5hB_N54aZ8o8LV_0l9aysYxFRP0Y_W7MBqsBkhUlvaUERJrSD-w/exec';
+
+    let scheduleData = [];
+    let selectedItem = null;
+
+
+    async function loadSchedule() {
+      const scheduleContainer =
+        document.getElementById('schedule');
+
+      scheduleContainer.innerHTML =
+        '<div class="loading">Loading volunteer schedule…</div>';
+
+      try {
+        const response = await fetch(
+          GAS_URL + '?action=schedule'
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+          throw new Error(
+            data.error || 'Unable to load schedule.'
+          );
+        }
+
+        scheduleData = data.schedule || [];
+
+        renderSchedule();
+
+      } catch (error) {
+        scheduleContainer.innerHTML =
+          '<div class="error">' +
+          'We could not load the volunteer schedule. ' +
+          'Please try again shortly.' +
+          '</div>';
+
+        console.error(error);
+      }
+    }
+
+
+    function renderSchedule() {
+      const container =
+        document.getElementById('schedule');
+
+      if (!scheduleData.length) {
+        container.innerHTML =
+          '<div class="empty">' +
+          'There are currently no volunteer opportunities.' +
+          '</div>';
+
+        return;
+      }
+
+      const dates = {};
+
+      scheduleData.forEach(item => {
+        if (!dates[item.date]) {
+          dates[item.date] = {
+            display: item.dateDisplay,
+            ministries: {}
+          };
+        }
+
+        const ministryKey =
+          item.ministry + '|' + item.time;
+
+        if (!dates[item.date].ministries[ministryKey]) {
+          dates[item.date].ministries[ministryKey] = {
+            ministry: item.ministry,
+            time: item.time,
+            opportunities: []
+          };
+        }
+
+        dates[item.date]
+          .ministries[ministryKey]
+          .opportunities
+          .push(item);
+      });
+
+
+      const sortedDates =
+        Object.keys(dates).sort();
+
+
+      container.innerHTML =
+        sortedDates.map(dateKey => {
+
+          const date = dates[dateKey];
+
+          const ministryHtml =
+            Object.values(date.ministries)
+              .map(section => {
+
+                const opportunitiesHtml =
+                  section.opportunities
+                    .map(item => renderOpportunity(item))
+                    .join('');
+
+                return `
+                  <section class="ministry-section">
+
+                    <div class="ministry-heading">
+                      <h3>${escapeHtml(section.ministry)}</h3>
+                      <div class="time">
+                        ${escapeHtml(section.time)}
+                      </div>
+                    </div>
+
+                    ${opportunitiesHtml}
+
+                  </section>
+                `;
+              })
+              .join('');
+
+          return `
+            <article class="date-card">
+
+              <div class="date-header">
+                <h2>${escapeHtml(date.display)}</h2>
+              </div>
+
+              ${ministryHtml}
+
+            </article>
+          `;
+        }).join('');
+    }
+
+
+    function renderOpportunity(item) {
+      const isFilled =
+        item.signupStatus === 'Filled';
+
+      const statusClass =
+        isFilled ? 'filled' : 'open';
+
+      let statusText = '';
+
+      if (isFilled) {
+        statusText = 'Filled';
+      } else if (item.remainingSlots === 1) {
+        statusText = '1 Volunteer Needed';
+      } else {
+        statusText =
+          item.remainingSlots + ' Volunteers Needed';
+      }
+
+
+      let detailText = '';
+
+      if (item.slotsNeeded > 1) {
+        detailText =
+          item.filledSlots +
+          ' of ' +
+          item.slotsNeeded +
+          ' volunteer spots filled';
+      }
+
+
+      let notesHtml = '';
+
+      if (item.notes) {
+        notesHtml =
+          `<div class="details">
+            ${escapeHtml(item.notes)}
+          </div>`;
+      }
+
+
+      let mealHtml = '';
+
+      if (
+        item.position === 'Meal Provider' &&
+        item.mealDescription
+      ) {
+        mealHtml =
+          `<div class="meal">
+            <strong>Meal:</strong>
+            ${escapeHtml(item.mealDescription)}
+          </div>`;
+      }
+
+
+      let buttonHtml = '';
+
+      if (!isFilled) {
+        buttonHtml =
+          `<button
+            class="signup-button"
+            onclick="openSignupModal('${escapeAttribute(item.opportunityId)}')"
+          >
+            Sign Up
+          </button>`;
+      }
+
+
+      return `
+        <div class="opportunity">
+
+          <div class="opportunity-top">
+
+            <div class="opportunity-title">
+              ${escapeHtml(item.position)}
+            </div>
+
+            <span class="status ${statusClass}">
+              ${escapeHtml(statusText)}
+            </span>
+
+          </div>
+
+          ${detailText
+            ? `<div class="details">${escapeHtml(detailText)}</div>`
+            : ''
+          }
+
+          ${notesHtml}
+
+          ${mealHtml}
+
+          ${buttonHtml}
+
+        </div>
+      `;
+    }
+
+
+    function openSignupModal(opportunityId) {
+      selectedItem =
+        scheduleData.find(
+          item =>
+            item.opportunityId === opportunityId
+        );
+
+      if (!selectedItem) {
+        return;
+      }
+
+      document.getElementById('opportunityId').value =
+        selectedItem.opportunityId;
+
+      document.getElementById(
+        'selectedOpportunity'
+      ).innerHTML =
+        `<strong>${escapeHtml(selectedItem.dateDisplay)}</strong><br>
+         ${escapeHtml(selectedItem.time)} —
+         ${escapeHtml(selectedItem.ministry)}<br>
+         ${escapeHtml(selectedItem.position)}`;
+
+
+      const mealField =
+        document.getElementById('mealField');
+
+      const mealDescription =
+        document.getElementById('mealDescription');
+
+      if (selectedItem.position === 'Meal Provider') {
+        mealField.style.display = 'block';
+        mealDescription.required = true;
+      } else {
+        mealField.style.display = 'none';
+        mealDescription.required = false;
+        mealDescription.value = '';
+      }
+
+
+      document.getElementById('formMessage').className =
+        'message';
+
+      document.getElementById('formMessage').textContent =
+        '';
+
+      document
+        .getElementById('signupModal')
+        .classList
+        .add('open');
+    }
+
+
+    function closeSignupModal() {
+      document
+        .getElementById('signupModal')
+        .classList
+        .remove('open');
+
+      document.getElementById('signupForm').reset();
+
+      selectedItem = null;
+    }
+
+
+    document
+      .getElementById('signupForm')
+      .addEventListener('submit', async event => {
+
+        event.preventDefault();
+
+        if (!selectedItem) {
+          return;
+        }
+
+        const confirmButton =
+          document.getElementById('confirmButton');
+
+        const message =
+          document.getElementById('formMessage');
+
+        confirmButton.disabled = true;
+        confirmButton.textContent = 'Signing Up…';
+
+        message.className = 'message';
+        message.textContent = '';
+
+
+        const payload = {
+          action: 'signup',
+
+          opportunityId:
+            selectedItem.opportunityId,
+
+          name:
+            document.getElementById('name')
+              .value.trim(),
+
+          email:
+            document.getElementById('email')
+              .value.trim(),
+
+          pcoPersonId: '',
+
+          mealDescription:
+            document.getElementById('mealDescription')
+              .value.trim()
+        };
+
+
+        try {
+          const response =
+            await fetch(GAS_URL, {
+              method: 'POST',
+
+              headers: {
+                'Content-Type':
+                  'text/plain;charset=utf-8'
+              },
+
+              body: JSON.stringify(payload)
+            });
+
+
+          const data =
+            await response.json();
+
+
+          if (!data.success) {
+            throw new Error(
+              data.error ||
+              'Unable to complete signup.'
+            );
+          }
+
+
+          message.className =
+            'message success';
+
+          message.textContent =
+            'Thank you! Your volunteer signup has been recorded.';
+
+
+          await loadSchedule();
+
+
+          setTimeout(() => {
+            closeSignupModal();
+          }, 1500);
+
+
+        } catch (error) {
+
+          message.className =
+            'message error';
+
+          message.textContent =
+            error.message ||
+            'Something went wrong. Please try again.';
+
+        } finally {
+
+          confirmButton.disabled = false;
+          confirmButton.textContent =
+            'Confirm Signup';
+        }
+      });
+
+
+    document
+      .getElementById('signupModal')
+      .addEventListener('click', event => {
+
+        if (event.target.id === 'signupModal') {
+          closeSignupModal();
+        }
+      });
+
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+
+    function escapeAttribute(value) {
+      return String(value ?? '')
+        .replaceAll('\\', '\\\\')
+        .replaceAll("'", "\\'");
+    }
+
+
+    loadSchedule();
+  </script>
+
+</body>
+</html>
