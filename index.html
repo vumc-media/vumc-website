@@ -1122,6 +1122,145 @@ rkp("event","PAGE_VIEW");
         width: 100%;
       }
     }
+
+
+    /* ===== UPCOMING LIVESTREAM HOMEPAGE CARD ===== */
+    .upcoming-livestream-section {
+      padding: 0 0 72px;
+      background: var(--bg);
+    }
+
+    .upcoming-livestream-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .upcoming-livestream-heading .section-copy { max-width: 680px; }
+
+    .upcoming-livestream-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .livestream-card {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      min-height: 300px;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .livestream-card-media {
+      position: relative;
+      min-height: 260px;
+      background: var(--dark);
+      overflow: hidden;
+    }
+
+    .livestream-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .livestream-card-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(17,22,29,0.42), transparent 55%);
+      pointer-events: none;
+    }
+
+    .livestream-badge {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      z-index: 2;
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(17,22,29,0.82);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      backdrop-filter: blur(8px);
+    }
+
+    .livestream-badge.is-live { background: #b42318; }
+
+    .livestream-card-body {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .livestream-card-date {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .livestream-card-body h3 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      line-height: 1.15;
+    }
+
+    .livestream-card-description {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .livestream-card-action { align-self: flex-start; }
+
+    .livestream-empty {
+      grid-column: 1 / -1;
+      padding: 34px;
+      border-radius: var(--radius-xl);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .livestream-empty strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .livestream-empty p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    @media (max-width: 980px) {
+      .upcoming-livestream-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .upcoming-livestream-section { padding: 0 0 56px; }
+      .upcoming-livestream-heading { display: block; }
+      .upcoming-livestream-heading .btn { margin-top: 20px; }
+      .livestream-card { grid-template-columns: 1fr; }
+      .livestream-card-media { min-height: 220px; aspect-ratio: 16 / 9; }
+      .livestream-card-body { padding: 24px; }
+      .livestream-card-action { width: 100%; }
+    }
+
     /* ===== COMMUNITY STORIES HOMEPAGE FEATURE ===== */
     .community-stories-section {
       padding: 0 0 72px;
@@ -2722,6 +2861,30 @@ rkp("event","PAGE_VIEW");
               and shared a reflection about feeling welcomed at Versailles UMC.
             </p>
           </a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- UPCOMING LIVESTREAM -->
+    <section class="upcoming-livestream-section" id="upcoming-livestream">
+      <div class="container">
+        <div class="upcoming-livestream-heading">
+          <div>
+            <div class="eyebrow">Worship Online</div>
+            <h2 class="section-title">Upcoming livestream.</h2>
+            <p class="section-copy">
+              Join Versailles UMC online for our next worship service. Watch live from wherever you are.
+            </p>
+          </div>
+          <a class="btn btn-light" href="/watch/">Watch Page</a>
+        </div>
+
+        <div class="upcoming-livestream-grid" id="upcomingLivestreamGrid" aria-live="polite" aria-busy="true">
+          <div class="livestream-empty">
+            <strong>Loading upcoming livestream…</strong>
+            <p>Checking the VUMC YouTube schedule.</p>
+          </div>
         </div>
       </div>
     </section>
