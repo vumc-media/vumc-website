@@ -4488,12 +4488,30 @@ You are welcome in person or online.`,
             );
           }
 
-          const streams = Array.isArray(data.streams)
-            ? data.streams
-            : [];
+          const now = Date.now();
+          const streams = (Array.isArray(data.streams) ? data.streams : [])
+            .filter(stream => {
+              const status = String(stream.broadcastStatus || '').toLowerCase();
+
+              // Always keep a stream that YouTube says is live right now.
+              if (status === 'live') return true;
+
+              // For everything else, require a valid start time that is still in the future.
+              const startTime = new Date(stream.scheduledStartTime).getTime();
+              return Number.isFinite(startTime) && startTime > now;
+            })
+            .sort((a, b) => {
+              const aLive = String(a.broadcastStatus || '').toLowerCase() === 'live';
+              const bLive = String(b.broadcastStatus || '').toLowerCase() === 'live';
+              if (aLive !== bLive) return aLive ? -1 : 1;
+
+              const aTime = new Date(a.scheduledStartTime).getTime();
+              const bTime = new Date(b.scheduledStartTime).getTime();
+              return aTime - bTime;
+            });
 
           if (!streams.length) {
-            renderEmpty();
+            renderEmpty('There are no future YouTube livestreams scheduled right now.');
             return;
           }
 
