@@ -1,10 +1,123 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>VUMC Staff Tools</title>
-  <link rel="stylesheet" href="./styles.css">
+
+  <link rel="stylesheet" href="./styles.css" />
+
+  <style>
+    [hidden] {
+      display: none !important;
+    }
+
+    .auth-screen {
+      min-height: calc(100vh - 110px);
+      display: grid;
+      place-items: center;
+      padding: 30px 18px;
+    }
+
+    .auth-card {
+      width: min(470px, 100%);
+      padding: 30px;
+      border: 1px solid #d8e2ea;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 18px 45px rgba(23, 50, 77, 0.12);
+    }
+
+    .auth-card h2 {
+      margin-bottom: 8px;
+      color: #17324d;
+    }
+
+    .auth-card p {
+      color: #687b8f;
+      line-height: 1.55;
+    }
+
+    .auth-card label {
+      display: grid;
+      gap: 8px;
+      margin-top: 18px;
+      color: #29465f;
+      font-weight: 700;
+    }
+
+    .auth-card input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #d8e2ea;
+      border-radius: 10px;
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    .auth-card input:focus {
+      outline: none;
+      border-color: #1f5f8b;
+      box-shadow: 0 0 0 4px rgba(31, 95, 139, 0.1);
+    }
+
+    .auth-button,
+    .logout-button {
+      border: 0;
+      border-radius: 10px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+    }
+
+    .auth-button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 13px 16px;
+      color: #ffffff;
+      background: #1f5f8b;
+    }
+
+    .auth-button:hover {
+      background: #15486d;
+    }
+
+    .auth-button:disabled {
+      cursor: wait;
+      opacity: 0.65;
+    }
+
+    .logout-button {
+      padding: 9px 13px;
+      color: #1f5f8b;
+      background: #edf4f8;
+    }
+
+    .auth-message {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      color: #17324d;
+      background: #edf4f8;
+    }
+
+    .auth-message.error {
+      color: #a61b1b;
+      background: #fff0ef;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .signed-in-user {
+      color: #687b8f;
+      font-size: 0.86rem;
+    }
+  </style>
 </head>
 
 <body>
@@ -14,55 +127,138 @@
       <h1>Staff Tools</h1>
     </div>
 
-    <span class="badge">Internal</span>
+    <div class="topbar-actions">
+      <span
+        id="signedInUser"
+        class="signed-in-user"
+        hidden
+      >Authorized staff</span>
+
+      <button
+        id="logoutButton"
+        class="logout-button"
+        type="button"
+        hidden
+      >
+        Sign out
+      </button>
+
+      <span class="badge">Internal</span>
+    </div>
   </header>
 
-  <main class="portal-shell">
-    <section class="portal-intro">
-      <p class="eyebrow">Staff resources</p>
-      <h2>Church Staff Tools</h2>
+  <main id="authScreen" class="auth-screen">
+    <section class="auth-card">
+      <p class="eyebrow">Authorized staff only</p>
+
+      <h2>Enter Staff Tools</h2>
+
       <p>
-        Choose a tool below.
+        Enter the shared staff passkey to continue.
+      </p>
+
+      <form id="loginForm">
+        <label>
+          Staff Passkey
+
+          <input
+            id="passkeyInput"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Enter staff passkey"
+            required
+          />
+        </label>
+
+        <button
+          id="loginButton"
+          class="auth-button"
+          type="submit"
+        >
+          Enter Staff Tools
+        </button>
+      </form>
+
+      <div
+        id="authMessage"
+        class="auth-message"
+        hidden
+      ></div>
+    </section>
+  </main>
+
+  <main id="staffPortal" class="shell" hidden>
+    <section class="intro">
+      <p class="eyebrow">Church staff portal</p>
+
+      <h2>Choose a tool</h2>
+
+      <p>
+        Use this page to access church-owned administrative and ministry tools.
       </p>
     </section>
 
-    <section class="tools-grid">
-      <a class="tool-card" href="./communications/">
-        <span class="tool-icon">✉</span>
-
-        <div>
-          <p class="eyebrow">Communications</p>
-          <h3>Communications Hub</h3>
-          <p>
-            Create one announcement and publish it by email, Facebook, or both.
-          </p>
-        </div>
+    <section class="grid" aria-label="Staff tools">
+      <a id="communicationsLink" class="tool-card" href="./communications/">
+        <span class="icon">📣</span>
+        <h3>Communications Hub</h3>
+        <p>Create announcements for email and the church Facebook Page.</p>
+        <span class="action">Open tool →</span>
       </a>
 
-      <div class="tool-card disabled" aria-disabled="true">
-        <span class="tool-icon">⌂</span>
+      <a class="tool-card" href="/admin/">
+        <span class="icon">🌐</span>
+        <h3>Website Editor</h3>
+        <p>Open the Sveltia CMS editor for approved website content.</p>
+        <span class="action">Open editor →</span>
+      </a>
 
-        <div>
-          <p class="eyebrow">Coming later</p>
-          <h3>Website Tools</h3>
-          <p>
-            Additional website tools can be added here.
-          </p>
-        </div>
-      </div>
+      <a class="tool-card disabled" href="#" aria-disabled="true">
+        <span class="icon">📰</span>
+        <h3>News & Notes</h3>
+        <p>Manage monthly newsletter files and the public archive.</p>
+        <span class="action">Coming soon</span>
+      </a>
 
-      <div class="tool-card disabled" aria-disabled="true">
-        <span class="tool-icon">＋</span>
+      <a class="tool-card disabled" href="#" aria-disabled="true">
+        <span class="icon">👨‍👩‍👧‍👦</span>
+        <h3>Church Family Connections</h3>
+        <p>Manage care, connection, and follow-up resources.</p>
+        <span class="action">Coming soon</span>
+      </a>
 
-        <div>
-          <p class="eyebrow">Coming later</p>
-          <h3>More Staff Tools</h3>
-          <p>
-            This area can grow as more staff workflows are added.
-          </p>
-        </div>
-      </div>
+      <a class="tool-card disabled" href="#" aria-disabled="true">
+        <span class="icon">✅</span>
+        <h3>Kids Check-In Admin</h3>
+        <p>Open check-in administration and attendance tools.</p>
+        <span class="action">Coming soon</span>
+      </a>
+
+      <a class="tool-card disabled" href="#" aria-disabled="true">
+        <span class="icon">🏫</span>
+        <h3>Academy Tools</h3>
+        <p>Access teacher workspace, menus, forms, and resources.</p>
+        <span class="action">Coming soon</span>
+      </a>
+
+      <a class="tool-card disabled" href="#" aria-disabled="true">
+        <span class="icon">🛠️</span>
+        <h3>Maintenance Requests</h3>
+        <p>Submit and review church facility maintenance requests.</p>
+        <span class="action">Coming soon</span>
+      </a>
+
+      <a class="tool-card disabled" href="#" aria-disabled="true">
+        <span class="icon">📁</span>
+        <h3>Staff Resources</h3>
+        <p>Store forms, policies, templates, and internal documents.</p>
+        <span class="action">Coming soon</span>
+      </a>
     </section>
+
+    <p class="security-note">
+      Access to this dashboard requires the VUMC staff passkey.
+    </p>
   </main>
 
   <script src="./app.js"></script>

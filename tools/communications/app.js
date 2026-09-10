@@ -1,17 +1,9 @@
-const RELAY_URL =
-  "https://cnreuxodfrnpyyrbtlmp.supabase.co/functions/v1/communications-relay";
-
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_bzCz7_E6sZTSZOdPpMvc5w_3OdUSndO";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzHpOIjWgX-jiOMGwiCBrONrmym-9kMJDOQ4DA15re8d-_MUidnpXbIGCZYTqM_gAJV/exec";
+const SESSION_KEY = "vumc_staff_token";
 
 const MAX_IMAGES = 10;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
-
-const ALLOWED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp"
-];
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 const loadingScreen = document.getElementById("loadingScreen");
 const app = document.getElementById("app");
@@ -36,37 +28,9 @@ const statusBox = document.getElementById("status");
 let defaultAudience = "All VUMC Contacts Group";
 let selectedImages = [];
 
-async function relay(action, payload = {}) {
-  const response = await fetch(RELAY_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "apikey": SUPABASE_PUBLISHABLE_KEY,
-    },
-    body: JSON.stringify({ action, payload }),
-  });
-
-  let data;
-
-  try {
-    data = await response.json();
-  } catch {
-    throw new Error("The Communications service returned an invalid response.");
-  }
-
-  if (!response.ok || data.success === false) {
-    throw new Error(
-      data.error || `Communications request failed (${response.status}).`
-    );
-  }
-
-  return data;
-}
-
 function updatePreview() {
   previewTitle.textContent =
-    titleInput.value.trim() ||
-    "Your announcement title";
+    titleInput.value.trim() || "Your announcement title";
 
   const body = bodyInput.value.trim();
   const link = linkUrlInput.value.trim();
@@ -95,12 +59,16 @@ function clearStatus() {
 function setBusy(isBusy) {
   publishButton.disabled = isBusy;
   clearButton.disabled = isBusy;
+  logoutButton.disabled = isBusy;
   imageInput.disabled = isBusy;
-  publishButton.textContent = isBusy ? "Publishing…" : "Publish";
+
+  publishButton.textContent =
+    isBusy ? "Publishing…" : "Publish";
 }
 
 function normalizeUrl(value) {
   const trimmed = String(value || "").trim();
+
   if (!trimmed) return "";
 
   try {
@@ -134,14 +102,21 @@ function readImageFile(file) {
       resolve({
         name: file.name || "announcement-image",
         mimeType: file.type,
-        base64: result.slice(commaIndex + 1),
+        base64: result.slice(commaIndex + 1)
       });
     };
 
-    reader.onerror = () =>
+    reader.onerror = () => {
       reject(new Error(`The image "${file.name}" could not be read.`));
+    };
 
     reader.readAsDataURL(file);
+  });
+}
+
+function revokeImagePreviewUrls() {
+  selectedImages.forEach(image => {
+    if (image.previewUrl) URL.revokeObjectURL(image.previewUrl);
   });
 }
 
@@ -169,16 +144,8 @@ function renderImagePreviews() {
     removeButton.type = "button";
     removeButton.className = "remove-image-button";
     removeButton.textContent = `Remove image ${index + 1}`;
-
     removeButton.addEventListener("click", () => {
-      const removed = selectedImages[index];
-
-      if (removed?.previewUrl) {
-        URL.revokeObjectURL(removed.previewUrl);
-      }
-
-      selectedImages.splice(index, 1);
-      renderImagePreviews();
+      removeSelectedImage(index);
     });
 
     item.appendChild(preview);
@@ -194,6 +161,7 @@ async function handleImageSelection() {
   clearStatus();
 
   const files = Array.from(imageInput.files || []);
+
   if (!files.length) return;
 
   if (selectedImages.length + files.length > MAX_IMAGES) {
@@ -205,7 +173,10 @@ async function handleImageSelection() {
   for (const file of files) {
     if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
       imageInput.value = "";
-      setStatus(`"${file.name}" is not a JPG, PNG, or WebP image.`, "error");
+      setStatus(
+        `"${file.name}" is not a JPG, PNG, or WebP image.`,
+        "error"
+      );
       return;
     }
 
@@ -217,18 +188,18 @@ async function handleImageSelection() {
   }
 
   try {
-    const prepared = [];
+    const preparedImages = [];
 
     for (const file of files) {
       const imageData = await readImageFile(file);
 
-      prepared.push({
+      preparedImages.push({
         ...imageData,
-        previewUrl: URL.createObjectURL(file),
+        previewUrl: URL.createObjectURL(file)
       });
     }
 
-    selectedImages = [...selectedImages, ...prepared];
+    selectedImages = [...selectedImages, ...preparedImages];
     imageInput.value = "";
     renderImagePreviews();
   } catch (error) {
@@ -240,8 +211,142 @@ async function handleImageSelection() {
   }
 }
 
+function removeSelectedImage(index) {
+  const image = selectedImages[index];
+
+  if (image && image.previewUrl) {
+    URL.revokeObjectURL(image.previewUrl);
+  }
+
+  selectedImages.splice(index, 1);
+  renderImagePreviews();
+}
+
+function removeAllSelectedImages() {
+  revokeImagePreviewUrls();
+  selectedImages = [];
+  imageInput.value = "";
+  renderImagePreviews();
+}
+
+const FORM_TIMEOUT_MS = 90000;
+const pendingGasRequests = new Map();
+let gasTransportFrame = null;
+
+function ensureGasTransportFrame() {
+  if (gasTransportFrame) return gasTransportFrame;
+
+  gasTransportFrame = document.createElement("iframe");
+  gasTransportFrame.name = "vumcGasTransport";
+  gasTransportFrame.title = "VUMC Communications Transport";
+  gasTransportFrame.setAttribute("aria-hidden", "true");
+
+  Object.assign(gasTransportFrame.style, {
+    position: "fixed",
+    left: "-10000px",
+    top: "-10000px",
+    width: "1px",
+    height: "1px",
+    border: "0",
+    opacity: "0",
+    pointerEvents: "none"
+  });
+
+  document.body.appendChild(gasTransportFrame);
+  return gasTransportFrame;
+}
+
+function makeGasRequestId() {
+  if (window.crypto && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+
+  return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
+}
+
+function gasPost(action, extra = {}) {
+  ensureGasTransportFrame();
+
+  const token = sessionStorage.getItem(SESSION_KEY);
+  const payload = { ...extra };
+
+  if (token) {
+    payload.token = token;
+  }
+
+  const requestId = makeGasRequestId();
+
+  return new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      pendingGasRequests.delete(requestId);
+      reject(new Error("The Communications request timed out."));
+    }, FORM_TIMEOUT_MS);
+
+    pendingGasRequests.set(requestId, { resolve, reject, timeout });
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = GAS_URL;
+    form.target = gasTransportFrame.name;
+    form.style.display = "none";
+
+    const fields = {
+      requestId,
+      action,
+      payload: JSON.stringify(payload)
+    };
+
+    Object.entries(fields).forEach(([name, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      input.value = String(value);
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+    form.remove();
+  }).then(data => {
+    if (data && data.authRequired) {
+      sessionStorage.removeItem(SESSION_KEY);
+      window.location.replace("../");
+      throw new Error(data.error || "Your Staff Tools session has expired.");
+    }
+
+    if (data && data.success === false) {
+      throw new Error(data.error || "The Communications service returned an error.");
+    }
+
+    return data;
+  });
+}
+
+window.addEventListener("message", event => {
+  const message = event.data;
+
+  if (!message || message.type !== "vumc-gas-form-response") return;
+
+  if (
+    gasTransportFrame &&
+    event.source !== gasTransportFrame.contentWindow
+  ) {
+    return;
+  }
+
+  const pending = pendingGasRequests.get(message.requestId);
+  if (!pending) return;
+
+  clearTimeout(pending.timeout);
+  pendingGasRequests.delete(message.requestId);
+  pending.resolve(message.result || {
+    success: false,
+    error: "The Communications service returned no result."
+  });
+});
+
 async function loadConfiguration() {
-  const data = await relay("getConfig");
+  const data = await gasPost("getConfig");
 
   defaultAudience =
     data.defaultAudience || "All VUMC Contacts Group";
@@ -255,7 +360,7 @@ async function loadAudiences() {
   audienceSelect.innerHTML =
     `<option value="">Loading Google Contacts labels…</option>`;
 
-  const data = await relay("getGroups");
+  const data = await gasPost("getGroups");
   const groups = Array.isArray(data.groups) ? data.groups : [];
 
   audienceSelect.innerHTML = "";
@@ -272,28 +377,32 @@ async function loadAudiences() {
     const option = document.createElement("option");
     option.value = group.name;
     option.textContent =
-      group.count
-        ? `${group.name} (${group.count})`
-        : group.name;
+      group.count ? `${group.name} (${group.count})` : group.name;
 
-    if (group.name === defaultAudience) {
-      option.selected = true;
-    }
+    if (group.name === defaultAudience) option.selected = true;
 
     audienceSelect.appendChild(option);
   });
 }
 
 async function initializeApp() {
+  const token = sessionStorage.getItem(SESSION_KEY);
+
+  if (!token) {
+    window.location.replace("../");
+    return;
+  }
+
   try {
-    if (signedInUser) {
-      signedInUser.textContent = "Staff Tool";
+    const auth = await gasPost("verifyStaffSession");
+
+    if (auth.success !== true) {
+      sessionStorage.removeItem(SESSION_KEY);
+      window.location.replace("../");
+      return;
     }
 
-    if (logoutButton) {
-      logoutButton.hidden = true;
-    }
-
+    signedInUser.textContent = "Authorized staff";
     loadingScreen.hidden = true;
     app.hidden = false;
 
@@ -305,13 +414,16 @@ async function initializeApp() {
     await loadAudiences();
   } catch (error) {
     console.error("Initialization error:", error);
+
     loadingScreen.hidden = true;
     app.hidden = false;
+
     configBox.textContent =
-      "The Communications backend could not be reached.";
+      "The Communications backend is not connected yet.";
 
     setStatus(
-      error.message || "The Communications Hub could not finish loading.",
+      error.message ||
+      "The Communications Hub could not finish loading.",
       "error"
     );
   }
@@ -365,28 +477,27 @@ async function publishAnnouncement() {
     const images = selectedImages.map(image => ({
       name: image.name,
       mimeType: image.mimeType,
-      base64: image.base64,
+      base64: image.base64
     }));
 
-    const data = await relay(
-      "publish",
-      {
-        announcement: {
-          title,
-          body,
-          linkUrl,
-          images,
-          audience,
-          sendEmail,
-          postFacebook,
-        },
+    const data = await gasPost("publish", {
+      payload: {
+        title,
+        body,
+        linkUrl,
+        images,
+        audience,
+        sendEmail,
+        postFacebook
       }
-    );
+    });
 
     const completed = [];
 
     if (data.result?.email?.success) {
-      completed.push(`email sent to ${data.result.email.recipients} contacts`);
+      completed.push(
+        `email sent to ${data.result.email.recipients} contacts`
+      );
     }
 
     if (data.result?.facebook?.success) {
@@ -420,14 +531,7 @@ function clearComposer() {
   sendEmailCheckbox.checked = false;
   postFacebookCheckbox.checked = true;
 
-  selectedImages.forEach(image => {
-    if (image.previewUrl) URL.revokeObjectURL(image.previewUrl);
-  });
-
-  selectedImages = [];
-  imageInput.value = "";
-  renderImagePreviews();
-
+  removeAllSelectedImages();
   updateAudienceVisibility();
   updatePreview();
   clearStatus();
@@ -441,4 +545,20 @@ imageInput.addEventListener("change", handleImageSelection);
 publishButton.addEventListener("click", publishAnnouncement);
 clearButton.addEventListener("click", clearComposer);
 
+logoutButton.addEventListener("click", async () => {
+  const token = sessionStorage.getItem(SESSION_KEY);
+
+  try {
+    if (token) {
+      await gasPost("staffLogout");
+    }
+  } catch (error) {
+    console.error("Logout request failed:", error);
+  }
+
+  sessionStorage.removeItem(SESSION_KEY);
+  window.location.replace("../");
+});
+
+ensureGasTransportFrame();
 initializeApp();
