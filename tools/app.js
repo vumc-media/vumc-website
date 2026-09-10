@@ -1,40 +1,14 @@
-const SUPABASE_URL =
-  "https://cnreuxodfrnpyyrbtlmp.supabase.co";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzHpOIjWgX-jiOMGwiCBrONrmym-9kMJDOQ4DA15re8d-_MUidnpXbIGCZYTqM_gAJV/exec";
+const SESSION_KEY = "vumc_staff_token";
 
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_bzCz7_E6sZTSZOdPpMvc5w_3OdUSndO";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
-
-const authScreen =
-  document.getElementById("authScreen");
-
-const staffPortal =
-  document.getElementById("staffPortal");
-
-const loginForm =
-  document.getElementById("loginForm");
-
-const emailInput =
-  document.getElementById("emailInput");
-
-const passwordInput =
-  document.getElementById("passwordInput");
-
-const loginButton =
-  document.getElementById("loginButton");
-
-const logoutButton =
-  document.getElementById("logoutButton");
-
-const signedInUser =
-  document.getElementById("signedInUser");
-
-const authMessage =
-  document.getElementById("authMessage");
+const authScreen = document.getElementById("authScreen");
+const staffPortal = document.getElementById("staffPortal");
+const loginForm = document.getElementById("loginForm");
+const passkeyInput = document.getElementById("passkeyInput");
+const loginButton = document.getElementById("loginButton");
+const logoutButton = document.getElementById("logoutButton");
+const signedInUser = document.getElementById("signedInUser");
+const authMessage = document.getElementById("authMessage");
 
 document
   .querySelectorAll(".tool-card.disabled")
@@ -44,212 +18,155 @@ document
     });
   });
 
-function showAuthMessage(
-  message,
-  isError = false
-) {
+function showAuthMessage(message, isError = false) {
   authMessage.textContent = message;
   authMessage.hidden = false;
-
-  authMessage.classList.toggle(
-    "error",
-    isError
-  );
+  authMessage.classList.toggle("error", isError);
 }
 
 function clearAuthMessage() {
   authMessage.hidden = true;
   authMessage.textContent = "";
-
   authMessage.classList.remove("error");
 }
 
 function showSignedOutState() {
   authScreen.hidden = false;
   staffPortal.hidden = true;
-
   logoutButton.hidden = true;
   signedInUser.hidden = true;
-  signedInUser.textContent = "";
 }
 
-function showSignedInState(user) {
+function showSignedInState() {
   authScreen.hidden = true;
   staffPortal.hidden = false;
-
   logoutButton.hidden = false;
   signedInUser.hidden = false;
-
-  signedInUser.textContent =
-    user.email ||
-    "Authorized staff member";
-
-  passwordInput.value = "";
+  signedInUser.textContent = "Authorized staff";
+  passkeyInput.value = "";
   clearAuthMessage();
 }
 
+async function postToGas(values) {
+  const body = new URLSearchParams();
+
+  Object.entries(values).forEach(([key, value]) => {
+    body.set(key, String(value ?? ""));
+  });
+
+  const response = await fetch(GAS_URL, {
+    method: "POST",
+    body
+  });
+
+  const text = await response.text();
+
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch (error) {
+    console.error("Invalid GAS response:", text);
+    throw new Error("The Staff Tools service returned an invalid response.");
+  }
+
+  return data;
+}
+
 async function refreshSession() {
-  const {
-    data: { session },
-    error
-  } =
-    await supabaseClient.auth.getSession();
+  const token = sessionStorage.getItem(SESSION_KEY);
 
-  if (error) {
-    console.error(
-      "Session error:",
-      error
-    );
-
+  if (!token) {
     showSignedOutState();
-
-    showAuthMessage(
-      error.message ||
-      "Unable to verify your sign-in session.",
-      true
-    );
-
     return;
   }
 
-  if (
-    session &&
-    session.user
-  ) {
-    showSignedInState(
-      session.user
-    );
-  } else {
+  try {
+    const data = await postToGas({
+      action: "verifyStaffSession",
+      token
+    });
+
+    if (data.success === true) {
+      showSignedInState();
+    } else {
+      sessionStorage.removeItem(SESSION_KEY);
+      showSignedOutState();
+    }
+  } catch (error) {
+    console.error("Session verification error:", error);
     showSignedOutState();
+    showAuthMessage(
+      "Unable to verify the staff session. Please try again.",
+      true
+    );
   }
 }
 
-loginForm.addEventListener(
-  "submit",
-  async event => {
-    event.preventDefault();
+loginForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  clearAuthMessage();
 
-    clearAuthMessage();
+  const passkey = passkeyInput.value;
 
-    const email =
-      emailInput.value
-        .trim()
-        .toLowerCase();
+  if (!passkey) {
+    showAuthMessage("Enter the staff passkey.", true);
+    passkeyInput.focus();
+    return;
+  }
 
-    const password =
-      passwordInput.value;
+  loginButton.disabled = true;
+  loginButton.textContent = "Checking…";
 
-    if (!email) {
+  try {
+    const data = await postToGas({
+      action: "staffLogin",
+      passkey
+    });
+
+    if (!data.success || !data.token) {
       showAuthMessage(
-        "Enter your email address.",
+        data.error || "The staff passkey was not accepted.",
         true
       );
-
-      emailInput.focus();
+      passkeyInput.select();
       return;
     }
 
-    if (!password) {
-      showAuthMessage(
-        "Enter your password.",
-        true
-      );
-
-      passwordInput.focus();
-      return;
-    }
-
-    loginButton.disabled = true;
-    loginButton.textContent =
-      "Signing in…";
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.auth
-        .signInWithPassword({
-          email,
-          password
-        });
-
-    loginButton.disabled = false;
-    loginButton.textContent =
-      "Sign in";
-
-    if (error) {
-      console.error(
-        "Sign-in error:",
-        error
-      );
-
-      showAuthMessage(
-        error.message ||
-        "The email or password was not accepted.",
-        true
-      );
-
-      return;
-    }
-
-    if (
-      !data ||
-      !data.user
-    ) {
-      showAuthMessage(
-        "The email or password was not accepted.",
-        true
-      );
-
-      return;
-    }
-
-    showSignedInState(
-      data.user
+    sessionStorage.setItem(SESSION_KEY, data.token);
+    showSignedInState();
+  } catch (error) {
+    console.error("Sign-in error:", error);
+    showAuthMessage(
+      error.message || "The Staff Tools service could not be reached.",
+      true
     );
+  } finally {
+    loginButton.disabled = false;
+    loginButton.textContent = "Enter Staff Tools";
   }
-);
+});
 
-logoutButton.addEventListener(
-  "click",
-  async () => {
-    logoutButton.disabled = true;
-    logoutButton.textContent =
-      "Signing out…";
+logoutButton.addEventListener("click", async () => {
+  const token = sessionStorage.getItem(SESSION_KEY);
 
-    const { error } =
-      await supabaseClient.auth.signOut();
+  logoutButton.disabled = true;
+  logoutButton.textContent = "Signing out…";
 
-    logoutButton.disabled = false;
-    logoutButton.textContent =
-      "Sign out";
-
-    if (error) {
-      console.error(
-        "Sign-out error:",
-        error
-      );
-
-      return;
+  try {
+    if (token) {
+      await postToGas({
+        action: "staffLogout",
+        token
+      });
     }
-
-    showSignedOutState();
+  } catch (error) {
+    console.error("Sign-out request failed:", error);
   }
-);
 
-supabaseClient.auth.onAuthStateChange(
-  (_event, session) => {
-    if (
-      session &&
-      session.user
-    ) {
-      showSignedInState(
-        session.user
-      );
-    } else {
-      showSignedOutState();
-    }
-  }
-);
+  sessionStorage.removeItem(SESSION_KEY);
+  logoutButton.disabled = false;
+  logoutButton.textContent = "Sign out";
+  showSignedOutState();
+});
 
 refreshSession();

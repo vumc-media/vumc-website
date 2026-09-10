@@ -8,8 +8,6 @@
 
   <link rel="stylesheet" href="./styles.css" />
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     [hidden] {
       display: none !important;
@@ -134,7 +132,7 @@
         id="signedInUser"
         class="signed-in-user"
         hidden
-      ></span>
+      >Authorized staff</span>
 
       <button
         id="logoutButton"
@@ -153,33 +151,21 @@
     <section class="auth-card">
       <p class="eyebrow">Authorized staff only</p>
 
-      <h2>Sign in to Staff Tools</h2>
+      <h2>Enter Staff Tools</h2>
 
       <p>
-        Enter your approved staff email address and password.
+        Enter the shared staff passkey to continue.
       </p>
 
       <form id="loginForm">
         <label>
-          Email address
+          Staff Passkey
 
           <input
-            id="emailInput"
-            type="email"
-            autocomplete="username"
-            placeholder="name@example.com"
-            required
-          />
-        </label>
-
-        <label>
-          Password
-
-          <input
-            id="passwordInput"
+            id="passkeyInput"
             type="password"
             autocomplete="current-password"
-            placeholder="Enter password"
+            placeholder="Enter staff passkey"
             required
           />
         </label>
@@ -189,7 +175,7 @@
           class="auth-button"
           type="submit"
         >
-          Sign in
+          Enter Staff Tools
         </button>
       </form>
 
@@ -213,136 +199,65 @@
     </section>
 
     <section class="grid" aria-label="Staff tools">
-      <a
-        id="communicationsLink"
-        class="tool-card"
-        href="./communications/"
-      >
+      <a id="communicationsLink" class="tool-card" href="./communications/">
         <span class="icon">📣</span>
-
         <h3>Communications Hub</h3>
-
-        <p>
-          Create announcements for email and the church Facebook Page.
-        </p>
-
+        <p>Create announcements for email and the church Facebook Page.</p>
         <span class="action">Open tool →</span>
       </a>
 
-      <a
-        class="tool-card"
-        href="/admin/"
-      >
+      <a class="tool-card" href="/admin/">
         <span class="icon">🌐</span>
-
         <h3>Website Editor</h3>
-
-        <p>
-          Open the Sveltia CMS editor for approved website content.
-        </p>
-
+        <p>Open the Sveltia CMS editor for approved website content.</p>
         <span class="action">Open editor →</span>
       </a>
 
-      <a
-        class="tool-card disabled"
-        href="#"
-        aria-disabled="true"
-      >
+      <a class="tool-card disabled" href="#" aria-disabled="true">
         <span class="icon">📰</span>
-
         <h3>News & Notes</h3>
-
-        <p>
-          Manage monthly newsletter files and the public archive.
-        </p>
-
+        <p>Manage monthly newsletter files and the public archive.</p>
         <span class="action">Coming soon</span>
       </a>
 
-      <a
-        class="tool-card disabled"
-        href="#"
-        aria-disabled="true"
-      >
+      <a class="tool-card disabled" href="#" aria-disabled="true">
         <span class="icon">👨‍👩‍👧‍👦</span>
-
         <h3>Church Family Connections</h3>
-
-        <p>
-          Manage care, connection, and follow-up resources.
-        </p>
-
+        <p>Manage care, connection, and follow-up resources.</p>
         <span class="action">Coming soon</span>
       </a>
 
-      <a
-        class="tool-card disabled"
-        href="#"
-        aria-disabled="true"
-      >
+      <a class="tool-card disabled" href="#" aria-disabled="true">
         <span class="icon">✅</span>
-
         <h3>Kids Check-In Admin</h3>
-
-        <p>
-          Open check-in administration and attendance tools.
-        </p>
-
+        <p>Open check-in administration and attendance tools.</p>
         <span class="action">Coming soon</span>
       </a>
 
-      <a
-        class="tool-card disabled"
-        href="#"
-        aria-disabled="true"
-      >
+      <a class="tool-card disabled" href="#" aria-disabled="true">
         <span class="icon">🏫</span>
-
         <h3>Academy Tools</h3>
-
-        <p>
-          Access teacher workspace, menus, forms, and resources.
-        </p>
-
+        <p>Access teacher workspace, menus, forms, and resources.</p>
         <span class="action">Coming soon</span>
       </a>
 
-      <a
-        class="tool-card disabled"
-        href="#"
-        aria-disabled="true"
-      >
+      <a class="tool-card disabled" href="#" aria-disabled="true">
         <span class="icon">🛠️</span>
-
         <h3>Maintenance Requests</h3>
-
-        <p>
-          Submit and review church facility maintenance requests.
-        </p>
-
+        <p>Submit and review church facility maintenance requests.</p>
         <span class="action">Coming soon</span>
       </a>
 
-      <a
-        class="tool-card disabled"
-        href="#"
-        aria-disabled="true"
-      >
+      <a class="tool-card disabled" href="#" aria-disabled="true">
         <span class="icon">📁</span>
-
         <h3>Staff Resources</h3>
-
-        <p>
-          Store forms, policies, templates, and internal documents.
-        </p>
-
+        <p>Store forms, policies, templates, and internal documents.</p>
         <span class="action">Coming soon</span>
       </a>
     </section>
 
     <p class="security-note">
-      Access to this dashboard requires an approved staff account.
+      Access to this dashboard requires the VUMC staff passkey.
     </p>
   </main>
 
