@@ -1,5 +1,115 @@
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzHpOIjWgX-jiOMGwiCBrONrmym-9kMJDOQ4DA15re8d-_MUidnpXbIGCZYTqM_gAJV/exec";
 const SESSION_KEY = "vumc_staff_token";
+const FORM_TIMEOUT_MS = 45000;
+const POLL_INTERVAL_MS = 500;
+
+function makeRequestId() {
+  if (window.crypto && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
+}
+
+function submitHiddenPost(action, payload, requestId) {
+  let frame = document.getElementById("vumcGasPostFrame");
+
+  if (!frame) {
+    frame = document.createElement("iframe");
+    frame.id = "vumcGasPostFrame";
+    frame.name = "vumcGasPostFrame";
+    frame.setAttribute("aria-hidden", "true");
+    Object.assign(frame.style, {
+      position: "fixed",
+      left: "-10000px",
+      top: "-10000px",
+      width: "1px",
+      height: "1px",
+      border: "0",
+      opacity: "0",
+      pointerEvents: "none"
+    });
+    document.body.appendChild(frame);
+  }
+
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = GAS_URL;
+  form.target = frame.name;
+  form.style.display = "none";
+
+  const fields = {
+    requestId,
+    action,
+    payload: JSON.stringify(payload || {})
+  };
+
+  Object.entries(fields).forEach(([name, value]) => {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+  });
+
+  document.body.appendChild(form);
+  form.submit();
+  form.remove();
+}
+
+function jsonpPoll(requestId) {
+  return new Promise((resolve, reject) => {
+    const callbackName =
+      "__vumcJsonp_" +
+      requestId.replace(/[^A-Za-z0-9_$]/g, "_");
+
+    const script = document.createElement("script");
+    const cleanup = () => {
+      try { delete window[callbackName]; } catch (e) {}
+      script.remove();
+    };
+
+    window[callbackName] = data => {
+      cleanup();
+      resolve(data);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("Could not read the Staff Tools response."));
+    };
+
+    const url = new URL(GAS_URL);
+    url.searchParams.set("api", "1");
+    url.searchParams.set("requestId", requestId);
+    url.searchParams.set("callback", callbackName);
+    url.searchParams.set("_", String(Date.now()));
+
+    script.src = url.toString();
+    document.head.appendChild(script);
+  });
+}
+
+async function gasRequest(action, payload = {}, timeoutMs = FORM_TIMEOUT_MS) {
+  const requestId = makeRequestId();
+  submitHiddenPost(action, payload, requestId);
+
+  const started = Date.now();
+
+  while (Date.now() - started < timeoutMs) {
+    await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
+
+    const envelope = await jsonpPoll(requestId);
+
+    if (envelope && envelope.ready) {
+      return envelope.result || {
+        success: false,
+        error: "No result returned."
+      };
+    }
+  }
+
+  throw new Error("The Staff Tools request timed out.");
+}
 
 const authScreen = document.getElementById("authScreen");
 const staffPortal = document.getElementById("staffPortal");
@@ -9,14 +119,6 @@ const loginButton = document.getElementById("loginButton");
 const logoutButton = document.getElementById("logoutButton");
 const signedInUser = document.getElementById("signedInUser");
 const authMessage = document.getElementById("authMessage");
-
-document
-  .querySelectorAll(".tool-card.disabled")
-  .forEach(card => {
-    card.addEventListener("click", event => {
-      event.preventDefault();
-    });
-  });
 
 function showAuthMessage(message, isError = false) {
   authMessage.textContent = message;
@@ -47,107 +149,6 @@ function showSignedInState() {
   clearAuthMessage();
 }
 
-const FORM_TIMEOUT_MS = 45000;
-const pendingGasRequests = new Map();
-let gasTransportFrame = null;
-
-function ensureGasTransportFrame() {
-  if (gasTransportFrame) return gasTransportFrame;
-
-  gasTransportFrame = document.createElement("iframe");
-  gasTransportFrame.name = "vumcGasTransport";
-  gasTransportFrame.title = "VUMC Staff Tools Transport";
-  gasTransportFrame.setAttribute("aria-hidden", "true");
-
-  Object.assign(gasTransportFrame.style, {
-    position: "fixed",
-    left: "-10000px",
-    top: "-10000px",
-    width: "1px",
-    height: "1px",
-    border: "0",
-    opacity: "0",
-    pointerEvents: "none"
-  });
-
-  document.body.appendChild(gasTransportFrame);
-  return gasTransportFrame;
-}
-
-function makeGasRequestId() {
-  if (window.crypto && typeof crypto.randomUUID === "function") {
-    return crypto.randomUUID();
-  }
-
-  return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
-}
-
-function postToGas(values) {
-  ensureGasTransportFrame();
-
-  const action = String(values.action || "");
-  const payload = { ...values };
-  delete payload.action;
-
-  const requestId = makeGasRequestId();
-
-  return new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      pendingGasRequests.delete(requestId);
-      reject(new Error("The Staff Tools request timed out."));
-    }, FORM_TIMEOUT_MS);
-
-    pendingGasRequests.set(requestId, { resolve, reject, timeout });
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = GAS_URL;
-    form.target = gasTransportFrame.name;
-    form.style.display = "none";
-
-    const fields = {
-      requestId,
-      action,
-      payload: JSON.stringify(payload)
-    };
-
-    Object.entries(fields).forEach(([name, value]) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = name;
-      input.value = String(value);
-      form.appendChild(input);
-    });
-
-    document.body.appendChild(form);
-    form.submit();
-    form.remove();
-  });
-}
-
-window.addEventListener("message", event => {
-  const message = event.data;
-
-  if (!message || message.type !== "vumc-gas-form-response") return;
-
-  if (
-    gasTransportFrame &&
-    event.source !== gasTransportFrame.contentWindow
-  ) {
-    return;
-  }
-
-  const pending = pendingGasRequests.get(message.requestId);
-  if (!pending) return;
-
-  clearTimeout(pending.timeout);
-  pendingGasRequests.delete(message.requestId);
-  pending.resolve(message.result || {
-    success: false,
-    error: "The Staff Tools service returned no result."
-  });
-});
-
 async function refreshSession() {
   const token = sessionStorage.getItem(SESSION_KEY);
 
@@ -157,10 +158,10 @@ async function refreshSession() {
   }
 
   try {
-    const data = await postToGas({
-      action: "verifyStaffSession",
-      token
-    });
+    const data = await gasRequest(
+      "verifyStaffSession",
+      { token }
+    );
 
     if (data.success === true) {
       showSignedInState();
@@ -170,11 +171,8 @@ async function refreshSession() {
     }
   } catch (error) {
     console.error("Session verification error:", error);
+    sessionStorage.removeItem(SESSION_KEY);
     showSignedOutState();
-    showAuthMessage(
-      "Unable to verify the staff session. Please try again.",
-      true
-    );
   }
 }
 
@@ -194,10 +192,10 @@ loginForm.addEventListener("submit", async event => {
   loginButton.textContent = "Checking…";
 
   try {
-    const data = await postToGas({
-      action: "staffLogin",
-      passkey
-    });
+    const data = await gasRequest(
+      "staffLogin",
+      { passkey }
+    );
 
     if (!data.success || !data.token) {
       showAuthMessage(
@@ -210,6 +208,7 @@ loginForm.addEventListener("submit", async event => {
 
     sessionStorage.setItem(SESSION_KEY, data.token);
     showSignedInState();
+
   } catch (error) {
     console.error("Sign-in error:", error);
     showAuthMessage(
@@ -225,25 +224,20 @@ loginForm.addEventListener("submit", async event => {
 logoutButton.addEventListener("click", async () => {
   const token = sessionStorage.getItem(SESSION_KEY);
 
-  logoutButton.disabled = true;
-  logoutButton.textContent = "Signing out…";
-
   try {
     if (token) {
-      await postToGas({
-        action: "staffLogout",
-        token
-      });
+      await gasRequest("staffLogout", { token });
     }
   } catch (error) {
     console.error("Sign-out request failed:", error);
   }
 
   sessionStorage.removeItem(SESSION_KEY);
-  logoutButton.disabled = false;
-  logoutButton.textContent = "Sign out";
   showSignedOutState();
 });
 
-ensureGasTransportFrame();
+document.querySelectorAll(".tool-card.disabled").forEach(card => {
+  card.addEventListener("click", event => event.preventDefault());
+});
+
 refreshSession();

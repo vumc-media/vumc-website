@@ -1,14 +1,121 @@
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzHpOIjWgX-jiOMGwiCBrONrmym-9kMJDOQ4DA15re8d-_MUidnpXbIGCZYTqM_gAJV/exec";
 const SESSION_KEY = "vumc_staff_token";
+const FORM_TIMEOUT_MS = 90000;
+const POLL_INTERVAL_MS = 500;
 
-const MAX_IMAGES = 10;
-const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
-const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+function makeRequestId() {
+  if (window.crypto && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
+}
+
+function submitHiddenPost(action, payload, requestId) {
+  let frame = document.getElementById("vumcGasPostFrame");
+
+  if (!frame) {
+    frame = document.createElement("iframe");
+    frame.id = "vumcGasPostFrame";
+    frame.name = "vumcGasPostFrame";
+    frame.setAttribute("aria-hidden", "true");
+    Object.assign(frame.style, {
+      position: "fixed",
+      left: "-10000px",
+      top: "-10000px",
+      width: "1px",
+      height: "1px",
+      border: "0",
+      opacity: "0",
+      pointerEvents: "none"
+    });
+    document.body.appendChild(frame);
+  }
+
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = GAS_URL;
+  form.target = frame.name;
+  form.style.display = "none";
+
+  const fields = {
+    requestId,
+    action,
+    payload: JSON.stringify(payload || {})
+  };
+
+  Object.entries(fields).forEach(([name, value]) => {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+  });
+
+  document.body.appendChild(form);
+  form.submit();
+  form.remove();
+}
+
+function jsonpPoll(requestId) {
+  return new Promise((resolve, reject) => {
+    const callbackName =
+      "__vumcJsonp_" +
+      requestId.replace(/[^A-Za-z0-9_$]/g, "_");
+
+    const script = document.createElement("script");
+    const cleanup = () => {
+      try { delete window[callbackName]; } catch (e) {}
+      script.remove();
+    };
+
+    window[callbackName] = data => {
+      cleanup();
+      resolve(data);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("Could not read the Staff Tools response."));
+    };
+
+    const url = new URL(GAS_URL);
+    url.searchParams.set("api", "1");
+    url.searchParams.set("requestId", requestId);
+    url.searchParams.set("callback", callbackName);
+    url.searchParams.set("_", String(Date.now()));
+
+    script.src = url.toString();
+    document.head.appendChild(script);
+  });
+}
+
+async function gasRequest(action, payload = {}, timeoutMs = FORM_TIMEOUT_MS) {
+  const requestId = makeRequestId();
+  submitHiddenPost(action, payload, requestId);
+
+  const started = Date.now();
+
+  while (Date.now() - started < timeoutMs) {
+    await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
+
+    const envelope = await jsonpPoll(requestId);
+
+    if (envelope && envelope.ready) {
+      return envelope.result || {
+        success: false,
+        error: "No result returned."
+      };
+    }
+  }
+
+  throw new Error("The Staff Tools request timed out.");
+}
 
 const loadingScreen = document.getElementById("loadingScreen");
 const app = document.getElementById("app");
 const signedInUser = document.getElementById("signedInUser");
 const logoutButton = document.getElementById("logoutButton");
+
 const titleInput = document.getElementById("title");
 const bodyInput = document.getElementById("body");
 const linkUrlInput = document.getElementById("linkUrl");
@@ -25,8 +132,48 @@ const previewBody = document.getElementById("previewBody");
 const configBox = document.getElementById("configBox");
 const statusBox = document.getElementById("status");
 
+const MAX_IMAGES = 10;
+const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
 let defaultAudience = "All VUMC Contacts Group";
 let selectedImages = [];
+
+function getToken() {
+  return sessionStorage.getItem(SESSION_KEY);
+}
+
+async function protectedRequest(action, payload = {}) {
+  const token = getToken();
+
+  if (!token) {
+    window.location.replace("../");
+    throw new Error("Staff authorization required.");
+  }
+
+  const result = await gasRequest(
+    action,
+    { ...payload, token }
+  );
+
+  if (result && result.authRequired) {
+    sessionStorage.removeItem(SESSION_KEY);
+    window.location.replace("../");
+    throw new Error(
+      result.error || "Your Staff Tools session has expired."
+    );
+  }
+
+  if (!result || result.success === false) {
+    throw new Error(
+      result && result.error
+        ? result.error
+        : "The Communications request failed."
+    );
+  }
+
+  return result;
+}
 
 function updatePreview() {
   previewTitle.textContent =
@@ -61,14 +208,11 @@ function setBusy(isBusy) {
   clearButton.disabled = isBusy;
   logoutButton.disabled = isBusy;
   imageInput.disabled = isBusy;
-
-  publishButton.textContent =
-    isBusy ? "Publishing…" : "Publish";
+  publishButton.textContent = isBusy ? "Publishing…" : "Publish";
 }
 
 function normalizeUrl(value) {
   const trimmed = String(value || "").trim();
-
   if (!trimmed) return "";
 
   try {
@@ -79,7 +223,7 @@ function normalizeUrl(value) {
     }
 
     return url.href;
-  } catch {
+  } catch (error) {
     throw new Error(
       "The optional link must begin with http:// or https://."
     );
@@ -114,12 +258,6 @@ function readImageFile(file) {
   });
 }
 
-function revokeImagePreviewUrls() {
-  selectedImages.forEach(image => {
-    if (image.previewUrl) URL.revokeObjectURL(image.previewUrl);
-  });
-}
-
 function renderImagePreviews() {
   imagePreviewWrap.innerHTML = "";
 
@@ -144,8 +282,16 @@ function renderImagePreviews() {
     removeButton.type = "button";
     removeButton.className = "remove-image-button";
     removeButton.textContent = `Remove image ${index + 1}`;
+
     removeButton.addEventListener("click", () => {
-      removeSelectedImage(index);
+      const removed = selectedImages[index];
+
+      if (removed && removed.previewUrl) {
+        URL.revokeObjectURL(removed.previewUrl);
+      }
+
+      selectedImages.splice(index, 1);
+      renderImagePreviews();
     });
 
     item.appendChild(preview);
@@ -161,7 +307,6 @@ async function handleImageSelection() {
   clearStatus();
 
   const files = Array.from(imageInput.files || []);
-
   if (!files.length) return;
 
   if (selectedImages.length + files.length > MAX_IMAGES) {
@@ -182,26 +327,30 @@ async function handleImageSelection() {
 
     if (file.size > MAX_IMAGE_BYTES) {
       imageInput.value = "";
-      setStatus(`"${file.name}" must be smaller than 8 MB.`, "error");
+      setStatus(
+        `"${file.name}" must be smaller than 8 MB.`,
+        "error"
+      );
       return;
     }
   }
 
   try {
-    const preparedImages = [];
+    const prepared = [];
 
     for (const file of files) {
       const imageData = await readImageFile(file);
 
-      preparedImages.push({
+      prepared.push({
         ...imageData,
         previewUrl: URL.createObjectURL(file)
       });
     }
 
-    selectedImages = [...selectedImages, ...preparedImages];
+    selectedImages = [...selectedImages, ...prepared];
     imageInput.value = "";
     renderImagePreviews();
+
   } catch (error) {
     imageInput.value = "";
     setStatus(
@@ -211,142 +360,8 @@ async function handleImageSelection() {
   }
 }
 
-function removeSelectedImage(index) {
-  const image = selectedImages[index];
-
-  if (image && image.previewUrl) {
-    URL.revokeObjectURL(image.previewUrl);
-  }
-
-  selectedImages.splice(index, 1);
-  renderImagePreviews();
-}
-
-function removeAllSelectedImages() {
-  revokeImagePreviewUrls();
-  selectedImages = [];
-  imageInput.value = "";
-  renderImagePreviews();
-}
-
-const FORM_TIMEOUT_MS = 90000;
-const pendingGasRequests = new Map();
-let gasTransportFrame = null;
-
-function ensureGasTransportFrame() {
-  if (gasTransportFrame) return gasTransportFrame;
-
-  gasTransportFrame = document.createElement("iframe");
-  gasTransportFrame.name = "vumcGasTransport";
-  gasTransportFrame.title = "VUMC Communications Transport";
-  gasTransportFrame.setAttribute("aria-hidden", "true");
-
-  Object.assign(gasTransportFrame.style, {
-    position: "fixed",
-    left: "-10000px",
-    top: "-10000px",
-    width: "1px",
-    height: "1px",
-    border: "0",
-    opacity: "0",
-    pointerEvents: "none"
-  });
-
-  document.body.appendChild(gasTransportFrame);
-  return gasTransportFrame;
-}
-
-function makeGasRequestId() {
-  if (window.crypto && typeof crypto.randomUUID === "function") {
-    return crypto.randomUUID();
-  }
-
-  return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
-}
-
-function gasPost(action, extra = {}) {
-  ensureGasTransportFrame();
-
-  const token = sessionStorage.getItem(SESSION_KEY);
-  const payload = { ...extra };
-
-  if (token) {
-    payload.token = token;
-  }
-
-  const requestId = makeGasRequestId();
-
-  return new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      pendingGasRequests.delete(requestId);
-      reject(new Error("The Communications request timed out."));
-    }, FORM_TIMEOUT_MS);
-
-    pendingGasRequests.set(requestId, { resolve, reject, timeout });
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = GAS_URL;
-    form.target = gasTransportFrame.name;
-    form.style.display = "none";
-
-    const fields = {
-      requestId,
-      action,
-      payload: JSON.stringify(payload)
-    };
-
-    Object.entries(fields).forEach(([name, value]) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = name;
-      input.value = String(value);
-      form.appendChild(input);
-    });
-
-    document.body.appendChild(form);
-    form.submit();
-    form.remove();
-  }).then(data => {
-    if (data && data.authRequired) {
-      sessionStorage.removeItem(SESSION_KEY);
-      window.location.replace("../");
-      throw new Error(data.error || "Your Staff Tools session has expired.");
-    }
-
-    if (data && data.success === false) {
-      throw new Error(data.error || "The Communications service returned an error.");
-    }
-
-    return data;
-  });
-}
-
-window.addEventListener("message", event => {
-  const message = event.data;
-
-  if (!message || message.type !== "vumc-gas-form-response") return;
-
-  if (
-    gasTransportFrame &&
-    event.source !== gasTransportFrame.contentWindow
-  ) {
-    return;
-  }
-
-  const pending = pendingGasRequests.get(message.requestId);
-  if (!pending) return;
-
-  clearTimeout(pending.timeout);
-  pendingGasRequests.delete(message.requestId);
-  pending.resolve(message.result || {
-    success: false,
-    error: "The Communications service returned no result."
-  });
-});
-
 async function loadConfiguration() {
-  const data = await gasPost("getConfig");
+  const data = await protectedRequest("getConfig");
 
   defaultAudience =
     data.defaultAudience || "All VUMC Contacts Group";
@@ -360,7 +375,7 @@ async function loadAudiences() {
   audienceSelect.innerHTML =
     `<option value="">Loading Google Contacts labels…</option>`;
 
-  const data = await gasPost("getGroups");
+  const data = await protectedRequest("getGroups");
   const groups = Array.isArray(data.groups) ? data.groups : [];
 
   audienceSelect.innerHTML = "";
@@ -379,14 +394,16 @@ async function loadAudiences() {
     option.textContent =
       group.count ? `${group.name} (${group.count})` : group.name;
 
-    if (group.name === defaultAudience) option.selected = true;
+    if (group.name === defaultAudience) {
+      option.selected = true;
+    }
 
     audienceSelect.appendChild(option);
   });
 }
 
 async function initializeApp() {
-  const token = sessionStorage.getItem(SESSION_KEY);
+  const token = getToken();
 
   if (!token) {
     window.location.replace("../");
@@ -394,7 +411,10 @@ async function initializeApp() {
   }
 
   try {
-    const auth = await gasPost("verifyStaffSession");
+    const auth = await gasRequest(
+      "verifyStaffSession",
+      { token }
+    );
 
     if (auth.success !== true) {
       sessionStorage.removeItem(SESSION_KEY);
@@ -412,18 +432,16 @@ async function initializeApp() {
 
     await loadConfiguration();
     await loadAudiences();
+
   } catch (error) {
     console.error("Initialization error:", error);
-
     loadingScreen.hidden = true;
     app.hidden = false;
-
     configBox.textContent =
-      "The Communications backend is not connected yet.";
+      "The Communications backend could not be reached.";
 
     setStatus(
-      error.message ||
-      "The Communications Hub could not finish loading.",
+      error.message || "The Communications Hub could not finish loading.",
       "error"
     );
   }
@@ -480,17 +498,20 @@ async function publishAnnouncement() {
       base64: image.base64
     }));
 
-    const data = await gasPost("publish", {
-      payload: {
-        title,
-        body,
-        linkUrl,
-        images,
-        audience,
-        sendEmail,
-        postFacebook
+    const data = await protectedRequest(
+      "publish",
+      {
+        announcement: {
+          title,
+          body,
+          linkUrl,
+          images,
+          audience,
+          sendEmail,
+          postFacebook
+        }
       }
-    });
+    );
 
     const completed = [];
 
@@ -513,6 +534,7 @@ async function publishAnnouncement() {
         ? `Success: ${completed.join(" · ")}.`
         : "Announcement completed."
     );
+
   } catch (error) {
     console.error("Publish error:", error);
     setStatus(
@@ -531,7 +553,16 @@ function clearComposer() {
   sendEmailCheckbox.checked = false;
   postFacebookCheckbox.checked = true;
 
-  removeAllSelectedImages();
+  selectedImages.forEach(image => {
+    if (image.previewUrl) {
+      URL.revokeObjectURL(image.previewUrl);
+    }
+  });
+
+  selectedImages = [];
+  imageInput.value = "";
+
+  renderImagePreviews();
   updateAudienceVisibility();
   updatePreview();
   clearStatus();
@@ -546,11 +577,11 @@ publishButton.addEventListener("click", publishAnnouncement);
 clearButton.addEventListener("click", clearComposer);
 
 logoutButton.addEventListener("click", async () => {
-  const token = sessionStorage.getItem(SESSION_KEY);
+  const token = getToken();
 
   try {
     if (token) {
-      await gasPost("staffLogout");
+      await gasRequest("staffLogout", { token });
     }
   } catch (error) {
     console.error("Logout request failed:", error);
@@ -560,5 +591,4 @@ logoutButton.addEventListener("click", async () => {
   window.location.replace("../");
 });
 
-ensureGasTransportFrame();
 initializeApp();
