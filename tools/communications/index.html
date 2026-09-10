@@ -25,7 +25,9 @@
       </div>
 
       <div class="topbar-actions">
-        <span id="signedInUser" class="signed-in-user">Authorized staff</span>
+        <span id="signedInUser" class="signed-in-user">
+          Authorized staff
+        </span>
 
         <a class="back-button" href="../">
           Staff Tools
@@ -48,6 +50,7 @@
 
         <label>
           Announcement title
+
           <input
             id="title"
             type="text"
@@ -57,6 +60,7 @@
 
         <label>
           Message
+
           <textarea
             id="body"
             placeholder="Write the church announcement here."
@@ -65,12 +69,14 @@
 
         <label>
           Optional link
+
           <input
             id="linkUrl"
             type="url"
             inputmode="url"
             placeholder="https://example.com/page"
           />
+
           <small class="field-help">
             Paste any public webpage link. Facebook will attempt to create a preview from the linked page.
           </small>
@@ -78,23 +84,32 @@
 
         <label>
           Optional Facebook image
+
           <input
             id="imageInput"
             type="file"
             accept="image/jpeg,image/png,image/webp"
             multiple
           />
+
           <small class="field-help">
-            JPG, PNG, or WebP. You may select up to 10 images.
+            JPG, PNG, or WebP. Up to 10 images.
           </small>
         </label>
 
-        <div id="imagePreviewWrap" class="image-preview-wrap" hidden></div>
+        <div
+          id="imagePreviewWrap"
+          class="image-preview-wrap"
+          hidden
+        ></div>
 
         <label id="audienceWrap">
           Email audience
+
           <select id="audience">
-            <option value="">Loading Google Contacts labels…</option>
+            <option value="">
+              Loading Google Contacts labels…
+            </option>
           </select>
         </label>
 
@@ -111,11 +126,19 @@
         </div>
 
         <div class="actions">
-          <button id="clearButton" class="secondary" type="button">
+          <button
+            id="clearButton"
+            class="secondary"
+            type="button"
+          >
             Clear
           </button>
 
-          <button id="publishButton" class="primary" type="button">
+          <button
+            id="publishButton"
+            class="primary"
+            type="button"
+          >
             Publish
           </button>
         </div>
@@ -136,13 +159,23 @@
             <div class="avatar">V</div>
 
             <div>
-              <strong>Versailles United Methodist Church</strong>
-              <span>Just now · Public</span>
+              <strong>
+                Versailles United Methodist Church
+              </strong>
+
+              <span>
+                Just now · Public
+              </span>
             </div>
           </div>
 
-          <h3 id="previewTitle">Your announcement title</h3>
-          <p id="previewBody">Your announcement message will appear here.</p>
+          <h3 id="previewTitle">
+            Your announcement title
+          </h3>
+
+          <p id="previewBody">
+            Your announcement message will appear here.
+          </p>
 
           <div class="engagement">
             <span>Like</span>
