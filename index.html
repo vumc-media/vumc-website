@@ -3480,7 +3480,7 @@ rkp("event","PAGE_VIEW");
     });
 
 
-    const VUMC_LATEST_SERVICE_API = 'https://script.google.com/macros/s/AKfycbyW1SdCBYDfn9txUqSzhLTZ6ej1iSzp4QaWoNuf0F2cpTapGAInJQvvHIQHjthoIeap/exec';
+    const VUMC_YOUTUBE_API = 'https://script.google.com/macros/s/AKfycbz7uxgtPT0UTDuFPEY3YoZyTgmOO1x5cDyc1Y4LaaztBAR9t0tNCp6bmb5hoWX819Cx/exec';
     let vumcLatestVideoId = '';
     let vumcLatestVideoTitle = 'Latest Worship Service';
 
@@ -3517,8 +3517,8 @@ rkp("event","PAGE_VIEW");
       try {
         if (loadingEl) loadingEl.textContent = 'Loading latest worship service…';
 
-        const separator = VUMC_LATEST_SERVICE_API.includes('?') ? '&' : '?';
-        const response = await fetch(`${VUMC_LATEST_SERVICE_API}${separator}t=${Date.now()}`, {
+        const separator = VUMC_YOUTUBE_API.includes('?') ? '&' : '?';
+        const response = await fetch(`${VUMC_YOUTUBE_API}${separator}action=latest&t=${Date.now()}`, {
           method: 'GET',
           cache: 'no-store'
         });
@@ -4385,9 +4385,6 @@ You are welcome in person or online.`,
 
   <script>
     (() => {
-      const YOUTUBE_STREAMS_API =
-        'https://script.google.com/macros/s/AKfycbz7uxgtPT0UTDuFPEY3YoZyTgmOO1x5cDyc1Y4LaaztBAR9t0tNCp6bmb5hoWX819Cx/exec';
-
       const grid = document.getElementById('upcomingLivestreamGrid');
       if (!grid) return;
 
@@ -4465,9 +4462,9 @@ You are welcome in person or online.`,
 
       async function loadUpcomingStreams() {
         try {
-          const separator = YOUTUBE_STREAMS_API.includes('?') ? '&' : '?';
+          const separator = VUMC_YOUTUBE_API.includes('?') ? '&' : '?';
           const response = await fetch(
-            `${YOUTUBE_STREAMS_API}${separator}action=upcoming&t=${Date.now()}`,
+            `${VUMC_YOUTUBE_API}${separator}action=upcoming&t=${Date.now()}`,
             {
               method: 'GET',
               cache: 'no-store'
