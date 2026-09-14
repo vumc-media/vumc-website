@@ -5,24 +5,28 @@ const POLL_INTERVAL_MS = 500;
 
 const MAX_IMAGES = 10;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+
 const ALLOWED_IMAGE_TYPES = [
   "image/jpeg",
   "image/png",
   "image/webp"
 ];
 
-let defaultAudience = "All VUMC Contacts Group";
+let defaultAudience =
+  "All VUMC Contacts Group";
+
 let selectedImages = [];
 
 
 /* =========================================================
-   GAS COMMUNICATION
+   GAS REQUEST
 ========================================================= */
 
 function makeRequestId() {
   if (
     window.crypto &&
-    typeof crypto.randomUUID === "function"
+    typeof crypto.randomUUID ===
+      "function"
   ) {
     return crypto.randomUUID();
   }
@@ -30,20 +34,34 @@ function makeRequestId() {
   return (
     Date.now().toString(36) +
     "-" +
-    Math.random().toString(36).slice(2)
+    Math.random()
+      .toString(36)
+      .slice(2)
   );
 }
 
 
-function submitHiddenPost(action, payload, requestId) {
+function submitHiddenPost(
+  action,
+  payload,
+  requestId
+) {
   let frame =
-    document.getElementById("vumcGasPostFrame");
+    document.getElementById(
+      "vumcGasPostFrame"
+    );
 
   if (!frame) {
-    frame = document.createElement("iframe");
+    frame =
+      document.createElement(
+        "iframe"
+      );
 
-    frame.id = "vumcGasPostFrame";
-    frame.name = "vumcGasPostFrame";
+    frame.id =
+      "vumcGasPostFrame";
+
+    frame.name =
+      "vumcGasPostFrame";
 
     frame.setAttribute(
       "aria-hidden",
@@ -64,11 +82,15 @@ function submitHiddenPost(action, payload, requestId) {
       }
     );
 
-    document.body.appendChild(frame);
+    document.body.appendChild(
+      frame
+    );
   }
 
   const form =
-    document.createElement("form");
+    document.createElement(
+      "form"
+    );
 
   form.method = "POST";
   form.action = GAS_URL;
@@ -78,25 +100,33 @@ function submitHiddenPost(action, payload, requestId) {
   const fields = {
     requestId,
     action,
-    payload: JSON.stringify(
-      payload || {}
-    )
+    payload:
+      JSON.stringify(
+        payload || {}
+      )
   };
 
-  Object.entries(fields).forEach(
-    ([name, value]) => {
-      const input =
-        document.createElement("input");
+  Object.entries(fields)
+    .forEach(
+      ([name, value]) => {
+        const input =
+          document.createElement(
+            "input"
+          );
 
-      input.type = "hidden";
-      input.name = name;
-      input.value = value;
+        input.type = "hidden";
+        input.name = name;
+        input.value = value;
 
-      form.appendChild(input);
-    }
+        form.appendChild(
+          input
+        );
+      }
+    );
+
+  document.body.appendChild(
+    form
   );
-
-  document.body.appendChild(form);
 
   form.submit();
 
@@ -104,7 +134,9 @@ function submitHiddenPost(action, payload, requestId) {
 }
 
 
-function jsonpPoll(requestId) {
+function jsonpPoll(
+  requestId
+) {
   return new Promise(
     (resolve, reject) => {
       const callbackName =
@@ -115,17 +147,23 @@ function jsonpPoll(requestId) {
         );
 
       const script =
-        document.createElement("script");
+        document.createElement(
+          "script"
+        );
 
       const cleanup = () => {
         try {
-          delete window[callbackName];
+          delete window[
+            callbackName
+          ];
         } catch (error) {}
 
         script.remove();
       };
 
-      window[callbackName] = data => {
+      window[
+        callbackName
+      ] = data => {
         cleanup();
         resolve(data);
       };
@@ -141,7 +179,9 @@ function jsonpPoll(requestId) {
       };
 
       const url =
-        new URL(GAS_URL);
+        new URL(
+          GAS_URL
+        );
 
       url.searchParams.set(
         "api",
@@ -160,15 +200,18 @@ function jsonpPoll(requestId) {
 
       url.searchParams.set(
         "_",
-        String(Date.now())
+        String(
+          Date.now()
+        )
       );
 
       script.src =
         url.toString();
 
-      document.head.appendChild(
-        script
-      );
+      document.head
+        .appendChild(
+          script
+        );
     }
   );
 }
@@ -177,7 +220,8 @@ function jsonpPoll(requestId) {
 async function gasRequest(
   action,
   payload = {},
-  timeoutMs = FORM_TIMEOUT_MS
+  timeoutMs =
+    FORM_TIMEOUT_MS
 ) {
   const requestId =
     makeRequestId();
@@ -192,7 +236,8 @@ async function gasRequest(
     Date.now();
 
   while (
-    Date.now() - started <
+    Date.now() -
+      started <
     timeoutMs
   ) {
     await new Promise(
@@ -229,7 +274,7 @@ async function gasRequest(
 
 
 /* =========================================================
-   AUTHENTICATED COMMUNICATIONS REQUEST
+   AUTHENTICATED REQUEST
 ========================================================= */
 
 async function communicationsRequest(
@@ -241,12 +286,10 @@ async function communicationsRequest(
       SESSION_KEY
     );
 
-  /*
-    Communications cannot be accessed
-    without a valid Staff Tools login.
-  */
   if (!token) {
-    window.location.replace("../");
+    window.location.replace(
+      "../"
+    );
 
     throw new Error(
       "Staff authorization required."
@@ -262,9 +305,6 @@ async function communicationsRequest(
       }
     );
 
-  /*
-    GAS says the session is no longer valid.
-  */
   if (
     result &&
     result.authRequired
@@ -273,7 +313,9 @@ async function communicationsRequest(
       SESSION_KEY
     );
 
-    window.location.replace("../");
+    window.location.replace(
+      "../"
+    );
 
     throw new Error(
       result.error ||
@@ -298,7 +340,7 @@ async function communicationsRequest(
 
 
 /* =========================================================
-   PAGE ELEMENTS
+   DOM
 ========================================================= */
 
 const loadingScreen =
@@ -388,7 +430,7 @@ const statusBox =
 
 
 /* =========================================================
-   PREVIEW / STATUS
+   UI HELPERS
 ========================================================= */
 
 function updatePreview() {
@@ -432,13 +474,20 @@ function setStatus(
 
 
 function clearStatus() {
-  statusBox.textContent = "";
-  statusBox.className = "status";
-  statusBox.hidden = true;
+  statusBox.textContent =
+    "";
+
+  statusBox.className =
+    "status";
+
+  statusBox.hidden =
+    true;
 }
 
 
-function setBusy(isBusy) {
+function setBusy(
+  isBusy
+) {
   publishButton.disabled =
     isBusy;
 
@@ -456,13 +505,16 @@ function setBusy(isBusy) {
 
 
 /* =========================================================
-   URL VALIDATION
+   URL
 ========================================================= */
 
-function normalizeUrl(value) {
+function normalizeUrl(
+  value
+) {
   const trimmed =
-    String(value || "")
-      .trim();
+    String(
+      value || ""
+    ).trim();
 
   if (!trimmed) {
     return "";
@@ -470,11 +522,15 @@ function normalizeUrl(value) {
 
   try {
     const url =
-      new URL(trimmed);
+      new URL(
+        trimmed
+      );
 
     if (
-      url.protocol !== "http:" &&
-      url.protocol !== "https:"
+      url.protocol !==
+        "http:" &&
+      url.protocol !==
+        "https:"
     ) {
       throw new Error();
     }
@@ -493,7 +549,9 @@ function normalizeUrl(value) {
    IMAGES
 ========================================================= */
 
-function readImageFile(file) {
+function readImageFile(
+  file
+) {
   return new Promise(
     (resolve, reject) => {
       const reader =
@@ -502,11 +560,14 @@ function readImageFile(file) {
       reader.onload = () => {
         const result =
           String(
-            reader.result || ""
+            reader.result ||
+            ""
           );
 
         const commaIndex =
-          result.indexOf(",");
+          result.indexOf(
+            ","
+          );
 
         if (
           commaIndex === -1
@@ -530,18 +591,20 @@ function readImageFile(file) {
 
           base64:
             result.slice(
-              commaIndex + 1
+              commaIndex +
+                1
             )
         });
       };
 
-      reader.onerror = () => {
-        reject(
-          new Error(
-            `The image "${file.name}" could not be read.`
-          )
-        );
-      };
+      reader.onerror =
+        () => {
+          reject(
+            new Error(
+              `The image "${file.name}" could not be read.`
+            )
+          );
+        };
 
       reader.readAsDataURL(
         file
@@ -615,7 +678,9 @@ function renderImagePreviews() {
         "click",
         () => {
           const removed =
-            selectedImages[index];
+            selectedImages[
+              index
+            ];
 
           if (
             removed &&
@@ -649,9 +714,10 @@ function renderImagePreviews() {
     }
   );
 
-  imagePreviewWrap.appendChild(
-    grid
-  );
+  imagePreviewWrap
+    .appendChild(
+      grid
+    );
 
   imagePreviewWrap.hidden =
     false;
@@ -663,7 +729,8 @@ async function handleImageSelection() {
 
   const files =
     Array.from(
-      imageInput.files || []
+      imageInput.files ||
+      []
     );
 
   if (!files.length) {
@@ -675,7 +742,8 @@ async function handleImageSelection() {
       files.length >
     MAX_IMAGES
   ) {
-    imageInput.value = "";
+    imageInput.value =
+      "";
 
     setStatus(
       `You may select up to ${MAX_IMAGES} images.`,
@@ -689,11 +757,13 @@ async function handleImageSelection() {
     const file of files
   ) {
     if (
-      !ALLOWED_IMAGE_TYPES.includes(
-        file.type
-      )
+      !ALLOWED_IMAGE_TYPES
+        .includes(
+          file.type
+        )
     ) {
-      imageInput.value = "";
+      imageInput.value =
+        "";
 
       setStatus(
         `"${file.name}" is not a JPG, PNG, or WebP image.`,
@@ -707,7 +777,8 @@ async function handleImageSelection() {
       file.size >
       MAX_IMAGE_BYTES
     ) {
-      imageInput.value = "";
+      imageInput.value =
+        "";
 
       setStatus(
         `"${file.name}" must be smaller than 8 MB.`,
@@ -719,7 +790,8 @@ async function handleImageSelection() {
   }
 
   try {
-    const prepared = [];
+    const prepared =
+      [];
 
     for (
       const file of files
@@ -744,12 +816,14 @@ async function handleImageSelection() {
       ...prepared
     ];
 
-    imageInput.value = "";
+    imageInput.value =
+      "";
 
     renderImagePreviews();
 
   } catch (error) {
-    imageInput.value = "";
+    imageInput.value =
+      "";
 
     setStatus(
       error.message ||
@@ -761,7 +835,7 @@ async function handleImageSelection() {
 
 
 /* =========================================================
-   CONFIGURATION
+   CONFIG
 ========================================================= */
 
 async function loadConfiguration() {
@@ -779,12 +853,9 @@ async function loadConfiguration() {
       ? "checking…"
       : "not configured";
 
-  let facebookDetail = "";
+  let facebookDetail =
+    "";
 
-  /*
-    If Facebook credentials exist,
-    verify that Meta accepts them.
-  */
   if (
     data.facebookConfigured
   ) {
@@ -821,22 +892,17 @@ async function loadConfiguration() {
     }
   }
 
-  const archiveText =
-    data.archiveConfigured
-      ? "configured"
-      : "not configured";
-
   configBox.textContent =
     `Email: ${
       data.emailConfigured
         ? "ready"
         : "not configured"
-    } · Facebook: ${facebookText} · Archive: ${archiveText}${facebookDetail}`;
+    } · Facebook: ${facebookText}${facebookDetail}`;
 }
 
 
 /* =========================================================
-   GOOGLE CONTACT AUDIENCES
+   CONTACT GROUPS
 ========================================================= */
 
 async function loadAudiences() {
@@ -866,7 +932,8 @@ async function loadAudiences() {
         "option"
       );
 
-    option.value = "";
+    option.value =
+      "";
 
     option.textContent =
       "No Google Contacts labels found";
@@ -910,29 +977,24 @@ async function loadAudiences() {
 
 
 /* =========================================================
-   INITIALIZATION
+   INITIALIZE
 ========================================================= */
 
 async function initializeApp() {
-  /*
-    First make sure this browser tab
-    came through Staff Tools login.
-  */
   const token =
     sessionStorage.getItem(
       SESSION_KEY
     );
 
   if (!token) {
-    window.location.replace("../");
+    window.location.replace(
+      "../"
+    );
+
     return;
   }
 
   try {
-    /*
-      Verify the session before
-      displaying Communications.
-    */
     const verification =
       await gasRequest(
         "verifyStaffSession",
@@ -943,13 +1005,17 @@ async function initializeApp() {
 
     if (
       !verification ||
-      verification.success !== true
+      verification.success !==
+        true
     ) {
       sessionStorage.removeItem(
         SESSION_KEY
       );
 
-      window.location.replace("../");
+      window.location.replace(
+        "../"
+      );
+
       return;
     }
 
@@ -1003,7 +1069,8 @@ async function publishAnnouncement() {
   const body =
     bodyInput.value.trim();
 
-  let linkUrl = "";
+  let linkUrl =
+    "";
 
   try {
     linkUrl =
@@ -1077,7 +1144,9 @@ async function publishAnnouncement() {
     return;
   }
 
-  setBusy(true);
+  setBusy(
+    true
+  );
 
   try {
     const images =
@@ -1110,10 +1179,12 @@ async function publishAnnouncement() {
         }
       );
 
-    const completed = [];
+    const completed =
+      [];
 
     if (
-      data.result?.email?.success
+      data.result?.email
+        ?.success
     ) {
       completed.push(
         `email sent to ${data.result.email.recipients} contacts`
@@ -1121,18 +1192,11 @@ async function publishAnnouncement() {
     }
 
     if (
-      data.result?.facebook?.success
+      data.result?.facebook
+        ?.success
     ) {
       completed.push(
         "Facebook post published"
-      );
-    }
-
-    if (
-      data.result?.archive?.success
-    ) {
-      completed.push(
-        "announcement archived"
       );
     }
 
@@ -1155,19 +1219,26 @@ async function publishAnnouncement() {
     );
 
   } finally {
-    setBusy(false);
+    setBusy(
+      false
+    );
   }
 }
 
 
 /* =========================================================
-   CLEAR COMPOSER
+   CLEAR
 ========================================================= */
 
 function clearComposer() {
-  titleInput.value = "";
-  bodyInput.value = "";
-  linkUrlInput.value = "";
+  titleInput.value =
+    "";
+
+  bodyInput.value =
+    "";
+
+  linkUrlInput.value =
+    "";
 
   sendEmailCheckbox.checked =
     false;
@@ -1187,9 +1258,11 @@ function clearComposer() {
     }
   );
 
-  selectedImages = [];
+  selectedImages =
+    [];
 
-  imageInput.value = "";
+  imageInput.value =
+    "";
 
   renderImagePreviews();
   updateAudienceVisibility();
@@ -1199,7 +1272,7 @@ function clearComposer() {
 
 
 /* =========================================================
-   EVENT LISTENERS
+   EVENTS
 ========================================================= */
 
 titleInput.addEventListener(
@@ -1236,10 +1309,5 @@ clearButton.addEventListener(
   "click",
   clearComposer
 );
-
-
-/* =========================================================
-   START
-========================================================= */
 
 initializeApp();
