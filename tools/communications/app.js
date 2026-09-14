@@ -1,39 +1,74 @@
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzHpOIjWgX-jiOMGwiCBrONrmym-9kMJDOQ4DA15re8d-_MUidnpXbIGCZYTqM_gAJV/exec";
+const SESSION_KEY = "vumc_staff_token";
 const FORM_TIMEOUT_MS = 90000;
 const POLL_INTERVAL_MS = 500;
 
+const MAX_IMAGES = 10;
+const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp"
+];
+
+let defaultAudience = "All VUMC Contacts Group";
+let selectedImages = [];
+
+
+/* =========================================================
+   GAS COMMUNICATION
+========================================================= */
+
 function makeRequestId() {
-  if (window.crypto && typeof crypto.randomUUID === "function") {
+  if (
+    window.crypto &&
+    typeof crypto.randomUUID === "function"
+  ) {
     return crypto.randomUUID();
   }
 
-  return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
+  return (
+    Date.now().toString(36) +
+    "-" +
+    Math.random().toString(36).slice(2)
+  );
 }
 
+
 function submitHiddenPost(action, payload, requestId) {
-  let frame = document.getElementById("vumcGasPostFrame");
+  let frame =
+    document.getElementById("vumcGasPostFrame");
 
   if (!frame) {
     frame = document.createElement("iframe");
+
     frame.id = "vumcGasPostFrame";
     frame.name = "vumcGasPostFrame";
-    frame.setAttribute("aria-hidden", "true");
 
-    Object.assign(frame.style, {
-      position: "fixed",
-      left: "-10000px",
-      top: "-10000px",
-      width: "1px",
-      height: "1px",
-      border: "0",
-      opacity: "0",
-      pointerEvents: "none"
-    });
+    frame.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    Object.assign(
+      frame.style,
+      {
+        position: "fixed",
+        left: "-10000px",
+        top: "-10000px",
+        width: "1px",
+        height: "1px",
+        border: "0",
+        opacity: "0",
+        pointerEvents: "none"
+      }
+    );
 
     document.body.appendChild(frame);
   }
 
-  const form = document.createElement("form");
+  const form =
+    document.createElement("form");
 
   form.method = "POST";
   form.action = GAS_URL;
@@ -43,74 +78,109 @@ function submitHiddenPost(action, payload, requestId) {
   const fields = {
     requestId,
     action,
-    payload: JSON.stringify(payload || {})
+    payload: JSON.stringify(
+      payload || {}
+    )
   };
 
-  Object.entries(fields).forEach(([name, value]) => {
-    const input = document.createElement("input");
+  Object.entries(fields).forEach(
+    ([name, value]) => {
+      const input =
+        document.createElement("input");
 
-    input.type = "hidden";
-    input.name = name;
-    input.value = value;
+      input.type = "hidden";
+      input.name = name;
+      input.value = value;
 
-    form.appendChild(input);
-  });
+      form.appendChild(input);
+    }
+  );
 
   document.body.appendChild(form);
+
   form.submit();
+
   form.remove();
 }
 
+
 function jsonpPoll(requestId) {
-  return new Promise((resolve, reject) => {
-    const callbackName =
-      "__vumcJsonp_" +
-      requestId.replace(/[^A-Za-z0-9_$]/g, "_");
+  return new Promise(
+    (resolve, reject) => {
+      const callbackName =
+        "__vumcJsonp_" +
+        requestId.replace(
+          /[^A-Za-z0-9_$]/g,
+          "_"
+        );
 
-    const script = document.createElement("script");
+      const script =
+        document.createElement("script");
 
-    const cleanup = () => {
-      try {
-        delete window[callbackName];
-      } catch (error) {}
+      const cleanup = () => {
+        try {
+          delete window[callbackName];
+        } catch (error) {}
 
-      script.remove();
-    };
+        script.remove();
+      };
 
-    window[callbackName] = data => {
-      cleanup();
-      resolve(data);
-    };
+      window[callbackName] = data => {
+        cleanup();
+        resolve(data);
+      };
 
-    script.onerror = () => {
-      cleanup();
+      script.onerror = () => {
+        cleanup();
 
-      reject(
-        new Error(
-          "Could not read the Communications backend response."
-        )
+        reject(
+          new Error(
+            "Could not read the Communications backend response."
+          )
+        );
+      };
+
+      const url =
+        new URL(GAS_URL);
+
+      url.searchParams.set(
+        "api",
+        "1"
       );
-    };
 
-    const url = new URL(GAS_URL);
+      url.searchParams.set(
+        "requestId",
+        requestId
+      );
 
-    url.searchParams.set("api", "1");
-    url.searchParams.set("requestId", requestId);
-    url.searchParams.set("callback", callbackName);
-    url.searchParams.set("_", String(Date.now()));
+      url.searchParams.set(
+        "callback",
+        callbackName
+      );
 
-    script.src = url.toString();
+      url.searchParams.set(
+        "_",
+        String(Date.now())
+      );
 
-    document.head.appendChild(script);
-  });
+      script.src =
+        url.toString();
+
+      document.head.appendChild(
+        script
+      );
+    }
+  );
 }
+
 
 async function gasRequest(
   action,
   payload = {},
   timeoutMs = FORM_TIMEOUT_MS
 ) {
-  const requestId = makeRequestId();
+  const requestId =
+    makeRequestId();
 
   submitHiddenPost(
     action,
@@ -118,10 +188,12 @@ async function gasRequest(
     requestId
   );
 
-  const started = Date.now();
+  const started =
+    Date.now();
 
   while (
-    Date.now() - started < timeoutMs
+    Date.now() - started <
+    timeoutMs
   ) {
     await new Promise(
       resolve =>
@@ -140,10 +212,13 @@ async function gasRequest(
       envelope &&
       envelope.ready
     ) {
-      return envelope.result || {
-        success: false,
-        error: "No result returned."
-      };
+      return (
+        envelope.result || {
+          success: false,
+          error:
+            "No result returned."
+        }
+      );
     }
   }
 
@@ -151,6 +226,80 @@ async function gasRequest(
     "The Communications request timed out."
   );
 }
+
+
+/* =========================================================
+   AUTHENTICATED COMMUNICATIONS REQUEST
+========================================================= */
+
+async function communicationsRequest(
+  action,
+  payload = {}
+) {
+  const token =
+    sessionStorage.getItem(
+      SESSION_KEY
+    );
+
+  /*
+    Communications cannot be accessed
+    without a valid Staff Tools login.
+  */
+  if (!token) {
+    window.location.replace("../");
+
+    throw new Error(
+      "Staff authorization required."
+    );
+  }
+
+  const result =
+    await gasRequest(
+      action,
+      {
+        ...payload,
+        token
+      }
+    );
+
+  /*
+    GAS says the session is no longer valid.
+  */
+  if (
+    result &&
+    result.authRequired
+  ) {
+    sessionStorage.removeItem(
+      SESSION_KEY
+    );
+
+    window.location.replace("../");
+
+    throw new Error(
+      result.error ||
+      "Your Staff Tools session has expired."
+    );
+  }
+
+  if (
+    !result ||
+    result.success === false
+  ) {
+    throw new Error(
+      result &&
+      result.error
+        ? result.error
+        : "The Communications request failed."
+    );
+  }
+
+  return result;
+}
+
+
+/* =========================================================
+   PAGE ELEMENTS
+========================================================= */
 
 const loadingScreen =
   document.getElementById(
@@ -237,46 +386,10 @@ const statusBox =
     "status"
   );
 
-const MAX_IMAGES = 10;
 
-const MAX_IMAGE_BYTES =
-  8 * 1024 * 1024;
-
-const ALLOWED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp"
-];
-
-let defaultAudience =
-  "All VUMC Contacts Group";
-
-let selectedImages = [];
-
-async function communicationsRequest(
-  action,
-  payload = {}
-) {
-  const result =
-    await gasRequest(
-      action,
-      payload
-    );
-
-  if (
-    !result ||
-    result.success === false
-  ) {
-    throw new Error(
-      result &&
-      result.error
-        ? result.error
-        : "The Communications request failed."
-    );
-  }
-
-  return result;
-}
+/* =========================================================
+   PREVIEW / STATUS
+========================================================= */
 
 function updatePreview() {
   previewTitle.textContent =
@@ -296,10 +409,12 @@ function updatePreview() {
     "Your announcement message will appear here.";
 }
 
+
 function updateAudienceVisibility() {
   audienceWrap.hidden =
     !sendEmailCheckbox.checked;
 }
+
 
 function setStatus(
   message,
@@ -315,16 +430,13 @@ function setStatus(
     false;
 }
 
+
 function clearStatus() {
-  statusBox.textContent =
-    "";
-
-  statusBox.className =
-    "status";
-
-  statusBox.hidden =
-    true;
+  statusBox.textContent = "";
+  statusBox.className = "status";
+  statusBox.hidden = true;
 }
+
 
 function setBusy(isBusy) {
   publishButton.disabled =
@@ -341,6 +453,11 @@ function setBusy(isBusy) {
       ? "Publishing…"
       : "Publish";
 }
+
+
+/* =========================================================
+   URL VALIDATION
+========================================================= */
 
 function normalizeUrl(value) {
   const trimmed =
@@ -370,6 +487,11 @@ function normalizeUrl(value) {
     );
   }
 }
+
+
+/* =========================================================
+   IMAGES
+========================================================= */
 
 function readImageFile(file) {
   return new Promise(
@@ -427,6 +549,7 @@ function readImageFile(file) {
     }
   );
 }
+
 
 function renderImagePreviews() {
   imagePreviewWrap.innerHTML =
@@ -534,6 +657,7 @@ function renderImagePreviews() {
     false;
 }
 
+
 async function handleImageSelection() {
   clearStatus();
 
@@ -551,8 +675,7 @@ async function handleImageSelection() {
       files.length >
     MAX_IMAGES
   ) {
-    imageInput.value =
-      "";
+    imageInput.value = "";
 
     setStatus(
       `You may select up to ${MAX_IMAGES} images.`,
@@ -570,8 +693,7 @@ async function handleImageSelection() {
         file.type
       )
     ) {
-      imageInput.value =
-        "";
+      imageInput.value = "";
 
       setStatus(
         `"${file.name}" is not a JPG, PNG, or WebP image.`,
@@ -585,8 +707,7 @@ async function handleImageSelection() {
       file.size >
       MAX_IMAGE_BYTES
     ) {
-      imageInput.value =
-        "";
+      imageInput.value = "";
 
       setStatus(
         `"${file.name}" must be smaller than 8 MB.`,
@@ -623,22 +744,25 @@ async function handleImageSelection() {
       ...prepared
     ];
 
-    imageInput.value =
-      "";
+    imageInput.value = "";
 
     renderImagePreviews();
 
   } catch (error) {
-    imageInput.value =
-      "";
+    imageInput.value = "";
 
     setStatus(
       error.message ||
-        "One or more images could not be prepared.",
+      "One or more images could not be prepared.",
       "error"
     );
   }
 }
+
+
+/* =========================================================
+   CONFIGURATION
+========================================================= */
 
 async function loadConfiguration() {
   const data =
@@ -655,9 +779,12 @@ async function loadConfiguration() {
       ? "checking…"
       : "not configured";
 
-  let facebookDetail =
-    "";
+  let facebookDetail = "";
 
+  /*
+    If Facebook credentials exist,
+    verify that Meta accepts them.
+  */
   if (
     data.facebookConfigured
   ) {
@@ -707,6 +834,11 @@ async function loadConfiguration() {
     } · Facebook: ${facebookText} · Archive: ${archiveText}${facebookDetail}`;
 }
 
+
+/* =========================================================
+   GOOGLE CONTACT AUDIENCES
+========================================================= */
+
 async function loadAudiences() {
   audienceSelect.innerHTML =
     `<option value="">Loading Google Contacts labels…</option>`;
@@ -734,8 +866,7 @@ async function loadAudiences() {
         "option"
       );
 
-    option.value =
-      "";
+    option.value = "";
 
     option.textContent =
       "No Google Contacts labels found";
@@ -777,8 +908,51 @@ async function loadAudiences() {
   );
 }
 
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
 async function initializeApp() {
+  /*
+    First make sure this browser tab
+    came through Staff Tools login.
+  */
+  const token =
+    sessionStorage.getItem(
+      SESSION_KEY
+    );
+
+  if (!token) {
+    window.location.replace("../");
+    return;
+  }
+
   try {
+    /*
+      Verify the session before
+      displaying Communications.
+    */
+    const verification =
+      await gasRequest(
+        "verifyStaffSession",
+        {
+          token
+        }
+      );
+
+    if (
+      !verification ||
+      verification.success !== true
+    ) {
+      sessionStorage.removeItem(
+        SESSION_KEY
+      );
+
+      window.location.replace("../");
+      return;
+    }
+
     loadingScreen.hidden =
       true;
 
@@ -809,11 +983,16 @@ async function initializeApp() {
 
     setStatus(
       error.message ||
-        "The Communications Hub could not finish loading.",
+      "The Communications Hub could not finish loading.",
       "error"
     );
   }
 }
+
+
+/* =========================================================
+   PUBLISH
+========================================================= */
 
 async function publishAnnouncement() {
   clearStatus();
@@ -824,8 +1003,7 @@ async function publishAnnouncement() {
   const body =
     bodyInput.value.trim();
 
-  let linkUrl =
-    "";
+  let linkUrl = "";
 
   try {
     linkUrl =
@@ -932,8 +1110,7 @@ async function publishAnnouncement() {
         }
       );
 
-    const completed =
-      [];
+    const completed = [];
 
     if (
       data.result?.email?.success
@@ -973,7 +1150,7 @@ async function publishAnnouncement() {
 
     setStatus(
       error.message ||
-        "The announcement could not be published.",
+      "The announcement could not be published.",
       "error"
     );
 
@@ -982,15 +1159,15 @@ async function publishAnnouncement() {
   }
 }
 
+
+/* =========================================================
+   CLEAR COMPOSER
+========================================================= */
+
 function clearComposer() {
-  titleInput.value =
-    "";
-
-  bodyInput.value =
-    "";
-
-  linkUrlInput.value =
-    "";
+  titleInput.value = "";
+  bodyInput.value = "";
+  linkUrlInput.value = "";
 
   sendEmailCheckbox.checked =
     false;
@@ -1010,17 +1187,20 @@ function clearComposer() {
     }
   );
 
-  selectedImages =
-    [];
+  selectedImages = [];
 
-  imageInput.value =
-    "";
+  imageInput.value = "";
 
   renderImagePreviews();
   updateAudienceVisibility();
   updatePreview();
   clearStatus();
 }
+
+
+/* =========================================================
+   EVENT LISTENERS
+========================================================= */
 
 titleInput.addEventListener(
   "input",
@@ -1056,5 +1236,10 @@ clearButton.addEventListener(
   "click",
   clearComposer
 );
+
+
+/* =========================================================
+   START
+========================================================= */
 
 initializeApp();
