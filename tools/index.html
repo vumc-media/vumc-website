@@ -805,17 +805,24 @@
   ================================================== -->
 
   <script>
-    const passkeyInput = document.getElementById("passkeyInput");
-    const togglePasskey = document.getElementById("togglePasskey");
+    (() => {
+      const visibilityInput = document.getElementById("passkeyInput");
+      const visibilityButton = document.getElementById("togglePasskey");
 
-    togglePasskey.addEventListener("click", function () {
-      const isHidden = passkeyInput.type === "password";
-      passkeyInput.type = isHidden ? "text" : "password";
-      togglePasskey.textContent = isHidden ? "🙈" : "👁";
-      togglePasskey.setAttribute("aria-label", isHidden ? "Hide passkey" : "Show passkey");
-      togglePasskey.title = isHidden ? "Hide passkey" : "Show passkey";
-      passkeyInput.focus();
-    });
+      if (!visibilityInput || !visibilityButton) return;
+
+      visibilityButton.addEventListener("click", () => {
+        const isHidden = visibilityInput.type === "password";
+        visibilityInput.type = isHidden ? "text" : "password";
+        visibilityButton.textContent = isHidden ? "🙈" : "👁";
+        visibilityButton.setAttribute(
+          "aria-label",
+          isHidden ? "Hide passkey" : "Show passkey"
+        );
+        visibilityButton.title = isHidden ? "Hide passkey" : "Show passkey";
+        visibilityInput.focus();
+      });
+    })();
   </script>
 
   <script src="./app.js"></script>
