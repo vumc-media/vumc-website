@@ -3,29 +3,174 @@ backend:
   repo: vumc-media/vumc-website
   branch: main
   base_url: https://vumc-sveltia-cms-auth.versaillesumcworshipteam.workers.dev
+
 media_folder: "vumc-media"
 public_folder: "/vumc-media"
 
 collections:
   - name: "homepage"
-    label: "Homepage Content"
+    label: "Homepage"
     files:
-      - label: "Home Page"
+      - label: "Edit Homepage"
         name: "home"
         file: "content/home.json"
+        format: "json"
+
         fields:
-          - label: "Hero Title"
-            name: "hero_title"
-            widget: "string"
 
-          - label: "Hero Subtitle"
-            name: "hero_subtitle"
-            widget: "text"
+          # =========================================================
+          # HERO
+          # =========================================================
+          - label: "Hero Section"
+            name: "hero"
+            widget: "object"
+            collapsed: false
+            fields:
+              - label: "Show Hero"
+                name: "enabled"
+                widget: "boolean"
+                default: true
 
-          - label: "Button Text"
-            name: "button_text"
-            widget: "string"
+              - label: "Hero Image"
+                name: "image"
+                widget: "image"
+                required: false
 
-          - label: "Button Link"
-            name: "button_link"
-            widget: "string"
+              - label: "Title"
+                name: "title"
+                widget: "string"
+
+              - label: "Subtitle"
+                name: "subtitle"
+                widget: "string"
+
+              - label: "Text"
+                name: "text"
+                widget: "text"
+
+              - label: "Primary Button Text"
+                name: "primary_button_text"
+                widget: "string"
+
+              - label: "Primary Button Link"
+                name: "primary_button_link"
+                widget: "string"
+
+              - label: "Secondary Button Text"
+                name: "secondary_button_text"
+                widget: "string"
+
+              - label: "Secondary Button Link"
+                name: "secondary_button_link"
+                widget: "string"
+
+
+          # =========================================================
+          # COMMUNITY STORIES
+          # =========================================================
+          - label: "Community Stories"
+            name: "community_stories"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Show Section"
+                name: "enabled"
+                widget: "boolean"
+                default: true
+
+              - label: "Image"
+                name: "image"
+                widget: "image"
+                required: false
+
+              - label: "Small Heading"
+                name: "eyebrow"
+                widget: "string"
+
+              - label: "Heading"
+                name: "title"
+                widget: "string"
+
+              - label: "Text"
+                name: "text"
+                widget: "text"
+
+              - label: "Button Text"
+                name: "button_text"
+                widget: "string"
+
+              - label: "Button Link"
+                name: "button_link"
+                widget: "string"
+
+
+          # =========================================================
+          # WHO WE ARE
+          # =========================================================
+          - label: "Who We Are"
+            name: "who_we_are"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Show Section"
+                name: "enabled"
+                widget: "boolean"
+                default: true
+
+              - label: "Image"
+                name: "image"
+                widget: "image"
+                required: false
+
+              - label: "Small Heading"
+                name: "eyebrow"
+                widget: "string"
+
+              - label: "Heading"
+                name: "title"
+                widget: "string"
+
+              - label: "Text"
+                name: "text"
+                widget: "text"
+
+
+          # =========================================================
+          # CUSTOM HOMEPAGE BOXES
+          # =========================================================
+          - label: "Custom Homepage Boxes"
+            name: "custom_boxes"
+            widget: "list"
+            collapsed: false
+            summary: "{{fields.title}}"
+            add_to_top: true
+
+            fields:
+              - label: "Show Box"
+                name: "enabled"
+                widget: "boolean"
+                default: true
+
+              - label: "Image"
+                name: "image"
+                widget: "image"
+                required: false
+
+              - label: "Heading"
+                name: "title"
+                widget: "string"
+
+              - label: "Text"
+                name: "text"
+                widget: "text"
+                required: false
+
+              - label: "Button Text"
+                name: "button_text"
+                widget: "string"
+                required: false
+
+              - label: "Button Link"
+                name: "button_link"
+                widget: "string"
+                required: false
