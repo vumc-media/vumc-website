@@ -1,1089 +1,1359 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>VUMC Website Editor</title>
-
-  <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
-
-  <script>
-    /* ============================================================
-       VUMC HOMEPAGE PREVIEW STYLES
-       ============================================================ */
-
-    CMS.registerPreviewStyle(`
-      * {
-        box-sizing: border-box;
-      }
-
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        background: #ffffff;
-        color: #172033;
-        font-family:
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI",
-          Arial,
-          Helvetica,
-          sans-serif;
-      }
-
-      .vumc-preview {
-        width: 100%;
-        min-height: 100vh;
-        margin: 0;
-        background: #ffffff;
-      }
-
-
-      /* ==========================================================
-         HERO
-         ========================================================== */
-
-      .vumc-hero {
-        position: relative;
-        min-height: 520px;
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-        background:
-          linear-gradient(
-            135deg,
-            #071b36 0%,
-            #0b2a52 55%,
-            #123e70 100%
-          );
-        color: #ffffff;
-      }
-
-      .vumc-hero-image {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-
-        width: 100%;
-        height: 100%;
-
-        object-fit: cover;
-      }
-
-      .vumc-hero-overlay {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-
-        background:
-          linear-gradient(
-            90deg,
-            rgba(4, 18, 37, .96) 0%,
-            rgba(6, 29, 57, .83) 48%,
-            rgba(6, 29, 57, .38) 100%
-          );
-      }
-
-      .vumc-hero-content {
-        position: relative;
-        z-index: 2;
-
-        width: 100%;
-        max-width: 1100px;
-
-        margin: 0 auto;
-        padding: 72px 44px;
-      }
-
-      .vumc-kicker {
-        margin: 0 0 15px;
-
-        color: #d8e8f5;
-
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: 1.6px;
-        text-transform: uppercase;
-      }
-
-      .vumc-hero h1 {
-        max-width: 800px;
-
-        margin: 0 0 14px;
-
-        color: #ffffff;
-
-        font-size: clamp(38px, 6vw, 66px);
-        line-height: 1;
-        letter-spacing: -2px;
-      }
-
-      .vumc-hero h2 {
-        max-width: 760px;
-
-        margin: 0 0 22px;
-
-        color: #e2edf6;
-
-        font-size: clamp(20px, 3vw, 29px);
-        line-height: 1.2;
-        font-weight: 500;
-      }
-
-      .vumc-hero p {
-        max-width: 740px;
-
-        margin: 0;
-
-        color: rgba(255,255,255,.93);
-
-        font-size: 17px;
-        line-height: 1.7;
-      }
-
-      .vumc-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-
-        margin-top: 28px;
-      }
-
-      .vumc-button {
-        display: inline-block;
-
-        padding: 13px 20px;
-
-        border-radius: 9px;
-
-        background: #0b2a52;
-        color: #ffffff;
-
-        font-size: 14px;
-        font-weight: 750;
-        line-height: 1.2;
-
-        text-decoration: none;
-      }
-
-      .vumc-hero .vumc-button {
-        background: #ffffff;
-        color: #0b2a52;
-      }
-
-      .vumc-hero .vumc-button.secondary {
-        border: 1px solid rgba(255,255,255,.65);
-
-        background: rgba(255,255,255,.12);
-        color: #ffffff;
-
-        backdrop-filter: blur(5px);
-      }
-
-      .hero-count {
-        position: absolute;
-        right: 18px;
-        bottom: 18px;
-        z-index: 3;
-
-        padding: 7px 12px;
-
-        border-radius: 999px;
-
-        background: rgba(0,0,0,.55);
-        color: #ffffff;
-
-        font-size: 11px;
-        font-weight: 700;
-      }
-
-
-      /* ==========================================================
-         GENERAL SECTIONS
-         ========================================================== */
-
-      .vumc-section {
-        padding: 68px 42px;
-      }
-
-      .vumc-container {
-        width: 100%;
-        max-width: 1100px;
-
-        margin: 0 auto;
-      }
-
-      .vumc-eyebrow {
-        margin: 0 0 9px;
-
-        color: #3f7a5a;
-
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-      }
-
-      .vumc-section h2 {
-        margin: 0 0 17px;
-
-        color: #0b2a52;
-
-        font-size: clamp(29px, 4vw, 38px);
-        line-height: 1.1;
-        letter-spacing: -.5px;
-      }
-
-      .vumc-section p {
-        margin: 0;
-
-        color: #4c596b;
-
-        font-size: 16px;
-        line-height: 1.7;
-      }
-
-
-      /* ==========================================================
-         IMAGE PLACEHOLDERS
-         ========================================================== */
-
-      .image-placeholder {
-        width: 100%;
-        min-height: 280px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        padding: 30px;
-
-        background:
-          linear-gradient(
-            135deg,
-            #edf0f3,
-            #dce2e8
-          );
-
-        color: #7b8794;
-
-        font-size: 13px;
-        font-weight: 700;
-
-        text-align: center;
-      }
-
-
-      /* ==========================================================
-         COMMUNITY STORIES
-         ========================================================== */
-
-      .community-section {
-        background: #f5f7f9;
-      }
-
-      .community-card {
-        display: grid;
-        grid-template-columns: minmax(240px, .85fr) 1.15fr;
-
-        overflow: hidden;
-
-        border-radius: 18px;
-
-        background: #ffffff;
-
-        box-shadow:
-          0 12px 38px rgba(0,0,0,.08);
-      }
-
-      .community-image {
-        min-height: 330px;
-
-        background: #dfe5eb;
-      }
-
-      .community-image img {
-        display: block;
-
-        width: 100%;
-        height: 100%;
-        min-height: 330px;
-
-        object-fit: cover;
-      }
-
-      .community-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-
-        padding: 44px;
-      }
-
-      .community-content .vumc-button {
-        align-self: flex-start;
-
-        margin-top: 24px;
-      }
-
-
-      /* ==========================================================
-         WHO WE ARE
-         ========================================================== */
-
-      .who-grid {
-        display: grid;
-        grid-template-columns: 1.1fr .9fr;
-        gap: 44px;
-
-        align-items: center;
-      }
-
-      .who-image {
-        overflow: hidden;
-
-        min-height: 310px;
-
-        border-radius: 18px;
-
-        background: #e3e7eb;
-      }
-
-      .who-image img {
-        display: block;
-
-        width: 100%;
-        height: 100%;
-        min-height: 310px;
-
-        object-fit: cover;
-      }
-
-
-      /* ==========================================================
-         CUSTOM HOMEPAGE BOXES
-         ========================================================== */
-
-      .custom-section {
-        background: #0b2a52;
-      }
-
-      .custom-section .vumc-eyebrow {
-        color: #b9d6c3;
-      }
-
-      .custom-section h2 {
-        color: #ffffff;
-      }
-
-      .custom-grid {
-        display: grid;
-        grid-template-columns:
-          repeat(2, minmax(0, 1fr));
-
-        gap: 22px;
-
-        margin-top: 28px;
-      }
-
-      .custom-card {
-        overflow: hidden;
-
-        border-radius: 16px;
-
-        background: #ffffff;
-
-        box-shadow:
-          0 10px 28px rgba(0,0,0,.12);
-      }
-
-      .custom-card-image {
-        height: 220px;
-
-        overflow: hidden;
-
-        background: #e3e7eb;
-      }
-
-      .custom-card-image img {
-        display: block;
-
-        width: 100%;
-        height: 100%;
-
-        object-fit: cover;
-      }
-
-      .custom-card-body {
-        padding: 26px;
-      }
-
-      .custom-card h3 {
-        margin: 0 0 10px;
-
-        color: #0b2a52;
-
-        font-size: 23px;
-        line-height: 1.2;
-      }
-
-      .custom-card p {
-        margin: 0 0 20px;
-
-        color: #4c596b;
-      }
-
-      .preview-empty {
-        margin-top: 25px;
-
-        padding: 42px;
-
-        border:
-          2px dashed rgba(255,255,255,.25);
-
-        border-radius: 15px;
-
-        color: rgba(255,255,255,.75);
-
-        text-align: center;
-      }
-
-
-      /* ==========================================================
-         MOBILE PREVIEW
-         ========================================================== */
-
-      @media (max-width: 700px) {
-
-        .community-card,
-        .who-grid,
-        .custom-grid {
-          grid-template-columns: 1fr;
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VUMC Website Editor</title>
+
+<script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+
+<script>
+CMS.registerPreviewStyle(`
+:root{
+  --bg:#f7f4ef;
+  --surface:#ffffff;
+  --surface-soft:#f1ece4;
+  --text:#1f242c;
+  --muted:#5b6470;
+  --dark:#11161d;
+  --dark-soft:#171d25;
+  --accent:#bb8c3f;
+  --accent-soft:#e3c991;
+  --border:rgba(17,22,29,.10);
+  --shadow:0 18px 50px rgba(17,22,29,.12);
+  --radius-xl:28px;
+  --radius-lg:20px;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+
+.vumc-preview{
+  background:var(--bg);
+  min-height:100vh;
+}
+
+.container{
+  width:min(1120px,calc(100% - 48px));
+  margin:0 auto;
+}
+
+.section{
+  padding:72px 0;
+}
+
+.eyebrow{
+  margin-bottom:10px;
+  color:var(--accent);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+
+.section-title{
+  margin:0 0 14px;
+  font-size:clamp(32px,5vw,52px);
+  line-height:1.04;
+  letter-spacing:-.03em;
+}
+
+.section-copy{
+  margin:0;
+  color:var(--muted);
+  font-size:18px;
+  line-height:1.65;
+}
+
+.btn-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:26px;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:46px;
+  padding:12px 18px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:800;
+  text-decoration:none;
+}
+
+.btn-primary{
+  background:var(--accent);
+  color:#fff;
+}
+
+.btn-secondary{
+  border:1px solid rgba(255,255,255,.34);
+  background:rgba(255,255,255,.10);
+  color:#fff;
+}
+
+.btn-light{
+  background:#fff;
+  color:var(--dark);
+}
+
+.btn-dark{
+  background:var(--dark);
+  color:#fff;
+}
+
+
+/* =========================================================
+   MINI WEBSITE HEADER
+========================================================= */
+
+.preview-header{
+  position:relative;
+  z-index:20;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+}
+
+.preview-nav{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+
+.preview-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.preview-brand-mark{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:var(--dark);
+  color:#fff;
+  font-size:17px;
+  font-weight:900;
+}
+
+.preview-brand-text strong{
+  display:block;
+  font-size:15px;
+}
+
+.preview-brand-text span{
+  display:block;
+  margin-top:2px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.preview-links{
+  display:flex;
+  align-items:center;
+  gap:17px;
+  color:#333b45;
+  font-size:12px;
+  font-weight:700;
+}
+
+.preview-watch{
+  padding:9px 14px;
+  border-radius:999px;
+  background:var(--dark);
+  color:#fff;
+}
+
+
+/* =========================================================
+   REAL HOMEPAGE HERO
+========================================================= */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  min-height:640px;
+  display:flex;
+  align-items:center;
+  color:#fff;
+  background:var(--dark);
+}
+
+.hero-slideshow{
+  position:absolute;
+  inset:0;
+  z-index:0;
+}
+
+.hero-slide{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:0;
+  transform:scale(1.03);
+  transition:opacity 1.5s ease-in-out,transform 7s ease;
+}
+
+.hero-slide.active{
+  opacity:1;
+  transform:scale(1);
+}
+
+.hero-overlay{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:
+    linear-gradient(135deg,rgba(17,22,29,.86),rgba(17,22,29,.64)),
+    radial-gradient(circle at top right,rgba(187,140,63,.28),transparent 35%),
+    radial-gradient(circle at bottom left,rgba(255,255,255,.08),transparent 28%);
+}
+
+.hero > .container{
+  position:relative;
+  z-index:2;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(270px,.65fr);
+  gap:42px;
+  align-items:center;
+  padding:78px 0;
+}
+
+.hero-panel{
+  max-width:720px;
+}
+
+.hero-kicker{
+  margin-bottom:16px;
+  color:var(--accent-soft);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:0 0 14px;
+  max-width:760px;
+  font-size:clamp(46px,7vw,76px);
+  line-height:.97;
+  letter-spacing:-.045em;
+}
+
+.hero h2{
+  margin:0 0 20px;
+  max-width:680px;
+  color:rgba(255,255,255,.93);
+  font-size:clamp(22px,3vw,31px);
+  line-height:1.15;
+  font-weight:600;
+}
+
+.hero p{
+  margin:0;
+  max-width:690px;
+  color:rgba(255,255,255,.82);
+  font-size:17px;
+  line-height:1.7;
+}
+
+.hero-side{
+  display:grid;
+  gap:18px;
+}
+
+.glass-card{
+  padding:25px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:24px;
+  background:rgba(255,255,255,.10);
+  box-shadow:0 18px 40px rgba(0,0,0,.18);
+  backdrop-filter:blur(14px);
+}
+
+.glass-card h3{
+  margin:0 0 8px;
+  font-size:20px;
+}
+
+.glass-card p{
+  margin:0;
+  color:rgba(255,255,255,.76);
+  font-size:14px;
+  line-height:1.55;
+}
+
+.service-times{
+  display:grid;
+  gap:8px;
+  margin-top:17px;
+}
+
+.service-time{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.88);
+  font-size:13px;
+}
+
+.hero-image-note{
+  position:absolute;
+  right:16px;
+  bottom:15px;
+  z-index:5;
+  padding:7px 11px;
+  border-radius:999px;
+  background:rgba(0,0,0,.55);
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+}
+
+
+/* =========================================================
+   COMMUNITY STORIES — MATCHES CURRENT HOMEPAGE
+========================================================= */
+
+.community-stories-section{
+  padding:72px 0;
+  background:var(--bg);
+}
+
+.community-story-card{
+  position:relative;
+  min-height:430px;
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  align-items:stretch;
+  overflow:hidden;
+  isolation:isolate;
+  border:1px solid var(--border);
+  border-radius:var(--radius-xl);
+  background:
+    linear-gradient(135deg,rgba(17,22,29,.88),rgba(17,22,29,.48)),
+    radial-gradient(circle at top right,rgba(187,140,63,.28),transparent 34%),
+    url('/vumc-media/church-picnic.webp') center/cover no-repeat;
+  color:#fff;
+  box-shadow:var(--shadow);
+}
+
+.community-story-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:
+    radial-gradient(circle at bottom left,rgba(255,255,255,.10),transparent 30%),
+    linear-gradient(to top,rgba(0,0,0,.24),transparent 48%);
+}
+
+.community-story-content{
+  position:relative;
+  z-index:1;
+  max-width:760px;
+  padding:46px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.community-story-content h2{
+  margin:0 0 14px;
+  font-size:clamp(34px,5vw,56px);
+  line-height:1.02;
+  letter-spacing:-.03em;
+}
+
+.community-story-content p{
+  margin:0;
+  max-width:700px;
+  color:rgba(255,255,255,.84);
+  font-size:18px;
+  line-height:1.6;
+}
+
+.community-story-highlight{
+  position:relative;
+  z-index:1;
+  align-self:center;
+  margin:38px;
+  padding:28px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:24px;
+  background:rgba(255,255,255,.12);
+  box-shadow:0 18px 40px rgba(0,0,0,.22);
+  backdrop-filter:blur(12px);
+}
+
+.story-label{
+  display:inline-flex;
+  margin-bottom:14px;
+  padding:7px 12px;
+  border-radius:999px;
+  background:rgba(187,140,63,.95);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.community-story-highlight h3{
+  margin:0 0 10px;
+  font-size:24px;
+  line-height:1.18;
+}
+
+.community-story-highlight p{
+  margin:0;
+  color:rgba(255,255,255,.80);
+  font-size:15px;
+  line-height:1.55;
+}
+
+
+/* =========================================================
+   PROTECTED / AUTOMATED WEBSITE SECTIONS
+========================================================= */
+
+.automatic-section{
+  padding:58px 0;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+}
+
+.automatic-card{
+  padding:28px;
+  border:1px solid var(--border);
+  border-radius:22px;
+  background:var(--surface-soft);
+}
+
+.automatic-label{
+  display:inline-flex;
+  margin-bottom:10px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#e8e1d6;
+  color:#615b52;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.automatic-card h2{
+  margin:0 0 8px;
+  font-size:26px;
+}
+
+.automatic-card p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+
+/* =========================================================
+   WHO WE ARE — CURRENT HOMEPAGE STRUCTURE
+========================================================= */
+
+.two-column{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:26px;
+}
+
+.content-card{
+  padding:40px;
+  border:1px solid var(--border);
+  border-radius:var(--radius-xl);
+  background:#fff;
+  box-shadow:var(--shadow);
+}
+
+.event-card{
+  position:relative;
+  min-height:420px;
+  display:flex;
+  align-items:flex-end;
+  overflow:hidden;
+  border-radius:var(--radius-xl);
+  background:
+    linear-gradient(135deg,rgba(17,22,29,.82),rgba(17,22,29,.42)),
+    url('/vumc-media/atrium.webp') center/cover no-repeat;
+  color:#fff;
+  box-shadow:var(--shadow);
+}
+
+.event-content{
+  position:relative;
+  z-index:2;
+  padding:38px;
+}
+
+
+/* =========================================================
+   CUSTOM CMS BOXES
+========================================================= */
+
+.cms-custom-section{
+  padding:72px 0;
+  background:var(--surface-soft);
+}
+
+.cms-custom-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:24px;
+  margin-top:28px;
+}
+
+.cms-custom-card{
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:var(--radius-xl);
+  background:#fff;
+  box-shadow:var(--shadow);
+}
+
+.cms-custom-image{
+  height:240px;
+  background:#ded9d0;
+}
+
+.cms-custom-image img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.cms-custom-body{
+  padding:28px;
+}
+
+.cms-custom-body h3{
+  margin:0 0 10px;
+  font-size:25px;
+}
+
+.cms-custom-body p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.empty-custom{
+  margin-top:24px;
+  padding:30px;
+  border:2px dashed rgba(17,22,29,.15);
+  border-radius:20px;
+  color:var(--muted);
+  text-align:center;
+}
+
+
+/* =========================================================
+   RESPONSIVE PREVIEW
+========================================================= */
+
+@media(max-width:900px){
+  .preview-links{
+    display:none;
+  }
+
+  .hero-grid,
+  .community-story-card,
+  .two-column,
+  .cms-custom-grid{
+    grid-template-columns:1fr;
+  }
+
+  .hero-side{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .community-story-highlight{
+    margin:0 28px 32px;
+  }
+}
+
+@media(max-width:650px){
+  .container{
+    width:min(100% - 28px,1120px);
+  }
+
+  .preview-brand-text span{
+    display:none;
+  }
+
+  .hero{
+    min-height:0;
+  }
+
+  .hero-grid{
+    padding:54px 0;
+  }
+
+  .hero-side{
+    grid-template-columns:1fr;
+  }
+
+  .hero h1{
+    font-size:43px;
+  }
+
+  .community-story-content{
+    padding:32px 26px 24px;
+  }
+
+  .community-story-highlight{
+    margin:0 20px 24px;
+    padding:22px;
+  }
+
+  .content-card,
+  .event-content{
+    padding:28px;
+  }
+}
+`, {raw:true});
+
+
+/* =========================================================
+   HOMEPAGE PREVIEW
+========================================================= */
+
+const HomePreview=createClass({
+
+  render:function(){
+
+    const entry=this.props.entry;
+    const getAsset=this.props.getAsset;
+
+    const hero=entry.getIn(["data","hero"]) || {};
+    const stories=entry.getIn(["data","community_stories"]) || {};
+    const who=entry.getIn(["data","who_we_are"]) || {};
+    const customBoxes=entry.getIn(["data","custom_boxes"]) || [];
+
+    const defaultHeroImages=[
+      "/vumc-media/worship.webp",
+      "/vumc-media/Rooted-Youth-Ministry.webp",
+      "/vumc-media/candlelight.webp",
+      "/vumc-media/IMG_4011.webp",
+      "/vumc-media/praiseteam8.webp",
+      "/vumc-media/Sprouts.webp",
+      "/vumc-media/493610968_1091241349711985_6048390933452425157_n (1).webp"
+    ];
+
+    function assetURL(path){
+      if(!path) return "";
+
+      try{
+        const asset=getAsset(path);
+
+        if(asset && asset.url){
+          return asset.url;
         }
+      }catch(e){}
 
-        .vumc-section {
-          padding: 48px 22px;
+      return path;
+    }
+
+
+    /* =====================================================
+       HERO IMAGE LOGIC
+
+       No CMS images:
+       use current real homepage images.
+
+       CMS images added:
+       use those instead.
+    ===================================================== */
+
+    let selectedHeroImages=[];
+
+    if(Array.isArray(hero.images) && hero.images.length){
+      selectedHeroImages=hero.images
+        .filter(item=>item && item.image)
+        .map(item=>({
+          image:assetURL(item.image),
+          alt:item.alt || ""
+        }));
+    }
+
+    const usingDefaults=!selectedHeroImages.length;
+
+    const finalHeroImages=usingDefaults
+      ? defaultHeroImages.map(path=>({
+          image:path,
+          alt:"Versailles United Methodist Church"
+        }))
+      : selectedHeroImages;
+
+
+    const heroSlides=finalHeroImages.map(function(item,index){
+
+      return h("div",{
+        key:"hero-"+index,
+        className:
+          "hero-slide"+(index===0 ? " active" : ""),
+        style:{
+          backgroundImage:
+            'url("'+item.image+'")'
         }
+      });
 
-        .vumc-hero {
-          min-height: 500px;
-        }
-
-        .vumc-hero-content {
-          padding: 58px 24px;
-        }
-
-        .community-content {
-          padding: 30px;
-        }
-
-        .who-grid {
-          gap: 28px;
-        }
-      }
-    `, { raw: true });
+    });
 
 
-    /* ============================================================
-       HOMEPAGE PREVIEW COMPONENT
-       ============================================================ */
+    /* =====================================================
+       HERO
+    ===================================================== */
 
-    const HomePreview = createClass({
+    let heroElement=null;
 
-      render: function () {
+    if(hero.enabled!==false){
 
-        const entry = this.props.entry;
-        const getAsset = this.props.getAsset;
+      heroElement=h(
+        "section",
+        {className:"hero"},
 
-        const hero =
-          entry.getIn(['data', 'hero']) || {};
+        h(
+          "div",
+          {className:"hero-slideshow"},
+          ...heroSlides
+        ),
 
-        const stories =
-          entry.getIn(['data', 'community_stories']) || {};
+        h("div",{className:"hero-overlay"}),
 
-        const who =
-          entry.getIn(['data', 'who_we_are']) || {};
+        h(
+          "div",
+          {className:"container"},
 
-        const customBoxes =
-          entry.getIn(['data', 'custom_boxes']) || [];
-
-
-        /* --------------------------------------------------------
-           NORMALIZE LISTS
-           -------------------------------------------------------- */
-
-        const heroImages =
-          Array.isArray(hero.images)
-            ? hero.images
-            : [];
-
-        const boxes =
-          Array.isArray(customBoxes)
-            ? customBoxes
-            : [];
-
-        const visibleBoxes =
-          boxes.filter(function (box) {
-
-            return (
-              box &&
-              box.enabled !== false
-            );
-
-          });
-
-
-        /* --------------------------------------------------------
-           IMAGE RESOLVER
-           -------------------------------------------------------- */
-
-        function assetURL(path) {
-
-          if (!path) {
-            return '';
-          }
-
-          try {
-
-            const asset = getAsset(path);
-
-            if (!asset) {
-              return path;
-            }
-
-            if (asset.url) {
-              return asset.url;
-            }
-
-            return path;
-
-          } catch (error) {
-
-            return path;
-
-          }
-        }
-
-
-        /* ========================================================
-           HERO
-           ======================================================== */
-
-        let heroElement = null;
-
-        if (hero.enabled !== false) {
-
-          const firstHero =
-            heroImages.length > 0
-              ? heroImages[0]
-              : null;
-
-          const heroImageURL =
-            firstHero
-              ? assetURL(firstHero.image)
-              : '';
-
-          heroElement = h(
-            'section',
-            {
-              className: 'vumc-hero'
-            },
-
-            heroImageURL
-              ? h(
-                  'img',
-                  {
-                    className:
-                      'vumc-hero-image',
-
-                    src:
-                      heroImageURL,
-
-                    alt:
-                      firstHero.alt || ''
-                  }
-                )
-              : null,
+          h(
+            "div",
+            {className:"hero-grid"},
 
             h(
-              'div',
-              {
-                className:
-                  'vumc-hero-overlay'
-              }
-            ),
-
-            h(
-              'div',
-              {
-                className:
-                  'vumc-hero-content'
-              },
+              "div",
+              {className:"hero-panel"},
 
               h(
-                'div',
-                {
-                  className:
-                    'vumc-kicker'
-                },
-
-                'Versailles, Kentucky • In Person & Online'
+                "div",
+                {className:"hero-kicker"},
+                "Versailles, Kentucky • In Person & Online"
               ),
 
               h(
-                'h1',
+                "h1",
                 {},
-
                 hero.title ||
-                'Versailles United Methodist Church'
+                "Versailles United Methodist Church"
               ),
 
               h(
-                'h2',
+                "h2",
                 {},
-
-                hero.subtitle || ''
+                hero.subtitle ||
+                "A Welcoming Church in Versailles, Kentucky"
               ),
 
               h(
-                'p',
+                "p",
                 {},
-
-                hero.text || ''
+                hero.text ||
+                "We are a church in Versailles, Kentucky seeking to Love Like Jesus through worship, connection, service, and spiritual growth."
               ),
 
               h(
-                'div',
-                {
-                  className:
-                    'vumc-buttons'
-                },
+                "div",
+                {className:"btn-row"},
 
                 hero.primary_button_text
                   ? h(
-                      'span',
-                      {
-                        className:
-                          'vumc-button'
-                      },
-
+                      "span",
+                      {className:"btn btn-primary"},
                       hero.primary_button_text
                     )
                   : null,
 
                 hero.secondary_button_text
                   ? h(
-                      'span',
-                      {
-                        className:
-                          'vumc-button secondary'
-                      },
-
+                      "span",
+                      {className:"btn btn-secondary"},
                       hero.secondary_button_text
                     )
-                  : null
+                  : null,
+
+                h(
+                  "span",
+                  {className:"btn btn-secondary"},
+                  "Who We Are"
+                ),
+
+                h(
+                  "span",
+                  {className:"btn btn-light"},
+                  "Subscribe"
+                )
               )
             ),
 
             h(
-              'div',
-              {
-                className:
-                  'hero-count'
-              },
-
-              heroImages.length +
-              (
-                heroImages.length === 1
-                  ? ' hero image'
-                  : ' hero images'
-              )
-            )
-          );
-        }
-
-
-        /* ========================================================
-           COMMUNITY STORIES
-           ======================================================== */
-
-        let storiesElement = null;
-
-        if (stories.enabled !== false) {
-
-          const storyImageURL =
-            assetURL(stories.image);
-
-          storiesElement = h(
-            'section',
-            {
-              className:
-                'vumc-section community-section'
-            },
-
-            h(
-              'div',
-              {
-                className:
-                  'vumc-container'
-              },
+              "div",
+              {className:"hero-side"},
 
               h(
-                'div',
-                {
-                  className:
-                    'community-card'
-                },
+                "div",
+                {className:"glass-card worship-card"},
+
+                h("h3",{},"Sunday Worship"),
 
                 h(
-                  'div',
-                  {
-                    className:
-                      'community-image'
-                  },
-
-                  storyImageURL
-                    ? h(
-                        'img',
-                        {
-                          src:
-                            storyImageURL,
-
-                          alt:
-                            'Community Stories'
-                        }
-                      )
-                    : h(
-                        'div',
-                        {
-                          className:
-                            'image-placeholder'
-                        },
-
-                        'Community Stories Image'
-                      )
-                ),
-
-                h(
-                  'div',
-                  {
-                    className:
-                      'community-content'
-                  },
-
-                  h(
-                    'div',
-                    {
-                      className:
-                        'vumc-eyebrow'
-                    },
-
-                    stories.eyebrow ||
-                    'Community Stories'
-                  ),
-
-                  h(
-                    'h2',
-                    {},
-
-                    stories.title || ''
-                  ),
-
-                  h(
-                    'p',
-                    {},
-
-                    stories.text || ''
-                  ),
-
-                  stories.button_text
-                    ? h(
-                        'span',
-                        {
-                          className:
-                            'vumc-button'
-                        },
-
-                        stories.button_text
-                      )
-                    : null
-                )
-              )
-            )
-          );
-        }
-
-
-        /* ========================================================
-           WHO WE ARE
-           ======================================================== */
-
-        let whoElement = null;
-
-        if (who.enabled !== false) {
-
-          const whoImageURL =
-            assetURL(who.image);
-
-          whoElement = h(
-            'section',
-            {
-              className:
-                'vumc-section'
-            },
-
-            h(
-              'div',
-              {
-                className:
-                  'vumc-container who-grid'
-              },
-
-              h(
-                'div',
-                {},
-
-                h(
-                  'div',
-                  {
-                    className:
-                      'vumc-eyebrow'
-                  },
-
-                  who.eyebrow ||
-                  'Who We Are'
-                ),
-
-                h(
-                  'h2',
+                  "p",
                   {},
-
-                  who.title || ''
+                  "Worship schedule is automatically managed from the church calendar."
                 ),
 
                 h(
-                  'p',
-                  {},
+                  "div",
+                  {className:"service-times"},
 
-                  who.text || ''
+                  h(
+                    "div",
+                    {className:"service-time"},
+                    h("strong",{},"Traditional Worship"),
+                    h("span",{},"9:30 AM")
+                  ),
+
+                  h(
+                    "div",
+                    {className:"service-time"},
+                    h("strong",{},"Contemporary Worship"),
+                    h("span",{},"10:30 AM")
+                  )
                 )
               ),
 
               h(
-                'div',
-                {
-                  className:
-                    'who-image'
-                },
+                "div",
+                {className:"glass-card"},
 
-                whoImageURL
-                  ? h(
-                      'img',
-                      {
-                        src:
-                          whoImageURL,
+                h("h3",{},"Take Your Next Step"),
 
-                        alt:
-                          'Versailles United Methodist Church'
-                      }
-                    )
-                  : h(
-                      'div',
-                      {
-                        className:
-                          'image-placeholder'
-                      },
-
-                      'Who We Are Image'
-                    )
+                h(
+                  "p",
+                  {},
+                  "Join us in person, worship online, find your place to connect, or discover ways to serve in ministry and community."
+                )
               )
             )
-          );
-        }
+          )
+        ),
+
+        h(
+          "div",
+          {className:"hero-image-note"},
+
+          usingDefaults
+            ? "Using current website hero images"
+            : finalHeroImages.length +
+              " CMS hero image" +
+              (finalHeroImages.length===1 ? "" : "s")
+        )
+      );
+    }
 
 
-        /* ========================================================
-           CUSTOM BOXES
-           ======================================================== */
+    /* =====================================================
+       COMMUNITY STORIES
 
-        const customCards =
-          visibleBoxes.map(
-            function (box, index) {
+       Default is the real current background.
+       If CMS image is selected, it overrides it.
+    ===================================================== */
 
-              const imageURL =
-                assetURL(box.image);
+    let communityElement=null;
 
-              return h(
-                'article',
-                {
-                  className:
-                    'custom-card',
+    if(stories.enabled!==false){
 
-                  key:
-                    'box-' + index
-                },
+      const communityImage=
+        stories.image
+          ? assetURL(stories.image)
+          : "/vumc-media/church-picnic.webp";
 
-                h(
-                  'div',
-                  {
-                    className:
-                      'custom-card-image'
-                  },
+      communityElement=h(
+        "section",
+        {className:"community-stories-section"},
 
-                  imageURL
-                    ? h(
-                        'img',
-                        {
-                          src:
-                            imageURL,
-
-                          alt:
-                            box.alt || ''
-                        }
-                      )
-                    : h(
-                        'div',
-                        {
-                          className:
-                            'image-placeholder'
-                        },
-
-                        'Homepage Box Image'
-                      )
-                ),
-
-                h(
-                  'div',
-                  {
-                    className:
-                      'custom-card-body'
-                  },
-
-                  h(
-                    'h3',
-                    {},
-
-                    box.title ||
-                    'Homepage Box'
-                  ),
-
-                  box.text
-                    ? h(
-                        'p',
-                        {},
-
-                        box.text
-                      )
-                    : null,
-
-                  box.button_text
-                    ? h(
-                        'span',
-                        {
-                          className:
-                            'vumc-button'
-                        },
-
-                        box.button_text
-                      )
-                    : null
-                )
-              );
-            }
-          );
-
-
-        const customElement = h(
-          'section',
-          {
-            className:
-              'vumc-section custom-section'
-          },
+        h(
+          "div",
+          {className:"container"},
 
           h(
-            'div',
+            "div",
             {
-              className:
-                'vumc-container'
+              className:"community-story-card",
+              style:{
+                backgroundImage:
+                  "linear-gradient(135deg,rgba(17,22,29,.88),rgba(17,22,29,.48)),"+
+                  "radial-gradient(circle at top right,rgba(187,140,63,.28),transparent 34%),"+
+                  'url("'+communityImage+'")'
+              }
             },
 
             h(
-              'div',
-              {
-                className:
-                  'vumc-eyebrow'
-              },
+              "div",
+              {className:"community-story-content"},
 
-              'Homepage Features'
+              h(
+                "div",
+                {
+                  className:"eyebrow",
+                  style:{color:"var(--accent-soft)"}
+                },
+                stories.eyebrow ||
+                "Community Stories"
+              ),
+
+              h(
+                "h2",
+                {},
+                stories.title ||
+                "Real stories from life at VUMC."
+              ),
+
+              h(
+                "p",
+                {},
+                stories.text ||
+                "Stories from guests, members, and neighbors help show what it means to Love Like Jesus through worship, welcome, fellowship, service, and community in Versailles, Kentucky."
+              ),
+
+              h(
+                "div",
+                {className:"btn-row"},
+
+                h(
+                  "span",
+                  {className:"btn btn-primary"},
+                  stories.button_text ||
+                  "Read Community Stories"
+                ),
+
+                h(
+                  "span",
+                  {className:"btn btn-secondary"},
+                  "Tammy’s First Visit"
+                )
+              )
             ),
 
             h(
-              'h2',
-              {},
+              "div",
+              {className:"community-story-highlight"},
 
-              'Custom Homepage Boxes'
+              h(
+                "span",
+                {className:"story-label"},
+                "Featured Story"
+              ),
+
+              h(
+                "h3",
+                {},
+                "A First Visit That Became Fellowship"
+              ),
+
+              h(
+                "p",
+                {},
+                "Tammy visited worship, stayed for the church picnic, checked in on Facebook, and shared a reflection about feeling welcomed at Versailles UMC."
+              )
+            )
+          )
+        )
+      );
+    }
+
+
+    /* =====================================================
+       PROTECTED DYNAMIC SECTIONS
+
+       These are visible in the preview so the editor sees
+       their place in the page, but CMS cannot alter them.
+    ===================================================== */
+
+    const protectedSections=h(
+      "section",
+      {className:"automatic-section"},
+
+      h(
+        "div",
+        {className:"container"},
+
+        h(
+          "div",
+          {className:"automatic-card"},
+
+          h(
+            "span",
+            {className:"automatic-label"},
+            "Automatic Website Content"
+          ),
+
+          h(
+            "h2",
+            {},
+            "Livestream, latest worship & featured events"
+          ),
+
+          h(
+            "p",
+            {},
+            "These sections continue to populate automatically from the existing VUMC systems. They are shown here as protected content and are not changed by the homepage editor."
+          )
+        )
+      )
+    );
+
+
+    /* =====================================================
+       WHO WE ARE
+    ===================================================== */
+
+    let whoElement=null;
+
+    if(who.enabled!==false){
+
+      const whoImage=
+        who.image
+          ? assetURL(who.image)
+          : "/vumc-media/atrium.webp";
+
+      whoElement=h(
+        "section",
+        {
+          className:"section",
+          id:"who-we-are"
+        },
+
+        h(
+          "div",
+          {className:"container"},
+
+          h(
+            "div",
+            {className:"two-column"},
+
+            h(
+              "div",
+              {className:"content-card"},
+
+              h(
+                "div",
+                {className:"eyebrow"},
+                who.eyebrow ||
+                "Who We Are"
+              ),
+
+              h(
+                "h2",
+                {className:"section-title"},
+                who.title ||
+                "More than a church. A calling."
+              ),
+
+              h(
+                "p",
+                {className:"section-copy"},
+                who.text ||
+                "At Versailles United Methodist Church, we are striving to Love Like Jesus. That means loving God, loving people, and living out our faith in real, everyday ways."
+              ),
+
+              h(
+                "div",
+                {className:"btn-row"},
+
+                h(
+                  "span",
+                  {className:"btn btn-primary"},
+                  "What Does That Mean?"
+                )
+              )
             ),
 
-            customCards.length > 0
+            h(
+              "div",
+              {
+                className:"event-card",
+                style:{
+                  backgroundImage:
+                    "linear-gradient(135deg,rgba(17,22,29,.82),rgba(17,22,29,.42)),"+
+                    'url("'+whoImage+'")'
+                }
+              },
 
-              ? h(
-                  'div',
+              h(
+                "div",
+                {className:"event-content"},
+
+                h(
+                  "div",
                   {
-                    className:
-                      'custom-grid'
+                    className:"eyebrow",
+                    style:{color:"var(--accent-soft)"}
                   },
+                  "Love Like Jesus"
+                ),
 
-                  ...customCards
-                )
-
-              : h(
-                  'div',
+                h(
+                  "h2",
                   {
-                    className:
-                      'preview-empty'
+                    style:{
+                      margin:"0 0 12px",
+                      fontSize:"clamp(32px,5vw,52px)",
+                      lineHeight:"1.04"
+                    }
                   },
+                  "Our mission, our witness, and our prayer."
+                ),
 
-                  'Add a homepage box in the editor to preview it here.'
+                h(
+                  "p",
+                  {
+                    style:{
+                      margin:"0",
+                      color:"rgba(255,255,255,.84)",
+                      fontSize:"18px"
+                    }
+                  },
+                  "Learn how this calling shapes the way we worship, welcome, serve, and grow together."
+                ),
+
+                h(
+                  "div",
+                  {className:"btn-row"},
+
+                  h(
+                    "span",
+                    {className:"btn btn-secondary"},
+                    "Learn More"
+                  )
                 )
+              )
+            )
           )
-        );
+        )
+      );
+    }
 
 
-        /* ========================================================
-           COMPLETE HOMEPAGE PREVIEW
-           ======================================================== */
+    /* =====================================================
+       CUSTOM HOMEPAGE BOXES
+    ===================================================== */
 
-        return h(
-          'main',
-          {
-            className:
-              'vumc-preview'
-          },
+    const boxes=
+      Array.isArray(customBoxes)
+        ? customBoxes.filter(box=>
+            box && box.enabled!==false
+          )
+        : [];
 
-          heroElement,
-          storiesElement,
-          whoElement,
-          customElement
-        );
-      }
+    const boxCards=boxes.map(function(box,index){
+
+      const image=box.image
+        ? assetURL(box.image)
+        : "";
+
+      return h(
+        "article",
+        {
+          className:"cms-custom-card",
+          key:"box-"+index
+        },
+
+        image
+          ? h(
+              "div",
+              {className:"cms-custom-image"},
+              h("img",{
+                src:image,
+                alt:box.alt || ""
+              })
+            )
+          : null,
+
+        h(
+          "div",
+          {className:"cms-custom-body"},
+
+          h(
+            "h3",
+            {},
+            box.title || "Homepage Feature"
+          ),
+
+          box.text
+            ? h("p",{},box.text)
+            : null,
+
+          box.button_text
+            ? h(
+                "div",
+                {className:"btn-row"},
+
+                h(
+                  "span",
+                  {className:"btn btn-dark"},
+                  box.button_text
+                )
+              )
+            : null
+        )
+      );
     });
 
 
-    /* ============================================================
-       REGISTER HOMEPAGE FILE PREVIEW
+    const customElement=h(
+      "section",
+      {className:"cms-custom-section"},
 
-       "home" matches:
-       collections > homepage > files > name: home
-       ============================================================ */
+      h(
+        "div",
+        {className:"container"},
 
-    CMS.registerPreviewTemplate(
-      'home',
-      HomePreview
+        h(
+          "div",
+          {className:"eyebrow"},
+          "Homepage Features"
+        ),
+
+        h(
+          "h2",
+          {className:"section-title"},
+          "Custom Homepage Boxes"
+        ),
+
+        boxCards.length
+          ? h(
+              "div",
+              {className:"cms-custom-grid"},
+              ...boxCards
+            )
+          : h(
+              "div",
+              {className:"empty-custom"},
+              "No custom homepage boxes have been added."
+            )
+      )
     );
 
-  </script>
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    const header=h(
+      "header",
+      {className:"preview-header"},
+
+      h(
+        "div",
+        {className:"container preview-nav"},
+
+        h(
+          "div",
+          {className:"preview-brand"},
+
+          h(
+            "div",
+            {className:"preview-brand-mark"},
+            "V"
+          ),
+
+          h(
+            "div",
+            {className:"preview-brand-text"},
+
+            h(
+              "strong",
+              {},
+              "Versailles UMC"
+            ),
+
+            h(
+              "span",
+              {},
+              "Love Like Jesus"
+            )
+          )
+        ),
+
+        h(
+          "div",
+          {className:"preview-links"},
+
+          h("span",{},"Home"),
+          h("span",{},"Watch"),
+          h("span",{},"Connect"),
+          h("span",{},"Media"),
+          h("span",{},"Events"),
+          h("span",{},"Give"),
+
+          h(
+            "span",
+            {className:"preview-watch"},
+            "Watch Live"
+          )
+        )
+      )
+    );
+
+
+    return h(
+      "main",
+      {className:"vumc-preview"},
+
+      header,
+      heroElement,
+      communityElement,
+      protectedSections,
+      whoElement,
+      customElement
+    );
+  }
+});
+
+
+CMS.registerPreviewTemplate(
+  "home",
+  HomePreview
+);
+</script>
 </head>
 
 <body></body>
