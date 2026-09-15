@@ -31,10 +31,22 @@ collections:
                 widget: "boolean"
                 default: true
 
-              - label: "Hero Image"
-                name: "image"
-                widget: "image"
-                required: false
+              - label: "Hero Images"
+                name: "images"
+                widget: "list"
+                collapsed: false
+                summary: "{{fields.image}}"
+                label_singular: "Hero Image"
+                fields:
+                  - label: "Image"
+                    name: "image"
+                    widget: "image"
+
+                  - label: "Image Description"
+                    name: "alt"
+                    widget: "string"
+                    required: false
+                    hint: "Briefly describe the image for accessibility."
 
               - label: "Title"
                 name: "title"
@@ -63,7 +75,6 @@ collections:
               - label: "Secondary Button Link"
                 name: "secondary_button_link"
                 widget: "string"
-
 
           # =========================================================
           # COMMUNITY STORIES
@@ -103,7 +114,6 @@ collections:
                 name: "button_link"
                 widget: "string"
 
-
           # =========================================================
           # WHO WE ARE
           # =========================================================
@@ -134,7 +144,6 @@ collections:
                 name: "text"
                 widget: "text"
 
-
           # =========================================================
           # CUSTOM HOMEPAGE BOXES
           # =========================================================
@@ -143,6 +152,7 @@ collections:
             widget: "list"
             collapsed: false
             summary: "{{fields.title}}"
+            label_singular: "Homepage Box"
             add_to_top: true
 
             fields:
@@ -155,6 +165,12 @@ collections:
                 name: "image"
                 widget: "image"
                 required: false
+
+              - label: "Image Description"
+                name: "alt"
+                widget: "string"
+                required: false
+                hint: "Briefly describe the image for accessibility."
 
               - label: "Heading"
                 name: "title"
