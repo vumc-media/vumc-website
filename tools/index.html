@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="en">
 
@@ -27,45 +28,112 @@
 
     .auth-card {
       width: min(470px, 100%);
-      padding: 30px;
-      border: 1px solid #d8e2ea;
-      border-radius: 18px;
-      background: #ffffff;
-      box-shadow: 0 18px 45px rgba(23, 50, 77, 0.12);
+      padding: 32px;
+      border: 0;
+      border-radius: 20px;
+      background:
+        linear-gradient(
+          135deg,
+          #073b66 0%,
+          #075f9c 55%,
+          #087fc4 100%
+        );
+      box-shadow:
+        0 22px 55px rgba(7, 59, 102, 0.30);
+      color: #ffffff;
     }
 
     .auth-card h2 {
       margin-bottom: 8px;
-      color: #17324d;
+      color: #ffffff;
     }
 
     .auth-card p {
-      color: #687b8f;
+      color: rgba(255, 255, 255, 0.90);
       line-height: 1.55;
+    }
+
+    .auth-card .eyebrow {
+      color: #ffffff;
+      opacity: 0.82;
     }
 
     .auth-card label {
       display: grid;
       gap: 8px;
-      margin-top: 18px;
-      color: #29465f;
-      font-weight: 700;
+      margin-top: 20px;
+      color: #ffffff;
+      font-weight: 800;
     }
 
     .auth-card input {
       width: 100%;
-      padding: 13px 14px;
-      border: 1px solid #d8e2ea;
+      padding: 14px 14px;
+      border: 2px solid rgba(255, 255, 255, 0.60);
       border-radius: 10px;
+      background: #ffffff;
+      color: #17324d;
       font: inherit;
       box-sizing: border-box;
     }
 
+    .auth-card input::placeholder {
+      color: #8293a2;
+    }
+
     .auth-card input:focus {
       outline: none;
-      border-color: #1f5f8b;
-      box-shadow: 0 0 0 4px rgba(31, 95, 139, 0.1);
+      border-color: #ffffff;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.20);
     }
+
+
+    /* ==================================================
+       PASSKEY SHOW / HIDE
+    ================================================== */
+
+    .passkey-field {
+      position: relative;
+      width: 100%;
+    }
+
+    .passkey-field input {
+      padding-right: 54px;
+    }
+
+    .passkey-toggle {
+      position: absolute;
+      top: 50%;
+      right: 7px;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: 0;
+      border-radius: 8px;
+      color: #29465f;
+      background: transparent;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .passkey-toggle:hover {
+      background: #e5eef4;
+    }
+
+    .passkey-toggle:focus-visible {
+      outline: 2px solid #075f9c;
+      outline-offset: 1px;
+    }
+
+
+    /* ==================================================
+       AUTH BUTTONS
+    ================================================== */
 
     .auth-button,
     .logout-button {
@@ -79,18 +147,27 @@
     .auth-button {
       width: 100%;
       margin-top: 20px;
-      padding: 13px 16px;
-      color: #ffffff;
-      background: #1f5f8b;
+      padding: 14px 16px;
+      color: #075f9c;
+      background: #ffffff;
+      box-shadow: 0 7px 18px rgba(0, 0, 0, 0.15);
+      transition:
+        transform 0.15s ease,
+        background 0.15s ease,
+        box-shadow 0.15s ease;
     }
 
     .auth-button:hover {
-      background: #15486d;
+      color: #073b66;
+      background: #edf6fb;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
     }
 
     .auth-button:disabled {
       cursor: wait;
       opacity: 0.65;
+      transform: none;
     }
 
     .logout-button {
@@ -104,7 +181,7 @@
       padding: 12px;
       border-radius: 10px;
       color: #17324d;
-      background: #edf4f8;
+      background: #ffffff;
     }
 
     .auth-message.error {
@@ -268,6 +345,11 @@
 
     @media (max-width: 700px) {
 
+      .auth-card {
+        padding: 26px 22px;
+        border-radius: 16px;
+      }
+
       .topbar-actions {
         gap: 7px;
       }
@@ -364,13 +446,27 @@
 
           Staff Passkey
 
-          <input
-            id="passkeyInput"
-            type="password"
-            autocomplete="current-password"
-            placeholder="Enter staff passkey"
-            required
-          />
+          <div class="passkey-field">
+
+            <input
+              id="passkeyInput"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Enter staff passkey"
+              required
+            />
+
+            <button
+              id="togglePasskey"
+              class="passkey-toggle"
+              type="button"
+              aria-label="Show passkey"
+              title="Show passkey"
+            >
+              👁
+            </button>
+
+          </div>
 
         </label>
 
@@ -437,7 +533,7 @@
 
       <!-- ==================================================
            COMMUNICATIONS HUB
-      =================================================== -->
+      ================================================== -->
 
       <a
         id="communicationsLink"
@@ -467,7 +563,7 @@
 
       <!-- ==================================================
            WEEKLY FEED ADMIN
-      =================================================== -->
+      ================================================== -->
 
       <a
         class="tool-card weekly"
@@ -498,7 +594,7 @@
 
       <!-- ==================================================
            ATRIUM SLIDE MANAGER
-      =================================================== -->
+      ================================================== -->
 
       <a
         class="tool-card atrium"
@@ -529,7 +625,7 @@
 
       <!-- ==================================================
            WEBSITE EDITOR
-      =================================================== -->
+      ================================================== -->
 
       <a
         class="tool-card website"
@@ -558,7 +654,7 @@
 
       <!-- ==================================================
            NEWS & NOTES
-      =================================================== -->
+      ================================================== -->
 
       <a
         class="tool-card disabled"
@@ -587,7 +683,7 @@
 
       <!-- ==================================================
            CHURCH FAMILY CONNECTIONS
-      =================================================== -->
+      ================================================== -->
 
       <a
         class="tool-card disabled"
@@ -616,7 +712,7 @@
 
       <!-- ==================================================
            KIDS CHECK-IN
-      =================================================== -->
+      ================================================== -->
 
       <a
         class="tool-card disabled"
@@ -645,7 +741,7 @@
 
       <!-- ==================================================
            ACADEMY TOOLS
-      =================================================== -->
+      ================================================== -->
 
       <a
         class="tool-card disabled"
@@ -674,7 +770,7 @@
 
       <!-- ==================================================
            MAINTENANCE
-      =================================================== -->
+      ================================================== -->
 
       <a
         class="tool-card disabled"
@@ -703,7 +799,7 @@
 
       <!-- ==================================================
            STAFF RESOURCES
-      =================================================== -->
+      ================================================== -->
 
       <a
         class="tool-card disabled"
@@ -732,13 +828,40 @@
     </section>
 
 
-    <!-- SECURITY NOTE -->
-
     <p class="security-note">
       Access to this dashboard requires the VUMC staff passkey.
     </p>
 
   </main>
+
+
+  <!-- ==================================================
+       PASSKEY VISIBILITY
+  ================================================== -->
+
+  <script>
+    const passkeyInput = document.getElementById("passkeyInput");
+    const togglePasskey = document.getElementById("togglePasskey");
+
+    togglePasskey.addEventListener("click", function () {
+      const isHidden = passkeyInput.type === "password";
+
+      passkeyInput.type = isHidden ? "text" : "password";
+
+      togglePasskey.textContent =
+        isHidden ? "🙈" : "👁";
+
+      togglePasskey.setAttribute(
+        "aria-label",
+        isHidden ? "Hide passkey" : "Show passkey"
+      );
+
+      togglePasskey.title =
+        isHidden ? "Hide passkey" : "Show passkey";
+
+      passkeyInput.focus();
+    });
+  </script>
 
 
   <!-- ==================================================
@@ -750,3 +873,4 @@
 </body>
 
 </html>
+```
