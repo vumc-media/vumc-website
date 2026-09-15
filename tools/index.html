@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -120,19 +121,34 @@
   </style>
 </head>
 
+
 <body>
+
+  <!-- ==================================================
+       HEADER
+  =================================================== -->
+
   <header class="topbar">
+
     <div>
-      <p class="eyebrow">Versailles United Methodist Church</p>
+      <p class="eyebrow">
+        Versailles United Methodist Church
+      </p>
+
       <h1>Staff Tools</h1>
     </div>
 
+
     <div class="topbar-actions">
+
       <span
         id="signedInUser"
         class="signed-in-user"
         hidden
-      >Authorized staff</span>
+      >
+        Authorized staff
+      </span>
+
 
       <button
         id="logoutButton"
@@ -143,22 +159,47 @@
         Sign out
       </button>
 
-      <span class="badge">Internal</span>
+
+      <span class="badge">
+        Internal
+      </span>
+
     </div>
+
   </header>
 
-  <main id="authScreen" class="auth-screen">
-    <section class="auth-card">
-      <p class="eyebrow">Authorized staff only</p>
 
-      <h2>Enter Staff Tools</h2>
+
+  <!-- ==================================================
+       LOGIN SCREEN
+  =================================================== -->
+
+  <main
+    id="authScreen"
+    class="auth-screen"
+  >
+
+    <section class="auth-card">
+
+      <p class="eyebrow">
+        Authorized staff only
+      </p>
+
+
+      <h2>
+        Enter Staff Tools
+      </h2>
+
 
       <p>
         Enter the shared staff passkey to continue.
       </p>
 
+
       <form id="loginForm">
+
         <label>
+
           Staff Passkey
 
           <input
@@ -168,7 +209,9 @@
             placeholder="Enter staff passkey"
             required
           />
+
         </label>
+
 
         <button
           id="loginButton"
@@ -177,90 +220,342 @@
         >
           Enter Staff Tools
         </button>
+
       </form>
+
 
       <div
         id="authMessage"
         class="auth-message"
         hidden
       ></div>
+
     </section>
+
   </main>
 
-  <main id="staffPortal" class="shell" hidden>
-    <section class="intro">
-      <p class="eyebrow">Church staff portal</p>
 
-      <h2>Choose a tool</h2>
+
+  <!-- ==================================================
+       STAFF PORTAL
+  =================================================== -->
+
+  <main
+    id="staffPortal"
+    class="shell"
+    hidden
+  >
+
+
+    <!-- INTRO -->
+
+    <section class="intro">
+
+      <p class="eyebrow">
+        Church staff portal
+      </p>
+
+
+      <h2>
+        Choose a tool
+      </h2>
+
 
       <p>
-        Use this page to access church-owned administrative and ministry tools.
+        Use this page to access church-owned administrative
+        and ministry tools.
       </p>
+
     </section>
 
-    <section class="grid" aria-label="Staff tools">
-      <a id="communicationsLink" class="tool-card" href="./communications/">
-        <span class="icon">📣</span>
-        <h3>Communications Hub</h3>
-        <p>Create announcements for email and the church Facebook Page.</p>
-        <span class="action">Open tool →</span>
+
+
+    <!-- ==================================================
+         TOOL GRID
+    =================================================== -->
+
+    <section
+      class="grid"
+      aria-label="Staff tools"
+    >
+
+
+      <!-- COMMUNICATIONS HUB -->
+
+      <a
+        id="communicationsLink"
+        class="tool-card"
+        href="./communications/"
+      >
+
+        <span class="icon">
+          📣
+        </span>
+
+        <h3>
+          Communications Hub
+        </h3>
+
+        <p>
+          Create announcements for email and the church
+          Facebook Page.
+        </p>
+
+        <span class="action">
+          Open tool →
+        </span>
+
       </a>
 
-      <a class="tool-card" href="/admin/">
-        <span class="icon">🌐</span>
-        <h3>Website Editor</h3>
-        <p>Open the Sveltia CMS editor for approved website content.</p>
-        <span class="action">Open editor →</span>
+
+
+      <!-- ATRIUM SLIDE MANAGER -->
+
+      <a
+        class="tool-card"
+        href="https://canvaslides.netlify.app/manager"
+        target="_blank"
+        rel="noopener"
+      >
+
+        <span class="icon">
+          🖥️
+        </span>
+
+        <h3>
+          Atrium Slide Manager
+        </h3>
+
+        <p>
+          Upload, replace, hide, show, and remove slides
+          from the Atrium display.
+        </p>
+
+        <span class="action">
+          Manage slides →
+        </span>
+
       </a>
 
-      <a class="tool-card disabled" href="#" aria-disabled="true">
-        <span class="icon">📰</span>
-        <h3>News & Notes</h3>
-        <p>Manage monthly newsletter files and the public archive.</p>
-        <span class="action">Coming soon</span>
+
+
+      <!-- WEBSITE EDITOR -->
+
+      <a
+        class="tool-card"
+        href="/admin/"
+      >
+
+        <span class="icon">
+          🌐
+        </span>
+
+        <h3>
+          Website Editor
+        </h3>
+
+        <p>
+          Open the Sveltia CMS editor for approved website
+          content.
+        </p>
+
+        <span class="action">
+          Open editor →
+        </span>
+
       </a>
 
-      <a class="tool-card disabled" href="#" aria-disabled="true">
-        <span class="icon">👨‍👩‍👧‍👦</span>
-        <h3>Church Family Connections</h3>
-        <p>Manage care, connection, and follow-up resources.</p>
-        <span class="action">Coming soon</span>
+
+
+      <!-- NEWS & NOTES -->
+
+      <a
+        class="tool-card disabled"
+        href="#"
+        aria-disabled="true"
+      >
+
+        <span class="icon">
+          📰
+        </span>
+
+        <h3>
+          News & Notes
+        </h3>
+
+        <p>
+          Manage monthly newsletter files and the public archive.
+        </p>
+
+        <span class="action">
+          Coming soon
+        </span>
+
       </a>
 
-      <a class="tool-card disabled" href="#" aria-disabled="true">
-        <span class="icon">✅</span>
-        <h3>Kids Check-In Admin</h3>
-        <p>Open check-in administration and attendance tools.</p>
-        <span class="action">Coming soon</span>
+
+
+      <!-- CHURCH FAMILY CONNECTIONS -->
+
+      <a
+        class="tool-card disabled"
+        href="#"
+        aria-disabled="true"
+      >
+
+        <span class="icon">
+          👨‍👩‍👧‍👦
+        </span>
+
+        <h3>
+          Church Family Connections
+        </h3>
+
+        <p>
+          Manage care, connection, and follow-up resources.
+        </p>
+
+        <span class="action">
+          Coming soon
+        </span>
+
       </a>
 
-      <a class="tool-card disabled" href="#" aria-disabled="true">
-        <span class="icon">🏫</span>
-        <h3>Academy Tools</h3>
-        <p>Access teacher workspace, menus, forms, and resources.</p>
-        <span class="action">Coming soon</span>
+
+
+      <!-- KIDS CHECK-IN -->
+
+      <a
+        class="tool-card disabled"
+        href="#"
+        aria-disabled="true"
+      >
+
+        <span class="icon">
+          ✅
+        </span>
+
+        <h3>
+          Kids Check-In Admin
+        </h3>
+
+        <p>
+          Open check-in administration and attendance tools.
+        </p>
+
+        <span class="action">
+          Coming soon
+        </span>
+
       </a>
 
-      <a class="tool-card disabled" href="#" aria-disabled="true">
-        <span class="icon">🛠️</span>
-        <h3>Maintenance Requests</h3>
-        <p>Submit and review church facility maintenance requests.</p>
-        <span class="action">Coming soon</span>
+
+
+      <!-- ACADEMY TOOLS -->
+
+      <a
+        class="tool-card disabled"
+        href="#"
+        aria-disabled="true"
+      >
+
+        <span class="icon">
+          🏫
+        </span>
+
+        <h3>
+          Academy Tools
+        </h3>
+
+        <p>
+          Access teacher workspace, menus, forms, and resources.
+        </p>
+
+        <span class="action">
+          Coming soon
+        </span>
+
       </a>
 
-      <a class="tool-card disabled" href="#" aria-disabled="true">
-        <span class="icon">📁</span>
-        <h3>Staff Resources</h3>
-        <p>Store forms, policies, templates, and internal documents.</p>
-        <span class="action">Coming soon</span>
+
+
+      <!-- MAINTENANCE -->
+
+      <a
+        class="tool-card disabled"
+        href="#"
+        aria-disabled="true"
+      >
+
+        <span class="icon">
+          🛠️
+        </span>
+
+        <h3>
+          Maintenance Requests
+        </h3>
+
+        <p>
+          Submit and review church facility maintenance requests.
+        </p>
+
+        <span class="action">
+          Coming soon
+        </span>
+
       </a>
+
+
+
+      <!-- STAFF RESOURCES -->
+
+      <a
+        class="tool-card disabled"
+        href="#"
+        aria-disabled="true"
+      >
+
+        <span class="icon">
+          📁
+        </span>
+
+        <h3>
+          Staff Resources
+        </h3>
+
+        <p>
+          Store forms, policies, templates, and internal documents.
+        </p>
+
+        <span class="action">
+          Coming soon
+        </span>
+
+      </a>
+
+
     </section>
+
+
+
+    <!-- SECURITY NOTE -->
 
     <p class="security-note">
       Access to this dashboard requires the VUMC staff passkey.
     </p>
+
+
   </main>
 
+
+
+  <!-- ==================================================
+       APP
+  =================================================== -->
+
   <script src="./app.js"></script>
+
+
 </body>
+
 </html>
