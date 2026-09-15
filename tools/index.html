@@ -14,6 +14,10 @@
       display: none !important;
     }
 
+    /* ==================================================
+       AUTHENTICATION
+    ================================================== */
+
     .auth-screen {
       min-height: calc(100vh - 110px);
       display: grid;
@@ -118,16 +122,133 @@
       color: #687b8f;
       font-size: 0.86rem;
     }
+
+    /* ==================================================
+       TOOL CARDS
+    ================================================== */
+
+    .tool-card {
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
+    }
+
+    .tool-card:not(.disabled):hover {
+      transform: translateY(-4px);
+    }
+
+    /* COMMUNICATIONS - BLUE */
+
+    .tool-card.communications {
+      background: linear-gradient(145deg, #eef7fc, #ffffff);
+      border: 2px solid #8bc4e5;
+      box-shadow: 0 8px 22px rgba(31, 95, 139, 0.10);
+    }
+
+    .tool-card.communications .icon {
+      background: #d9eef9;
+    }
+
+    .tool-card.communications h3,
+    .tool-card.communications .action {
+      color: #155b86;
+    }
+
+    .tool-card.communications:hover {
+      border-color: #1f7daf;
+      box-shadow: 0 12px 28px rgba(31, 95, 139, 0.18);
+    }
+
+    /* WEEKLY FEED - GREEN */
+
+    .tool-card.weekly {
+      background: linear-gradient(145deg, #effaf3, #ffffff);
+      border: 2px solid #91d3a5;
+      box-shadow: 0 8px 22px rgba(44, 122, 72, 0.10);
+    }
+
+    .tool-card.weekly .icon {
+      background: #dcf3e3;
+    }
+
+    .tool-card.weekly h3,
+    .tool-card.weekly .action {
+      color: #267346;
+    }
+
+    .tool-card.weekly:hover {
+      border-color: #3b9b5d;
+      box-shadow: 0 12px 28px rgba(44, 122, 72, 0.18);
+    }
+
+    /* ATRIUM - PURPLE */
+
+    .tool-card.atrium {
+      background: linear-gradient(145deg, #f5f0fb, #ffffff);
+      border: 2px solid #bba1db;
+      box-shadow: 0 8px 22px rgba(100, 65, 145, 0.10);
+    }
+
+    .tool-card.atrium .icon {
+      background: #e9def6;
+    }
+
+    .tool-card.atrium h3,
+    .tool-card.atrium .action {
+      color: #674393;
+    }
+
+    .tool-card.atrium:hover {
+      border-color: #8057ae;
+      box-shadow: 0 12px 28px rgba(100, 65, 145, 0.18);
+    }
+
+    /* WEBSITE EDITOR - GOLD */
+
+    .tool-card.website {
+      background: linear-gradient(145deg, #fff8e8, #ffffff);
+      border: 2px solid #e2bd67;
+      box-shadow: 0 8px 22px rgba(159, 111, 20, 0.10);
+    }
+
+    .tool-card.website .icon {
+      background: #f9e9bd;
+    }
+
+    .tool-card.website h3,
+    .tool-card.website .action {
+      color: #916510;
+    }
+
+    .tool-card.website:hover {
+      border-color: #bd8a27;
+      box-shadow: 0 12px 28px rgba(159, 111, 20, 0.18);
+    }
+
+    /* COMING SOON */
+
+    .tool-card.disabled {
+      background: #f6f8fa;
+      border: 1px solid #dfe5ea;
+      opacity: 0.62;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
+  <!-- ==================================================
+       HEADER
+  ================================================== -->
 
   <header class="topbar">
+
     <div>
-      <p class="eyebrow">Versailles United Methodist Church</p>
+      <p class="eyebrow">
+        Versailles United Methodist Church
+      </p>
+
       <h1>Staff Tools</h1>
     </div>
 
@@ -155,10 +276,13 @@
       </span>
 
     </div>
+
   </header>
 
 
-  <!-- LOGIN SCREEN -->
+  <!-- ==================================================
+       LOGIN SCREEN
+  ================================================== -->
 
   <main
     id="authScreen"
@@ -214,7 +338,9 @@
   </main>
 
 
-  <!-- STAFF PORTAL -->
+  <!-- ==================================================
+       STAFF PORTAL
+  ================================================== -->
 
   <main
     id="staffPortal"
@@ -240,7 +366,9 @@
     </section>
 
 
-    <!-- TOOL GRID -->
+    <!-- ==================================================
+         TOOL GRID
+    ================================================== -->
 
     <section
       class="grid"
@@ -252,11 +380,13 @@
 
       <a
         id="communicationsLink"
-        class="tool-card"
+        class="tool-card communications"
         href="./communications/"
       >
 
-        <span class="icon">📣</span>
+        <span class="icon">
+          📣
+        </span>
 
         <h3>
           Communications Hub
@@ -276,13 +406,15 @@
       <!-- WEEKLY FEED ADMIN -->
 
       <a
-        class="tool-card"
+        class="tool-card weekly"
         href="https://weekly.versaillesumc.org/admin"
         target="_blank"
         rel="noopener"
       >
 
-        <span class="icon">📅</span>
+        <span class="icon">
+          📅
+        </span>
 
         <h3>
           Weekly Feed Admin
@@ -303,13 +435,15 @@
       <!-- ATRIUM SLIDE MANAGER -->
 
       <a
-        class="tool-card"
+        class="tool-card atrium"
         href="https://canvaslides.netlify.app/manager"
         target="_blank"
         rel="noopener"
       >
 
-        <span class="icon">🖥️</span>
+        <span class="icon">
+          🖥️
+        </span>
 
         <h3>
           Atrium Slide Manager
@@ -330,11 +464,13 @@
       <!-- WEBSITE EDITOR -->
 
       <a
-        class="tool-card"
+        class="tool-card website"
         href="/admin/"
       >
 
-        <span class="icon">🌐</span>
+        <span class="icon">
+          🌐
+        </span>
 
         <h3>
           Website Editor
@@ -359,7 +495,9 @@
         aria-disabled="true"
       >
 
-        <span class="icon">📰</span>
+        <span class="icon">
+          📰
+        </span>
 
         <h3>
           News & Notes
@@ -384,7 +522,9 @@
         aria-disabled="true"
       >
 
-        <span class="icon">👨‍👩‍👧‍👦</span>
+        <span class="icon">
+          👨‍👩‍👧‍👦
+        </span>
 
         <h3>
           Church Family Connections
@@ -409,7 +549,9 @@
         aria-disabled="true"
       >
 
-        <span class="icon">✅</span>
+        <span class="icon">
+          ✅
+        </span>
 
         <h3>
           Kids Check-In Admin
@@ -434,7 +576,9 @@
         aria-disabled="true"
       >
 
-        <span class="icon">🏫</span>
+        <span class="icon">
+          🏫
+        </span>
 
         <h3>
           Academy Tools
@@ -459,7 +603,9 @@
         aria-disabled="true"
       >
 
-        <span class="icon">🛠️</span>
+        <span class="icon">
+          🛠️
+        </span>
 
         <h3>
           Maintenance Requests
@@ -484,7 +630,9 @@
         aria-disabled="true"
       >
 
-        <span class="icon">📁</span>
+        <span class="icon">
+          📁
+        </span>
 
         <h3>
           Staff Resources
@@ -510,7 +658,9 @@
   </main>
 
 
-  <!-- APP -->
+  <!-- ==================================================
+       APP
+  ================================================== -->
 
   <script src="./app.js"></script>
 
