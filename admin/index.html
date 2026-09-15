@@ -1,100 +1,144 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>VUMC Website Editor</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
 
   <script>
-CMS.registerPreviewStyle(`      * {
+    /* ============================================================
+       VUMC HOMEPAGE PREVIEW STYLES
+       ============================================================ */
+
+    CMS.registerPreviewStyle(`
+      * {
         box-sizing: border-box;
       }
 
+      html,
       body {
         margin: 0;
-        background: #fff;
+        padding: 0;
+        background: #ffffff;
         color: #172033;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Arial,
+          Helvetica,
+          sans-serif;
       }
 
       .vumc-preview {
+        width: 100%;
         min-height: 100vh;
-        background: #fff;
+        margin: 0;
+        background: #ffffff;
       }
 
-      /* HERO */
+
+      /* ==========================================================
+         HERO
+         ========================================================== */
 
       .vumc-hero {
         position: relative;
-        min-height: 540px;
+        min-height: 520px;
         display: flex;
         align-items: center;
         overflow: hidden;
-        background: #0b2a52;
-        color: white;
+        background:
+          linear-gradient(
+            135deg,
+            #071b36 0%,
+            #0b2a52 55%,
+            #123e70 100%
+          );
+        color: #ffffff;
       }
 
       .vumc-hero-image {
         position: absolute;
         inset: 0;
+        z-index: 0;
+
         width: 100%;
         height: 100%;
+
         object-fit: cover;
       }
 
       .vumc-hero-overlay {
         position: absolute;
         inset: 0;
+        z-index: 1;
+
         background:
           linear-gradient(
             90deg,
-            rgba(4,19,38,.95) 0%,
-            rgba(7,31,61,.78) 50%,
-            rgba(7,31,61,.35) 100%
+            rgba(4, 18, 37, .96) 0%,
+            rgba(6, 29, 57, .83) 48%,
+            rgba(6, 29, 57, .38) 100%
           );
       }
 
       .vumc-hero-content {
         position: relative;
         z-index: 2;
+
         width: 100%;
         max-width: 1100px;
-        margin: auto;
-        padding: 70px 42px;
+
+        margin: 0 auto;
+        padding: 72px 44px;
       }
 
       .vumc-kicker {
-        margin-bottom: 14px;
-        color: #dce9f6;
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: 1.5px;
+        margin: 0 0 15px;
+
+        color: #d8e8f5;
+
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1.6px;
         text-transform: uppercase;
       }
 
       .vumc-hero h1 {
-        max-width: 760px;
+        max-width: 800px;
+
         margin: 0 0 14px;
-        font-size: clamp(38px, 6vw, 68px);
+
+        color: #ffffff;
+
+        font-size: clamp(38px, 6vw, 66px);
         line-height: 1;
         letter-spacing: -2px;
       }
 
       .vumc-hero h2 {
-        max-width: 720px;
+        max-width: 760px;
+
         margin: 0 0 22px;
-        color: #dfeaf5;
+
+        color: #e2edf6;
+
         font-size: clamp(20px, 3vw, 29px);
         line-height: 1.2;
         font-weight: 500;
       }
 
       .vumc-hero p {
-        max-width: 720px;
+        max-width: 740px;
+
         margin: 0;
-        color: rgba(255,255,255,.92);
+
+        color: rgba(255,255,255,.93);
+
         font-size: 17px;
         line-height: 1.7;
       }
@@ -103,28 +147,39 @@ CMS.registerPreviewStyle(`      * {
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
+
         margin-top: 28px;
       }
 
       .vumc-button {
         display: inline-block;
+
         padding: 13px 20px;
+
         border-radius: 9px;
+
         background: #0b2a52;
-        color: white;
+        color: #ffffff;
+
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 750;
+        line-height: 1.2;
+
+        text-decoration: none;
       }
 
       .vumc-hero .vumc-button {
-        background: white;
+        background: #ffffff;
         color: #0b2a52;
       }
 
       .vumc-hero .vumc-button.secondary {
-        border: 1px solid rgba(255,255,255,.6);
+        border: 1px solid rgba(255,255,255,.65);
+
         background: rgba(255,255,255,.12);
-        color: white;
+        color: #ffffff;
+
+        backdrop-filter: blur(5px);
       }
 
       .hero-count {
@@ -132,27 +187,39 @@ CMS.registerPreviewStyle(`      * {
         right: 18px;
         bottom: 18px;
         z-index: 3;
-        padding: 7px 11px;
-        border-radius: 20px;
+
+        padding: 7px 12px;
+
+        border-radius: 999px;
+
         background: rgba(0,0,0,.55);
-        color: white;
+        color: #ffffff;
+
         font-size: 11px;
+        font-weight: 700;
       }
 
-      /* SECTIONS */
+
+      /* ==========================================================
+         GENERAL SECTIONS
+         ========================================================== */
 
       .vumc-section {
-        padding: 65px 42px;
+        padding: 68px 42px;
       }
 
       .vumc-container {
+        width: 100%;
         max-width: 1100px;
-        margin: auto;
+
+        margin: 0 auto;
       }
 
       .vumc-eyebrow {
-        margin-bottom: 8px;
+        margin: 0 0 9px;
+
         color: #3f7a5a;
+
         font-size: 12px;
         font-weight: 800;
         letter-spacing: 1.5px;
@@ -160,20 +227,58 @@ CMS.registerPreviewStyle(`      * {
       }
 
       .vumc-section h2 {
-        margin: 0 0 16px;
+        margin: 0 0 17px;
+
         color: #0b2a52;
-        font-size: 35px;
+
+        font-size: clamp(29px, 4vw, 38px);
         line-height: 1.1;
+        letter-spacing: -.5px;
       }
 
       .vumc-section p {
         margin: 0;
+
         color: #4c596b;
+
         font-size: 16px;
         line-height: 1.7;
       }
 
-      /* COMMUNITY */
+
+      /* ==========================================================
+         IMAGE PLACEHOLDERS
+         ========================================================== */
+
+      .image-placeholder {
+        width: 100%;
+        min-height: 280px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 30px;
+
+        background:
+          linear-gradient(
+            135deg,
+            #edf0f3,
+            #dce2e8
+          );
+
+        color: #7b8794;
+
+        font-size: 13px;
+        font-weight: 700;
+
+        text-align: center;
+      }
+
+
+      /* ==========================================================
+         COMMUNITY STORIES
+         ========================================================== */
 
       .community-section {
         background: #f5f7f9;
@@ -181,77 +286,85 @@ CMS.registerPreviewStyle(`      * {
 
       .community-card {
         display: grid;
-        grid-template-columns: .85fr 1.15fr;
+        grid-template-columns: minmax(240px, .85fr) 1.15fr;
+
         overflow: hidden;
+
         border-radius: 18px;
-        background: white;
-        box-shadow: 0 10px 35px rgba(0,0,0,.08);
+
+        background: #ffffff;
+
+        box-shadow:
+          0 12px 38px rgba(0,0,0,.08);
       }
 
       .community-image {
-        min-height: 310px;
+        min-height: 330px;
+
         background: #dfe5eb;
       }
 
       .community-image img {
         display: block;
+
         width: 100%;
         height: 100%;
-        min-height: 310px;
+        min-height: 330px;
+
         object-fit: cover;
       }
 
       .community-content {
-        padding: 44px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+
+        padding: 44px;
       }
 
       .community-content .vumc-button {
         align-self: flex-start;
+
         margin-top: 24px;
       }
 
-      /* WHO WE ARE */
+
+      /* ==========================================================
+         WHO WE ARE
+         ========================================================== */
 
       .who-grid {
         display: grid;
         grid-template-columns: 1.1fr .9fr;
-        gap: 42px;
+        gap: 44px;
+
         align-items: center;
       }
 
       .who-image {
         overflow: hidden;
-        min-height: 300px;
+
+        min-height: 310px;
+
         border-radius: 18px;
+
         background: #e3e7eb;
       }
 
       .who-image img {
         display: block;
+
         width: 100%;
         height: 100%;
-        min-height: 300px;
+        min-height: 310px;
+
         object-fit: cover;
       }
 
-      .image-placeholder {
-        min-height: 280px;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 30px;
-        background: linear-gradient(135deg,#e7ebef,#d8dee5);
-        color: #7c8794;
-        text-align: center;
-        font-size: 13px;
-        font-weight: 700;
-      }
 
-      /* CUSTOM BOXES */
+      /* ==========================================================
+         CUSTOM HOMEPAGE BOXES
+         ========================================================== */
 
       .custom-section {
         background: #0b2a52;
@@ -262,56 +375,88 @@ CMS.registerPreviewStyle(`      * {
       }
 
       .custom-section h2 {
-        color: white;
+        color: #ffffff;
       }
 
       .custom-grid {
         display: grid;
-        grid-template-columns: repeat(2,minmax(0,1fr));
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+
         gap: 22px;
+
         margin-top: 28px;
       }
 
       .custom-card {
         overflow: hidden;
+
         border-radius: 16px;
-        background: white;
+
+        background: #ffffff;
+
+        box-shadow:
+          0 10px 28px rgba(0,0,0,.12);
       }
 
       .custom-card-image {
-        height: 210px;
+        height: 220px;
+
+        overflow: hidden;
+
         background: #e3e7eb;
       }
 
       .custom-card-image img {
+        display: block;
+
         width: 100%;
         height: 100%;
+
         object-fit: cover;
       }
 
       .custom-card-body {
-        padding: 25px;
+        padding: 26px;
       }
 
       .custom-card h3 {
         margin: 0 0 10px;
+
         color: #0b2a52;
+
         font-size: 23px;
+        line-height: 1.2;
       }
 
       .custom-card p {
-        margin-bottom: 18px;
+        margin: 0 0 20px;
+
+        color: #4c596b;
       }
 
       .preview-empty {
-        padding: 40px;
-        border: 2px dashed rgba(255,255,255,.25);
+        margin-top: 25px;
+
+        padding: 42px;
+
+        border:
+          2px dashed rgba(255,255,255,.25);
+
         border-radius: 15px;
+
         color: rgba(255,255,255,.75);
+
         text-align: center;
       }
 
+
+      /* ==========================================================
+         MOBILE PREVIEW
+         ========================================================== */
+
       @media (max-width: 700px) {
+
         .community-card,
         .who-grid,
         .custom-grid {
@@ -319,15 +464,31 @@ CMS.registerPreviewStyle(`      * {
         }
 
         .vumc-section {
-          padding: 45px 22px;
+          padding: 48px 22px;
+        }
+
+        .vumc-hero {
+          min-height: 500px;
         }
 
         .vumc-hero-content {
-          padding: 55px 24px;
+          padding: 58px 24px;
+        }
+
+        .community-content {
+          padding: 30px;
+        }
+
+        .who-grid {
+          gap: 28px;
         }
       }
-    `);
+    `, { raw: true });
 
+
+    /* ============================================================
+       HOMEPAGE PREVIEW COMPONENT
+       ============================================================ */
 
     const HomePreview = createClass({
 
@@ -336,108 +497,178 @@ CMS.registerPreviewStyle(`      * {
         const entry = this.props.entry;
         const getAsset = this.props.getAsset;
 
-        const hero = entry.getIn(['data', 'hero']) || {};
+        const hero =
+          entry.getIn(['data', 'hero']) || {};
+
         const stories =
           entry.getIn(['data', 'community_stories']) || {};
+
         const who =
           entry.getIn(['data', 'who_we_are']) || {};
-        const boxes =
+
+        const customBoxes =
           entry.getIn(['data', 'custom_boxes']) || [];
 
-        const heroImages =
-          Array.isArray(hero.images) ? hero.images : [];
 
-        const visibleBoxes =
-          Array.isArray(boxes)
-            ? boxes.filter(function (box) {
-                return box && box.enabled !== false;
-              })
+        /* --------------------------------------------------------
+           NORMALIZE LISTS
+           -------------------------------------------------------- */
+
+        const heroImages =
+          Array.isArray(hero.images)
+            ? hero.images
             : [];
 
+        const boxes =
+          Array.isArray(customBoxes)
+            ? customBoxes
+            : [];
 
-        /* -----------------------------
+        const visibleBoxes =
+          boxes.filter(function (box) {
+
+            return (
+              box &&
+              box.enabled !== false
+            );
+
+          });
+
+
+        /* --------------------------------------------------------
            IMAGE RESOLVER
-        ----------------------------- */
+           -------------------------------------------------------- */
 
-        const assetURL = function (path) {
+        function assetURL(path) {
 
-          if (!path) return '';
+          if (!path) {
+            return '';
+          }
 
-          const asset = getAsset(path);
+          try {
 
-          if (!asset) return '';
+            const asset = getAsset(path);
 
-          return asset.url || '';
+            if (!asset) {
+              return path;
+            }
 
-        };
+            if (asset.url) {
+              return asset.url;
+            }
+
+            return path;
+
+          } catch (error) {
+
+            return path;
+
+          }
+        }
 
 
-        /* -----------------------------
+        /* ========================================================
            HERO
-        ----------------------------- */
+           ======================================================== */
 
         let heroElement = null;
 
         if (hero.enabled !== false) {
 
-          const firstImage =
-            heroImages.length
-              ? assetURL(heroImages[0].image)
+          const firstHero =
+            heroImages.length > 0
+              ? heroImages[0]
+              : null;
+
+          const heroImageURL =
+            firstHero
+              ? assetURL(firstHero.image)
               : '';
 
           heroElement = h(
             'section',
-            { className: 'vumc-hero' },
+            {
+              className: 'vumc-hero'
+            },
 
-            firstImage
-              ? h('img', {
-                  className: 'vumc-hero-image',
-                  src: firstImage,
-                  alt: heroImages[0].alt || ''
-                })
+            heroImageURL
+              ? h(
+                  'img',
+                  {
+                    className:
+                      'vumc-hero-image',
+
+                    src:
+                      heroImageURL,
+
+                    alt:
+                      firstHero.alt || ''
+                  }
+                )
               : null,
-
-            h('div', {
-              className: 'vumc-hero-overlay'
-            }),
 
             h(
               'div',
-              { className: 'vumc-hero-content' },
+              {
+                className:
+                  'vumc-hero-overlay'
+              }
+            ),
+
+            h(
+              'div',
+              {
+                className:
+                  'vumc-hero-content'
+              },
 
               h(
                 'div',
-                { className: 'vumc-kicker' },
+                {
+                  className:
+                    'vumc-kicker'
+                },
+
                 'Versailles, Kentucky • In Person & Online'
               ),
 
               h(
                 'h1',
                 {},
+
                 hero.title ||
-                  'Versailles United Methodist Church'
+                'Versailles United Methodist Church'
               ),
 
               h(
                 'h2',
                 {},
+
                 hero.subtitle || ''
               ),
 
               h(
                 'p',
                 {},
+
                 hero.text || ''
               ),
 
               h(
                 'div',
-                { className: 'vumc-buttons' },
+                {
+                  className:
+                    'vumc-buttons'
+                },
 
                 hero.primary_button_text
                   ? h(
                       'span',
-                      { className: 'vumc-button' },
+                      {
+                        className:
+                          'vumc-button'
+                      },
+
                       hero.primary_button_text
                     )
                   : null,
@@ -449,6 +680,7 @@ CMS.registerPreviewStyle(`      * {
                         className:
                           'vumc-button secondary'
                       },
+
                       hero.secondary_button_text
                     )
                   : null
@@ -457,25 +689,31 @@ CMS.registerPreviewStyle(`      * {
 
             h(
               'div',
-              { className: 'hero-count' },
+              {
+                className:
+                  'hero-count'
+              },
+
               heroImages.length +
-                (heroImages.length === 1
+              (
+                heroImages.length === 1
                   ? ' hero image'
-                  : ' hero images')
+                  : ' hero images'
+              )
             )
           );
         }
 
 
-        /* -----------------------------
+        /* ========================================================
            COMMUNITY STORIES
-        ----------------------------- */
+           ======================================================== */
 
         let storiesElement = null;
 
         if (stories.enabled !== false) {
 
-          const image =
+          const storyImageURL =
             assetURL(stories.image);
 
           storiesElement = h(
@@ -487,27 +725,43 @@ CMS.registerPreviewStyle(`      * {
 
             h(
               'div',
-              { className: 'vumc-container' },
+              {
+                className:
+                  'vumc-container'
+              },
 
               h(
                 'div',
-                { className: 'community-card' },
+                {
+                  className:
+                    'community-card'
+                },
 
                 h(
                   'div',
-                  { className: 'community-image' },
+                  {
+                    className:
+                      'community-image'
+                  },
 
-                  image
-                    ? h('img', {
-                        src: image,
-                        alt: ''
-                      })
+                  storyImageURL
+                    ? h(
+                        'img',
+                        {
+                          src:
+                            storyImageURL,
+
+                          alt:
+                            'Community Stories'
+                        }
+                      )
                     : h(
                         'div',
                         {
                           className:
                             'image-placeholder'
                         },
+
                         'Community Stories Image'
                       )
                 ),
@@ -521,20 +775,26 @@ CMS.registerPreviewStyle(`      * {
 
                   h(
                     'div',
-                    { className: 'vumc-eyebrow' },
+                    {
+                      className:
+                        'vumc-eyebrow'
+                    },
+
                     stories.eyebrow ||
-                      'Community Stories'
+                    'Community Stories'
                   ),
 
                   h(
                     'h2',
                     {},
+
                     stories.title || ''
                   ),
 
                   h(
                     'p',
                     {},
+
                     stories.text || ''
                   ),
 
@@ -545,6 +805,7 @@ CMS.registerPreviewStyle(`      * {
                           className:
                             'vumc-button'
                         },
+
                         stories.button_text
                       )
                     : null
@@ -555,20 +816,23 @@ CMS.registerPreviewStyle(`      * {
         }
 
 
-        /* -----------------------------
+        /* ========================================================
            WHO WE ARE
-        ----------------------------- */
+           ======================================================== */
 
         let whoElement = null;
 
         if (who.enabled !== false) {
 
-          const image =
+          const whoImageURL =
             assetURL(who.image);
 
           whoElement = h(
             'section',
-            { className: 'vumc-section' },
+            {
+              className:
+                'vumc-section'
+            },
 
             h(
               'div',
@@ -583,38 +847,55 @@ CMS.registerPreviewStyle(`      * {
 
                 h(
                   'div',
-                  { className: 'vumc-eyebrow' },
-                  who.eyebrow || 'Who We Are'
+                  {
+                    className:
+                      'vumc-eyebrow'
+                  },
+
+                  who.eyebrow ||
+                  'Who We Are'
                 ),
 
                 h(
                   'h2',
                   {},
+
                   who.title || ''
                 ),
 
                 h(
                   'p',
                   {},
+
                   who.text || ''
                 )
               ),
 
               h(
                 'div',
-                { className: 'who-image' },
+                {
+                  className:
+                    'who-image'
+                },
 
-                image
-                  ? h('img', {
-                      src: image,
-                      alt: ''
-                    })
+                whoImageURL
+                  ? h(
+                      'img',
+                      {
+                        src:
+                          whoImageURL,
+
+                        alt:
+                          'Versailles United Methodist Church'
+                      }
+                    )
                   : h(
                       'div',
                       {
                         className:
                           'image-placeholder'
                       },
+
                       'Who We Are Image'
                     )
               )
@@ -623,81 +904,95 @@ CMS.registerPreviewStyle(`      * {
         }
 
 
-        /* -----------------------------
+        /* ========================================================
            CUSTOM BOXES
-        ----------------------------- */
+           ======================================================== */
 
-        const boxElements =
-          visibleBoxes.map(function (box, index) {
+        const customCards =
+          visibleBoxes.map(
+            function (box, index) {
 
-            const image =
-              assetURL(box.image);
+              const imageURL =
+                assetURL(box.image);
 
-            return h(
-              'article',
-              {
-                className: 'custom-card',
-                key: index
-              },
-
-              h(
-                'div',
+              return h(
+                'article',
                 {
                   className:
-                    'custom-card-image'
-                },
+                    'custom-card',
 
-                image
-                  ? h('img', {
-                      src: image,
-                      alt: box.alt || ''
-                    })
-                  : h(
-                      'div',
-                      {
-                        className:
-                          'image-placeholder'
-                      },
-                      'Homepage Box Image'
-                    )
-              ),
-
-              h(
-                'div',
-                {
-                  className:
-                    'custom-card-body'
+                  key:
+                    'box-' + index
                 },
 
                 h(
-                  'h3',
-                  {},
-                  box.title ||
-                    'Homepage Box'
+                  'div',
+                  {
+                    className:
+                      'custom-card-image'
+                  },
+
+                  imageURL
+                    ? h(
+                        'img',
+                        {
+                          src:
+                            imageURL,
+
+                          alt:
+                            box.alt || ''
+                        }
+                      )
+                    : h(
+                        'div',
+                        {
+                          className:
+                            'image-placeholder'
+                        },
+
+                        'Homepage Box Image'
+                      )
                 ),
 
-                box.text
-                  ? h(
-                      'p',
-                      {},
-                      box.text
-                    )
-                  : null,
+                h(
+                  'div',
+                  {
+                    className:
+                      'custom-card-body'
+                  },
 
-                box.button_text
-                  ? h(
-                      'span',
-                      {
-                        className:
-                          'vumc-button'
-                      },
-                      box.button_text
-                    )
-                  : null
-              )
-            );
+                  h(
+                    'h3',
+                    {},
 
-          });
+                    box.title ||
+                    'Homepage Box'
+                  ),
+
+                  box.text
+                    ? h(
+                        'p',
+                        {},
+
+                        box.text
+                      )
+                    : null,
+
+                  box.button_text
+                    ? h(
+                        'span',
+                        {
+                          className:
+                            'vumc-button'
+                        },
+
+                        box.button_text
+                      )
+                    : null
+                )
+              );
+            }
+          );
 
 
         const customElement = h(
@@ -709,42 +1004,63 @@ CMS.registerPreviewStyle(`      * {
 
           h(
             'div',
-            { className: 'vumc-container' },
+            {
+              className:
+                'vumc-container'
+            },
 
             h(
               'div',
-              { className: 'vumc-eyebrow' },
+              {
+                className:
+                  'vumc-eyebrow'
+              },
+
               'Homepage Features'
             ),
 
             h(
               'h2',
               {},
+
               'Custom Homepage Boxes'
             ),
 
-            boxElements.length
+            customCards.length > 0
+
               ? h(
                   'div',
-                  { className: 'custom-grid' },
-                  ...boxElements
+                  {
+                    className:
+                      'custom-grid'
+                  },
+
+                  ...customCards
                 )
+
               : h(
                   'div',
-                  { className: 'preview-empty' },
+                  {
+                    className:
+                      'preview-empty'
+                  },
+
                   'Add a homepage box in the editor to preview it here.'
                 )
           )
         );
 
 
-        /* -----------------------------
-           FINAL PREVIEW
-        ----------------------------- */
+        /* ========================================================
+           COMPLETE HOMEPAGE PREVIEW
+           ======================================================== */
 
         return h(
           'main',
-          { className: 'vumc-preview' },
+          {
+            className:
+              'vumc-preview'
+          },
 
           heroElement,
           storiesElement,
@@ -755,10 +1071,13 @@ CMS.registerPreviewStyle(`      * {
     });
 
 
-    /*
-     * IMPORTANT:
-     * "home" is the file name in config.yml.
-     */
+    /* ============================================================
+       REGISTER HOMEPAGE FILE PREVIEW
+
+       "home" matches:
+       collections > homepage > files > name: home
+       ============================================================ */
+
     CMS.registerPreviewTemplate(
       'home',
       HomePreview
