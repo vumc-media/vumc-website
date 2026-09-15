@@ -1,6 +1,42 @@
 {
-  "hero_title": "Welcome to Versailles UMC",
-  "hero_subtitle": "Love Like Jesus",
-  "button_text": "Watch Online",
-  "button_link": "/watch"
+  "hero": {
+    "enabled": true,
+    "title": "Versailles United Methodist Church",
+    "subtitle": "A Welcoming Church in Versailles, Kentucky",
+    "text": "We are a church in Versailles, Kentucky seeking to Love Like Jesus through worship, connection, service, and spiritual growth. Whether you are exploring faith, returning to church, or looking for a church home, there is a place for you here. #LoveLikeJesus",
+    "image": "",
+    "primary_button_text": "Plan Your Visit",
+    "primary_button_link": "/plan-your-visit/",
+    "secondary_button_text": "Watch Worship Online",
+    "secondary_button_link": "/watch/"
+  },
+
+  "community_stories": {
+    "enabled": true,
+    "eyebrow": "Community Stories",
+    "title": "Real stories from life at VUMC.",
+    "text": "Stories from guests, members, and neighbors help show what it means to Love Like Jesus through worship, welcome, fellowship, service, and community in Versailles, Kentucky.",
+    "image": "",
+    "button_text": "Read Community Stories",
+    "button_link": "/community-stories/"
+  },
+
+  "who_we_are": {
+    "enabled": true,
+    "eyebrow": "Church in Versailles, KY",
+    "title": "A local church helping people Love Like Jesus.",
+    "text": "Versailles United Methodist Church is a welcoming United Methodist congregation serving Versailles, Woodford County, and the surrounding Central Kentucky area.",
+    "image": ""
+  },
+
+  "custom_boxes": [
+    {
+      "enabled": true,
+      "title": "Welcome to Versailles UMC",
+      "text": "There is a place for you here.",
+      "image": "",
+      "button_text": "Learn More",
+      "button_link": "/new-here/"
+    }
+  ]
 }
