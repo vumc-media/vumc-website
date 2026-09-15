@@ -2,8 +2,7 @@ backend:
   name: github
   repo: vumc-media/vumc-website
   branch: main
-  base_url: https://sveltia-cms-auth.vercel.app
-
+  base_url: https://vumc-sveltia-cms-auth.versaillesumcworshipteam.workers.dev
 media_folder: "vumc-media"
 public_folder: "/vumc-media"
 
