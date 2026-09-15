@@ -4,7 +4,7 @@ backend:
   branch: main
   base_url: https://vumc-sveltia-cms-auth.versaillesumcworshipteam.workers.dev
 
-media_folder: "vumc-media"
+media_folder: "/vumc-media"
 public_folder: "/vumc-media"
 
 collections:
@@ -15,178 +15,132 @@ collections:
         name: "home"
         file: "content/home.json"
         format: "json"
-
         fields:
-
-          # =========================================================
-          # HERO
-          # =========================================================
-          - label: "Hero Section"
+          - label: "Hero"
             name: "hero"
             widget: "object"
             collapsed: false
             fields:
-              - label: "Show Hero"
-                name: "enabled"
-                widget: "boolean"
-                default: true
-
+              - { label: "Show Hero", name: "enabled", widget: "boolean", default: true }
               - label: "Hero Images"
                 name: "images"
                 widget: "list"
-                collapsed: false
-                summary: "{{fields.image}}"
+                required: false
                 label_singular: "Hero Image"
+                summary: "{{fields.image}}"
                 fields:
-                  - label: "Image"
-                    name: "image"
-                    widget: "image"
+                  - { label: "Image", name: "image", widget: "image" }
+                  - { label: "Image Description", name: "alt", widget: "string", required: false }
+              - { label: "Kicker", name: "kicker", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Subtitle", name: "subtitle", widget: "string" }
+              - { label: "Text", name: "text", widget: "text" }
+              - label: "Buttons"
+                name: "buttons"
+                widget: "list"
+                required: false
+                label_singular: "Button"
+                summary: "{{fields.text}}"
+                fields:
+                  - { label: "Show Button", name: "enabled", widget: "boolean", default: true }
+                  - { label: "Button Text", name: "text", widget: "string" }
+                  - { label: "Button Link", name: "link", widget: "string" }
+                  - label: "Button Style"
+                    name: "style"
+                    widget: "select"
+                    options:
+                      - { label: "Gold", value: "primary" }
+                      - { label: "Outline", value: "secondary" }
+                      - { label: "White", value: "light" }
+                      - { label: "Dark", value: "dark" }
 
-                  - label: "Image Description"
-                    name: "alt"
-                    widget: "string"
-                    required: false
-                    hint: "Briefly describe the image for accessibility."
-
-              - label: "Title"
-                name: "title"
-                widget: "string"
-
-              - label: "Subtitle"
-                name: "subtitle"
-                widget: "string"
-
-              - label: "Text"
-                name: "text"
-                widget: "text"
-
-              - label: "Primary Button Text"
-                name: "primary_button_text"
-                widget: "string"
-
-              - label: "Primary Button Link"
-                name: "primary_button_link"
-                widget: "string"
-
-              - label: "Secondary Button Text"
-                name: "secondary_button_text"
-                widget: "string"
-
-              - label: "Secondary Button Link"
-                name: "secondary_button_link"
-                widget: "string"
-
-          # =========================================================
-          # COMMUNITY STORIES
-          # =========================================================
           - label: "Community Stories"
             name: "community_stories"
             widget: "object"
             collapsed: true
             fields:
-              - label: "Show Section"
-                name: "enabled"
-                widget: "boolean"
-                default: true
-
-              - label: "Image"
-                name: "image"
-                widget: "image"
+              - { label: "Show Section", name: "enabled", widget: "boolean", default: true }
+              - { label: "Background Image", name: "image", widget: "image", required: false }
+              - { label: "Small Heading", name: "eyebrow", widget: "string" }
+              - { label: "Heading", name: "title", widget: "string" }
+              - { label: "Text", name: "text", widget: "text" }
+              - label: "Buttons"
+                name: "buttons"
+                widget: "list"
                 required: false
+                label_singular: "Button"
+                summary: "{{fields.text}}"
+                fields:
+                  - { label: "Show Button", name: "enabled", widget: "boolean", default: true }
+                  - { label: "Button Text", name: "text", widget: "string" }
+                  - { label: "Button Link", name: "link", widget: "string" }
+                  - label: "Button Style"
+                    name: "style"
+                    widget: "select"
+                    options:
+                      - { label: "Gold", value: "primary" }
+                      - { label: "Outline", value: "secondary" }
+                      - { label: "White", value: "light" }
+                      - { label: "Dark", value: "dark" }
 
-              - label: "Small Heading"
-                name: "eyebrow"
-                widget: "string"
-
-              - label: "Heading"
-                name: "title"
-                widget: "string"
-
-              - label: "Text"
-                name: "text"
-                widget: "text"
-
-              - label: "Button Text"
-                name: "button_text"
-                widget: "string"
-
-              - label: "Button Link"
-                name: "button_link"
-                widget: "string"
-
-          # =========================================================
-          # WHO WE ARE
-          # =========================================================
           - label: "Who We Are"
             name: "who_we_are"
             widget: "object"
             collapsed: true
             fields:
-              - label: "Show Section"
-                name: "enabled"
-                widget: "boolean"
-                default: true
-
-              - label: "Image"
-                name: "image"
-                widget: "image"
+              - { label: "Show Section", name: "enabled", widget: "boolean", default: true }
+              - { label: "Feature Image", name: "image", widget: "image", required: false }
+              - { label: "Small Heading", name: "eyebrow", widget: "string" }
+              - { label: "Heading", name: "title", widget: "string" }
+              - { label: "Text", name: "text", widget: "text" }
+              - label: "Buttons"
+                name: "buttons"
+                widget: "list"
                 required: false
+                label_singular: "Button"
+                summary: "{{fields.text}}"
+                fields:
+                  - { label: "Show Button", name: "enabled", widget: "boolean", default: true }
+                  - { label: "Button Text", name: "text", widget: "string" }
+                  - { label: "Button Link", name: "link", widget: "string" }
+                  - label: "Button Style"
+                    name: "style"
+                    widget: "select"
+                    options:
+                      - { label: "Gold", value: "primary" }
+                      - { label: "Outline", value: "secondary" }
+                      - { label: "White", value: "light" }
+                      - { label: "Dark", value: "dark" }
 
-              - label: "Small Heading"
-                name: "eyebrow"
-                widget: "string"
-
-              - label: "Heading"
-                name: "title"
-                widget: "string"
-
-              - label: "Text"
-                name: "text"
-                widget: "text"
-
-          # =========================================================
-          # CUSTOM HOMEPAGE BOXES
-          # =========================================================
           - label: "Custom Homepage Boxes"
             name: "custom_boxes"
             widget: "list"
-            collapsed: false
-            summary: "{{fields.title}}"
-            label_singular: "Homepage Box"
+            required: false
             add_to_top: true
-
+            label_singular: "Homepage Box"
+            summary: "{{fields.title}}"
             fields:
-              - label: "Show Box"
-                name: "enabled"
-                widget: "boolean"
-                default: true
-
-              - label: "Image"
-                name: "image"
-                widget: "image"
+              - { label: "Show Box", name: "enabled", widget: "boolean", default: true }
+              - { label: "Image", name: "image", widget: "image", required: false }
+              - { label: "Image Description", name: "alt", widget: "string", required: false }
+              - { label: "Small Heading", name: "eyebrow", widget: "string", required: false }
+              - { label: "Heading", name: "title", widget: "string" }
+              - { label: "Text", name: "text", widget: "text", required: false }
+              - label: "Buttons"
+                name: "buttons"
+                widget: "list"
                 required: false
-
-              - label: "Image Description"
-                name: "alt"
-                widget: "string"
-                required: false
-                hint: "Briefly describe the image for accessibility."
-
-              - label: "Heading"
-                name: "title"
-                widget: "string"
-
-              - label: "Text"
-                name: "text"
-                widget: "text"
-                required: false
-
-              - label: "Button Text"
-                name: "button_text"
-                widget: "string"
-                required: false
-
-              - label: "Button Link"
-                name: "button_link"
-                widget: "string"
-                required: false
+                label_singular: "Button"
+                summary: "{{fields.text}}"
+                fields:
+                  - { label: "Show Button", name: "enabled", widget: "boolean", default: true }
+                  - { label: "Button Text", name: "text", widget: "string" }
+                  - { label: "Button Link", name: "link", widget: "string" }
+                  - label: "Button Style"
+                    name: "style"
+                    widget: "select"
+                    options:
+                      - { label: "Gold", value: "primary" }
+                      - { label: "Outline", value: "secondary" }
+                      - { label: "White", value: "light" }
+                      - { label: "Dark", value: "dark" }
