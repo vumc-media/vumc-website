@@ -123,118 +123,167 @@
       font-size: 0.86rem;
     }
 
+
     /* ==================================================
        TOOL CARDS
     ================================================== */
 
     .tool-card {
+      position: relative;
+      overflow: hidden;
       transition:
         transform 0.18s ease,
         box-shadow 0.18s ease,
-        border-color 0.18s ease;
+        filter 0.18s ease;
+    }
+
+    .tool-card:not(.disabled) {
+      color: #ffffff;
+      border: 0;
+      box-shadow: 0 10px 26px rgba(23, 50, 77, 0.20);
     }
 
     .tool-card:not(.disabled):hover {
-      transform: translateY(-4px);
+      transform: translateY(-6px);
+      filter: brightness(1.07);
+      box-shadow: 0 17px 36px rgba(23, 50, 77, 0.30);
     }
 
-    /* COMMUNICATIONS - BLUE */
+    .tool-card:not(.disabled) h3 {
+      color: #ffffff;
+    }
+
+    .tool-card:not(.disabled) p {
+      color: rgba(255, 255, 255, 0.94);
+    }
+
+    .tool-card:not(.disabled) .action {
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    .tool-card:not(.disabled) .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px;
+      height: 54px;
+      margin-bottom: 8px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.18);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.20);
+      font-size: 29px;
+    }
+
+
+    /* ==================================================
+       COMMUNICATIONS HUB — BLUE
+    ================================================== */
 
     .tool-card.communications {
-      background: linear-gradient(145deg, #eef7fc, #ffffff);
-      border: 2px solid #8bc4e5;
-      box-shadow: 0 8px 22px rgba(31, 95, 139, 0.10);
+      background:
+        linear-gradient(
+          135deg,
+          #064f8c 0%,
+          #0878c9 55%,
+          #1498df 100%
+        );
     }
 
-    .tool-card.communications .icon {
-      background: #d9eef9;
-    }
 
-    .tool-card.communications h3,
-    .tool-card.communications .action {
-      color: #155b86;
-    }
-
-    .tool-card.communications:hover {
-      border-color: #1f7daf;
-      box-shadow: 0 12px 28px rgba(31, 95, 139, 0.18);
-    }
-
-    /* WEEKLY FEED - GREEN */
+    /* ==================================================
+       WEEKLY FEED — GREEN
+    ================================================== */
 
     .tool-card.weekly {
-      background: linear-gradient(145deg, #effaf3, #ffffff);
-      border: 2px solid #91d3a5;
-      box-shadow: 0 8px 22px rgba(44, 122, 72, 0.10);
+      background:
+        linear-gradient(
+          135deg,
+          #125d31 0%,
+          #208846 55%,
+          #2fad5a 100%
+        );
     }
 
-    .tool-card.weekly .icon {
-      background: #dcf3e3;
-    }
 
-    .tool-card.weekly h3,
-    .tool-card.weekly .action {
-      color: #267346;
-    }
-
-    .tool-card.weekly:hover {
-      border-color: #3b9b5d;
-      box-shadow: 0 12px 28px rgba(44, 122, 72, 0.18);
-    }
-
-    /* ATRIUM - PURPLE */
+    /* ==================================================
+       ATRIUM — PURPLE
+    ================================================== */
 
     .tool-card.atrium {
-      background: linear-gradient(145deg, #f5f0fb, #ffffff);
-      border: 2px solid #bba1db;
-      box-shadow: 0 8px 22px rgba(100, 65, 145, 0.10);
+      background:
+        linear-gradient(
+          135deg,
+          #492174 0%,
+          #7036a6 55%,
+          #984fc6 100%
+        );
     }
 
-    .tool-card.atrium .icon {
-      background: #e9def6;
-    }
 
-    .tool-card.atrium h3,
-    .tool-card.atrium .action {
-      color: #674393;
-    }
-
-    .tool-card.atrium:hover {
-      border-color: #8057ae;
-      box-shadow: 0 12px 28px rgba(100, 65, 145, 0.18);
-    }
-
-    /* WEBSITE EDITOR - GOLD */
+    /* ==================================================
+       WEBSITE EDITOR — ORANGE
+    ================================================== */
 
     .tool-card.website {
-      background: linear-gradient(145deg, #fff8e8, #ffffff);
-      border: 2px solid #e2bd67;
-      box-shadow: 0 8px 22px rgba(159, 111, 20, 0.10);
+      background:
+        linear-gradient(
+          135deg,
+          #994005 0%,
+          #ca6109 55%,
+          #ee8a1d 100%
+        );
     }
 
-    .tool-card.website .icon {
-      background: #f9e9bd;
-    }
 
-    .tool-card.website h3,
-    .tool-card.website .action {
-      color: #916510;
-    }
-
-    .tool-card.website:hover {
-      border-color: #bd8a27;
-      box-shadow: 0 12px 28px rgba(159, 111, 20, 0.18);
-    }
-
-    /* COMING SOON */
+    /* ==================================================
+       COMING SOON
+    ================================================== */
 
     .tool-card.disabled {
-      background: #f6f8fa;
-      border: 1px solid #dfe5ea;
-      opacity: 0.62;
+      background: #eef1f4;
+      border: 1px solid #d5dce2;
+      color: #7b8792;
+      opacity: 0.72;
+      box-shadow: none;
+    }
+
+    .tool-card.disabled h3 {
+      color: #65717c;
+    }
+
+    .tool-card.disabled p {
+      color: #89939c;
+    }
+
+    .tool-card.disabled .action {
+      color: #929ca5;
+    }
+
+
+    /* ==================================================
+       MOBILE
+    ================================================== */
+
+    @media (max-width: 700px) {
+
+      .topbar-actions {
+        gap: 7px;
+      }
+
+      .signed-in-user {
+        display: none;
+      }
+
+      .tool-card:not(.disabled):hover {
+        transform: none;
+      }
+
     }
   </style>
 </head>
+
 
 <body>
 
@@ -249,8 +298,11 @@
         Versailles United Methodist Church
       </p>
 
-      <h1>Staff Tools</h1>
+      <h1>
+        Staff Tools
+      </h1>
     </div>
+
 
     <div class="topbar-actions">
 
@@ -262,6 +314,7 @@
         Authorized staff
       </span>
 
+
       <button
         id="logoutButton"
         class="logout-button"
@@ -270,6 +323,7 @@
       >
         Sign out
       </button>
+
 
       <span class="badge">
         Internal
@@ -303,9 +357,11 @@
         Enter the shared staff passkey to continue.
       </p>
 
+
       <form id="loginForm">
 
         <label>
+
           Staff Passkey
 
           <input
@@ -315,7 +371,9 @@
             placeholder="Enter staff passkey"
             required
           />
+
         </label>
+
 
         <button
           id="loginButton"
@@ -326,6 +384,7 @@
         </button>
 
       </form>
+
 
       <div
         id="authMessage"
@@ -376,7 +435,9 @@
     >
 
 
-      <!-- COMMUNICATIONS HUB -->
+      <!-- ==================================================
+           COMMUNICATIONS HUB
+      =================================================== -->
 
       <a
         id="communicationsLink"
@@ -393,7 +454,8 @@
         </h3>
 
         <p>
-          Create announcements for email and the church Facebook Page.
+          Create announcements for email and the church
+          Facebook Page.
         </p>
 
         <span class="action">
@@ -403,7 +465,9 @@
       </a>
 
 
-      <!-- WEEKLY FEED ADMIN -->
+      <!-- ==================================================
+           WEEKLY FEED ADMIN
+      =================================================== -->
 
       <a
         class="tool-card weekly"
@@ -432,7 +496,9 @@
       </a>
 
 
-      <!-- ATRIUM SLIDE MANAGER -->
+      <!-- ==================================================
+           ATRIUM SLIDE MANAGER
+      =================================================== -->
 
       <a
         class="tool-card atrium"
@@ -461,7 +527,9 @@
       </a>
 
 
-      <!-- WEBSITE EDITOR -->
+      <!-- ==================================================
+           WEBSITE EDITOR
+      =================================================== -->
 
       <a
         class="tool-card website"
@@ -477,7 +545,8 @@
         </h3>
 
         <p>
-          Open the Sveltia CMS editor for approved website content.
+          Open the Sveltia CMS editor for approved website
+          content.
         </p>
 
         <span class="action">
@@ -487,7 +556,9 @@
       </a>
 
 
-      <!-- NEWS & NOTES -->
+      <!-- ==================================================
+           NEWS & NOTES
+      =================================================== -->
 
       <a
         class="tool-card disabled"
@@ -514,7 +585,9 @@
       </a>
 
 
-      <!-- CHURCH FAMILY CONNECTIONS -->
+      <!-- ==================================================
+           CHURCH FAMILY CONNECTIONS
+      =================================================== -->
 
       <a
         class="tool-card disabled"
@@ -541,7 +614,9 @@
       </a>
 
 
-      <!-- KIDS CHECK-IN -->
+      <!-- ==================================================
+           KIDS CHECK-IN
+      =================================================== -->
 
       <a
         class="tool-card disabled"
@@ -568,7 +643,9 @@
       </a>
 
 
-      <!-- ACADEMY TOOLS -->
+      <!-- ==================================================
+           ACADEMY TOOLS
+      =================================================== -->
 
       <a
         class="tool-card disabled"
@@ -595,7 +672,9 @@
       </a>
 
 
-      <!-- MAINTENANCE -->
+      <!-- ==================================================
+           MAINTENANCE
+      =================================================== -->
 
       <a
         class="tool-card disabled"
@@ -622,7 +701,9 @@
       </a>
 
 
-      <!-- STAFF RESOURCES -->
+      <!-- ==================================================
+           STAFF RESOURCES
+      =================================================== -->
 
       <a
         class="tool-card disabled"
@@ -650,6 +731,8 @@
 
     </section>
 
+
+    <!-- SECURITY NOTE -->
 
     <p class="security-note">
       Access to this dashboard requires the VUMC staff passkey.
