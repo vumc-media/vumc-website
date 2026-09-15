@@ -6,6 +6,652 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+
+  <script>
+    /*
+     * VUMC Homepage Visual Preview
+     * Collection: homepage
+     * File: home
+     */
+
+    CMS.registerPreviewStyle(`
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #f4f6f8;
+        color: #172033;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .vumc-preview {
+        min-height: 100vh;
+        background: #ffffff;
+      }
+
+      /* ========================================
+         HERO
+      ======================================== */
+
+      .vumc-hero {
+        position: relative;
+        min-height: 520px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        background:
+          linear-gradient(
+            110deg,
+            rgba(6, 24, 48, .94),
+            rgba(11, 42, 82, .74)
+          ),
+          #0b2a52;
+        color: white;
+      }
+
+      .vumc-hero-image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+      }
+
+      .vumc-hero-overlay {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(
+            90deg,
+            rgba(4, 19, 38, .94) 0%,
+            rgba(7, 31, 61, .78) 48%,
+            rgba(7, 31, 61, .38) 100%
+          );
+        z-index: 1;
+      }
+
+      .vumc-hero-content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 1100px;
+        margin: auto;
+        padding: 70px 42px;
+      }
+
+      .vumc-kicker {
+        margin-bottom: 14px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #dce9f6;
+      }
+
+      .vumc-hero h1 {
+        max-width: 760px;
+        margin: 0 0 12px;
+        font-size: clamp(38px, 6vw, 68px);
+        line-height: .98;
+        letter-spacing: -2px;
+      }
+
+      .vumc-hero h2 {
+        max-width: 720px;
+        margin: 0 0 22px;
+        font-size: clamp(20px, 3vw, 29px);
+        line-height: 1.2;
+        font-weight: 500;
+        color: #dfeaf5;
+      }
+
+      .vumc-hero p {
+        max-width: 720px;
+        margin: 0;
+        font-size: 17px;
+        line-height: 1.7;
+        color: rgba(255,255,255,.92);
+      }
+
+      .vumc-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .vumc-button {
+        display: inline-block;
+        padding: 13px 20px;
+        border-radius: 9px;
+        background: #ffffff;
+        color: #0b2a52;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .vumc-button.secondary {
+        border: 1px solid rgba(255,255,255,.55);
+        background: rgba(255,255,255,.10);
+        color: #ffffff;
+      }
+
+      .hero-image-count {
+        position: absolute;
+        right: 20px;
+        bottom: 18px;
+        z-index: 3;
+        padding: 7px 11px;
+        border-radius: 20px;
+        background: rgba(0,0,0,.55);
+        color: white;
+        font-size: 11px;
+      }
+
+      /* ========================================
+         GENERAL SECTIONS
+      ======================================== */
+
+      .vumc-section {
+        padding: 65px 42px;
+      }
+
+      .vumc-container {
+        max-width: 1100px;
+        margin: auto;
+      }
+
+      .vumc-eyebrow {
+        margin-bottom: 8px;
+        color: #3f7a5a;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+      }
+
+      .vumc-section h2 {
+        margin: 0 0 16px;
+        color: #0b2a52;
+        font-size: 34px;
+        line-height: 1.1;
+      }
+
+      .vumc-section p {
+        margin: 0;
+        color: #4c596b;
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      /* ========================================
+         COMMUNITY STORIES
+      ======================================== */
+
+      .community-section {
+        background: #f5f7f9;
+      }
+
+      .community-card {
+        display: grid;
+        grid-template-columns: minmax(220px, .8fr) 1.2fr;
+        overflow: hidden;
+        border-radius: 18px;
+        background: white;
+        box-shadow: 0 10px 35px rgba(0,0,0,.08);
+      }
+
+      .community-image {
+        min-height: 310px;
+        background: #dfe5eb;
+      }
+
+      .community-image img {
+        width: 100%;
+        height: 100%;
+        min-height: 310px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .image-placeholder {
+        height: 100%;
+        min-height: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+        text-align: center;
+        color: #7c8794;
+        background:
+          linear-gradient(135deg, #e7ebef, #d8dee5);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .community-content {
+        padding: 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .community-content .vumc-button {
+        align-self: flex-start;
+        margin-top: 24px;
+        background: #0b2a52;
+        color: white;
+      }
+
+      /* ========================================
+         WHO WE ARE
+      ======================================== */
+
+      .who-grid {
+        display: grid;
+        grid-template-columns: 1.1fr .9fr;
+        gap: 42px;
+        align-items: center;
+      }
+
+      .who-image {
+        overflow: hidden;
+        min-height: 300px;
+        border-radius: 18px;
+        background: #e3e7eb;
+      }
+
+      .who-image img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 300px;
+        object-fit: cover;
+      }
+
+      /* ========================================
+         CUSTOM BOXES
+      ======================================== */
+
+      .custom-section {
+        background: #0b2a52;
+      }
+
+      .custom-section > .vumc-container > h2 {
+        color: white;
+      }
+
+      .custom-section .vumc-eyebrow {
+        color: #b9d6c3;
+      }
+
+      .custom-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px;
+        margin-top: 28px;
+      }
+
+      .custom-card {
+        overflow: hidden;
+        border-radius: 16px;
+        background: white;
+      }
+
+      .custom-card-image {
+        height: 210px;
+        background: #e3e7eb;
+      }
+
+      .custom-card-image img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .custom-card-body {
+        padding: 25px;
+      }
+
+      .custom-card h3 {
+        margin: 0 0 10px;
+        color: #0b2a52;
+        font-size: 23px;
+      }
+
+      .custom-card p {
+        margin-bottom: 18px;
+      }
+
+      .custom-card .vumc-button {
+        background: #0b2a52;
+        color: white;
+      }
+
+      .preview-empty {
+        padding: 45px;
+        border: 2px dashed rgba(255,255,255,.25);
+        border-radius: 15px;
+        color: rgba(255,255,255,.7);
+        text-align: center;
+      }
+
+      @media (max-width: 700px) {
+        .community-card,
+        .who-grid,
+        .custom-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .vumc-section {
+          padding: 45px 22px;
+        }
+
+        .vumc-hero-content {
+          padding: 55px 24px;
+        }
+      }
+    `);
+
+    CMS.registerPreviewTemplate('homepage', ({ entry, getAsset }) => {
+
+      const data = entry?.data || {};
+
+      const hero = data.hero || {};
+      const stories = data.community_stories || {};
+      const who = data.who_we_are || {};
+      const customBoxes = data.custom_boxes || [];
+
+      /*
+       * Sveltia can return list/object values in slightly different
+       * forms depending on editing state, so normalize them here.
+       */
+      const heroImages = Array.isArray(hero.images)
+        ? hero.images
+        : [];
+
+      const boxes = Array.isArray(customBoxes)
+        ? customBoxes
+        : [];
+
+      const resolveAsset = (path) => {
+        if (!path) return '';
+
+        try {
+          const asset = getAsset(path);
+
+          if (!asset) return '';
+
+          if (typeof asset === 'string') {
+            return asset;
+          }
+
+          return asset.toString();
+        } catch (error) {
+          return path;
+        }
+      };
+
+      const esc = (value = '') =>
+        String(value)
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#039;');
+
+      const firstHeroImage =
+        heroImages.length > 0
+          ? resolveAsset(heroImages[0]?.image)
+          : '';
+
+      const heroMarkup = hero.enabled !== false ? `
+        <section class="vumc-hero">
+
+          ${firstHeroImage ? `
+            <img
+              class="vumc-hero-image"
+              src="${esc(firstHeroImage)}"
+              alt="${esc(heroImages[0]?.alt || '')}"
+            >
+          ` : ''}
+
+          <div class="vumc-hero-overlay"></div>
+
+          <div class="vumc-hero-content">
+
+            <div class="vumc-kicker">
+              Versailles, Kentucky • In Person & Online
+            </div>
+
+            <h1>
+              ${esc(hero.title || 'Versailles United Methodist Church')}
+            </h1>
+
+            <h2>
+              ${esc(hero.subtitle || '')}
+            </h2>
+
+            <p>
+              ${esc(hero.text || '')}
+            </p>
+
+            <div class="vumc-buttons">
+
+              ${hero.primary_button_text ? `
+                <span class="vumc-button">
+                  ${esc(hero.primary_button_text)}
+                </span>
+              ` : ''}
+
+              ${hero.secondary_button_text ? `
+                <span class="vumc-button secondary">
+                  ${esc(hero.secondary_button_text)}
+                </span>
+              ` : ''}
+
+            </div>
+
+          </div>
+
+          <div class="hero-image-count">
+            ${heroImages.length}
+            ${heroImages.length === 1 ? 'hero image' : 'hero images'}
+          </div>
+
+        </section>
+      ` : '';
+
+      const storyImage = resolveAsset(stories.image);
+
+      const storiesMarkup = stories.enabled !== false ? `
+        <section class="vumc-section community-section">
+          <div class="vumc-container">
+
+            <div class="community-card">
+
+              <div class="community-image">
+
+                ${storyImage ? `
+                  <img
+                    src="${esc(storyImage)}"
+                    alt=""
+                  >
+                ` : `
+                  <div class="image-placeholder">
+                    Community Stories Image
+                  </div>
+                `}
+
+              </div>
+
+              <div class="community-content">
+
+                <div class="vumc-eyebrow">
+                  ${esc(stories.eyebrow || 'Community Stories')}
+                </div>
+
+                <h2>
+                  ${esc(stories.title || '')}
+                </h2>
+
+                <p>
+                  ${esc(stories.text || '')}
+                </p>
+
+                ${stories.button_text ? `
+                  <span class="vumc-button">
+                    ${esc(stories.button_text)}
+                  </span>
+                ` : ''}
+
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+      ` : '';
+
+      const whoImage = resolveAsset(who.image);
+
+      const whoMarkup = who.enabled !== false ? `
+        <section class="vumc-section">
+          <div class="vumc-container">
+
+            <div class="who-grid">
+
+              <div>
+
+                <div class="vumc-eyebrow">
+                  ${esc(who.eyebrow || 'Who We Are')}
+                </div>
+
+                <h2>
+                  ${esc(who.title || '')}
+                </h2>
+
+                <p>
+                  ${esc(who.text || '')}
+                </p>
+
+              </div>
+
+              <div class="who-image">
+
+                ${whoImage ? `
+                  <img
+                    src="${esc(whoImage)}"
+                    alt=""
+                  >
+                ` : `
+                  <div class="image-placeholder">
+                    Who We Are Image
+                  </div>
+                `}
+
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+      ` : '';
+
+      const visibleBoxes =
+        boxes.filter(box => box && box.enabled !== false);
+
+      const customMarkup = `
+        <section class="vumc-section custom-section">
+          <div class="vumc-container">
+
+            <div class="vumc-eyebrow">
+              Homepage Features
+            </div>
+
+            <h2>
+              Custom Homepage Boxes
+            </h2>
+
+            ${
+              visibleBoxes.length
+                ? `
+                  <div class="custom-grid">
+
+                    ${visibleBoxes.map(box => {
+
+                      const image = resolveAsset(box.image);
+
+                      return `
+                        <article class="custom-card">
+
+                          <div class="custom-card-image">
+
+                            ${image ? `
+                              <img
+                                src="${esc(image)}"
+                                alt="${esc(box.alt || '')}"
+                              >
+                            ` : `
+                              <div class="image-placeholder">
+                                Homepage Box Image
+                              </div>
+                            `}
+
+                          </div>
+
+                          <div class="custom-card-body">
+
+                            <h3>
+                              ${esc(box.title || 'Homepage Box')}
+                            </h3>
+
+                            ${box.text ? `
+                              <p>${esc(box.text)}</p>
+                            ` : ''}
+
+                            ${box.button_text ? `
+                              <span class="vumc-button">
+                                ${esc(box.button_text)}
+                              </span>
+                            ` : ''}
+
+                          </div>
+
+                        </article>
+                      `;
+
+                    }).join('')}
+
+                  </div>
+                `
+                : `
+                  <div class="preview-empty">
+                    Add a homepage box in the editor to preview it here.
+                  </div>
+                `
+            }
+
+          </div>
+        </section>
+      `;
+
+      return `
+        <main class="vumc-preview">
+          ${heroMarkup}
+          ${storiesMarkup}
+          ${whoMarkup}
+          ${customMarkup}
+        </main>
+      `;
+    });
+  </script>
 </head>
+
 <body></body>
 </html>
