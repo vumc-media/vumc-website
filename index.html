@@ -1142,14 +1142,15 @@ rkp("event","PAGE_VIEW");
 
     .upcoming-livestream-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      align-items: stretch;
     }
 
     .livestream-card {
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
       overflow: hidden;
       border-radius: var(--radius-xl);
       background: var(--surface);
@@ -1159,12 +1160,14 @@ rkp("event","PAGE_VIEW");
 
     .livestream-card-media {
       position: relative;
-      min-height: 260px;
+      width: 100%;
+      aspect-ratio: 16 / 9;
       background: var(--dark);
       overflow: hidden;
     }
 
     .livestream-card-media img {
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -1174,58 +1177,56 @@ rkp("event","PAGE_VIEW");
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(17,22,29,0.42), transparent 55%);
+      background: linear-gradient(to top, rgba(17,22,29,0.28), transparent 55%);
       pointer-events: none;
     }
 
     .livestream-badge {
       position: absolute;
-      left: 18px;
-      top: 18px;
+      left: 14px;
+      top: 14px;
       z-index: 2;
       display: inline-flex;
-      padding: 8px 12px;
+      padding: 7px 11px;
       border-radius: 999px;
-      background: rgba(17,22,29,0.82);
+      background: rgba(17,22,29,0.84);
       color: #fff;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.11em;
+      letter-spacing: 0.10em;
       backdrop-filter: blur(8px);
     }
 
     .livestream-badge.is-live { background: #b42318; }
 
     .livestream-card-body {
-      padding: 28px;
       display: flex;
+      flex: 1;
       flex-direction: column;
-      justify-content: center;
+      padding: 20px;
     }
 
     .livestream-card-date {
-      margin: 0 0 8px;
+      margin: 0 0 7px;
       color: var(--accent);
-      font-size: 12px;
+      font-size: 11px;
+      line-height: 1.4;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.07em;
     }
 
     .livestream-card-body h3 {
-      margin: 0 0 10px;
-      font-size: 24px;
-      line-height: 1.15;
+      margin: 0 0 18px;
+      font-size: 21px;
+      line-height: 1.12;
     }
 
-    .livestream-card-description {
-      margin: 0 0 22px;
-      color: var(--muted);
-      font-size: 15px;
+    .livestream-card-action {
+      align-self: flex-start;
+      margin-top: auto;
     }
-
-    .livestream-card-action { align-self: flex-start; }
 
     .livestream-empty {
       grid-column: 1 / -1;
@@ -1248,16 +1249,16 @@ rkp("event","PAGE_VIEW");
     }
 
     @media (max-width: 980px) {
-      .upcoming-livestream-grid { grid-template-columns: 1fr; }
+      .upcoming-livestream-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 760px) {
       .upcoming-livestream-section { padding: 0 0 56px; }
       .upcoming-livestream-heading { display: block; }
       .upcoming-livestream-heading .btn { margin-top: 20px; }
-      .livestream-card { grid-template-columns: 1fr; }
-      .livestream-card-media { min-height: 220px; aspect-ratio: 16 / 9; }
-      .livestream-card-body { padding: 24px; }
+      .upcoming-livestream-grid { grid-template-columns: 1fr; gap: 18px; }
+      .livestream-card-body { padding: 18px; }
+      .livestream-card-body h3 { font-size: 20px; }
       .livestream-card-action { width: 100%; }
     }
 
@@ -4441,8 +4442,6 @@ You are welcome in person or online.`,
             ? 'Streaming live now'
             : formatStreamDate(stream.scheduledStartTime);
           const buttonText = isLive ? 'Watch Live Now' : 'Set Reminder';
-          const description = stream.description ||
-            'Join Versailles United Methodist Church for worship online.';
 
           return `
             <article class="livestream-card">
@@ -4453,7 +4452,6 @@ You are welcome in person or online.`,
               <div class="livestream-card-body">
                 <p class="livestream-card-date">${escapeHtml(dateText)}</p>
                 <h3>${escapeHtml(title)}</h3>
-                <p class="livestream-card-description">${escapeHtml(description)}</p>
                 <a class="btn ${isLive ? 'btn-primary' : 'btn-dark'} livestream-card-action" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${buttonText}</a>
               </div>
             </article>`;
