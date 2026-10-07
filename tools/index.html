@@ -10,167 +10,6 @@
   <link rel="stylesheet" href="./styles.css" />
 
   <style>
-    [hidden] {
-      display: none !important;
-    }
-
-    /* ==================================================
-       AUTHENTICATION
-    ================================================== */
-
-    .auth-screen {
-      min-height: calc(100vh - 110px);
-      display: grid;
-      place-items: center;
-      padding: 30px 18px;
-    }
-
-    .auth-card {
-      width: min(470px, 100%);
-      padding: 32px;
-      border: 0;
-      border-radius: 20px;
-      background: linear-gradient(135deg, #073b66 0%, #075f9c 55%, #087fc4 100%);
-      box-shadow: 0 22px 55px rgba(7, 59, 102, 0.30);
-      color: #ffffff;
-    }
-
-    .auth-card h2 {
-      margin-bottom: 8px;
-      color: #ffffff;
-    }
-
-    .auth-card p {
-      color: rgba(255, 255, 255, 0.90);
-      line-height: 1.55;
-    }
-
-    .auth-card .eyebrow {
-      color: #ffffff;
-      opacity: 0.82;
-    }
-
-    .auth-card label {
-      display: grid;
-      gap: 8px;
-      margin-top: 20px;
-      color: #ffffff;
-      font-weight: 800;
-    }
-
-    .auth-card input {
-      width: 100%;
-      padding: 14px 14px;
-      border: 2px solid rgba(255, 255, 255, 0.60);
-      border-radius: 10px;
-      background: #ffffff;
-      color: #17324d;
-      font: inherit;
-      box-sizing: border-box;
-    }
-
-    .auth-card input::placeholder {
-      color: #8293a2;
-    }
-
-    .auth-card input:focus {
-      outline: none;
-      border-color: #ffffff;
-      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.20);
-    }
-
-    .passkey-field {
-      position: relative;
-      width: 100%;
-    }
-
-    .passkey-field input {
-      padding-right: 54px;
-    }
-
-    .passkey-toggle {
-      position: absolute;
-      top: 50%;
-      right: 7px;
-      transform: translateY(-50%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      padding: 0;
-      border: 0;
-      border-radius: 8px;
-      color: #29465f;
-      background: transparent;
-      cursor: pointer;
-      font-size: 20px;
-      line-height: 1;
-    }
-
-    .passkey-toggle:hover {
-      background: #e5eef4;
-    }
-
-    .auth-button,
-    .logout-button {
-      border: 0;
-      border-radius: 10px;
-      cursor: pointer;
-      font: inherit;
-      font-weight: 800;
-    }
-
-    .auth-button {
-      width: 100%;
-      margin-top: 20px;
-      padding: 14px 16px;
-      color: #075f9c;
-      background: #ffffff;
-      box-shadow: 0 7px 18px rgba(0, 0, 0, 0.15);
-    }
-
-    .auth-button:hover {
-      color: #073b66;
-      background: #edf6fb;
-    }
-
-    .auth-button:disabled {
-      cursor: wait;
-      opacity: 0.65;
-    }
-
-    .logout-button {
-      padding: 9px 13px;
-      color: #1f5f8b;
-      background: #edf4f8;
-    }
-
-    .auth-message {
-      margin-top: 16px;
-      padding: 12px;
-      border-radius: 10px;
-      color: #17324d;
-      background: #edf4f8;
-    }
-
-    .auth-message.error {
-      color: #a61b1b;
-      background: #fff0ef;
-    }
-
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .signed-in-user {
-      color: #687b8f;
-      font-size: 0.86rem;
-    }
-
-
     /* ==================================================
        TOOL CARDS
     ================================================== */
@@ -294,6 +133,7 @@
       color: #7b8792;
       opacity: 0.72;
       box-shadow: none;
+      cursor: default;
     }
 
     .tool-card.disabled h3 {
@@ -314,14 +154,6 @@
     ================================================== */
 
     @media (max-width: 700px) {
-
-      .topbar-actions {
-        gap: 7px;
-      }
-
-      .signed-in-user {
-        display: none;
-      }
 
       .tool-card:not(.disabled):hover {
         transform: none;
@@ -353,25 +185,6 @@
 
     <div class="topbar-actions">
 
-      <span
-        id="signedInUser"
-        class="signed-in-user"
-        hidden
-      >
-        Authorized staff
-      </span>
-
-
-      <button
-        id="logoutButton"
-        class="logout-button"
-        type="button"
-        hidden
-      >
-        Sign out
-      </button>
-
-
       <span class="badge">
         Internal
       </span>
@@ -382,88 +195,12 @@
 
 
   <!-- ==================================================
-       LOGIN SCREEN
-  ================================================== -->
-
-  <main
-    id="authScreen"
-    class="auth-screen"
-  >
-
-    <section class="auth-card">
-
-      <p class="eyebrow">
-        Authorized staff only
-      </p>
-
-      <h2>
-        Enter Staff Tools
-      </h2>
-
-      <p>
-        Enter the shared staff passkey to continue.
-      </p>
-
-
-      <form id="loginForm">
-
-        <label>
-
-          Staff Passkey
-
-          <div class="passkey-field">
-            <input
-              id="passkeyInput"
-              type="password"
-              autocomplete="current-password"
-              placeholder="Enter staff passkey"
-              required
-            />
-
-            <button
-              id="togglePasskey"
-              class="passkey-toggle"
-              type="button"
-              aria-label="Show passkey"
-              title="Show passkey"
-            >
-              👁
-            </button>
-          </div>
-
-        </label>
-
-
-        <button
-          id="loginButton"
-          class="auth-button"
-          type="submit"
-        >
-          Enter Staff Tools
-        </button>
-
-      </form>
-
-
-      <div
-        id="authMessage"
-        class="auth-message"
-        hidden
-      ></div>
-
-    </section>
-
-  </main>
-
-
-  <!-- ==================================================
        STAFF PORTAL
   ================================================== -->
 
   <main
     id="staffPortal"
     class="shell"
-    hidden
   >
 
     <section class="intro">
@@ -790,40 +527,12 @@
 
     </section>
 
-
-    <!-- SECURITY NOTE -->
-
-    <p class="security-note">
-      Access to this dashboard requires the VUMC staff passkey.
-    </p>
-
   </main>
 
 
   <!-- ==================================================
        APP
   ================================================== -->
-
-  <script>
-    (() => {
-      const visibilityInput = document.getElementById("passkeyInput");
-      const visibilityButton = document.getElementById("togglePasskey");
-
-      if (!visibilityInput || !visibilityButton) return;
-
-      visibilityButton.addEventListener("click", () => {
-        const isHidden = visibilityInput.type === "password";
-        visibilityInput.type = isHidden ? "text" : "password";
-        visibilityButton.textContent = isHidden ? "🙈" : "👁";
-        visibilityButton.setAttribute(
-          "aria-label",
-          isHidden ? "Hide passkey" : "Show passkey"
-        );
-        visibilityButton.title = isHidden ? "Hide passkey" : "Show passkey";
-        visibilityInput.focus();
-      });
-    })();
-  </script>
 
   <script src="./app.js"></script>
 
