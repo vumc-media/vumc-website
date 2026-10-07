@@ -1,5 +1,6 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzHpOIjWgX-jiOMGwiCBrONrmym-9kMJDOQ4DA15re8d-_MUidnpXbIGCZYTqM_gAJV/exec";
-const SESSION_KEY = "vumc_staff_token";
+const GAS_URL =
+  "https://script.google.com/macros/s/AKfycbzHpOIjWgX-jiOMGwiCBrONrmym-9kMJDOQ4DA15re8d-_MUidnpXbIGCZYTqM_gAJV/exec";
+
 const FORM_TIMEOUT_MS = 90000;
 const POLL_INTERVAL_MS = 500;
 
@@ -12,9 +13,7 @@ const ALLOWED_IMAGE_TYPES = [
   "image/webp"
 ];
 
-let defaultAudience =
-  "All VUMC Contacts Group";
-
+let defaultAudience = "All VUMC Contacts Group";
 let selectedImages = [];
 
 
@@ -25,18 +24,15 @@ let selectedImages = [];
 function makeRequestId() {
   if (
     window.crypto &&
-    typeof crypto.randomUUID ===
-      "function"
+    typeof window.crypto.randomUUID === "function"
   ) {
-    return crypto.randomUUID();
+    return window.crypto.randomUUID();
   }
 
   return (
     Date.now().toString(36) +
     "-" +
-    Math.random()
-      .toString(36)
-      .slice(2)
+    Math.random().toString(36).slice(2)
   );
 }
 
@@ -57,11 +53,8 @@ function submitHiddenPost(
         "iframe"
       );
 
-    frame.id =
-      "vumcGasPostFrame";
-
-    frame.name =
-      "vumcGasPostFrame";
+    frame.id = "vumcGasPostFrame";
+    frame.name = "vumcGasPostFrame";
 
     frame.setAttribute(
       "aria-hidden",
@@ -129,7 +122,6 @@ function submitHiddenPost(
   );
 
   form.submit();
-
   form.remove();
 }
 
@@ -156,9 +148,13 @@ function jsonpPoll(
           delete window[
             callbackName
           ];
-        } catch (error) {}
+        } catch (error) {
+          // Ignore cleanup errors.
+        }
 
-        script.remove();
+        if (script.parentNode) {
+          script.remove();
+        }
       };
 
       window[
@@ -220,8 +216,7 @@ function jsonpPoll(
 async function gasRequest(
   action,
   payload = {},
-  timeoutMs =
-    FORM_TIMEOUT_MS
+  timeoutMs = FORM_TIMEOUT_MS
 ) {
   const requestId =
     makeRequestId();
@@ -236,8 +231,7 @@ async function gasRequest(
     Date.now();
 
   while (
-    Date.now() -
-      started <
+    Date.now() - started <
     timeoutMs
   ) {
     await new Promise(
@@ -274,54 +268,19 @@ async function gasRequest(
 
 
 /* =========================================================
-   AUTHENTICATED REQUEST
+   COMMUNICATIONS REQUEST
+   Authentication removed.
 ========================================================= */
 
 async function communicationsRequest(
   action,
   payload = {}
 ) {
-  const token =
-    sessionStorage.getItem(
-      SESSION_KEY
-    );
-
-  if (!token) {
-    window.location.replace(
-      "../"
-    );
-
-    throw new Error(
-      "Staff authorization required."
-    );
-  }
-
   const result =
     await gasRequest(
       action,
-      {
-        ...payload,
-        token
-      }
+      payload
     );
-
-  if (
-    result &&
-    result.authRequired
-  ) {
-    sessionStorage.removeItem(
-      SESSION_KEY
-    );
-
-    window.location.replace(
-      "../"
-    );
-
-    throw new Error(
-      result.error ||
-      "Your Staff Tools session has expired."
-    );
-  }
 
   if (
     !result ||
@@ -527,10 +486,8 @@ function normalizeUrl(
       );
 
     if (
-      url.protocol !==
-        "http:" &&
-      url.protocol !==
-        "https:"
+      url.protocol !== "http:" &&
+      url.protocol !== "https:"
     ) {
       throw new Error();
     }
@@ -560,8 +517,7 @@ function readImageFile(
       reader.onload = () => {
         const result =
           String(
-            reader.result ||
-            ""
+            reader.result || ""
           );
 
         const commaIndex =
@@ -591,8 +547,7 @@ function readImageFile(
 
           base64:
             result.slice(
-              commaIndex +
-                1
+              commaIndex + 1
             )
         });
       };
@@ -729,8 +684,7 @@ async function handleImageSelection() {
 
   const files =
     Array.from(
-      imageInput.files ||
-      []
+      imageInput.files || []
     );
 
   if (!files.length) {
@@ -790,8 +744,7 @@ async function handleImageSelection() {
   }
 
   try {
-    const prepared =
-      [];
+    const prepared = [];
 
     for (
       const file of files
@@ -978,57 +931,22 @@ async function loadAudiences() {
 
 /* =========================================================
    INITIALIZE
+   No Staff Tools login/session required.
 ========================================================= */
 
 async function initializeApp() {
-  const token =
-    sessionStorage.getItem(
-      SESSION_KEY
-    );
 
-  if (!token) {
-    window.location.replace(
-      "../"
-    );
+  loadingScreen.hidden =
+    true;
 
-    return;
-  }
+  app.hidden =
+    false;
+
+  updateAudienceVisibility();
+  updatePreview();
+  renderImagePreviews();
 
   try {
-    const verification =
-      await gasRequest(
-        "verifyStaffSession",
-        {
-          token
-        }
-      );
-
-    if (
-      !verification ||
-      verification.success !==
-        true
-    ) {
-      sessionStorage.removeItem(
-        SESSION_KEY
-      );
-
-      window.location.replace(
-        "../"
-      );
-
-      return;
-    }
-
-    loadingScreen.hidden =
-      true;
-
-    app.hidden =
-      false;
-
-    updateAudienceVisibility();
-    updatePreview();
-    renderImagePreviews();
-
     await loadConfiguration();
     await loadAudiences();
 
@@ -1037,12 +955,6 @@ async function initializeApp() {
       "Initialization error:",
       error
     );
-
-    loadingScreen.hidden =
-      true;
-
-    app.hidden =
-      false;
 
     configBox.textContent =
       "The Communications backend could not be reached.";
@@ -1179,8 +1091,7 @@ async function publishAnnouncement() {
         }
       );
 
-    const completed =
-      [];
+    const completed = [];
 
     if (
       data.result?.email
@@ -1309,5 +1220,10 @@ clearButton.addEventListener(
   "click",
   clearComposer
 );
+
+
+/* =========================================================
+   START
+========================================================= */
 
 initializeApp();
