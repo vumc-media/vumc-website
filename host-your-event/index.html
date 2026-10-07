@@ -567,6 +567,99 @@ body {
   .brand-mark { width: 40px; height: 40px; }
   .mobile-menu { padding: 0 14px 14px; }
 }
+
+/* Wide Facility Request modal */
+.facility-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(18, 28, 30, .76);
+  backdrop-filter: blur(5px);
+}
+
+.facility-modal.open {
+  display: flex;
+}
+
+.facility-modal-dialog {
+  width: min(1100px, 96vw);
+  height: min(88vh, 900px);
+  background: #fff;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 28px 80px rgba(0,0,0,.35);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.facility-modal-header {
+  min-height: 62px;
+  padding: 12px 18px 12px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--teal-dark);
+  color: #fff;
+}
+
+.facility-modal-title {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 800;
+}
+
+.facility-modal-close {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.14);
+  color: #fff;
+  font-size: 27px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.facility-modal-close:hover {
+  background: rgba(255,255,255,.24);
+}
+
+.facility-modal-frame {
+  width: 100%;
+  flex: 1;
+  border: 0;
+  background: #fff;
+}
+
+body.facility-modal-open {
+  overflow: hidden;
+}
+
+@media (max-width: 700px) {
+  .facility-modal {
+    padding: 0;
+  }
+
+  .facility-modal-dialog {
+    width: 100vw;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .facility-modal-header {
+    min-height: 58px;
+    padding: 9px 12px 9px 16px;
+  }
+}
+
 </style>
 </head>
 
@@ -643,7 +736,7 @@ body {
     </p>
     <div class="hero-actions">
       <a class="btn" href="#rental-documents">Review Rental Information</a>
-      <a class="btn outline" href="https://versaillesumc.churchcenter.com/people/forms/779435" data-open-in-church-center-modal="true">Start Facility Request</a>
+      <a class="btn outline facility-modal-link" href="https://versaillesumc.churchcenter.com/people/forms/779435">Start Facility Request</a>
     </div>
   </div>
 </header>
@@ -817,7 +910,7 @@ body {
         After reviewing the documents above, submit your request. The church office will confirm availability,
         review your event details, and contact you regarding approval and next steps.
       </p>
-      <a class="btn" href="https://versaillesumc.churchcenter.com/people/forms/779435" data-open-in-church-center-modal="true">Start Facility Rental Request</a>
+      <a class="btn facility-modal-link" href="https://versaillesumc.churchcenter.com/people/forms/779435">Start Facility Rental Request</a>
     </div>
   </div>
 </section>
@@ -856,7 +949,7 @@ body {
   </p>
 
   <a class="btn secondary" href="#rental-documents">Review Documents</a>
-  <a class="btn" href="https://versaillesumc.churchcenter.com/people/forms/779435" data-open-in-church-center-modal="true">Start Facility Rental Request</a>
+  <a class="btn facility-modal-link" href="https://versaillesumc.churchcenter.com/people/forms/779435">Start Facility Rental Request</a>
 
   <div class="small-note">
     Versailles United Methodist Church · 230 Paynes Mill Road · Versailles, Kentucky
@@ -865,7 +958,67 @@ body {
 
 
 
+<div class="facility-modal" id="facilityModal" aria-hidden="true">
+  <div class="facility-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="facilityModalTitle">
+    <div class="facility-modal-header">
+      <p class="facility-modal-title" id="facilityModalTitle">Facility Rental Request</p>
+      <button class="facility-modal-close" id="facilityModalClose" type="button" aria-label="Close facility request">&times;</button>
+    </div>
+    <iframe
+      class="facility-modal-frame"
+      id="facilityModalFrame"
+      title="Versailles UMC Facility Rental Request"
+      data-src="https://versaillesumc.churchcenter.com/people/forms/779435"
+      loading="lazy">
+    </iframe>
+  </div>
+</div>
+
 <script>
+
+  // Wide facility request modal
+  const facilityModal = document.getElementById('facilityModal');
+  const facilityModalFrame = document.getElementById('facilityModalFrame');
+  const facilityModalClose = document.getElementById('facilityModalClose');
+  const facilityModalLinks = document.querySelectorAll('.facility-modal-link');
+
+  function openFacilityModal(event) {
+    event.preventDefault();
+
+    if (!facilityModalFrame.src) {
+      facilityModalFrame.src = facilityModalFrame.dataset.src;
+    }
+
+    facilityModal.classList.add('open');
+    facilityModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('facility-modal-open');
+    facilityModalClose.focus();
+  }
+
+  function closeFacilityModal() {
+    facilityModal.classList.remove('open');
+    facilityModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('facility-modal-open');
+  }
+
+  facilityModalLinks.forEach(link => {
+    link.addEventListener('click', openFacilityModal);
+  });
+
+  facilityModalClose.addEventListener('click', closeFacilityModal);
+
+  facilityModal.addEventListener('click', event => {
+    if (event.target === facilityModal) {
+      closeFacilityModal();
+    }
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && facilityModal.classList.contains('open')) {
+      closeFacilityModal();
+    }
+  });
+
   const mobileToggle = document.getElementById('mobileToggle');
   const mobileMenu = document.getElementById('mobileMenu');
   const mobileConnectToggle = document.getElementById('mobileConnectToggle');
