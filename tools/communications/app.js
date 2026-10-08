@@ -11,14 +11,13 @@ const REQUEST_TIMEOUT = 90000;
 const MAX_IMAGES = 10;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
 const IMAGE_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp"
+  "image/jpeg", "image/png", "image/webp"
 ];
 
 let defaultAudience = "All VUMC Contacts Group";
 let selectedImages = [];
 let publishingEnabled = false;
+let busy = false;
 
 /* ---------- Bridge connection ---------- */
 
@@ -39,7 +38,6 @@ const bridgeReady = new Promise((resolve, reject) => {
 function isGoogleOrigin(origin) {
   try {
     const url = new URL(origin);
-
     return url.protocol === "https:" && (
       url.hostname === "script.google.com" ||
       url.hostname === "script.googleusercontent.com" ||
@@ -76,7 +74,6 @@ window.addEventListener("message", event => {
 
   const id = String(message.requestId || "");
   const pending = pendingRequests.get(id);
-
   if (!pending) return;
 
   pendingRequests.delete(id);
@@ -137,14 +134,12 @@ async function gasRequest(action, payload = {}) {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       pendingRequests.delete(id);
-      reject(new Error("Communications request timed out."));
+      reject(new Error(
+        "Communications request timed out. Check whether the announcement was sent before trying again."
+      ));
     }, REQUEST_TIMEOUT);
 
-    pendingRequests.set(id, {
-      resolve,
-      reject,
-      timer
-    });
+    pendingRequests.set(id, { resolve, reject, timer });
 
     try {
       bridgeWindow.postMessage({
@@ -173,7 +168,7 @@ async function communicationsRequest(action, payload = {}) {
   return result;
 }
 
-/* ---------- Existing page elements ---------- */
+/* ---------- Page elements ---------- */
 
 const el = id => document.getElementById(id);
 
@@ -224,7 +219,8 @@ function updateAudienceVisibility() {
   audienceWrap.hidden = !sendEmailCheckbox.checked;
 }
 
-function setBusy(busy) {
+function setBusy(value) {
+  busy = value;
   publishButton.disabled = busy || !publishingEnabled;
   clearButton.disabled = busy;
   imageInput.disabled = busy;
@@ -239,11 +235,9 @@ function normalizeUrl(value) {
 
   try {
     const url = new URL(text);
-
     if (!["http:", "https:"].includes(url.protocol)) {
       throw new Error("Invalid protocol");
     }
-
     return url.href;
   } catch (_) {
     throw new Error(
@@ -372,12 +366,13 @@ async function handleImageSelection() {
 
     selectedImages.push(...prepared);
     renderImagePreviews();
+
   } catch (error) {
     prepared.forEach(image => {
       URL.revokeObjectURL(image.previewUrl);
     });
-
     setStatus(error.message, "error");
+
   } finally {
     imageInput.value = "";
   }
@@ -388,7 +383,9 @@ async function handleImageSelection() {
 async function loadConfiguration() {
   const data = await communicationsRequest("getConfig");
 
-  publishingEnabled = data.publishingEnabled === true;
+  // Publishing is protected by the staff password
+  // and the server-side pinPublish function.
+  publishingEnabled = true;
 
   defaultAudience =
     data.defaultAudience || "All VUMC Contacts Group";
@@ -411,11 +408,7 @@ async function loadConfiguration() {
   }
 
   configBox.textContent =
-    `Publishing: ${
-      publishingEnabled
-        ? "enabled"
-        : "locked (staff authorization required)"
-    } · Email: ${
+    `Publishing: staff password required · Email: ${
       data.emailConfigured ? "ready" : "not configured"
     } · Facebook: ${facebookText}`;
 }
@@ -460,13 +453,7 @@ async function loadAudiences() {
 async function publishAnnouncement() {
   clearStatus();
 
-  if (!publishingEnabled) {
-    setStatus(
-      "Publishing is locked until staff authorization is configured.",
-      "error"
-    );
-    return;
-  }
+  if (busy || !publishingEnabled) return;
 
   const title = titleInput.value.trim();
   const body = bodyInput.value.trim();
@@ -506,6 +493,36 @@ async function publishAnnouncement() {
     return;
   }
 
+  /*
+   * Ask for the password only when publishing.
+   * Cancel leaves the announcement untouched.
+   */
+  const pin = window.prompt(
+    "Enter your VUMC staff password to publish:"
+  );
+
+  if (pin === null) return;
+
+  if (pin.length < 6 || pin.length > 64) {
+    setStatus(
+      "Staff password must contain 6 to 64 characters.",
+      "error"
+    );
+    return;
+  }
+
+  const destinations = [
+    sendEmail ? "Email" : "",
+    postFacebook ? "Facebook" : ""
+  ].filter(Boolean).join(" and ");
+
+  const confirmed = window.confirm(
+    `Publish "${title}" to ${destinations}?` +
+    (sendEmail ? `\nAudience: ${audience}` : "")
+  );
+
+  if (!confirmed) return;
+
   setBusy(true);
 
   try {
@@ -516,6 +533,7 @@ async function publishAnnouncement() {
     }));
 
     const data = await communicationsRequest("publish", {
+      pin,
       announcement: {
         title,
         body,
@@ -544,12 +562,15 @@ async function publishAnnouncement() {
         ? `Success: ${completed.join(" · ")}.`
         : "Announcement completed."
     );
+
   } catch (error) {
     console.error("Publish error:", error);
     setStatus(
-      error.message || "The announcement could not be published.",
+      error.message ||
+      "The announcement could not be published.",
       "error"
     );
+
   } finally {
     setBusy(false);
   }
@@ -558,6 +579,8 @@ async function publishAnnouncement() {
 /* ---------- Clear form ---------- */
 
 function clearComposer() {
+  if (busy) return;
+
   titleInput.value = "";
   bodyInput.value = "";
   linkUrlInput.value = "";
@@ -590,7 +613,7 @@ async function initializeApp() {
 
   publishButton.disabled = true;
   publishButton.title =
-    "Publishing requires staff authorization.";
+    "Connecting to Communications backend.";
 
   try {
     await loadConfiguration();
@@ -598,10 +621,13 @@ async function initializeApp() {
 
     publishButton.disabled = !publishingEnabled;
     publishButton.title = publishingEnabled
-      ? ""
-      : "Publishing requires staff authorization.";
+      ? "Publish with staff password"
+      : "Publishing unavailable.";
+
   } catch (error) {
     console.error("Initialization error:", error);
+
+    publishingEnabled = false;
 
     configBox.textContent =
       "The Communications backend could not be reached.";
