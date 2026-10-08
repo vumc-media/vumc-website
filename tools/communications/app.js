@@ -1,13 +1,16 @@
+
+"use strict";
+
+/* VUMC Communications Hub */
+
 const GAS_URL =
   "https://script.google.com/macros/s/AKfycbzHpOIjWgX-jiOMGwiCBrONrmym-9kMJDOQ4DA15re8d-_MUidnpXbIGCZYTqM_gAJV/exec";
 
-const FORM_TIMEOUT_MS = 90000;
-const POLL_INTERVAL_MS = 500;
-
+const BRIDGE_URL = GAS_URL + "?bridge=1";
+const REQUEST_TIMEOUT = 90000;
 const MAX_IMAGES = 10;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
-
-const ALLOWED_IMAGE_TYPES = [
+const IMAGE_TYPES = [
   "image/jpeg",
   "image/png",
   "image/webp"
@@ -15,946 +18,590 @@ const ALLOWED_IMAGE_TYPES = [
 
 let defaultAudience = "All VUMC Contacts Group";
 let selectedImages = [];
+let publishingEnabled = false;
 
+/* ---------- Bridge connection ---------- */
 
-/* =========================================================
-   GAS REQUEST
-========================================================= */
+let bridgeFrame = null;
+let bridgeWindow = null;
+let bridgeOrigin = null;
+let readyResolve;
+let readyReject;
+let readyTimer;
 
-function makeRequestId() {
+const pendingRequests = new Map();
+
+const bridgeReady = new Promise((resolve, reject) => {
+  readyResolve = resolve;
+  readyReject = reject;
+});
+
+function isGoogleOrigin(origin) {
+  try {
+    const url = new URL(origin);
+
+    return url.protocol === "https:" && (
+      url.hostname === "script.google.com" ||
+      url.hostname === "script.googleusercontent.com" ||
+      url.hostname.endsWith(".googleusercontent.com")
+    );
+  } catch (_) {
+    return false;
+  }
+}
+
+window.addEventListener("message", event => {
+  if (!isGoogleOrigin(event.origin)) return;
+
+  const message = event.data;
+  if (!message || typeof message !== "object") return;
+
+  if (message.type === "vumc-bridge-ready") {
+    if (!bridgeFrame || !event.source) return;
+
+    bridgeWindow = event.source;
+    bridgeOrigin = event.origin;
+
+    clearTimeout(readyTimer);
+    readyResolve();
+    return;
+  }
+
+  if (message.type !== "vumc-bridge-response") return;
+
   if (
-    window.crypto &&
-    typeof window.crypto.randomUUID === "function"
-  ) {
+    event.source !== bridgeWindow ||
+    event.origin !== bridgeOrigin
+  ) return;
+
+  const id = String(message.requestId || "");
+  const pending = pendingRequests.get(id);
+
+  if (!pending) return;
+
+  pendingRequests.delete(id);
+  clearTimeout(pending.timer);
+
+  pending.resolve(message.result || {
+    success: false,
+    error: "No result returned by Communications."
+  });
+});
+
+function startBridge() {
+  if (bridgeFrame) return;
+
+  bridgeFrame = document.createElement("iframe");
+  bridgeFrame.title = "Communications connection";
+  bridgeFrame.setAttribute("aria-hidden", "true");
+
+  bridgeFrame.style.cssText = [
+    "position:absolute",
+    "width:1px",
+    "height:1px",
+    "border:0",
+    "opacity:0",
+    "pointer-events:none",
+    "left:-9999px"
+  ].join(";");
+
+  readyTimer = setTimeout(() => {
+    readyReject(new Error(
+      "The Google Apps Script bridge did not connect."
+    ));
+  }, 20000);
+
+  bridgeFrame.src = BRIDGE_URL;
+  document.body.appendChild(bridgeFrame);
+}
+
+function requestId() {
+  if (window.crypto?.randomUUID) {
     return window.crypto.randomUUID();
   }
 
-  return (
-    Date.now().toString(36) +
-    "-" +
-    Math.random().toString(36).slice(2)
-  );
+  return Date.now().toString(36) +
+    "-" + Math.random().toString(36).slice(2);
 }
 
+async function gasRequest(action, payload = {}) {
+  startBridge();
+  await bridgeReady;
 
-function submitHiddenPost(
-  action,
-  payload,
-  requestId
-) {
-  let frame =
-    document.getElementById(
-      "vumcGasPostFrame"
-    );
-
-  if (!frame) {
-    frame =
-      document.createElement(
-        "iframe"
-      );
-
-    frame.id = "vumcGasPostFrame";
-    frame.name = "vumcGasPostFrame";
-
-    frame.setAttribute(
-      "aria-hidden",
-      "true"
-    );
-
-    Object.assign(
-      frame.style,
-      {
-        position: "fixed",
-        left: "-10000px",
-        top: "-10000px",
-        width: "1px",
-        height: "1px",
-        border: "0",
-        opacity: "0",
-        pointerEvents: "none"
-      }
-    );
-
-    document.body.appendChild(
-      frame
-    );
+  if (!bridgeWindow || !bridgeOrigin) {
+    throw new Error("Communications bridge unavailable.");
   }
 
-  const form =
-    document.createElement(
-      "form"
-    );
+  const id = requestId();
 
-  form.method = "POST";
-  form.action = GAS_URL;
-  form.target = frame.name;
-  form.style.display = "none";
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      pendingRequests.delete(id);
+      reject(new Error("Communications request timed out."));
+    }, REQUEST_TIMEOUT);
 
-  const fields = {
-    requestId,
-    action,
-    payload:
-      JSON.stringify(
-        payload || {}
-      )
-  };
+    pendingRequests.set(id, {
+      resolve,
+      reject,
+      timer
+    });
 
-  Object.entries(fields)
-    .forEach(
-      ([name, value]) => {
-        const input =
-          document.createElement(
-            "input"
-          );
-
-        input.type = "hidden";
-        input.name = name;
-        input.value = value;
-
-        form.appendChild(
-          input
-        );
-      }
-    );
-
-  document.body.appendChild(
-    form
-  );
-
-  form.submit();
-  form.remove();
-}
-
-
-function jsonpPoll(
-  requestId
-) {
-  return new Promise(
-    (resolve, reject) => {
-      const callbackName =
-        "__vumcJsonp_" +
-        requestId.replace(
-          /[^A-Za-z0-9_$]/g,
-          "_"
-        );
-
-      const script =
-        document.createElement(
-          "script"
-        );
-
-      const cleanup = () => {
-        try {
-          delete window[
-            callbackName
-          ];
-        } catch (error) {
-          // Ignore cleanup errors.
-        }
-
-        if (script.parentNode) {
-          script.remove();
-        }
-      };
-
-      window[
-        callbackName
-      ] = data => {
-        cleanup();
-        resolve(data);
-      };
-
-      script.onerror = () => {
-        cleanup();
-
-        reject(
-          new Error(
-            "Could not read the Communications backend response."
-          )
-        );
-      };
-
-      const url =
-        new URL(
-          GAS_URL
-        );
-
-      url.searchParams.set(
-        "api",
-        "1"
-      );
-
-      url.searchParams.set(
-        "requestId",
-        requestId
-      );
-
-      url.searchParams.set(
-        "callback",
-        callbackName
-      );
-
-      url.searchParams.set(
-        "_",
-        String(
-          Date.now()
-        )
-      );
-
-      script.src =
-        url.toString();
-
-      document.head
-        .appendChild(
-          script
-        );
+    try {
+      bridgeWindow.postMessage({
+        type: "vumc-bridge-request",
+        requestId: id,
+        action,
+        payload
+      }, bridgeOrigin);
+    } catch (error) {
+      clearTimeout(timer);
+      pendingRequests.delete(id);
+      reject(error);
     }
-  );
+  });
 }
 
+async function communicationsRequest(action, payload = {}) {
+  const result = await gasRequest(action, payload);
 
-async function gasRequest(
-  action,
-  payload = {},
-  timeoutMs = FORM_TIMEOUT_MS
-) {
-  const requestId =
-    makeRequestId();
-
-  submitHiddenPost(
-    action,
-    payload,
-    requestId
-  );
-
-  const started =
-    Date.now();
-
-  while (
-    Date.now() - started <
-    timeoutMs
-  ) {
-    await new Promise(
-      resolve =>
-        setTimeout(
-          resolve,
-          POLL_INTERVAL_MS
-        )
-    );
-
-    const envelope =
-      await jsonpPoll(
-        requestId
-      );
-
-    if (
-      envelope &&
-      envelope.ready
-    ) {
-      return (
-        envelope.result || {
-          success: false,
-          error:
-            "No result returned."
-        }
-      );
-    }
-  }
-
-  throw new Error(
-    "The Communications request timed out."
-  );
-}
-
-
-/* =========================================================
-   COMMUNICATIONS REQUEST
-   Authentication removed.
-========================================================= */
-
-async function communicationsRequest(
-  action,
-  payload = {}
-) {
-  const result =
-    await gasRequest(
-      action,
-      payload
-    );
-
-  if (
-    !result ||
-    result.success === false
-  ) {
+  if (!result || result.success === false) {
     throw new Error(
-      result &&
-      result.error
-        ? result.error
-        : "The Communications request failed."
+      result?.error || "Communications request failed."
     );
   }
 
   return result;
 }
 
+/* ---------- Existing page elements ---------- */
 
-/* =========================================================
-   DOM
-========================================================= */
+const el = id => document.getElementById(id);
 
-const loadingScreen =
-  document.getElementById(
-    "loadingScreen"
-  );
+const loadingScreen = el("loadingScreen");
+const app = el("app");
+const titleInput = el("title");
+const bodyInput = el("body");
+const linkUrlInput = el("linkUrl");
+const imageInput = el("imageInput");
+const imagePreviewWrap = el("imagePreviewWrap");
+const audienceSelect = el("audience");
+const audienceWrap = el("audienceWrap");
+const sendEmailCheckbox = el("sendEmail");
+const postFacebookCheckbox = el("postFacebook");
+const publishButton = el("publishButton");
+const clearButton = el("clearButton");
+const previewTitle = el("previewTitle");
+const previewBody = el("previewBody");
+const configBox = el("configBox");
+const statusBox = el("status");
 
-const app =
-  document.getElementById(
-    "app"
-  );
+/* ---------- Status and preview ---------- */
 
-const titleInput =
-  document.getElementById(
-    "title"
-  );
+function setStatus(message, type = "success") {
+  statusBox.textContent = message;
+  statusBox.className = "status " + type;
+  statusBox.hidden = false;
+}
 
-const bodyInput =
-  document.getElementById(
-    "body"
-  );
-
-const linkUrlInput =
-  document.getElementById(
-    "linkUrl"
-  );
-
-const imageInput =
-  document.getElementById(
-    "imageInput"
-  );
-
-const imagePreviewWrap =
-  document.getElementById(
-    "imagePreviewWrap"
-  );
-
-const audienceSelect =
-  document.getElementById(
-    "audience"
-  );
-
-const audienceWrap =
-  document.getElementById(
-    "audienceWrap"
-  );
-
-const sendEmailCheckbox =
-  document.getElementById(
-    "sendEmail"
-  );
-
-const postFacebookCheckbox =
-  document.getElementById(
-    "postFacebook"
-  );
-
-const publishButton =
-  document.getElementById(
-    "publishButton"
-  );
-
-const clearButton =
-  document.getElementById(
-    "clearButton"
-  );
-
-const previewTitle =
-  document.getElementById(
-    "previewTitle"
-  );
-
-const previewBody =
-  document.getElementById(
-    "previewBody"
-  );
-
-const configBox =
-  document.getElementById(
-    "configBox"
-  );
-
-const statusBox =
-  document.getElementById(
-    "status"
-  );
-
-
-/* =========================================================
-   UI HELPERS
-========================================================= */
+function clearStatus() {
+  statusBox.textContent = "";
+  statusBox.className = "status";
+  statusBox.hidden = true;
+}
 
 function updatePreview() {
   previewTitle.textContent =
-    titleInput.value.trim() ||
-    "Your announcement title";
+    titleInput.value.trim() || "Your announcement title";
 
-  const body =
-    bodyInput.value.trim();
-
-  const link =
-    linkUrlInput.value.trim();
-
-  previewBody.textContent =
-    [body, link]
-      .filter(Boolean)
-      .join("\n\n") ||
+  previewBody.textContent = [
+    bodyInput.value.trim(),
+    linkUrlInput.value.trim()
+  ].filter(Boolean).join("\n\n") ||
     "Your announcement message will appear here.";
 }
 
-
 function updateAudienceVisibility() {
-  audienceWrap.hidden =
-    !sendEmailCheckbox.checked;
+  audienceWrap.hidden = !sendEmailCheckbox.checked;
 }
 
-
-function setStatus(
-  message,
-  type = "success"
-) {
-  statusBox.textContent =
-    message;
-
-  statusBox.className =
-    `status ${type}`;
-
-  statusBox.hidden =
-    false;
-}
-
-
-function clearStatus() {
-  statusBox.textContent =
-    "";
-
-  statusBox.className =
-    "status";
-
-  statusBox.hidden =
-    true;
-}
-
-
-function setBusy(
-  isBusy
-) {
-  publishButton.disabled =
-    isBusy;
-
-  clearButton.disabled =
-    isBusy;
-
-  imageInput.disabled =
-    isBusy;
+function setBusy(busy) {
+  publishButton.disabled = busy || !publishingEnabled;
+  clearButton.disabled = busy;
+  imageInput.disabled = busy;
 
   publishButton.textContent =
-    isBusy
-      ? "Publishing…"
-      : "Publish";
+    busy ? "Publishing…" : "Publish";
 }
 
-
-/* =========================================================
-   URL
-========================================================= */
-
-function normalizeUrl(
-  value
-) {
-  const trimmed =
-    String(
-      value || ""
-    ).trim();
-
-  if (!trimmed) {
-    return "";
-  }
+function normalizeUrl(value) {
+  const text = String(value || "").trim();
+  if (!text) return "";
 
   try {
-    const url =
-      new URL(
-        trimmed
-      );
+    const url = new URL(text);
 
-    if (
-      url.protocol !== "http:" &&
-      url.protocol !== "https:"
-    ) {
-      throw new Error();
+    if (!["http:", "https:"].includes(url.protocol)) {
+      throw new Error("Invalid protocol");
     }
 
     return url.href;
-
-  } catch (error) {
+  } catch (_) {
     throw new Error(
       "The optional link must begin with http:// or https://."
     );
   }
 }
 
+/* ---------- Images ---------- */
 
-/* =========================================================
-   IMAGES
-========================================================= */
+function readImageFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
 
-function readImageFile(
-  file
-) {
-  return new Promise(
-    (resolve, reject) => {
-      const reader =
-        new FileReader();
+    reader.onload = () => {
+      const text = String(reader.result || "");
+      const comma = text.indexOf(",");
 
-      reader.onload = () => {
-        const result =
-          String(
-            reader.result || ""
-          );
+      if (comma < 0) {
+        reject(new Error(
+          `The image "${file.name}" could not be read.`
+        ));
+        return;
+      }
 
-        const commaIndex =
-          result.indexOf(
-            ","
-          );
+      resolve({
+        name: file.name || "announcement-image",
+        mimeType: file.type,
+        base64: text.slice(comma + 1)
+      });
+    };
 
-        if (
-          commaIndex === -1
-        ) {
-          reject(
-            new Error(
-              `The image "${file.name}" could not be read.`
-            )
-          );
+    reader.onerror = () => reject(new Error(
+      `The image "${file.name}" could not be read.`
+    ));
 
-          return;
-        }
-
-        resolve({
-          name:
-            file.name ||
-            "announcement-image",
-
-          mimeType:
-            file.type,
-
-          base64:
-            result.slice(
-              commaIndex + 1
-            )
-        });
-      };
-
-      reader.onerror =
-        () => {
-          reject(
-            new Error(
-              `The image "${file.name}" could not be read.`
-            )
-          );
-        };
-
-      reader.readAsDataURL(
-        file
-      );
-    }
-  );
+    reader.readAsDataURL(file);
+  });
 }
 
-
 function renderImagePreviews() {
-  imagePreviewWrap.innerHTML =
-    "";
+  imagePreviewWrap.innerHTML = "";
 
-  if (
-    !selectedImages.length
-  ) {
-    imagePreviewWrap.hidden =
-      true;
-
+  if (!selectedImages.length) {
+    imagePreviewWrap.hidden = true;
     return;
   }
 
-  const grid =
-    document.createElement(
-      "div"
-    );
+  const grid = document.createElement("div");
+  grid.className = "image-preview-grid";
 
-  grid.className =
-    "image-preview-grid";
+  selectedImages.forEach((image, index) => {
+    const item = document.createElement("div");
+    item.className = "image-preview-item";
 
-  selectedImages.forEach(
-    (image, index) => {
-      const item =
-        document.createElement(
-          "div"
-        );
+    const preview = document.createElement("img");
+    preview.className = "image-preview";
+    preview.src = image.previewUrl;
+    preview.alt = image.name || `Image ${index + 1}`;
 
-      item.className =
-        "image-preview-item";
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "remove-image-button";
+    remove.textContent = `Remove image ${index + 1}`;
 
-      const preview =
-        document.createElement(
-          "img"
-        );
+    remove.addEventListener("click", () => {
+      URL.revokeObjectURL(image.previewUrl);
+      selectedImages.splice(index, 1);
+      renderImagePreviews();
+    });
 
-      preview.className =
-        "image-preview";
+    item.append(preview, remove);
+    grid.appendChild(item);
+  });
 
-      preview.src =
-        image.previewUrl;
-
-      preview.alt =
-        image.name ||
-        `Selected image ${index + 1}`;
-
-      const removeButton =
-        document.createElement(
-          "button"
-        );
-
-      removeButton.type =
-        "button";
-
-      removeButton.className =
-        "remove-image-button";
-
-      removeButton.textContent =
-        `Remove image ${index + 1}`;
-
-      removeButton.addEventListener(
-        "click",
-        () => {
-          const removed =
-            selectedImages[
-              index
-            ];
-
-          if (
-            removed &&
-            removed.previewUrl
-          ) {
-            URL.revokeObjectURL(
-              removed.previewUrl
-            );
-          }
-
-          selectedImages.splice(
-            index,
-            1
-          );
-
-          renderImagePreviews();
-        }
-      );
-
-      item.appendChild(
-        preview
-      );
-
-      item.appendChild(
-        removeButton
-      );
-
-      grid.appendChild(
-        item
-      );
-    }
-  );
-
-  imagePreviewWrap
-    .appendChild(
-      grid
-    );
-
-  imagePreviewWrap.hidden =
-    false;
+  imagePreviewWrap.appendChild(grid);
+  imagePreviewWrap.hidden = false;
 }
-
 
 async function handleImageSelection() {
   clearStatus();
 
-  const files =
-    Array.from(
-      imageInput.files || []
-    );
+  const files = Array.from(imageInput.files || []);
+  if (!files.length) return;
 
-  if (!files.length) {
-    return;
-  }
-
-  if (
-    selectedImages.length +
-      files.length >
-    MAX_IMAGES
-  ) {
-    imageInput.value =
-      "";
-
+  if (selectedImages.length + files.length > MAX_IMAGES) {
+    imageInput.value = "";
     setStatus(
       `You may select up to ${MAX_IMAGES} images.`,
       "error"
     );
-
     return;
   }
 
-  for (
-    const file of files
-  ) {
-    if (
-      !ALLOWED_IMAGE_TYPES
-        .includes(
-          file.type
-        )
-    ) {
-      imageInput.value =
-        "";
-
+  for (const file of files) {
+    if (!IMAGE_TYPES.includes(file.type)) {
+      imageInput.value = "";
       setStatus(
         `"${file.name}" is not a JPG, PNG, or WebP image.`,
         "error"
       );
-
       return;
     }
 
-    if (
-      file.size >
-      MAX_IMAGE_BYTES
-    ) {
-      imageInput.value =
-        "";
-
+    if (file.size > MAX_IMAGE_BYTES) {
+      imageInput.value = "";
       setStatus(
         `"${file.name}" must be smaller than 8 MB.`,
         "error"
       );
-
       return;
     }
   }
 
-  try {
-    const prepared = [];
+  const prepared = [];
 
-    for (
-      const file of files
-    ) {
-      const imageData =
-        await readImageFile(
-          file
-        );
+  try {
+    for (const file of files) {
+      const data = await readImageFile(file);
 
       prepared.push({
-        ...imageData,
-
-        previewUrl:
-          URL.createObjectURL(
-            file
-          )
+        ...data,
+        previewUrl: URL.createObjectURL(file)
       });
     }
 
-    selectedImages = [
-      ...selectedImages,
-      ...prepared
-    ];
-
-    imageInput.value =
-      "";
-
+    selectedImages.push(...prepared);
     renderImagePreviews();
-
   } catch (error) {
-    imageInput.value =
-      "";
+    prepared.forEach(image => {
+      URL.revokeObjectURL(image.previewUrl);
+    });
 
-    setStatus(
-      error.message ||
-      "One or more images could not be prepared.",
-      "error"
-    );
+    setStatus(error.message, "error");
+  } finally {
+    imageInput.value = "";
   }
 }
 
-
-/* =========================================================
-   CONFIG
-========================================================= */
+/* ---------- Configuration ---------- */
 
 async function loadConfiguration() {
-  const data =
-    await communicationsRequest(
-      "getConfig"
-    );
+  const data = await communicationsRequest("getConfig");
+
+  publishingEnabled = data.publishingEnabled === true;
 
   defaultAudience =
-    data.defaultAudience ||
-    "All VUMC Contacts Group";
+    data.defaultAudience || "All VUMC Contacts Group";
 
-  let facebookText =
-    data.facebookConfigured
-      ? "checking…"
-      : "not configured";
+  let facebookText = data.facebookConfigured
+    ? "checking…"
+    : "not configured";
 
-  let facebookDetail =
-    "";
-
-  if (
-    data.facebookConfigured
-  ) {
+  if (data.facebookConfigured) {
     try {
       const facebook =
-        await communicationsRequest(
-          "testFacebook"
-        );
+        await communicationsRequest("testFacebook");
 
-      if (
-        facebook.connected
-      ) {
-        facebookText =
-          facebook.pageName
-            ? `connected (${facebook.pageName})`
-            : "connected";
-
-      } else {
-        facebookText =
-          "connection failed";
-
-        facebookDetail =
-          facebook.error
-            ? ` — ${facebook.error}`
-            : "";
-      }
-
+      facebookText = facebook.connected
+        ? `connected (${facebook.pageName || "Page"})`
+        : `connection failed — ${facebook.error || "Unknown error"}`;
     } catch (error) {
-      facebookText =
-        "connection failed";
-
-      facebookDetail =
-        ` — ${error.message}`;
+      facebookText = `connection failed — ${error.message}`;
     }
   }
 
   configBox.textContent =
-    `Email: ${
-      data.emailConfigured
-        ? "ready"
-        : "not configured"
-    } · Facebook: ${facebookText}${facebookDetail}`;
+    `Publishing: ${
+      publishingEnabled
+        ? "enabled"
+        : "locked (staff authorization required)"
+    } · Email: ${
+      data.emailConfigured ? "ready" : "not configured"
+    } · Facebook: ${facebookText}`;
 }
 
-
-/* =========================================================
-   CONTACT GROUPS
-========================================================= */
+/* ---------- Google Contacts ---------- */
 
 async function loadAudiences() {
   audienceSelect.innerHTML =
-    `<option value="">Loading Google Contacts labels…</option>`;
+    '<option value="">Loading Google Contacts labels…</option>';
 
-  const data =
-    await communicationsRequest(
-      "getGroups"
-    );
+  const data = await communicationsRequest("getGroups");
+  const groups = Array.isArray(data.groups) ? data.groups : [];
 
-  const groups =
-    Array.isArray(
-      data.groups
-    )
-      ? data.groups
-      : [];
+  audienceSelect.innerHTML = "";
 
-  audienceSelect.innerHTML =
-    "";
-
-  if (
-    !groups.length
-  ) {
-    const option =
-      document.createElement(
-        "option"
-      );
-
-    option.value =
-      "";
-
-    option.textContent =
-      "No Google Contacts labels found";
-
-    audienceSelect.appendChild(
-      option
-    );
-
+  if (!groups.length) {
+    const option = document.createElement("option");
+    option.value = "";
+    option.textContent = "No Google Contacts labels found";
+    audienceSelect.appendChild(option);
     return;
   }
 
-  groups.forEach(
-    group => {
-      const option =
-        document.createElement(
-          "option"
-        );
+  groups.forEach(group => {
+    const option = document.createElement("option");
+    option.value = group.name;
 
-      option.value =
-        group.name;
+    option.textContent = group.count
+      ? `${group.name} (${group.count})`
+      : group.name;
 
-      option.textContent =
-        group.count
-          ? `${group.name} (${group.count})`
-          : group.name;
-
-      if (
-        group.name ===
-        defaultAudience
-      ) {
-        option.selected =
-          true;
-      }
-
-      audienceSelect.appendChild(
-        option
-      );
+    if (group.name === defaultAudience) {
+      option.selected = true;
     }
-  );
+
+    audienceSelect.appendChild(option);
+  });
 }
 
+/* ---------- Publishing ---------- */
 
-/* =========================================================
-   INITIALIZE
-   No Staff Tools login/session required.
-========================================================= */
+async function publishAnnouncement() {
+  clearStatus();
+
+  if (!publishingEnabled) {
+    setStatus(
+      "Publishing is locked until staff authorization is configured.",
+      "error"
+    );
+    return;
+  }
+
+  const title = titleInput.value.trim();
+  const body = bodyInput.value.trim();
+  const audience = audienceSelect.value;
+  const sendEmail = sendEmailCheckbox.checked;
+  const postFacebook = postFacebookCheckbox.checked;
+
+  let linkUrl;
+
+  try {
+    linkUrl = normalizeUrl(linkUrlInput.value);
+  } catch (error) {
+    setStatus(error.message, "error");
+    linkUrlInput.focus();
+    return;
+  }
+
+  if (!title) {
+    setStatus("Add an announcement title.", "error");
+    titleInput.focus();
+    return;
+  }
+
+  if (!body) {
+    setStatus("Add an announcement message.", "error");
+    bodyInput.focus();
+    return;
+  }
+
+  if (!sendEmail && !postFacebook) {
+    setStatus("Choose Email, Facebook, or both.", "error");
+    return;
+  }
+
+  if (sendEmail && !audience) {
+    setStatus("Choose an email audience.", "error");
+    return;
+  }
+
+  setBusy(true);
+
+  try {
+    const images = selectedImages.map(image => ({
+      name: image.name,
+      mimeType: image.mimeType,
+      base64: image.base64
+    }));
+
+    const data = await communicationsRequest("publish", {
+      announcement: {
+        title,
+        body,
+        linkUrl,
+        images,
+        audience,
+        sendEmail,
+        postFacebook
+      }
+    });
+
+    const completed = [];
+
+    if (data.result?.email?.success) {
+      completed.push(
+        `email sent to ${data.result.email.recipients} contacts`
+      );
+    }
+
+    if (data.result?.facebook?.success) {
+      completed.push("Facebook post published");
+    }
+
+    setStatus(
+      completed.length
+        ? `Success: ${completed.join(" · ")}.`
+        : "Announcement completed."
+    );
+  } catch (error) {
+    console.error("Publish error:", error);
+    setStatus(
+      error.message || "The announcement could not be published.",
+      "error"
+    );
+  } finally {
+    setBusy(false);
+  }
+}
+
+/* ---------- Clear form ---------- */
+
+function clearComposer() {
+  titleInput.value = "";
+  bodyInput.value = "";
+  linkUrlInput.value = "";
+
+  sendEmailCheckbox.checked = false;
+  postFacebookCheckbox.checked = true;
+
+  selectedImages.forEach(image => {
+    URL.revokeObjectURL(image.previewUrl);
+  });
+
+  selectedImages = [];
+  imageInput.value = "";
+
+  renderImagePreviews();
+  updateAudienceVisibility();
+  updatePreview();
+  clearStatus();
+}
+
+/* ---------- Initialization ---------- */
 
 async function initializeApp() {
-
-  loadingScreen.hidden =
-    true;
-
-  app.hidden =
-    false;
+  loadingScreen.hidden = true;
+  app.hidden = false;
 
   updateAudienceVisibility();
   updatePreview();
   renderImagePreviews();
 
+  publishButton.disabled = true;
+  publishButton.title =
+    "Publishing requires staff authorization.";
+
   try {
     await loadConfiguration();
     await loadAudiences();
 
+    publishButton.disabled = !publishingEnabled;
+    publishButton.title = publishingEnabled
+      ? ""
+      : "Publishing requires staff authorization.";
   } catch (error) {
-    console.error(
-      "Initialization error:",
-      error
-    );
+    console.error("Initialization error:", error);
 
     configBox.textContent =
       "The Communications backend could not be reached.";
@@ -967,239 +614,11 @@ async function initializeApp() {
   }
 }
 
+/* ---------- Events ---------- */
 
-/* =========================================================
-   PUBLISH
-========================================================= */
-
-async function publishAnnouncement() {
-  clearStatus();
-
-  const title =
-    titleInput.value.trim();
-
-  const body =
-    bodyInput.value.trim();
-
-  let linkUrl =
-    "";
-
-  try {
-    linkUrl =
-      normalizeUrl(
-        linkUrlInput.value
-      );
-
-  } catch (error) {
-    setStatus(
-      error.message,
-      "error"
-    );
-
-    linkUrlInput.focus();
-
-    return;
-  }
-
-  const audience =
-    audienceSelect.value;
-
-  const sendEmail =
-    sendEmailCheckbox.checked;
-
-  const postFacebook =
-    postFacebookCheckbox.checked;
-
-  if (!title) {
-    setStatus(
-      "Add an announcement title.",
-      "error"
-    );
-
-    titleInput.focus();
-
-    return;
-  }
-
-  if (!body) {
-    setStatus(
-      "Add an announcement message.",
-      "error"
-    );
-
-    bodyInput.focus();
-
-    return;
-  }
-
-  if (
-    !sendEmail &&
-    !postFacebook
-  ) {
-    setStatus(
-      "Choose Email, Facebook, or both.",
-      "error"
-    );
-
-    return;
-  }
-
-  if (
-    sendEmail &&
-    !audience
-  ) {
-    setStatus(
-      "Choose an email audience.",
-      "error"
-    );
-
-    return;
-  }
-
-  setBusy(
-    true
-  );
-
-  try {
-    const images =
-      selectedImages.map(
-        image => ({
-          name:
-            image.name,
-
-          mimeType:
-            image.mimeType,
-
-          base64:
-            image.base64
-        })
-      );
-
-    const data =
-      await communicationsRequest(
-        "publish",
-        {
-          announcement: {
-            title,
-            body,
-            linkUrl,
-            images,
-            audience,
-            sendEmail,
-            postFacebook
-          }
-        }
-      );
-
-    const completed = [];
-
-    if (
-      data.result?.email
-        ?.success
-    ) {
-      completed.push(
-        `email sent to ${data.result.email.recipients} contacts`
-      );
-    }
-
-    if (
-      data.result?.facebook
-        ?.success
-    ) {
-      completed.push(
-        "Facebook post published"
-      );
-    }
-
-    setStatus(
-      completed.length
-        ? `Success: ${completed.join(" · ")}.`
-        : "Announcement completed."
-    );
-
-  } catch (error) {
-    console.error(
-      "Publish error:",
-      error
-    );
-
-    setStatus(
-      error.message ||
-      "The announcement could not be published.",
-      "error"
-    );
-
-  } finally {
-    setBusy(
-      false
-    );
-  }
-}
-
-
-/* =========================================================
-   CLEAR
-========================================================= */
-
-function clearComposer() {
-  titleInput.value =
-    "";
-
-  bodyInput.value =
-    "";
-
-  linkUrlInput.value =
-    "";
-
-  sendEmailCheckbox.checked =
-    false;
-
-  postFacebookCheckbox.checked =
-    true;
-
-  selectedImages.forEach(
-    image => {
-      if (
-        image.previewUrl
-      ) {
-        URL.revokeObjectURL(
-          image.previewUrl
-        );
-      }
-    }
-  );
-
-  selectedImages =
-    [];
-
-  imageInput.value =
-    "";
-
-  renderImagePreviews();
-  updateAudienceVisibility();
-  updatePreview();
-  clearStatus();
-}
-
-
-/* =========================================================
-   EVENTS
-========================================================= */
-
-titleInput.addEventListener(
-  "input",
-  updatePreview
-);
-
-bodyInput.addEventListener(
-  "input",
-  updatePreview
-);
-
-linkUrlInput.addEventListener(
-  "input",
-  updatePreview
-);
+titleInput.addEventListener("input", updatePreview);
+bodyInput.addEventListener("input", updatePreview);
+linkUrlInput.addEventListener("input", updatePreview);
 
 sendEmailCheckbox.addEventListener(
   "change",
@@ -1220,10 +639,5 @@ clearButton.addEventListener(
   "click",
   clearComposer
 );
-
-
-/* =========================================================
-   START
-========================================================= */
 
 initializeApp();
