@@ -1,2 +1,345 @@
-/* Community Pulse */
-.pulse-panel{padding:27px;margin-bottom:20px;border-top:5px solid #0b8279}.pulse-head{display:flex;justify-content:space-between;gap:16px;align-items:center}.pulse-head h2{font-size:25px;color:#173d68}.pulse-label{background:#dff4ee;color:#086a5b;border-radius:30px;padding:8px 13px;font-size:12px;font-weight:800;white-space:nowrap}.pulse-intro{margin:13px 0 22px!important;max-width:850px}.pulse-geographies{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.pulse-geo{display:flex;flex-direction:column;gap:9px;padding:18px;border:1px solid #dce7f3;background:#f5f8fc;border-radius:13px}.pulse-geo.primary{background:#e5f6f1;border-color:#adddce}.pulse-geo strong{font-size:12px;color:#176b67}.pulse-geo span{font-weight:800;color:#183c5b}.pulse-geo small{color:#657d92;line-height:1.5}.pulse-research{display:grid;grid-template-columns:minmax(0,2fr) minmax(150px,1fr) auto;align-items:end;gap:13px;margin-top:23px;padding:20px;background:#f4f8fd;border-radius:13px}.pulse-research label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}.pulse-research input,.pulse-research select{width:100%;border:1px solid #c5d3e1;border-radius:9px;padding:12px;font:inherit;font-size:13px;background:white;color:#163550}.pulse-research button{background:#08786f;color:white;border-color:#08786f;white-space:nowrap}.pulse-research button:hover{background:#07655e}.pulse-hint{font-size:11px!important;margin:8px 0 0!important;color:#6a8195!important}.pulse-actions{display:flex;gap:18px;flex-wrap:wrap;margin:13px 0 23px}.pulse-actions a{font-size:13px;font-weight:700;color:#0874a7}.pulse-bottom{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.pulse-card{border:1px solid #dce7f3;border-radius:13px;padding:20px;min-width:0}.pulse-card h3{margin:0 0 9px;font-size:18px}.pulse-card>p{margin:0 0 14px!important}.pulse-themes{display:grid;gap:8px}.pulse-theme{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #e7edf4;font-size:12px}.pulse-theme span{min-width:0}.pulse-theme strong{color:#086ebd;white-space:nowrap}.pulse-chips{display:flex;flex-wrap:wrap;gap:8px}.pulse-chips button{font-size:12px;padding:9px 12px;background:#e8f4f3;color:#076b63;border:1px solid #c5e5df;border-radius:30px}.pulse-chips button:hover{background:#d4eee9}.pulse-disclosure{margin-top:20px!important;padding:13px 15px;background:#f6f8fb;border-radius:9px;font-size:11px!important}@media(max-width:850px){.pulse-geographies{grid-template-columns:1fr}.pulse-research{grid-template-columns:1fr 1fr}.pulse-research button{grid-column:1/-1}.pulse-bottom{grid-template-columns:1fr}}@media(max-width:520px){.pulse-panel{padding:17px}.pulse-head{align-items:flex-start;flex-direction:column}.pulse-research{grid-template-columns:1fr}.pulse-research button{grid-column:auto}}
+
+/*
+  VUMC COMMUNITY PULSE
+  Bold Color Dashboard — Version 3
+  Styling only. No changes to Cloudflare or JavaScript.
+*/
+
+/* Main workspace */
+body {
+  background: #eaf0f7 !important;
+}
+
+.pulse-panel {
+  background: #ffffff;
+  border-top: 6px solid #087f83 !important;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(18, 47, 81, .09);
+}
+
+.pulse-head h2 {
+  color: #123a65;
+}
+
+.pulse-label {
+  background: #d7f5ee;
+  color: #00685e;
+  border: 1px solid #9cddd0;
+  font-weight: 800;
+}
+
+.section-kicker {
+  color: #007c84;
+}
+
+/* Geographic priority cards */
+.pulse-geographies {
+  gap: 17px;
+}
+
+.pulse-geo,
+.pulse-geo.primary {
+  border: none;
+  border-radius: 15px;
+  padding: 24px;
+  min-height: 190px;
+  box-shadow: 0 8px 20px rgba(19, 49, 80, .12);
+}
+
+.pulse-geo.primary {
+  background: linear-gradient(
+    135deg, #103b83 0%, #0879c5 100%
+  ) !important;
+}
+
+.pulse-geo:not(.primary):nth-child(2) {
+  background: linear-gradient(
+    135deg, #00665f 0%, #08a18f 100%
+  ) !important;
+}
+
+.pulse-geo:not(.primary):nth-child(3) {
+  background: linear-gradient(
+    135deg, #5127a1 0%, #8a49d1 100%
+  ) !important;
+}
+
+.pulse-geo strong,
+.pulse-geo.primary strong {
+  color: #d9f4ff !important;
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+
+.pulse-geo span,
+.pulse-geo.primary span {
+  color: #ffffff !important;
+  font-size: 20px;
+  line-height: 1.35;
+  font-weight: 850;
+}
+
+.pulse-geo small,
+.pulse-geo.primary small {
+  color: #ffffff !important;
+  opacity: .92;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+/* Research panel */
+.pulse-research {
+  background: linear-gradient(
+    115deg, #e1f1fb, #e9f7f4
+  ) !important;
+  border: 1px solid #b9d9e9;
+  border-left: 5px solid #087f83;
+  border-radius: 15px;
+  padding: 25px;
+}
+
+.pulse-research label {
+  color: #123e67;
+  font-weight: 800;
+}
+
+.pulse-research input,
+.pulse-research select {
+  border: 1px solid #a9c9df;
+  background: #ffffff;
+  color: #163954;
+}
+
+.pulse-research-button,
+.pulse-research button {
+  background: #007e80 !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(0, 111, 112, .2);
+}
+
+.pulse-research-button:hover,
+.pulse-research button:hover {
+  background: #005d65 !important;
+}
+
+/* Quick research links */
+.pulse-actions {
+  gap: 12px;
+}
+
+.pulse-actions a {
+  background: #dceeff;
+  border: 1px solid #b3d7f5;
+  color: #105b98;
+  border-radius: 9px;
+  padding: 11px 17px;
+  font-weight: 800;
+}
+
+.pulse-actions a:hover {
+  background: #c3e1fb;
+}
+
+/* Distinct analytics and exploration panels */
+.pulse-bottom {
+  gap: 20px;
+  align-items: stretch;
+}
+
+.pulse-card {
+  background: #ffffff;
+  border: 1px solid #d5e2ed;
+  border-radius: 16px;
+  padding: 25px;
+  overflow: hidden;
+  box-shadow: 0 7px 22px rgba(19, 49, 80, .07);
+}
+
+.pulse-card:first-child {
+  border-top: 6px solid #1769bb;
+}
+
+.pulse-card:last-child {
+  border-top: 6px solid #7a42c2;
+  background: linear-gradient(
+    180deg, #f6f1ff 0%, #ffffff 75%
+  );
+}
+
+.pulse-card:first-child h3 {
+  color: #15599e;
+}
+
+.pulse-card:last-child h3 {
+  color: #6632ad;
+}
+
+.pulse-card > p {
+  color: #5c7188;
+  line-height: 1.6;
+}
+
+/* Analytics summary */
+.pulse-themes {
+  display: block;
+  background: #eef4fc !important;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.pulse-data-status {
+  color: #536e8c !important;
+  font-weight: 650;
+}
+
+.pulse-data-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.pulse-data-stat {
+  padding: 17px 8px;
+  border-radius: 11px;
+  color: white;
+}
+
+.pulse-data-stat:nth-child(1) {
+  background: linear-gradient(
+    135deg, #145ca9, #2589d1
+  ) !important;
+}
+
+.pulse-data-stat:nth-child(2) {
+  background: linear-gradient(
+    135deg, #007969, #0aaa91
+  ) !important;
+}
+
+.pulse-data-stat:nth-child(3) {
+  background: linear-gradient(
+    135deg, #6431ac, #9657d4
+  ) !important;
+}
+
+.pulse-data-stat strong {
+  display: block;
+  color: #ffffff !important;
+  font-size: 25px;
+  font-weight: 850;
+}
+
+.pulse-data-stat span {
+  display: block;
+  color: #ffffff !important;
+  font-size: 11px;
+  font-weight: 650;
+  opacity: .95;
+}
+
+/* Sermon rankings */
+.pulse-theme {
+  padding: 14px 8px;
+  border-bottom: 1px solid #d3e1ee;
+  border-radius: 6px;
+}
+
+.pulse-theme:nth-of-type(even) {
+  background: #e2edf9;
+}
+
+.pulse-theme span {
+  color: #173e66 !important;
+  font-weight: 700;
+}
+
+.pulse-theme strong {
+  color: #075eaa !important;
+  font-weight: 850;
+}
+
+.pulse-data-note {
+  color: #60788f !important;
+}
+
+/* Ministry exploration chips */
+.pulse-chips {
+  gap: 11px;
+  margin-top: 20px;
+}
+
+.pulse-chips button {
+  padding: 12px 15px;
+  border: 1px solid #c9b2ed;
+  border-radius: 10px;
+  background: #e9ddfb;
+  color: #542398;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background .15s ease,
+              transform .15s ease;
+}
+
+.pulse-chips button:hover {
+  background: #d9c5f5;
+  transform: translateY(-2px);
+}
+
+/* Disclosure */
+.pulse-disclosure {
+  background: #e8f1fc !important;
+  border-left: 4px solid #1769bb !important;
+  border-radius: 10px;
+  color: #425f7e !important;
+  padding: 18px 20px !important;
+}
+
+/* Responsive */
+@media (max-width: 850px) {
+  .pulse-geographies {
+    grid-template-columns: 1fr;
+  }
+
+  .pulse-geo,
+  .pulse-geo.primary {
+    min-height: 0;
+  }
+
+  .pulse-bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .pulse-research {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .pulse-card {
+    padding: 18px;
+  }
+
+  .pulse-research {
+    padding: 17px;
+  }
+
+  .pulse-data-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .pulse-data-stat {
+    padding: 13px 4px;
+  }
+
+  .pulse-data-stat strong {
+    font-size: 20px;
+  }
+
+  .pulse-data-stat span {
+    font-size: 10px;
+  }
+}
