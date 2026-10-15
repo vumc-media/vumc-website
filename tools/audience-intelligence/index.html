@@ -1,641 +1,233 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#102c4b">
-  <title>Community Pulse | VUMC Audience Intelligence</title>
-
-  <link rel="stylesheet" href="./community-pulse.css?v=3">
-
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: #edf2f8;
-      color: #20354b;
-      font: 15px/1.55 -apple-system, BlinkMacSystemFont,
-        "Segoe UI", Arial, sans-serif;
-    }
-
-    .pulse-topbar {
-      background: linear-gradient(120deg, #102b4b, #17649b);
-      color: white;
-      padding: 34px max(24px, calc((100% - 1180px)/2));
-    }
-
-    .pulse-topbar a {
-      color: #d7ecff;
-      text-decoration: none;
-      font-size: 13px;
-    }
-
-    .pulse-topbar h1 {
-      margin: 14px 0 5px;
-      font-size: clamp(29px, 4vw, 43px);
-      letter-spacing: -.04em;
-    }
-
-    .pulse-topbar p {
-      margin: 0;
-      color: #d7e8f6;
-    }
-
-    .container {
-      max-width: 1220px;
-      padding: 30px 20px 65px;
-      margin: auto;
-    }
-
-    .pulse-panel {
-      background: white;
-      border-radius: 18px;
-      padding: clamp(20px, 3vw, 36px);
-      box-shadow: 0 8px 32px #1737560c;
-    }
-
-    .pulse-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .section-kicker {
-      color: #007c84;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .14em;
-    }
-
-    .pulse-head h2 {
-      margin: 6px 0;
-      font-size: 29px;
-      color: #123a65;
-    }
-
-    .pulse-head p,
-    .pulse-intro {
-      color: #61788f;
-    }
-
-    .pulse-head p { margin: 0; }
-
-    .pulse-label {
-      background: #d7f5ee;
-      color: #00685e;
-      padding: 8px 14px;
-      border-radius: 30px;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .pulse-intro {
-      margin: 24px 0;
-      max-width: 900px;
-    }
-
-    .pulse-geographies {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 17px;
-      margin: 26px 0;
-    }
-
-    .pulse-geo {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 24px;
-      border-radius: 15px;
-      color: white;
-      min-height: 190px;
-    }
-
-    .pulse-geo.primary {
-      background: linear-gradient(135deg, #103b83, #0879c5);
-    }
-
-    .pulse-geo:nth-child(2) {
-      background: linear-gradient(135deg, #00665f, #08a18f);
-    }
-
-    .pulse-geo:nth-child(3) {
-      background: linear-gradient(135deg, #5127a1, #8a49d1);
-    }
-
-    .pulse-geo strong {
-      color: #d9f4ff;
-      font-size: 12px;
-    }
-
-    .pulse-geo span {
-      color: white;
-      font-size: 20px;
-      font-weight: 800;
-      line-height: 1.35;
-    }
-
-    .pulse-geo small {
-      color: #fff;
-      opacity: .92;
-      font-size: 12px;
-      line-height: 1.65;
-    }
-
-    .pulse-research {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 180px auto;
-      gap: 16px;
-      align-items: end;
-      margin-top: 30px;
-      padding: 25px;
-      border-radius: 15px;
-      background: #e6f3fb;
-    }
-
-    .pulse-research label {
-      display: block;
-      margin-bottom: 9px;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .pulse-research input,
-    .pulse-research select {
-      width: 100%;
-      min-height: 46px;
-      padding: 10px 13px;
-      border: 1px solid #b4cde1;
-      border-radius: 9px;
-      background: white;
-      color: #213c56;
-      font: inherit;
-      font-size: 14px;
-    }
-
-    .pulse-research-button {
-      min-height: 46px;
-      padding: 11px 20px;
-      border: 0;
-      border-radius: 9px;
-      background: #007e80;
-      color: white;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .pulse-hint {
-      margin: 9px 0 0;
-      color: #71849a;
-      font-size: 12px;
-    }
-
-    .pulse-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 17px 0 30px;
-    }
-
-    .pulse-actions a {
-      text-decoration: none;
-      padding: 10px 15px;
-      border-radius: 9px;
-      background: #e8f3fc;
-      color: #145f9c;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    /* PIR LAUNCH CARD */
-
-    .pir-launch {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 25px;
-      margin: 26px 0;
-      padding: 28px;
-      border-radius: 17px;
-      background: linear-gradient(
-        115deg, #123c78 0%, #087f83 100%
-      );
-      color: white;
-      box-shadow: 0 12px 28px #133d6830;
-    }
-
-    .pir-launch .pir-kicker {
-      display: block;
-      margin-bottom: 8px;
-      color: #c2f7ee;
-      font-size: 11px;
-      font-weight: 850;
-      letter-spacing: .12em;
-    }
-
-    .pir-launch h3 {
-      margin: 0 0 9px;
-      color: white;
-      font-size: clamp(22px, 3vw, 28px);
-    }
-
-    .pir-launch p {
-      margin: 0;
-      color: #e4f3ff;
-      font-size: 14px;
-      max-width: 700px;
-    }
-
-    .pir-launch a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 12px 21px;
-      border-radius: 10px;
-      background: white;
-      color: #124e81;
-      text-decoration: none;
-      font-weight: 850;
-      white-space: nowrap;
-      transition: transform .15s ease;
-    }
-
-    .pir-launch a:hover {
-      transform: translateY(-2px);
-      background: #e6f7ff;
-    }
-
-    .pir-features {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-top: 15px;
-    }
-
-    .pir-features span {
-      padding: 5px 10px;
-      border-radius: 30px;
-      background: #ffffff20;
-      border: 1px solid #ffffff35;
-      color: white;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    /* EXISTING ANALYTICS */
-
-    .pulse-bottom {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
-    }
-
-    .pulse-card {
-      padding: 25px;
-      border: 1px solid #d5e2ed;
-      border-radius: 15px;
-      background: white;
-      min-width: 0;
-    }
-
-    .pulse-card h3 {
-      margin: 0 0 8px;
-      font-size: 19px;
-      color: #193d60;
-    }
-
-    .pulse-card > p {
-      color: #61788f;
-      font-size: 13px;
-    }
-
-    .pulse-themes {
-      margin-top: 18px;
-      padding: 15px;
-      border-radius: 10px;
-      background: #eef4fc;
-      color: #60768a;
-      font-size: 13px;
-    }
-
-    .pulse-theme {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 11px 0;
-      border-bottom: 1px solid #dfe8f1;
-    }
-
-    .pulse-theme:last-child { border-bottom: 0; }
-
-    .pulse-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-top: 20px;
-    }
-
-    .pulse-chips button {
-      border: 1px solid #c9b2ed;
-      background: #e9ddfb;
-      color: #542398;
-      border-radius: 10px;
-      padding: 10px 13px;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .pulse-disclosure {
-      margin: 26px 0 0;
-      padding: 16px 20px;
-      border-left: 4px solid #1769bb;
-      background: #e8f1fc;
-      border-radius: 9px;
-      color: #63798e;
-      font-size: 12px;
-    }
-
-    .pulse-footer {
-      margin-top: 25px;
-      text-align: center;
-      font-size: 12px;
-      color: #8393a3;
-    }
-
-    @media (max-width: 850px) {
-      .pulse-geographies,
-      .pulse-bottom,
-      .pulse-research {
-        grid-template-columns: 1fr;
-      }
-
-      .pir-launch {
-        grid-template-columns: 1fr;
-      }
-
-      .pir-launch a {
-        justify-self: start;
-      }
-
-      .pulse-geo { min-height: 0; }
-    }
-
-    @media (max-width: 550px) {
-      .pulse-topbar { padding: 26px 20px; }
-      .container { padding: 15px 12px 45px; }
-      .pulse-panel { padding: 18px; }
-      .pulse-research { padding: 17px; }
-      .pulse-card { padding: 18px; }
-      .pir-launch { padding: 21px; }
-      .pir-launch a { width: 100%; }
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#102d50">
+  <title>Audience Intelligence | VUMC Staff Tools</title>
+  <link rel="stylesheet" href="./styles.css">
 </head>
-
 <body>
-
-  <header class="pulse-topbar">
-    <a href="../index.html">
-      ← Back to Audience Intelligence
-    </a>
-    <h1>Community Pulse</h1>
-    <p>Local insight. Regional awareness. National perspective.</p>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="eyebrow">VERSAILLES UNITED METHODIST CHURCH</span>
+        <h1>Audience <span>Intelligence</span></h1>
+        <p>Understand your reach. Strengthen your ministry.</p>
+      </div>
+      <a class="back-link" href="/tools/">← Staff Tools</a>
+    </div>
   </header>
 
-  <main class="container">
-    <section class="pulse-panel"
-      id="community-pulse"
-      aria-labelledby="pulse-heading">
+  <main>
+    <div class="notice" id="status" role="status" aria-live="polite">
+      Checking YouTube Analytics connection…
+    </div>
 
-      <div class="pulse-head">
-        <div>
-          <span class="section-kicker">
-            COMMUNITY LISTENING
-          </span>
-          <h2 id="pulse-heading">
-            Understanding Our Community
-          </h2>
-          <p>
-            Discovering questions, concerns, and
-            opportunities for meaningful ministry.
-          </p>
-        </div>
-        <span class="pulse-label">Research Workspace</span>
+    <section class="toolbar" aria-label="Report controls">
+      <div class="period-wrap">
+        <label for="period">Reporting period</label>
+        <select id="period">
+          <option value="28">Last 28 days</option>
+          <option value="90" selected>Last 90 days</option>
+          <option value="365">Last 365 days</option>
+        </select>
       </div>
-
-      <p class="pulse-intro">
-        Community Pulse helps us explore what people are
-        searching for and connect those interests with
-        potential ministry opportunities. Public search
-        interest does not determine spiritual need or
-        replace pastoral discernment.
-      </p>
-
-      <div class="pulse-geographies">
-        <div class="pulse-geo primary">
-          <strong>01 · PRIMARY PRIORITY</strong>
-          <span>Versailles &amp; Woodford County</span>
-          <small>
-            Our immediate community comes first.
-            When town- or county-level search data is
-            unavailable, use the nearest supported region
-            and identify it clearly.
-          </small>
-        </div>
-
-        <div class="pulse-geo">
-          <strong>02 · REGIONAL CONTEXT</strong>
-          <span>Central Kentucky &amp; Kentucky</span>
-          <small>
-            Explore interests across Lexington,
-            Frankfort, surrounding communities,
-            and statewide search patterns.
-          </small>
-        </div>
-
-        <div class="pulse-geo">
-          <strong>03 · NATIONAL PERSPECTIVE</strong>
-          <span>United States</span>
-          <small>
-            Understand larger conversations without
-            allowing national popularity to outweigh
-            local ministry needs.
-          </small>
-        </div>
-      </div>
-
-      <!-- PUBLIC INTEREST RESEARCH ENGINE -->
-
-      <section class="pir-launch"
-        aria-labelledby="pir-launch-heading">
-
-        <div>
-          <span class="pir-kicker">
-            PUBLIC INTEREST RESEARCH ENGINE
-          </span>
-
-          <h3 id="pir-launch-heading">
-            Discover What People Are Searching For
-          </h3>
-
-          <p>
-            Explore public search interests, compare
-            Kentucky with national patterns, and record
-            potential connections to ministry.
-          </p>
-
-          <div class="pir-features">
-            <span>Topic Comparisons</span>
-            <span>Kentucky &amp; National</span>
-            <span>Research Notebook</span>
-          </div>
-        </div>
-
-        <a href="./pir/">
-          Launch PIR Engine &rarr;
-        </a>
-
-      </section>
-
-      <!-- EXISTING GOOGLE TRENDS QUICK RESEARCH -->
-
-      <div class="pulse-research">
-        <div>
-          <label for="pulse-topic">
-            Quick Topic Research
-          </label>
-
-          <input
-            id="pulse-topic"
-            type="search"
-            placeholder="e.g. loneliness, forgiveness, finding purpose"
-            maxlength="100"
-            autocomplete="off"
-          >
-
-          <p class="pulse-hint">
-            Open a single topic in Google Trends.
-            For multiple topics, use the PIR Engine above.
-          </p>
-        </div>
-
-        <div>
-          <label for="pulse-range">Time window</label>
-          <select id="pulse-range">
-            <option value="today 1-m">Past 30 days</option>
-            <option value="today 12-m" selected>
-              Past 12 months
-            </option>
-            <option value="today 5-y">Past 5 years</option>
-          </select>
-        </div>
-
-        <button
-          id="pulse-research-button"
-          class="pulse-research-button"
-          type="button">
-          Explore public interest ↗
-        </button>
-      </div>
-
-      <div class="pulse-actions">
-        <a
-          href="https://trends.google.com/trends/explore?geo=US-KY"
-          target="_blank"
-          rel="noopener noreferrer">
-          Kentucky Trends ↗
-        </a>
-
-        <a
-          href="https://trends.google.com/trends/explore?geo=US"
-          target="_blank"
-          rel="noopener noreferrer">
-          National Trends ↗
-        </a>
-      </div>
-
-      <!-- EXISTING CLOUDFLARE ANALYTICS -->
-
-      <div class="pulse-bottom">
-
-        <div class="pulse-card">
-          <h3>Connections to VUMC</h3>
-          <p>
-            Compare community interests with sermon
-            themes receiving attention on VUMC's
-            YouTube channel.
-          </p>
-
-          <div
-            id="pulse-channel-themes"
-            class="pulse-themes"
-            aria-live="polite">
-            Connecting to VUMC Analytics…
-          </div>
-        </div>
-
-        <div class="pulse-card">
-          <h3>Ministry Exploration</h3>
-          <p>
-            Select a topic to research.
-            These are suggested subjects, not
-            verified local search trends.
-          </p>
-
-          <div class="pulse-chips" id="pulse-suggestions">
-            <button type="button" data-topic="anxiety and peace">
-              Anxiety &amp; peace
-            </button>
-            <button type="button" data-topic="loneliness and belonging">
-              Loneliness &amp; belonging
-            </button>
-            <button type="button" data-topic="grief and hope">
-              Grief &amp; hope
-            </button>
-            <button type="button" data-topic="family relationships">
-              Family relationships
-            </button>
-            <button type="button" data-topic="purpose in life">
-              Purpose &amp; direction
-            </button>
-            <button type="button" data-topic="forgiveness">
-              Forgiveness
-            </button>
-          </div>
-
-          <p class="pulse-hint">
-            Research may inform worship, outreach,
-            small groups, and pastoral conversations.
-          </p>
-        </div>
-
-      </div>
-
-      <p class="pulse-disclosure">
-        <strong>About the data:</strong>
-        Google Trends reports normalized relative
-        search interest, not exact search volume.
-        PIR currently opens source research and
-        supports manual notes; automated public
-        trend analysis has not yet been connected.
-      </p>
-
+      <button id="refresh" type="button">↻ Refresh data</button>
+      <a id="login" class="connect"
+         href="https://holy-star-1faevumc-youtube-analytics.versaillesumcworshipteam.workers.dev/auth/login">
+        Connect YouTube
+      </a>
+      <span id="updated" class="updated" aria-live="polite"></span>
     </section>
 
-    <div class="pulse-footer">
-      Versailles United Methodist Church ·
-      Audience Intelligence · Community Pulse
-    </div>
+    <section class="metrics" aria-label="YouTube statistics">
+      <article class="metric navy">
+        <div class="metric-top">
+          <span>Total Subscribers</span>
+          <span class="metric-icon" aria-hidden="true">♟</span>
+        </div>
+        <strong id="subscribers">—</strong>
+        <small>Current channel total</small>
+      </article>
+
+      <article class="metric green">
+        <div class="metric-top">
+          <span>Subscribers Gained</span>
+          <span class="metric-icon" aria-hidden="true">↗</span>
+        </div>
+        <strong id="gained">—</strong>
+        <small>During selected period</small>
+      </article>
+
+      <article class="metric red">
+        <div class="metric-top">
+          <span>Subscribers Lost</span>
+          <span class="metric-icon" aria-hidden="true">↘</span>
+        </div>
+        <strong id="lost">—</strong>
+        <small>During selected period</small>
+      </article>
+
+      <article class="metric purple">
+        <div class="metric-top">
+          <span>Net Growth</span>
+          <span class="metric-icon" aria-hidden="true">＋</span>
+        </div>
+        <strong id="net">—</strong>
+        <small>Gained minus lost</small>
+      </article>
+
+      <article class="metric blue">
+        <div class="metric-top">
+          <span>Video Views</span>
+          <span class="metric-icon" aria-hidden="true">▶</span>
+        </div>
+        <strong id="views">—</strong>
+        <small>During selected period</small>
+      </article>
+
+      <article class="metric orange">
+        <div class="metric-top">
+          <span>Watch Time</span>
+          <span class="metric-icon" aria-hidden="true">◷</span>
+        </div>
+        <strong id="watch">—</strong>
+        <small>Hours watched</small>
+      </article>
+    </section>
+
+    <section class="panel chart-panel">
+      <div class="panel-head">
+        <div>
+          <span class="section-kicker">CHANNEL GROWTH</span>
+          <h2>Subscriber Rhythm</h2>
+          <p>Daily subscriber gains and losses for your selected period.</p>
+        </div>
+        <div class="legend">
+          <span><i class="legend-dot gain-dot"></i> Gained</span>
+          <span><i class="legend-dot loss-dot"></i> Lost</span>
+        </div>
+      </div>
+      <div id="chart" class="chart" role="img"
+           aria-label="Daily subscriber gains and losses">
+        Connect YouTube to view subscriber activity.
+      </div>
+      <div class="chart-axis">
+        <span id="chart-start"></span>
+        <span id="chart-end"></span>
+      </div>
+    </section>
+
+    <!-- CONTENT PERFORMANCE -->
+    <section class="panel content-panel" id="content-performance">
+      <div class="panel-head">
+        <div>
+          <span class="section-kicker">WORSHIP VIDEO INTELLIGENCE</span>
+          <h2>Content Performance</h2>
+          <p>Discover which worship services and sermon themes are connecting with viewers.</p>
+        </div>
+        <div class="content-controls">
+          <label for="content-filter">Service type</label>
+          <select id="content-filter">
+            <option value="All">All worship</option>
+            <option value="Traditional">Traditional</option>
+            <option value="Contemporary">Contemporary</option>
+            <option value="Unclassified">Unclassified</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="content-status" class="content-status" role="status"
+           aria-live="polite">
+        Waiting for YouTube video analytics…
+      </div>
+
+      <div class="content-summary">
+        <div>
+          <span>Worship Videos</span>
+          <strong id="content-count">—</strong>
+          <small>Published services analyzed</small>
+        </div>
+        <div>
+          <span>Video Views</span>
+          <strong id="content-views">—</strong>
+          <small>Selected reporting period</small>
+        </div>
+        <div>
+          <span>Watch Hours</span>
+          <strong id="content-hours">—</strong>
+          <small>Selected reporting period</small>
+        </div>
+      </div>
+
+      <h3>Top Sermon Themes</h3>
+      <p class="content-help">
+        Matching Traditional and Contemporary worship videos are grouped
+        under the same sermon theme when their titles can be matched.
+      </p>
+      <div id="content-themes" class="theme-list">
+        Sermon rankings will appear when analytics are loaded.
+      </div>
+
+      <h3>Worship Video Details</h3>
+      <p class="content-help">
+        Browse individual services, compare views and watch hours,
+        and open each video directly on YouTube.
+      </p>
+      <div id="content-videos" class="video-grid"></div>
+
+      <p class="content-disclaimer">
+        Content Performance measures complete worship videos, not isolated
+        sermon segments. Funeral services, special events, duplicate
+        records, and upcoming broadcasts are excluded from sermon rankings.
+        Service types may be inferred from matching titles when descriptions
+        are incomplete. YouTube analytics may lag, and the current
+        integration scans up to 200 recent uploads.
+      </p>
+    </section>
+
+    <!-- FUTURE INTELLIGENCE MODULES -->
+    <section class="panels">
+      <article class="panel feature">
+        <div class="feature-icon purple-text">◎</div>
+        <div>
+          <h2>Audience Discovery</h2>
+          <p>See how viewers find your channel through search and recommendations.</p>
+          <div class="coming">Traffic-source reporting is coming next.</div>
+        </div>
+      </article>
+
+      <article class="panel feature">
+        <div class="feature-icon green-text">◉</div>
+        <div>
+          <h2>Live vs. Replay</h2>
+          <p>Compare live worship participation with viewing after the broadcast.</p>
+          <div class="coming">Livestream and replay analysis is coming next.</div>
+        </div>
+      </article>
+
+      <article class="panel feature">
+        <div class="feature-icon orange-text">✦</div>
+        <div>
+          <h2>Ministry Insights</h2>
+          <p>Turn audience trends into practical ideas for church communications.</p>
+          <div class="coming">
+            Pastoral planning insights will be added after
+            content reporting is verified.
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <p class="foot">
+      YouTube reports may lag by several days. Views and subscriptions
+      are not the same as unique people. Subscriber totals may be rounded
+      by YouTube.
+    </p>
   </main>
 
-  <script src="./community-pulse.js?v=3"></script>
-
+  <script src="./app.js"></script>
 </body>
 </html>
