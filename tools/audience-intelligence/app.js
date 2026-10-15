@@ -1,14 +1,27 @@
 
-// VUMC Audience Intelligence
-// Public dashboard JavaScript.
-// Never place Google credentials, OAuth secrets, or tokens here.
+/*
+  VUMC AUDIENCE INTELLIGENCE
+  Subscriber Reporting + Content Performance
+  No credentials or tokens belong in this file.
+*/
 
-const API = 'https://holy-star-1faevumc-youtube-analytics.versaillesumcworshipteam.workers.dev';
+const API =
+  'https://holy-star-1faevumc-youtube-analytics.versaillesumcworshipteam.workers.dev';
 
 const $ = id => document.getElementById(id);
-const format = value => Number(value).toLocaleString('en-US');
+
+const format = value =>
+  Number(value).toLocaleString('en-US');
+
 const safeNumber = value =>
   Number.isFinite(Number(value)) ? Number(value) : 0;
+
+let requestId = 0;
+let contentRecords = [];
+
+// =====================================================
+// DATE RANGE
+// =====================================================
 
 function dates(days) {
   const end = new Date();
@@ -23,23 +36,9 @@ function dates(days) {
   };
 }
 
-function message(value, kind = '') {
-  $('status').textContent = value;
-  $('status').className = 'notice ' + kind;
-}
-
-function clearReport() {
-  for (const id of ['gained', 'lost', 'net', 'views', 'watch']) {
-    $(id).textContent = '—';
-  }
-
-  $('chart').replaceChildren();
-  $('chart').textContent =
-    'Connect YouTube to display verified subscriber activity.';
-
-  $('chart-start').textContent = '';
-  $('chart-end').textContent = '';
-}
+// =====================================================
+// API
+// =====================================================
 
 async function getJSON(path) {
   const response = await fetch(API + path, {
@@ -55,8 +54,11 @@ async function getJSON(path) {
 
   if (!response.ok) {
     const error = new Error(
-      data.message || data.error || `Request returned ${response.status}`
+      data.message ||
+      data.error ||
+      `Request returned ${response.status}`
     );
+
     error.status = response.status;
     throw error;
   }
@@ -64,12 +66,43 @@ async function getJSON(path) {
   return data;
 }
 
-// ---------------------------------------------------------
-// SUBSCRIBER RHYTHM
-// ---------------------------------------------------------
+function message(value, kind = '') {
+  $('status').textContent = value;
+  $('status').className = 'notice ' + kind;
+}
+
+function element(tag, className = '', text = undefined) {
+  const node = document.createElement(tag);
+
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+
+  return node;
+}
+
+// =====================================================
+// SUBSCRIBER REPORTING
+// =====================================================
+
+function clearReport() {
+  for (const id of [
+    'gained', 'lost', 'net', 'views', 'watch'
+  ]) {
+    $(id).textContent = '—';
+  }
+
+  $('chart').replaceChildren();
+
+  $('chart').textContent =
+    'Connect YouTube to display subscriber activity.';
+
+  $('chart-start').textContent = '';
+  $('chart-end').textContent = '';
+}
 
 function drawChart(rows, start, end) {
   const chart = $('chart');
+
   chart.replaceChildren();
 
   $('chart-start').textContent = start;
@@ -89,28 +122,30 @@ function drawChart(rows, start, end) {
     ])
   );
 
-  const bars = document.createElement('div');
-  bars.className = 'bars';
+  const bars = element('div', 'bars');
 
   for (const row of rows) {
-    const day = document.createElement('div');
-    day.className = 'chart-day';
+    const day = element('div', 'chart-day');
 
     const gained = safeNumber(row[1]);
     const lost = safeNumber(row[2]);
 
-    day.title = `${row[0]} • Gained ${gained}, lost ${lost}`;
+    day.title =
+      `${row[0]} • Gained ${gained}, lost ${lost}`;
+
     day.setAttribute('aria-label', day.title);
 
     for (const [value, type] of [
       [gained, 'gain'],
       [lost, 'loss']
     ]) {
-      const bar = document.createElement('div');
-      bar.className = 'chart-bar ' + type;
+      const bar = element(
+        'div',
+        'chart-bar ' + type
+      );
 
       bar.style.height = value
-        ? `${Math.max(3, (value / max) * 100)}%`
+        ? `${Math.max(3, value / max * 100)}%`
         : '0';
 
       day.appendChild(bar);
@@ -122,29 +157,77 @@ function drawChart(rows, start, end) {
   chart.appendChild(bars);
 }
 
-// ---------------------------------------------------------
-// CONTENT PERFORMANCE
-// ---------------------------------------------------------
+// =====================================================
+// SERMON TITLE CLEANUP
+// =====================================================
 
-let contentRecords = [];
-let requestId = 0;
+function cleanSermonTitle(rawTitle) {
+  let title = String(rawTitle || '').trim();
 
-function normalizeTheme(title) {
-  return (title || 'Untitled')
+  // Remove the Acts series prefix.
+  title = title.replace(
+    /^acts\s*:\s*the church that changed the world\s*[|—–-]\s*/i,
+    ''
+  );
+
+  // Remove week numbers, including "Week 10 -".
+  title = title.replace(
+    /^week\s*\d+\s*[:—–-]?\s*/i,
+    ''
+  );
+
+  // Remove calendar prefixes, such as "Oct. 11 —".
+  title = title.replace(
+    /^(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)\.?\s+\d{1,2}\s*[:—–-]\s*/i,
+    ''
+  );
+
+  // Remove scripture suffix after a vertical bar.
+  title = title.replace(
+    /\s*\|\s*(?:acts|john|matthew|mark|luke|romans|hebrews|psalm|genesis|exodus|philippians|colossians|ecclesiastes|proverbs|galatians)\b.*$/i,
+    ''
+  );
+
+  // Remove parenthesized scripture at the end.
+  title = title.replace(
+    /\s*\(\s*(?:acts|john|matthew|mark|luke|romans|hebrews|psalm)\b[^)]*\)\s*$/i,
+    ''
+  );
+
+  // Remove scripture after an em dash.
+  title = title.replace(
+    /\s*[—–]\s*(?:acts|john|matthew|mark|luke|romans|hebrews|psalm)\b.*$/i,
+    ''
+  );
+
+  // Remove trailing Acts reference without a separator.
+  title = title.replace(
+    /\s+acts\s+\d+:\d+(?:\s*[-–—]\s*\d+)?\s*$/i,
+    ''
+  );
+
+  return title
+    .replace(/\s+/g, ' ')
+    .trim() || 'Untitled Worship Service';
+}
+
+function sermonKey(title) {
+  return cleanSermonTitle(title)
     .toLowerCase()
-    .replace(/^acts:\s*the church that changed the world\s*[|—–-]\s*/i, '')
-    .replace(/^week\s*\d+\s*[-—–:]?\s*/i, '')
-    .replace(/^oct\.?\s*\d+\s*[-—–:]\s*/i, '')
-    .replace(/\s*[|—–]\s*acts\s*\d+.*$/i, '')
-    .replace(/\s*\(acts\s*\d+.*$/i, '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[“”‘’]/g, '')
     .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
-function isWorship(video) {
-  const title = (video.title || '').toLowerCase();
+// =====================================================
+// VIDEO ELIGIBILITY
+// =====================================================
 
-  // Exclude upcoming broadcasts.
+function isWorship(video) {
+  const title = String(video.title || '').toLowerCase();
+
   if (
     video.liveBroadcastContent === 'upcoming' ||
     video.duration === 'P0D'
@@ -152,14 +235,13 @@ function isWorship(video) {
     return false;
   }
 
-  // Exclude funeral services and unrelated special events.
   if (
     /celebration of life|memorial service|funeral|anniversary worship event|silver voices/.test(title)
   ) {
     return false;
   }
 
-  // Generic titles cannot reliably identify sermon themes.
+  // Generic titles cannot be assigned to a sermon reliably.
   if (title === 'versailles umc live') {
     return false;
   }
@@ -167,57 +249,211 @@ function isWorship(video) {
   return true;
 }
 
-function classifyContent(video, allVideos) {
-  if (video.serviceType !== 'Unclassified') {
-    return video.serviceType;
-  }
+// =====================================================
+// TRADITIONAL / CONTEMPORARY CLASSIFICATION
+// =====================================================
 
-  const theme = normalizeTheme(video.title);
+function explicitServiceType(video) {
+  const type = video.serviceType;
 
-  const companions = allVideos.filter(other =>
-    other.id !== video.id &&
-    normalizeTheme(other.title) === theme
-  );
-
-  const types = new Set(
-    companions
-      .map(other => other.serviceType)
-      .filter(type => type !== 'Unclassified')
-  );
-
-  // When two recordings share a sermon title and one is
-  // explicitly Traditional, infer the other as Contemporary.
   if (
-    companions.length === 1 &&
-    types.size === 1 &&
-    types.has('Traditional')
+    type === 'Traditional' ||
+    type === 'Contemporary'
   ) {
-    return 'Contemporary';
+    return type;
   }
 
   return 'Unclassified';
 }
 
-function createElement(tag, className = '', textValue) {
-  const element = document.createElement(tag);
+function classifyVideo(video, allVideos) {
+  const explicit = explicitServiceType(video);
 
-  if (className) {
-    element.className = className;
+  if (explicit !== 'Unclassified') {
+    return {
+      type: explicit,
+      inferred: false
+    };
   }
 
-  if (textValue !== undefined) {
-    element.textContent = textValue;
+  const key = sermonKey(video.title);
+
+  const matches = allVideos.filter(
+    other => sermonKey(other.title) === key
+  );
+
+  const traditional = matches.filter(
+    other => explicitServiceType(other) === 'Traditional'
+  );
+
+  const contemporary = matches.filter(
+    other => explicitServiceType(other) === 'Contemporary'
+  );
+
+  const unclassified = matches.filter(
+    other => explicitServiceType(other) === 'Unclassified'
+  );
+
+  // Infer Contemporary only for a unique two-video pair
+  // containing one explicitly labeled Traditional recording.
+  if (
+    matches.length === 2 &&
+    traditional.length === 1 &&
+    contemporary.length === 0 &&
+    unclassified.length === 1
+  ) {
+    return {
+      type: 'Contemporary',
+      inferred: true
+    };
   }
 
-  return element;
+  return {
+    type: 'Unclassified',
+    inferred: false
+  };
 }
+
+// =====================================================
+// COMPARISON MODULE
+// Created automatically; no index.html edit required.
+// =====================================================
+
+function setupComparison() {
+  if ($('service-comparison')) return;
+
+  const summary = document.querySelector('.content-summary');
+
+  if (!summary) return;
+
+  const section = element(
+    'section',
+    'service-comparison'
+  );
+
+  section.id = 'service-comparison';
+
+  const heading = element(
+    'h3',
+    '',
+    'Traditional vs. Contemporary'
+  );
+
+  const description = element(
+    'p',
+    'content-help',
+    'Compare reported video views and watch hours for each worship service.'
+  );
+
+  const grid = element(
+    'div',
+    'comparison-grid'
+  );
+
+  for (const type of [
+    'Traditional',
+    'Contemporary'
+  ]) {
+    const card = element(
+      'article',
+      'comparison-card ' + type.toLowerCase()
+    );
+
+    card.appendChild(
+      element('h4', '', type + ' Worship')
+    );
+
+    const views = element(
+      'strong',
+      'comparison-views',
+      '—'
+    );
+
+    views.id = 'compare-' + type.toLowerCase() + '-views';
+
+    const hours = element(
+      'span',
+      'comparison-hours',
+      '—'
+    );
+
+    hours.id = 'compare-' + type.toLowerCase() + '-hours';
+
+    const count = element(
+      'span',
+      'comparison-count',
+      '—'
+    );
+
+    count.id = 'compare-' + type.toLowerCase() + '-count';
+
+    card.append(views, hours, count);
+    grid.appendChild(card);
+  }
+
+  section.append(heading, description, grid);
+
+  const note = element(
+    'p',
+    'comparison-note',
+    'Comparisons use videos whose service type is labeled or inferred from a unique matching sermon pair. Unclassified videos are excluded.'
+  );
+
+  section.appendChild(note);
+
+  summary.insertAdjacentElement('afterend', section);
+}
+
+function updateComparison(videos) {
+  setupComparison();
+
+  for (const type of [
+    'Traditional',
+    'Contemporary'
+  ]) {
+    const group = videos.filter(
+      video => video.displayType === type
+    );
+
+    const views = group.reduce(
+      (total, video) =>
+        total + safeNumber(video.metrics?.views),
+      0
+    );
+
+    const minutes = group.reduce(
+      (total, video) =>
+        total + safeNumber(video.metrics?.watchMinutes),
+      0
+    );
+
+    const prefix = 'compare-' + type.toLowerCase();
+
+    $(prefix + '-views').textContent =
+      format(views) + ' views';
+
+    $(prefix + '-hours').textContent =
+      (minutes / 60).toLocaleString('en-US', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+      }) + ' watch hours';
+
+    $(prefix + '-count').textContent =
+      format(group.length) + ' worship videos';
+  }
+}
+
+// =====================================================
+// CONTENT PERFORMANCE RENDERING
+// =====================================================
 
 function showContent() {
   const filter = $('content-filter').value;
 
-  const videos = contentRecords.filter(video =>
-    filter === 'All' ||
-    video.inferredType === filter
+  const videos = contentRecords.filter(
+    video =>
+      filter === 'All' ||
+      video.displayType === filter
   );
 
   const totalViews = videos.reduce(
@@ -232,26 +468,33 @@ function showContent() {
     0
   );
 
-  $('content-count').textContent = format(videos.length);
-  $('content-views').textContent = format(totalViews);
+  $('content-count').textContent =
+    format(videos.length);
+
+  $('content-views').textContent =
+    format(totalViews);
 
   $('content-hours').textContent =
     (totalMinutes / 60).toLocaleString('en-US', {
-      maximumFractionDigits: 1,
-      minimumFractionDigits: 1
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1
     });
 
-  // Group worship recordings by sermon theme.
+  // Always compare the full set of classified services.
+  // The service filter affects rankings and video details.
+  updateComparison(contentRecords);
+
+  // Group matching worship recordings by sermon title.
   const groups = new Map();
 
   for (const video of videos) {
-    const key = normalizeTheme(video.title);
+    const key = sermonKey(video.title);
 
     if (!groups.has(key)) {
       groups.set(key, {
-        title: video.title,
+        title: cleanSermonTitle(video.title),
         views: 0,
-        watchMinutes: 0,
+        minutes: 0,
         count: 0
       });
     }
@@ -259,50 +502,58 @@ function showContent() {
     const group = groups.get(key);
 
     group.views += safeNumber(video.metrics?.views);
-    group.watchMinutes += safeNumber(video.metrics?.watchMinutes);
+    group.minutes += safeNumber(
+      video.metrics?.watchMinutes
+    );
     group.count++;
   }
 
-  const themes = [...groups.values()]
-    .sort((a, b) => b.views - a.views)
+  const rankedThemes = [...groups.values()]
+    .sort(
+      (a, b) =>
+        b.views - a.views ||
+        a.title.localeCompare(b.title)
+    )
     .slice(0, 10);
 
   const themeContainer = $('content-themes');
   themeContainer.replaceChildren();
 
-  if (!themes.length) {
+  if (!rankedThemes.length) {
     themeContainer.textContent =
-      'No worship videos matched this selection.';
+      'No worship videos match this selection.';
   }
 
-  themes.forEach((theme, index) => {
-    const row = createElement('div', 'theme-row');
+  rankedThemes.forEach((theme, index) => {
+    const row = element('div', 'theme-row');
 
-    const rank = createElement(
-      'span',
-      'theme-rank',
-      String(index + 1)
+    row.append(
+      element(
+        'span',
+        'theme-rank',
+        String(index + 1)
+      ),
+      element(
+        'span',
+        'theme-name',
+        theme.title
+      ),
+      element(
+        'span',
+        'theme-value',
+        format(theme.views) +
+          ' views · ' +
+          theme.count +
+          (theme.count === 1 ? ' video' : ' videos')
+      )
     );
 
-    const name = createElement(
-      'span',
-      'theme-name',
-      theme.title
-    );
-
-    const value = createElement(
-      'span',
-      'theme-value',
-      `${format(theme.views)} views · ${theme.count} video${theme.count === 1 ? '' : 's'}`
-    );
-
-    row.append(rank, name, value);
     themeContainer.appendChild(row);
   });
 
-  // Individual worship video cards.
-  const videoContainer = $('content-videos');
-  videoContainer.replaceChildren();
+  // Individual video cards.
+  const container = $('content-videos');
+  container.replaceChildren();
 
   const rankedVideos = [...videos]
     .sort(
@@ -313,7 +564,7 @@ function showContent() {
     .slice(0, 30);
 
   for (const video of rankedVideos) {
-    const card = createElement('a', 'video-card');
+    const card = element('a', 'video-card');
 
     card.href =
       'https://www.youtube.com/watch?v=' +
@@ -323,57 +574,70 @@ function showContent() {
     card.rel = 'noopener noreferrer';
 
     if (video.thumbnail) {
-      const image = createElement('img', 'video-thumb');
+      const image = element('img', 'video-thumb');
       image.src = video.thumbnail;
       image.alt = '';
       image.loading = 'lazy';
       card.appendChild(image);
     }
 
-    const info = createElement('div', 'video-info');
+    const info = element('div', 'video-info');
 
     info.appendChild(
-      createElement('strong', '', video.title)
+      element(
+        'strong',
+        '',
+        cleanSermonTitle(video.title)
+      )
     );
 
-    const inferred =
-      video.inferredType !== video.serviceType
-        ? ' (inferred)'
-        : '';
+    const typeLabel =
+      video.displayType +
+      (video.inferredType ? ' (inferred)' : '');
 
-    const date = new Date(
-      video.publishedAt
-    ).toLocaleDateString();
+    const published = new Date(video.publishedAt);
+
+    const dateLabel = Number.isNaN(published.getTime())
+      ? 'Date unavailable'
+      : published.toLocaleDateString();
 
     info.appendChild(
-      createElement(
+      element(
         'span',
         'video-meta',
-        `${video.inferredType}${inferred} · ${date}`
+        typeLabel + ' · ' + dateLabel
       )
     );
 
     const views = safeNumber(video.metrics?.views);
+
     const hours =
       safeNumber(video.metrics?.watchMinutes) / 60;
 
     info.appendChild(
-      createElement(
+      element(
         'span',
         'video-stats',
-        `${format(views)} views · ${hours.toFixed(1)} watch hours`
+        format(views) +
+          ' views · ' +
+          hours.toFixed(1) +
+          ' watch hours'
       )
     );
 
     card.appendChild(info);
-    videoContainer.appendChild(card);
+    container.appendChild(card);
   }
 }
 
-function clearContent(messageText) {
+// =====================================================
+// CONTENT DATA LOADING
+// =====================================================
+
+function clearContent(text) {
   contentRecords = [];
 
-  $('content-status').textContent = messageText;
+  $('content-status').textContent = text;
 
   for (const id of [
     'content-count',
@@ -385,6 +649,8 @@ function clearContent(messageText) {
 
   $('content-themes').replaceChildren();
   $('content-videos').replaceChildren();
+
+  updateComparison([]);
 }
 
 async function loadContent(start, end, current) {
@@ -396,11 +662,8 @@ async function loadContent(start, end, current) {
       `/api/content?start=${start}&end=${end}`
     );
 
-    if (current !== requestId) {
-      return;
-    }
+    if (current !== requestId) return;
 
-    // Remove duplicate YouTube video IDs.
     const unique = new Map();
 
     for (const video of report.videos || []) {
@@ -415,32 +678,42 @@ async function loadContent(start, end, current) {
 
     const allVideos = [...unique.values()];
 
-    contentRecords = allVideos.map(video => ({
-      ...video,
-      inferredType: classifyContent(video, allVideos)
-    }));
+    contentRecords = allVideos.map(video => {
+      const classification =
+        classifyVideo(video, allVideos);
+
+      return {
+        ...video,
+        cleanTitle: cleanSermonTitle(video.title),
+        displayType: classification.type,
+        inferredType: classification.inferred
+      };
+    });
 
     const unclassified = contentRecords.filter(
-      video => video.inferredType === 'Unclassified'
+      video => video.displayType === 'Unclassified'
     ).length;
 
-    const limitNote = report.limitedToRecentUploads
-      ? ' · Recent-upload scan limit reached'
-      : '';
+    const inferred = contentRecords.filter(
+      video => video.inferredType
+    ).length;
 
     $('content-status').textContent =
       `${contentRecords.length} worship videos loaded · ` +
-      `${unclassified} unclassified${limitNote}`;
+      `${inferred} service types inferred · ` +
+      `${unclassified} unclassified` +
+      (report.limitedToRecentUploads
+        ? ' · Recent-upload scan limit reached'
+        : '');
 
     showContent();
 
   } catch (error) {
-    if (current !== requestId) {
-      return;
-    }
+    if (current !== requestId) return;
 
     clearContent(
-      'Content Performance unavailable: ' + error.message
+      'Content Performance unavailable: ' +
+      error.message
     );
 
     console.warn(
@@ -450,9 +723,9 @@ async function loadContent(start, end, current) {
   }
 }
 
-// ---------------------------------------------------------
+// =====================================================
 // MAIN DASHBOARD LOADER
-// ---------------------------------------------------------
+// =====================================================
 
 async function load() {
   const current = ++requestId;
@@ -465,9 +738,8 @@ async function load() {
     Number($('period').value)
   );
 
-  // Load Content Performance independently so that a failure
-  // in one reporting module does not hide the other.
-  const contentPromise = loadContent(start, end, current);
+  const contentPromise =
+    loadContent(start, end, current);
 
   try {
     const [reportResult, channelResult] =
@@ -478,9 +750,7 @@ async function load() {
         getJSON('/api/channel')
       ]);
 
-    if (current !== requestId) {
-      return;
-    }
+    if (current !== requestId) return;
 
     if (channelResult.status === 'fulfilled') {
       const count =
@@ -490,7 +760,6 @@ async function load() {
         count === undefined || count === null
           ? 'Unavailable'
           : format(count);
-
     } else {
       $('subscribers').textContent = '—';
     }
@@ -518,18 +787,20 @@ async function load() {
     $('gained').textContent =
       '+' + format(gained);
 
-    $('lost').textContent = format(lost);
+    $('lost').textContent =
+      format(lost);
 
     $('net').textContent =
       (gained - lost > 0 ? '+' : '') +
       format(gained - lost);
 
-    $('views').textContent = format(views);
+    $('views').textContent =
+      format(views);
 
     $('watch').textContent =
       (minutes / 60).toLocaleString('en-US', {
-        maximumFractionDigits: 1,
-        minimumFractionDigits: 1
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
       });
 
     drawChart(rows, start, end);
@@ -553,28 +824,25 @@ async function load() {
       });
 
   } catch (error) {
-    if (current !== requestId) {
-      return;
-    }
+    if (current !== requestId) return;
 
     clearReport();
 
     if (error.status === 401) {
       message(
-        'YouTube sign-in required. Select Connect YouTube to authorize the dashboard.',
+        'YouTube sign-in required. Select Connect YouTube.',
         'warn'
       );
     } else if (error.status === 503) {
       message(
-        'YouTube Analytics is not fully configured: ' +
+        'YouTube Analytics configuration error: ' +
         error.message,
         'error'
       );
     } else {
       message(
         'Could not load YouTube Analytics: ' +
-        error.message +
-        '. Try Refresh.',
+        error.message,
         'error'
       );
     }
@@ -593,18 +861,17 @@ async function load() {
   }
 }
 
-// ---------------------------------------------------------
-// EVENTS
-// ---------------------------------------------------------
+// =====================================================
+// EVENTS AND INITIALIZATION
+// =====================================================
+
+setupComparison();
 
 $('refresh').addEventListener('click', load);
-
 $('period').addEventListener('change', load);
-
 $('content-filter').addEventListener(
   'change',
   showContent
 );
 
-// Start dashboard.
 load();
