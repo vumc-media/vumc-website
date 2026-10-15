@@ -864,3 +864,99 @@ h2 {
     font-size: 23px;
   }
 }
+
+/* ================================================
+   VUMC SERVICE COMPARISON - SPACING FIX
+   ================================================ */
+
+#service-comparison {
+  display: block;
+  margin: 28px 0;
+  padding: 24px;
+  background: #f4f8fd;
+  border: 1px solid #dce7f3;
+  border-radius: 15px;
+}
+
+#service-comparison .comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 20px 0 0;
+}
+
+#service-comparison .comparison-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 25px;
+  border-radius: 15px;
+  color: #ffffff;
+  min-width: 0;
+}
+
+#service-comparison .comparison-card.traditional {
+  background: linear-gradient(125deg, #123e78, #086ebd);
+}
+
+#service-comparison .comparison-card.contemporary {
+  background: linear-gradient(125deg, #673ab7, #8b5ad6);
+}
+
+#service-comparison .comparison-card h4 {
+  display: block;
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+#service-comparison .comparison-views {
+  display: block;
+  font-size: 34px;
+  font-weight: 850;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+#service-comparison .comparison-hours {
+  display: block;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+#service-comparison .comparison-count {
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #ffffffdd;
+}
+
+#service-comparison .comparison-note {
+  display: block;
+  margin: 17px 0 0 !important;
+  line-height: 1.6;
+  color: #657c93;
+}
+
+@media (max-width: 650px) {
+  #service-comparison {
+    padding: 16px;
+  }
+
+  #service-comparison .comparison-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  #service-comparison .comparison-card {
+    padding: 20px;
+  }
+
+  #service-comparison .comparison-views {
+    font-size: 29px;
+  }
+}
+
