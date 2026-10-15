@@ -32,6 +32,7 @@ textarea{min-height:110px;resize:vertical}
 .field{margin-bottom:17px}
 button,.action{display:inline-block;border:0;border-radius:9px;padding:12px 17px;background:#087b83;color:#fff;font:inherit;font-weight:750;cursor:pointer;text-decoration:none}
 button:hover,.action:hover{background:#00666d}
+button:disabled{opacity:.55;cursor:wait}
 .secondary{background:#155f9f}
 .secondary:hover{background:#104a7d}
 .muted{background:#e8f1fa;color:#165889}
@@ -42,13 +43,10 @@ button:hover,.action:hover{background:#00666d}
 .chips button{background:#e7dcfa;color:#542493;border:1px solid #d0b7ed;font-size:12px;padding:9px 13px}
 .chips button:hover{background:#d7c1f2}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.result{background:#f4f8fc;border:1px solid #dce8f3;border-radius:12px;padding:19px}
-.result strong{color:#145e9b}
-.result p{color:#617b90;font-size:13px}
 .note{color:#60798e;font-size:12px}
 footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
 
-/* LIVE CENSUS SNAPSHOT */
+/* CENSUS SNAPSHOT */
 .snapshot-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .snapshot-heading .sub{margin-bottom:0}
 .snapshot-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px;margin-top:24px}
@@ -58,18 +56,63 @@ footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
 .metric-unit{display:block;color:#72899b;font-size:11px;margin-top:3px}
 .source-line{margin:17px 0 0;font-size:12px;color:#60798e}
 .source-line a{color:#1268a8}
-.source-line a:hover{text-decoration:none}
 .snapshot-badge{display:inline-block;background:#dcf4e9;color:#08714f;border-radius:20px;padding:5px 10px;font-size:11px;font-weight:800}
 .snapshot-badge.loading{background:#e8f1fa;color:#47708e}
 .snapshot-badge.error{background:#fce9e9;color:#a33a3a}
 .snapshot-error{margin-top:16px;padding:13px;background:#fff2f0;color:#953b35;border-radius:9px;font-size:13px}
 .snapshot-note{margin-top:14px;padding:13px 16px;border-radius:9px;background:#f1f6fa;color:#60798e;font-size:12px}
-@media(max-width:1000px){.snapshot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:750px){.grid,.two,.form-grid{grid-template-columns:1fr}.panel{padding:19px}.snapshot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:430px){.snapshot-grid{grid-template-columns:1fr 1fr;gap:9px}.metric{padding:14px 11px}.metric-value{font-size:23px}}
+
+/* COMMUNITY NEEDS & OPPORTUNITIES */
+.opportunity-intro{background:#f1f7fc;border:1px solid #d9e8f5;border-radius:11px;padding:15px 17px;color:#466b86;font-size:13px}
+.opportunity-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px;margin-top:22px}
+.op-card{border:1px solid #d9e5f0;border-radius:14px;padding:21px;background:#fff;min-width:0}
+.op-card h3{font-size:19px;color:#173f65;margin:0}
+.op-top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.op-icon{width:43px;height:43px;flex-shrink:0;display:grid;place-items:center;border-radius:11px;font-size:21px;background:#e6f0fa}
+.op-card:nth-child(2) .op-icon{background:#e1f4ef}
+.op-card:nth-child(3) .op-icon{background:#eee8fa}
+.op-card:nth-child(4) .op-icon{background:#fff0dd}
+.op-stat{margin-bottom:17px}
+.op-stat-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:7px}
+.op-stat-name{font-size:13px;color:#48687f}
+.op-stat-number{font-size:16px;font-weight:800;color:#153e66;white-space:nowrap}
+.op-stat-detail{font-size:11px;color:#71889a;margin-top:4px}
+.op-track{height:9px;background:#e8eff5;border-radius:99px;overflow:hidden}
+.op-fill{height:100%;width:0;background:#1979b8;border-radius:99px;transition:width .4s ease}
+.op-card:nth-child(2) .op-fill{background:#09967e}
+.op-card:nth-child(3) .op-fill{background:#8451b9}
+.op-card:nth-child(4) .op-fill{background:#d38b2c}
+.op-question{background:#f6f9fc;border-radius:10px;padding:14px;margin-top:17px;font-size:13px;color:#4e6b80}
+.op-question strong{display:block;color:#244d70;margin-bottom:5px}
+.op-question p{margin:0}
+.op-card .actions{margin-top:13px}
+.op-card .actions button{font-size:12px;padding:9px 12px}
+.op-source{font-size:12px;color:#688095;margin:17px 0 0}
+.op-source a{color:#1268a8}
+.op-message{margin-top:15px;font-size:13px;color:#53758d}
+.op-message.error{color:#a33a3a}
+.op-footnote{font-size:12px;color:#688095;margin-top:18px}
+.op-card [data-loading]{color:#8496a6}
+.op-card [data-loading] .op-stat-number{color:#8496a6}
+[hidden]{display:none!important}
+
+@media(max-width:1000px){
+.snapshot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:750px){
+.grid,.two,.form-grid,.opportunity-grid{grid-template-columns:1fr}
+.panel{padding:19px}
+.snapshot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:430px){
+.snapshot-grid{grid-template-columns:1fr 1fr;gap:9px}
+.metric{padding:14px 11px}
+.metric-value{font-size:23px}
+}
 </style>
 </head>
 <body>
+
 <header>
 <a href="../">← Back to Community Pulse</a>
 <h1>Public Interest Research</h1>
@@ -77,6 +120,7 @@ footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
 </header>
 
 <main>
+
 <section class="panel">
 <h2>Geographic Research</h2>
 <p class="sub">We begin with our immediate community, then examine the wider context.</p>
@@ -96,7 +140,7 @@ footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
 </div>
 </section>
 
-<!-- LIVE WOODFORD COUNTY CENSUS DATA -->
+<!-- EXISTING COMMUNITY SNAPSHOT -->
 <section class="panel" aria-labelledby="snapshot-title">
 <div class="snapshot-heading">
 <div>
@@ -106,7 +150,7 @@ footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
 <span id="snapshot-badge" class="snapshot-badge loading">Connecting…</span>
 </div>
 
-<div class="snapshot-grid" id="snapshot-grid" aria-live="polite">
+<div class="snapshot-grid" aria-live="polite">
 <div class="metric">
 <span class="metric-label">Population</span>
 <span class="metric-value" id="metric-population">—</span>
@@ -130,26 +174,196 @@ footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
 <div class="metric">
 <span class="metric-label">Poverty Rate</span>
 <span class="metric-value" id="metric-poverty">—</span>
-<span class="metric-unit">percent of population in poverty universe</span>
+<span class="metric-unit">percent of poverty universe</span>
 </div>
 </div>
 
 <div id="snapshot-error" class="snapshot-error" hidden></div>
-
 <p class="source-line">
 Source: <a id="census-source" href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener noreferrer">U.S. Census Bureau — American Community Survey</a>.
 <span id="census-year">Loading reporting year…</span>
 </p>
-
 <div class="snapshot-note">
 These are five-year survey estimates, not live counts or measurements of local Google searches. They provide context for ministry research, not conclusions about individual needs.
 </div>
-
 <div class="actions">
 <button class="muted" id="refresh-census" type="button">Refresh Community Data</button>
 </div>
 </section>
 
+<!-- NEW PHASE 3 DASHBOARD -->
+<section class="panel" aria-labelledby="opportunities-title">
+<div class="snapshot-heading">
+<div>
+<h2 id="opportunities-title">Community Needs &amp; Opportunities</h2>
+<p class="sub">Four research perspectives on Woodford County.</p>
+</div>
+<span id="opportunities-badge" class="snapshot-badge loading">Connecting…</span>
+</div>
+
+<div class="opportunity-intro">
+<strong>Community research, not assumptions.</strong>
+These indicators can help VUMC ask better questions about the people and families around us. Each card separates Census evidence from a possible ministry research question.
+</div>
+
+<div id="opportunities-error" class="snapshot-error" hidden></div>
+
+<div class="opportunity-grid">
+
+<article class="op-card" id="op-age">
+<div class="op-top">
+<div class="op-icon" aria-hidden="true">👥</div>
+<h3>Age &amp; Generations</h3>
+</div>
+
+<div class="op-stat">
+<div class="op-stat-head">
+<span class="op-stat-name">Children under 18</span>
+<span class="op-stat-number" id="age-children">—</span>
+</div>
+<div class="op-track"><div class="op-fill" id="bar-age-children"></div></div>
+<div class="op-stat-detail" id="count-age-children">Loading Census data…</div>
+</div>
+
+<div class="op-stat">
+<div class="op-stat-head">
+<span class="op-stat-name">Adults 18–64</span>
+<span class="op-stat-number" id="age-adults">—</span>
+</div>
+<div class="op-track"><div class="op-fill" id="bar-age-adults"></div></div>
+<div class="op-stat-detail" id="count-age-adults">Loading Census data…</div>
+</div>
+
+<div class="op-stat">
+<div class="op-stat-head">
+<span class="op-stat-name">Adults 65+</span>
+<span class="op-stat-number" id="age-seniors">—</span>
+</div>
+<div class="op-track"><div class="op-fill" id="bar-age-seniors"></div></div>
+<div class="op-stat-detail" id="count-age-seniors">Loading Census data…</div>
+</div>
+
+<div class="op-question">
+<strong>Possible ministry research</strong>
+<p>What opportunities exist for intergenerational relationships, family support, and connection with older adults? Which needs have local organizations already identified?</p>
+</div>
+<div class="actions">
+<button class="secondary add-finding" data-category="age" type="button" disabled>Add Findings to Notebook</button>
+</div>
+</article>
+
+<article class="op-card" id="op-households">
+<div class="op-top">
+<div class="op-icon" aria-hidden="true">🏠</div>
+<h3>Families &amp; Households</h3>
+</div>
+
+<div class="op-stat">
+<div class="op-stat-head">
+<span class="op-stat-name">Family households</span>
+<span class="op-stat-number" id="house-family">—</span>
+</div>
+<div class="op-track"><div class="op-fill" id="bar-house-family"></div></div>
+<div class="op-stat-detail" id="count-house-family">Loading Census data…</div>
+</div>
+
+<div class="op-stat">
+<div class="op-stat-head">
+<span class="op-stat-name">One-person households</span>
+<span class="op-stat-number" id="house-alone">—</span>
+</div>
+<div class="op-track"><div class="op-fill" id="bar-house-alone"></div></div>
+<div class="op-stat-detail" id="count-house-alone">Loading Census data…</div>
+</div>
+
+<div class="op-question">
+<strong>Possible ministry research</strong>
+<p>How are residents finding meaningful relationships and community? What are families, single adults, and people living alone saying about belonging and support?</p>
+</div>
+<div class="actions">
+<button class="secondary add-finding" data-category="households" type="button" disabled>Add Findings to Notebook</button>
+</div>
+</article>
+
+<article class="op-card" id="op-housing">
+<div class="op-top">
+<div class="op-icon" aria-hidden="true">🏘️</div>
+<h3>Housing &amp; Stability</h3>
+</div>
+
+<div class="op-stat">
+<div class="op-stat-head">
+<span class="op-stat-name">Owner-occupied homes</span>
+<span class="op-stat-number" id="housing-owners">—</span>
+</div>
+<div class="op-track"><div class="op-fill" id="bar-housing-owners"></div></div>
+<div class="op-stat-detail" id="count-housing-owners">Loading Census data…</div>
+</div>
+
+<div class="op-stat">
+<div class="op-stat-head">
+<span class="op-stat-name">Renter-occupied homes</span>
+<span class="op-stat-number" id="housing-renters">—</span>
+</div>
+<div class="op-track"><div class="op-fill" id="bar-housing-renters"></div></div>
+<div class="op-stat-detail" id="count-housing-renters">Loading Census data…</div>
+</div>
+
+<div class="op-question">
+<strong>Possible ministry research</strong>
+<p>What do local housing partners report about affordability, accessibility, and housing security? Homeownership rates alone do not tell us whether residents face housing difficulties.</p>
+</div>
+<div class="actions">
+<button class="secondary add-finding" data-category="housing" type="button" disabled>Add Findings to Notebook</button>
+</div>
+</article>
+
+<article class="op-card" id="op-economy">
+<div class="op-top">
+<div class="op-icon" aria-hidden="true">📊</div>
+<h3>Economic Conditions</h3>
+</div>
+
+<div class="op-stat">
+<div class="op-stat-head">
+<span class="op-stat-name">Residents below poverty threshold</span>
+<span class="op-stat-number" id="economy-poverty">—</span>
+</div>
+<div class="op-track"><div class="op-fill" id="bar-economy-poverty"></div></div>
+<div class="op-stat-detail" id="count-economy-poverty">Loading Census data…</div>
+</div>
+
+<div class="metric" style="margin-top:18px">
+<span class="metric-label">Median Household Income</span>
+<span class="metric-value" id="economy-income">—</span>
+<span class="metric-unit">annual household income estimate</span>
+</div>
+
+<div class="op-question">
+<strong>Possible ministry research</strong>
+<p>Where are food, transportation, childcare, or emergency assistance gaps being reported? What do local service providers identify as their greatest unmet requests?</p>
+</div>
+<div class="actions">
+<button class="secondary add-finding" data-category="economy" type="button" disabled>Add Findings to Notebook</button>
+</div>
+</article>
+
+</div>
+
+<p class="op-source">
+Source: <a href="https://api.census.gov/data/2024/acs/acs5" target="_blank" rel="noopener noreferrer">U.S. Census Bureau — 2024 ACS five-year detailed tables</a>, covering 2020–2024. Percentages use the appropriate Census denominator.
+</p>
+<p class="op-footnote">
+Age percentages refer to total population. Household percentages refer to all households. Housing percentages refer to occupied housing units. Poverty percentage refers to people for whom poverty status is determined. These categories use different denominators and should not be directly compared as though they represent the same population.
+</p>
+<div class="actions">
+<button class="muted" id="refresh-opportunities" type="button">Refresh Opportunity Data</button>
+<button class="secondary" id="add-all-findings" type="button" disabled>Add All Findings to Notebook</button>
+</div>
+<p class="op-message" id="opportunities-message" role="status"></p>
+</section>
+
+<!-- EXISTING GOOGLE TRENDS RESEARCH -->
 <section class="panel">
 <h2>Topic Discovery &amp; Comparison</h2>
 <p class="sub">Explore up to four topics using Google Trends. Search results open in a new tab.</p>
@@ -222,21 +436,18 @@ Google Trends measures relative search interest, not exact search volume. Kentuc
 </div>
 </section>
 
-<section class="panel">
+<!-- EXISTING RESEARCH NOTEBOOK -->
+<section class="panel" id="research-notebook">
 <h2>Research Notebook</h2>
-<p class="sub">Record what the source actually shows and consider possible ministry connections. Your notes remain in this browser session unless you copy them.</p>
+<p class="sub">Record what the source actually shows and consider possible ministry connections. Your notes remain in this browser session unless you copy or download them.</p>
 <div class="two">
-<div>
 <div class="field">
 <label for="evidence">What does the research show?</label>
 <textarea id="evidence" placeholder="Record the geographic scope, dates, source and observed findings."></textarea>
 </div>
-</div>
-<div>
 <div class="field">
 <label for="ministry">Possible ministry connections</label>
 <textarea id="ministry" placeholder="Possible pastoral conversations, worship themes, small groups or outreach opportunities."></textarea>
-</div>
 </div>
 </div>
 <div class="actions">
@@ -249,14 +460,20 @@ Google Trends measures relative search interest, not exact search volume. Kentuc
 <footer>
 Versailles United Methodist Church · Community Pulse · PIR Engine
 </footer>
+
 </main>
 
 <script>
 (() => {
+  'use strict';
+
   const $ = id => document.getElementById(id);
 
-  const CENSUS_ENDPOINT =
-    'https://holy-star-1faevumc-youtube-analytics.versaillesumcworshipteam.workers.dev/api/community/woodford';
+  const WORKER =
+    'https://holy-star-1faevumc-youtube-analytics.versaillesumcworshipteam.workers.dev';
+
+  const CENSUS_ENDPOINT = WORKER + '/api/community/woodford';
+  const OPPORTUNITIES_ENDPOINT = WORKER + '/api/community/opportunities';
 
   const numberFormat = new Intl.NumberFormat('en-US');
 
@@ -267,6 +484,25 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
   });
 
   let lastCensus = null;
+  let lastOpportunities = null;
+
+  function formattedNumber(value) {
+    return typeof value === 'number' && Number.isFinite(value)
+      ? numberFormat.format(value)
+      : 'Unavailable';
+  }
+
+  function formattedMoney(value) {
+    return typeof value === 'number' && Number.isFinite(value)
+      ? moneyFormat.format(value)
+      : 'Unavailable';
+  }
+
+  function formattedPercent(value) {
+    return typeof value === 'number' && Number.isFinite(value)
+      ? value.toFixed(1) + '%'
+      : 'Unavailable';
+  }
 
   function metric(id, value, formatter) {
     $(id).textContent =
@@ -274,6 +510,25 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
         ? formatter(value)
         : 'Unavailable';
   }
+
+  async function fetchJSON(endpoint) {
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'omit',
+      cache: 'no-store'
+    });
+
+    if (!response.ok) {
+      throw new Error('Server returned HTTP ' + response.status);
+    }
+
+    return response.json();
+  }
+
+  // ====================================================
+  // EXISTING CENSUS SNAPSHOT
+  // ====================================================
 
   async function loadCensus() {
     const badge = $('snapshot-badge');
@@ -286,18 +541,7 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
     refresh.disabled = true;
 
     try {
-      const response = await fetch(CENSUS_ENDPOINT, {
-        method: 'GET',
-        mode: 'cors',
-        credentials: 'omit',
-        cache: 'no-store'
-      });
-
-      if (!response.ok) {
-        throw new Error('Server returned HTTP ' + response.status);
-      }
-
-      const data = await response.json();
+      const data = await fetchJSON(CENSUS_ENDPOINT);
 
       if (data.status !== 'ready' || !data.indicators) {
         throw new Error('Community data was not available.');
@@ -306,24 +550,51 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
       lastCensus = data;
       const indicators = data.indicators;
 
-      metric('metric-population', indicators.population?.value, numberFormat.format.bind(numberFormat));
-      metric('metric-age', indicators.medianAge?.value, n => n.toFixed(1));
-      metric('metric-households', indicators.households?.value, numberFormat.format.bind(numberFormat));
-      metric('metric-income', indicators.medianHouseholdIncome?.value, moneyFormat.format.bind(moneyFormat));
-      metric('metric-poverty', indicators.povertyRate?.value, n => n.toFixed(1) + '%');
+      metric(
+        'metric-population',
+        indicators.population?.value,
+        formattedNumber
+      );
+
+      metric(
+        'metric-age',
+        indicators.medianAge?.value,
+        n => n.toFixed(1)
+      );
+
+      metric(
+        'metric-households',
+        indicators.households?.value,
+        formattedNumber
+      );
+
+      metric(
+        'metric-income',
+        indicators.medianHouseholdIncome?.value,
+        formattedMoney
+      );
+
+      metric(
+        'metric-poverty',
+        indicators.povertyRate?.value,
+        formattedPercent
+      );
 
       const year = data.source?.year;
+
       $('census-year').textContent = year
         ? `${year} ACS five-year estimates.`
         : 'ACS five-year estimates.';
 
-      if (data.source?.url &&
-          /^https:\/\/api\.census\.gov\//.test(data.source.url)) {
+      if (
+        data.source?.url &&
+        /^https:\/\/api\.census\.gov\//.test(data.source.url)
+      ) {
         $('census-source').href = data.source.url;
       }
 
       badge.className = 'snapshot-badge';
-      badge.textContent = 'Live Data Connected';
+      badge.textContent = 'Data Connected';
     } catch (error) {
       badge.className = 'snapshot-badge error';
       badge.textContent = 'Connection Unavailable';
@@ -334,8 +605,13 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
         ' Please try Refresh Community Data.';
 
       if (!lastCensus) {
-        ['metric-population','metric-age','metric-households',
-         'metric-income','metric-poverty'].forEach(id => {
+        [
+          'metric-population',
+          'metric-age',
+          'metric-households',
+          'metric-income',
+          'metric-poverty'
+        ].forEach(id => {
           $(id).textContent = '—';
         });
       }
@@ -347,12 +623,293 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
   $('refresh-census').addEventListener('click', loadCensus);
   loadCensus();
 
-  const topics = () => {
-    const values = [1,2,3,4].map(n =>
-      $('topic' + n).value.trim()
-    ).filter(Boolean);
+  // ====================================================
+  // NEW COMMUNITY NEEDS & OPPORTUNITIES
+  // ====================================================
 
-    return [...new Set(values)].slice(0,4);
+  function showStat(prefix, item) {
+    const percentValue = item?.percent;
+    const countValue = item?.count;
+
+    $(prefix).textContent = formattedPercent(percentValue);
+
+    $('count-' + prefix).textContent =
+      formattedNumber(countValue) +
+      (countValue === 1 ? ' person or household' : ' people or households');
+
+    // Bars always represent percentages, not counts.
+    const width =
+      typeof percentValue === 'number' && Number.isFinite(percentValue)
+        ? Math.max(0, Math.min(100, percentValue))
+        : 0;
+
+    $('bar-' + prefix).style.width = width + '%';
+  }
+
+  function renderOpportunities(data) {
+    const categories = data.categories;
+
+    showStat('age-children', categories.age.under18);
+    showStat('age-adults', categories.age.adults18to64);
+    showStat('age-seniors', categories.age.seniors65plus);
+
+    showStat('house-family', categories.households.family);
+    showStat('house-alone', categories.households.livingAlone);
+
+    showStat('housing-owners', categories.housing.ownerOccupied);
+    showStat('housing-renters', categories.housing.renterOccupied);
+
+    showStat('economy-poverty', categories.economy.belowPoverty);
+
+    $('economy-income').textContent =
+      formattedMoney(categories.economy.medianHouseholdIncome);
+
+    // Use category-specific labels instead of the
+    // generic wording shown while data loads.
+    const descriptions = {
+      'count-age-children': ' residents under age 18',
+      'count-age-adults': ' residents ages 18–64',
+      'count-age-seniors': ' residents ages 65+',
+      'count-house-family': ' family households',
+      'count-house-alone': ' one-person households',
+      'count-housing-owners': ' owner-occupied housing units',
+      'count-housing-renters': ' renter-occupied housing units',
+      'count-economy-poverty': ' residents below poverty threshold'
+    };
+
+    const values = {
+      'count-age-children': categories.age.under18.count,
+      'count-age-adults': categories.age.adults18to64.count,
+      'count-age-seniors': categories.age.seniors65plus.count,
+      'count-house-family': categories.households.family.count,
+      'count-house-alone': categories.households.livingAlone.count,
+      'count-housing-owners': categories.housing.ownerOccupied.count,
+      'count-housing-renters': categories.housing.renterOccupied.count,
+      'count-economy-poverty': categories.economy.belowPoverty.count
+    };
+
+    Object.keys(descriptions).forEach(id => {
+      $(id).textContent =
+        formattedNumber(values[id]) + descriptions[id];
+    });
+
+    document.querySelectorAll('.add-finding').forEach(button => {
+      button.disabled = false;
+    });
+
+    $('add-all-findings').disabled = false;
+  }
+
+  async function loadOpportunities() {
+    const badge = $('opportunities-badge');
+    const errorBox = $('opportunities-error');
+    const refresh = $('refresh-opportunities');
+    const message = $('opportunities-message');
+
+    badge.className = 'snapshot-badge loading';
+    badge.textContent = 'Connecting…';
+    errorBox.hidden = true;
+    refresh.disabled = true;
+    message.textContent = '';
+
+    try {
+      const data = await fetchJSON(OPPORTUNITIES_ENDPOINT);
+
+      if (
+        data.status !== 'ready' ||
+        !data.categories?.age ||
+        !data.categories?.households ||
+        !data.categories?.housing ||
+        !data.categories?.economy
+      ) {
+        throw new Error('Incomplete community research response.');
+      }
+
+      lastOpportunities = data;
+      renderOpportunities(data);
+
+      badge.className = 'snapshot-badge';
+      badge.textContent = 'Data Connected';
+
+      message.textContent =
+        'Community indicators loaded. Choose a research card to add its verified findings to the notebook.';
+    } catch (error) {
+      badge.className = 'snapshot-badge error';
+      badge.textContent = 'Connection Unavailable';
+      errorBox.hidden = false;
+      errorBox.textContent =
+        'Unable to retrieve Community Needs & Opportunities data. ' +
+        error.message;
+
+      if (!lastOpportunities) {
+        document.querySelectorAll('.add-finding').forEach(button => {
+          button.disabled = true;
+        });
+        $('add-all-findings').disabled = true;
+      } else {
+        message.textContent =
+          'Previously loaded data remains visible. Refresh to try again.';
+      }
+    } finally {
+      refresh.disabled = false;
+    }
+  }
+
+  $('refresh-opportunities').addEventListener(
+    'click',
+    loadOpportunities
+  );
+
+  loadOpportunities();
+
+  // ====================================================
+  // TRANSFER VERIFIED FINDINGS INTO NOTEBOOK
+  // ====================================================
+
+  const researchQuestions = {
+    age:
+      'Research question: What do local families, older adults, and service organizations identify as opportunities for intergenerational connection and support?',
+    households:
+      'Research question: How do residents describe belonging and social connection, including people living alone?',
+    housing:
+      'Research question: What do local housing organizations report about affordability, accessibility, and housing stability?',
+    economy:
+      'Research question: What needs are local food, transportation, childcare, and emergency assistance providers observing?'
+  };
+
+  function findingLines(category) {
+    if (!lastOpportunities) return [];
+
+    const c = lastOpportunities.categories;
+
+    const entry = (name, value) =>
+      name + ': ' +
+      formattedNumber(value?.count) +
+      ' (' + formattedPercent(value?.percent) + ')';
+
+    const shared = [
+      'Source: U.S. Census Bureau, 2024 ACS five-year detailed tables (2020–2024).',
+      'Geography: Woodford County, Kentucky.'
+    ];
+
+    switch (category) {
+      case 'age':
+        return [
+          'AGE & GENERATIONS',
+          ...shared,
+          'Population: ' + formattedNumber(c.age.population),
+          entry('Children under 18', c.age.under18),
+          entry('Adults ages 18–64', c.age.adults18to64),
+          entry('Adults ages 65+', c.age.seniors65plus),
+          'Denominator: total population.'
+        ];
+
+      case 'households':
+        return [
+          'FAMILIES & HOUSEHOLDS',
+          ...shared,
+          'Total households: ' + formattedNumber(c.households.total),
+          entry('Family households', c.households.family),
+          entry('One-person households', c.households.livingAlone),
+          'Denominator: total households.'
+        ];
+
+      case 'housing':
+        return [
+          'HOUSING & STABILITY',
+          ...shared,
+          'Occupied housing units: ' +
+            formattedNumber(c.housing.occupiedHousingUnits),
+          entry('Owner-occupied units', c.housing.ownerOccupied),
+          entry('Renter-occupied units', c.housing.renterOccupied),
+          'Denominator: occupied housing units.'
+        ];
+
+      case 'economy':
+        return [
+          'ECONOMIC CONDITIONS',
+          ...shared,
+          'Median household income: ' +
+            formattedMoney(c.economy.medianHouseholdIncome),
+          'Poverty-status population: ' +
+            formattedNumber(c.economy.povertyUniverse),
+          entry('People below poverty threshold', c.economy.belowPoverty),
+          'Poverty percentage denominator: population for whom poverty status is determined.'
+        ];
+
+      default:
+        return [];
+    }
+  }
+
+  function appendUniqueBlock(textarea, block) {
+    if (textarea.value.includes(block)) return false;
+
+    textarea.value = textarea.value.trim()
+      ? textarea.value.trimEnd() + '\n\n' + block
+      : block;
+
+    return true;
+  }
+
+  function addFindings(categories, scroll = true) {
+    if (!lastOpportunities) return;
+
+    let added = 0;
+
+    categories.forEach(category => {
+      const evidence = findingLines(category).join('\n');
+      const question = researchQuestions[category];
+
+      if (evidence && appendUniqueBlock($('evidence'), evidence)) {
+        added++;
+      }
+
+      if (question) {
+        appendUniqueBlock($('ministry'), question);
+      }
+    });
+
+    $('opportunities-message').textContent = added
+      ? added + ' research section(s) added to the notebook.'
+      : 'Those findings are already in your notebook.';
+
+    $('note-status').textContent =
+      'Census findings were added. Review and edit your notes before copying or downloading.';
+
+    if (scroll) {
+      $('research-notebook').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  }
+
+  document.querySelectorAll('.add-finding').forEach(button => {
+    button.addEventListener('click', () => {
+      addFindings([button.dataset.category]);
+    });
+  });
+
+  $('add-all-findings').addEventListener('click', () => {
+    addFindings([
+      'age',
+      'households',
+      'housing',
+      'economy'
+    ]);
+  });
+
+  // ====================================================
+  // EXISTING GOOGLE TRENDS RESEARCH
+  // ====================================================
+
+  const topics = () => {
+    const values = [1, 2, 3, 4]
+      .map(n => $('topic' + n).value.trim())
+      .filter(Boolean);
+
+    return [...new Set(values)].slice(0, 4);
   };
 
   function trends(geo) {
@@ -389,7 +946,10 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
   });
 
   $('clear').addEventListener('click', () => {
-    [1,2,3,4].forEach(n => $('topic'+n).value = '');
+    [1, 2, 3, 4].forEach(n => {
+      $('topic' + n).value = '';
+    });
+
     $('topic1').focus();
   });
 
@@ -401,11 +961,16 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
       });
     });
 
+  // ====================================================
+  // EXISTING RESEARCH NOTEBOOK
+  // ====================================================
+
   function notes() {
     const censusSection = lastCensus
       ? [
           'WOODFORD COUNTY COMMUNITY CONTEXT',
-          'Source: U.S. Census Bureau, ACS ' + lastCensus.source.year + ' five-year estimates',
+          'Source: U.S. Census Bureau, ACS ' +
+            lastCensus.source.year + ' five-year estimates',
           'Population: ' + $('metric-population').textContent,
           'Median age: ' + $('metric-age').textContent,
           'Households: ' + $('metric-households').textContent,
@@ -416,7 +981,7 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
         ]
       : [
           'WOODFORD COUNTY COMMUNITY CONTEXT',
-          'Census data unavailable during this session.',
+          'Census snapshot unavailable during this session.',
           ''
         ];
 
@@ -424,17 +989,20 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
       'COMMUNITY PULSE — PUBLIC INTEREST RESEARCH',
       'Date: ' + new Date().toLocaleDateString(),
       'Topics: ' + topics().join(', '),
-      'Geography: ' + $('region').selectedOptions[0].text,
-      'Period: ' + $('period').selectedOptions[0].text,
+      'Geography for Google Trends: ' +
+        $('region').selectedOptions[0].text,
+      'Trends period: ' +
+        $('period').selectedOptions[0].text,
       '',
       ...censusSection,
       'OBSERVED EVIDENCE',
       $('evidence').value.trim() || '(Not entered)',
       '',
-      'POSSIBLE MINISTRY CONNECTIONS',
+      'POSSIBLE MINISTRY CONNECTIONS / RESEARCH QUESTIONS',
       $('ministry').value.trim() || '(Not entered)',
       '',
-      'Research notes are researcher-entered, not AI-verified.'
+      'Researcher-entered notes are not AI-verified.',
+      'Census estimates do not prove unmet community needs.'
     ].join('\n');
   }
 
@@ -462,6 +1030,7 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
 
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
+
 })();
 </script>
 </body>
