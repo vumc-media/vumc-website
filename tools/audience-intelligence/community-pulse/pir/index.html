@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PIR Engine | Community Pulse</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#edf2f8;color:#193751;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+header{background:linear-gradient(110deg,#102b4b,#17649b);color:#fff;padding:30px max(20px,calc((100% - 1120px)/2))}
+header a{color:#cce9ff;text-decoration:none;font-size:13px}
+header h1{margin:12px 0 3px;font-size:clamp(28px,4vw,40px)}
+header p{margin:0;color:#d5e8f8}
+main{max-width:1160px;margin:auto;padding:26px 20px 65px}
+.panel{background:white;border-radius:16px;padding:26px;margin-bottom:20px;box-shadow:0 8px 24px #183f6410}
+h2{margin:0 0 7px;font-size:23px;color:#153e66}
+h3{margin:0 0 12px;font-size:17px}
+.sub{color:#627d92;margin:0 0 22px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.geo{padding:22px;border-radius:13px;color:white}
+.geo h3{color:white;margin-bottom:6px}
+.geo p{margin:0;font-size:13px;color:#fff}
+.local{background:linear-gradient(125deg,#123e83,#087bc4)}
+.regional{background:linear-gradient(125deg,#00645c,#06a18d)}
+.national{background:linear-gradient(125deg,#53269d,#9250d2)}
+label{display:block;font-weight:750;font-size:13px;margin-bottom:7px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #b9ccdf;border-radius:9px;background:white;color:#193751;font:inherit}
+textarea{min-height:110px;resize:vertical}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.field{margin-bottom:17px}
+button,.action{display:inline-block;border:0;border-radius:9px;padding:12px 17px;background:#087b83;color:#fff;font:inherit;font-weight:750;cursor:pointer;text-decoration:none}
+button:hover,.action:hover{background:#00666d}
+.secondary{background:#155f9f}
+.secondary:hover{background:#104a7d}
+.muted{background:#e8f1fa;color:#165889}
+.muted:hover{background:#d4e6f6}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.status{padding:14px 17px;background:#edf5fd;border-left:4px solid #1675b5;border-radius:8px;color:#4e6b83;font-size:13px;margin-top:18px}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+.chips button{background:#e7dcfa;color:#542493;border:1px solid #d0b7ed;font-size:12px;padding:9px 13px}
+.chips button:hover{background:#d7c1f2}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.result{background:#f4f8fc;border:1px solid #dce8f3;border-radius:12px;padding:19px}
+.result strong{color:#145e9b}
+.result p{color:#617b90;font-size:13px}
+.note{color:#60798e;font-size:12px}
+footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
+@media(max-width:750px){.grid,.two,.form-grid{grid-template-columns:1fr}.panel{padding:19px}}
+</style>
+</head>
+<body>
+<header>
+<a href="../">← Back to Community Pulse</a>
+<h1>Public Interest Research</h1>
+<p>Local priorities. Regional context. National perspective.</p>
+</header>
+
+<main>
+<section class="panel">
+<h2>Geographic Research</h2>
+<p class="sub">We begin with our immediate community, then examine the wider context.</p>
+<div class="grid">
+<div class="geo local">
+<h3>01 · Local Priority</h3>
+<p>Versailles and Woodford County. Research local questions using the closest reliable geographic evidence.</p>
+</div>
+<div class="geo regional">
+<h3>02 · Regional Context</h3>
+<p>Lexington, Frankfort, Central Kentucky, and statewide search interest.</p>
+</div>
+<div class="geo national">
+<h3>03 · National Perspective</h3>
+<p>Broader questions and emerging conversations across the United States.</p>
+</div>
+</div>
+</section>
+
+<section class="panel">
+<h2>Topic Discovery & Comparison</h2>
+<p class="sub">Explore up to five topics using Google Trends. Search results open in a new tab.</p>
+
+<div class="form-grid">
+<div class="field">
+<label for="topic1">Primary topic</label>
+<input id="topic1" value="loneliness" maxlength="100">
+</div>
+<div class="field">
+<label for="topic2">Comparison topic</label>
+<input id="topic2" value="belonging" maxlength="100">
+</div>
+<div class="field">
+<label for="topic3">Additional topic (optional)</label>
+<input id="topic3" placeholder="e.g. anxiety" maxlength="100">
+</div>
+<div class="field">
+<label for="topic4">Additional topic (optional)</label>
+<input id="topic4" placeholder="e.g. hope" maxlength="100">
+</div>
+</div>
+
+<div class="form-grid">
+<div class="field">
+<label for="region">Geographic scope</label>
+<select id="region">
+<option value="US-KY">Kentucky</option>
+<option value="US">United States</option>
+</select>
+</div>
+<div class="field">
+<label for="period">Time period</label>
+<select id="period">
+<option value="today 1-m">Past 30 days</option>
+<option value="today 12-m" selected>Past 12 months</option>
+<option value="today 5-y">Past 5 years</option>
+</select>
+</div>
+</div>
+
+<div class="actions">
+<button id="research">Open Trends Comparison ↗</button>
+<button class="secondary" id="both">Compare Kentucky & National ↗</button>
+<button class="muted" id="clear">Clear Topics</button>
+</div>
+
+<div class="status">
+Google Trends measures relative search interest, not exact search volume. Kentucky results are statewide and should not be presented as Versailles or Woodford County measurements.
+</div>
+</section>
+
+<section class="panel">
+<h2>Explore Ministry Topics</h2>
+<p class="sub">These are starting points for research, not claims about what people are currently searching for.</p>
+<div class="chips" id="suggestions">
+<button data-topic="anxiety">Anxiety</button>
+<button data-topic="loneliness">Loneliness</button>
+<button data-topic="grief">Grief</button>
+<button data-topic="forgiveness">Forgiveness</button>
+<button data-topic="purpose in life">Purpose</button>
+<button data-topic="marriage">Marriage</button>
+<button data-topic="parenting">Parenting</button>
+<button data-topic="faith">Faith</button>
+<button data-topic="church">Church</button>
+<button data-topic="hope">Hope</button>
+<button data-topic="financial stress">Financial stress</button>
+<button data-topic="depression">Depression</button>
+</div>
+</section>
+
+<section class="panel">
+<h2>Research Notebook</h2>
+<p class="sub">Record what the source actually shows and consider possible ministry connections. Your notes remain in this browser session unless you copy them.</p>
+<div class="two">
+<div>
+<div class="field">
+<label for="evidence">What does the research show?</label>
+<textarea id="evidence" placeholder="Record the geographic scope, dates, source and observed findings."></textarea>
+</div>
+</div>
+<div>
+<div class="field">
+<label for="ministry">Possible ministry connections</label>
+<textarea id="ministry" placeholder="Possible pastoral conversations, worship themes, small groups or outreach opportunities."></textarea>
+</div>
+</div>
+</div>
+<div class="actions">
+<button id="copy" class="secondary">Copy Research Notes</button>
+<button id="download" class="muted">Download Notes</button>
+</div>
+<p class="note" id="note-status">Research notes are not automatically verified or analyzed by AI.</p>
+</section>
+
+<footer>
+Versailles United Methodist Church · Community Pulse · PIR Engine
+</footer>
+</main>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+
+  const topics = () => {
+    const values = [1,2,3,4].map(n =>
+      $('topic' + n).value.trim()
+    ).filter(Boolean);
+    return [...new Set(values)].slice(0,5);
+  };
+
+  function trends(geo) {
+    const selected = topics();
+    if (!selected.length) {
+      $('topic1').focus();
+      return;
+    }
+    const params = new URLSearchParams({
+      date: $('period').value,
+      geo,
+      q: selected.join(',')
+    });
+    window.open(
+      'https://trends.google.com/trends/explore?' + params,
+      '_blank',
+      'noopener,noreferrer'
+    );
+  }
+
+  $('research').addEventListener('click', () => {
+    trends($('region').value);
+  });
+
+  $('both').addEventListener('click', () => {
+    if (!topics().length) return;
+    // Both windows are opened directly from the user click.
+    trends('US-KY');
+    trends('US');
+  });
+
+  $('clear').addEventListener('click', () => {
+    [1,2,3,4].forEach(n => $('topic'+n).value = '');
+    $('topic1').focus();
+  });
+
+  document.querySelectorAll('#suggestions button')
+    .forEach(button => {
+      button.addEventListener('click', () => {
+        $('topic1').value = button.dataset.topic;
+        trends($('region').value);
+      });
+    });
+
+  function notes() {
+    return [
+      'COMMUNITY PULSE — PUBLIC INTEREST RESEARCH',
+      'Date: ' + new Date().toLocaleDateString(),
+      'Topics: ' + topics().join(', '),
+      'Geography: ' + $('region').selectedOptions[0].text,
+      'Period: ' + $('period').selectedOptions[0].text,
+      '',
+      'OBSERVED EVIDENCE',
+      $('evidence').value.trim() || '(Not entered)',
+      '',
+      'POSSIBLE MINISTRY CONNECTIONS',
+      $('ministry').value.trim() || '(Not entered)',
+      '',
+      'These notes are researcher-entered, not AI-verified.'
+    ].join('\n');
+  }
+
+  $('copy').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(notes());
+      $('note-status').textContent = 'Research notes copied.';
+    } catch (_) {
+      $('note-status').textContent =
+        'Copy unavailable. Use Download Notes instead.';
+    }
+  });
+
+  $('download').addEventListener('click', () => {
+    const blob = new Blob([notes()], {
+      type: 'text/plain;charset=utf-8'
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'community-pulse-research.txt';
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+})();
+</script>
+</body>
+</html>
