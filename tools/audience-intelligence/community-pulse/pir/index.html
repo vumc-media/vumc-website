@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102b4b">
 <title>PIR Engine | Community Pulse</title>
 <style>
 *{box-sizing:border-box}
@@ -46,7 +47,26 @@ button:hover,.action:hover{background:#00666d}
 .result p{color:#617b90;font-size:13px}
 .note{color:#60798e;font-size:12px}
 footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
-@media(max-width:750px){.grid,.two,.form-grid{grid-template-columns:1fr}.panel{padding:19px}}
+
+/* LIVE CENSUS SNAPSHOT */
+.snapshot-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.snapshot-heading .sub{margin-bottom:0}
+.snapshot-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px;margin-top:24px}
+.metric{padding:20px 16px;border:1px solid #dce8f3;border-radius:13px;background:linear-gradient(180deg,#f7fbff,#edf5fc);min-width:0}
+.metric-label{display:block;font-size:12px;color:#55748d;font-weight:750;min-height:37px}
+.metric-value{display:block;font-size:clamp(21px,2.5vw,30px);font-weight:850;letter-spacing:-.035em;color:#123e72;overflow-wrap:anywhere}
+.metric-unit{display:block;color:#72899b;font-size:11px;margin-top:3px}
+.source-line{margin:17px 0 0;font-size:12px;color:#60798e}
+.source-line a{color:#1268a8}
+.source-line a:hover{text-decoration:none}
+.snapshot-badge{display:inline-block;background:#dcf4e9;color:#08714f;border-radius:20px;padding:5px 10px;font-size:11px;font-weight:800}
+.snapshot-badge.loading{background:#e8f1fa;color:#47708e}
+.snapshot-badge.error{background:#fce9e9;color:#a33a3a}
+.snapshot-error{margin-top:16px;padding:13px;background:#fff2f0;color:#953b35;border-radius:9px;font-size:13px}
+.snapshot-note{margin-top:14px;padding:13px 16px;border-radius:9px;background:#f1f6fa;color:#60798e;font-size:12px}
+@media(max-width:1000px){.snapshot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:750px){.grid,.two,.form-grid{grid-template-columns:1fr}.panel{padding:19px}.snapshot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:430px){.snapshot-grid{grid-template-columns:1fr 1fr;gap:9px}.metric{padding:14px 11px}.metric-value{font-size:23px}}
 </style>
 </head>
 <body>
@@ -76,9 +96,63 @@ footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
 </div>
 </section>
 
+<!-- LIVE WOODFORD COUNTY CENSUS DATA -->
+<section class="panel" aria-labelledby="snapshot-title">
+<div class="snapshot-heading">
+<div>
+<h2 id="snapshot-title">Woodford County Community Snapshot</h2>
+<p class="sub">Verified community indicators from the U.S. Census Bureau.</p>
+</div>
+<span id="snapshot-badge" class="snapshot-badge loading">Connecting…</span>
+</div>
+
+<div class="snapshot-grid" id="snapshot-grid" aria-live="polite">
+<div class="metric">
+<span class="metric-label">Population</span>
+<span class="metric-value" id="metric-population">—</span>
+<span class="metric-unit">residents</span>
+</div>
+<div class="metric">
+<span class="metric-label">Median Age</span>
+<span class="metric-value" id="metric-age">—</span>
+<span class="metric-unit">years</span>
+</div>
+<div class="metric">
+<span class="metric-label">Households</span>
+<span class="metric-value" id="metric-households">—</span>
+<span class="metric-unit">households</span>
+</div>
+<div class="metric">
+<span class="metric-label">Median Household Income</span>
+<span class="metric-value" id="metric-income">—</span>
+<span class="metric-unit">annual USD</span>
+</div>
+<div class="metric">
+<span class="metric-label">Poverty Rate</span>
+<span class="metric-value" id="metric-poverty">—</span>
+<span class="metric-unit">percent of population in poverty universe</span>
+</div>
+</div>
+
+<div id="snapshot-error" class="snapshot-error" hidden></div>
+
+<p class="source-line">
+Source: <a id="census-source" href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener noreferrer">U.S. Census Bureau — American Community Survey</a>.
+<span id="census-year">Loading reporting year…</span>
+</p>
+
+<div class="snapshot-note">
+These are five-year survey estimates, not live counts or measurements of local Google searches. They provide context for ministry research, not conclusions about individual needs.
+</div>
+
+<div class="actions">
+<button class="muted" id="refresh-census" type="button">Refresh Community Data</button>
+</div>
+</section>
+
 <section class="panel">
-<h2>Topic Discovery & Comparison</h2>
-<p class="sub">Explore up to five topics using Google Trends. Search results open in a new tab.</p>
+<h2>Topic Discovery &amp; Comparison</h2>
+<p class="sub">Explore up to four topics using Google Trends. Search results open in a new tab.</p>
 
 <div class="form-grid">
 <div class="field">
@@ -118,9 +192,10 @@ footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
 </div>
 
 <div class="actions">
-<button id="research">Open Trends Comparison ↗</button>
-<button class="secondary" id="both">Compare Kentucky & National ↗</button>
-<button class="muted" id="clear">Clear Topics</button>
+<button id="research" type="button">Open Selected Region ↗</button>
+<button class="secondary" id="kentucky" type="button">Kentucky Trends ↗</button>
+<button class="secondary" id="national" type="button">National Trends ↗</button>
+<button class="muted" id="clear" type="button">Clear Topics</button>
 </div>
 
 <div class="status">
@@ -132,18 +207,18 @@ Google Trends measures relative search interest, not exact search volume. Kentuc
 <h2>Explore Ministry Topics</h2>
 <p class="sub">These are starting points for research, not claims about what people are currently searching for.</p>
 <div class="chips" id="suggestions">
-<button data-topic="anxiety">Anxiety</button>
-<button data-topic="loneliness">Loneliness</button>
-<button data-topic="grief">Grief</button>
-<button data-topic="forgiveness">Forgiveness</button>
-<button data-topic="purpose in life">Purpose</button>
-<button data-topic="marriage">Marriage</button>
-<button data-topic="parenting">Parenting</button>
-<button data-topic="faith">Faith</button>
-<button data-topic="church">Church</button>
-<button data-topic="hope">Hope</button>
-<button data-topic="financial stress">Financial stress</button>
-<button data-topic="depression">Depression</button>
+<button type="button" data-topic="anxiety">Anxiety</button>
+<button type="button" data-topic="loneliness">Loneliness</button>
+<button type="button" data-topic="grief">Grief</button>
+<button type="button" data-topic="forgiveness">Forgiveness</button>
+<button type="button" data-topic="purpose in life">Purpose</button>
+<button type="button" data-topic="marriage">Marriage</button>
+<button type="button" data-topic="parenting">Parenting</button>
+<button type="button" data-topic="faith">Faith</button>
+<button type="button" data-topic="church">Church</button>
+<button type="button" data-topic="hope">Hope</button>
+<button type="button" data-topic="financial stress">Financial stress</button>
+<button type="button" data-topic="depression">Depression</button>
 </div>
 </section>
 
@@ -165,8 +240,8 @@ Google Trends measures relative search interest, not exact search volume. Kentuc
 </div>
 </div>
 <div class="actions">
-<button id="copy" class="secondary">Copy Research Notes</button>
-<button id="download" class="muted">Download Notes</button>
+<button id="copy" class="secondary" type="button">Copy Research Notes</button>
+<button id="download" class="muted" type="button">Download Notes</button>
 </div>
 <p class="note" id="note-status">Research notes are not automatically verified or analyzed by AI.</p>
 </section>
@@ -180,24 +255,120 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
 (() => {
   const $ = id => document.getElementById(id);
 
+  const CENSUS_ENDPOINT =
+    'https://holy-star-1faevumc-youtube-analytics.versaillesumcworshipteam.workers.dev/api/community/woodford';
+
+  const numberFormat = new Intl.NumberFormat('en-US');
+
+  const moneyFormat = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  });
+
+  let lastCensus = null;
+
+  function metric(id, value, formatter) {
+    $(id).textContent =
+      typeof value === 'number' && Number.isFinite(value)
+        ? formatter(value)
+        : 'Unavailable';
+  }
+
+  async function loadCensus() {
+    const badge = $('snapshot-badge');
+    const errorBox = $('snapshot-error');
+    const refresh = $('refresh-census');
+
+    badge.className = 'snapshot-badge loading';
+    badge.textContent = 'Connecting…';
+    errorBox.hidden = true;
+    refresh.disabled = true;
+
+    try {
+      const response = await fetch(CENSUS_ENDPOINT, {
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'omit',
+        cache: 'no-store'
+      });
+
+      if (!response.ok) {
+        throw new Error('Server returned HTTP ' + response.status);
+      }
+
+      const data = await response.json();
+
+      if (data.status !== 'ready' || !data.indicators) {
+        throw new Error('Community data was not available.');
+      }
+
+      lastCensus = data;
+      const indicators = data.indicators;
+
+      metric('metric-population', indicators.population?.value, numberFormat.format.bind(numberFormat));
+      metric('metric-age', indicators.medianAge?.value, n => n.toFixed(1));
+      metric('metric-households', indicators.households?.value, numberFormat.format.bind(numberFormat));
+      metric('metric-income', indicators.medianHouseholdIncome?.value, moneyFormat.format.bind(moneyFormat));
+      metric('metric-poverty', indicators.povertyRate?.value, n => n.toFixed(1) + '%');
+
+      const year = data.source?.year;
+      $('census-year').textContent = year
+        ? `${year} ACS five-year estimates.`
+        : 'ACS five-year estimates.';
+
+      if (data.source?.url &&
+          /^https:\/\/api\.census\.gov\//.test(data.source.url)) {
+        $('census-source').href = data.source.url;
+      }
+
+      badge.className = 'snapshot-badge';
+      badge.textContent = 'Live Data Connected';
+    } catch (error) {
+      badge.className = 'snapshot-badge error';
+      badge.textContent = 'Connection Unavailable';
+      errorBox.hidden = false;
+      errorBox.textContent =
+        'Unable to retrieve Census data. ' +
+        error.message +
+        ' Please try Refresh Community Data.';
+
+      if (!lastCensus) {
+        ['metric-population','metric-age','metric-households',
+         'metric-income','metric-poverty'].forEach(id => {
+          $(id).textContent = '—';
+        });
+      }
+    } finally {
+      refresh.disabled = false;
+    }
+  }
+
+  $('refresh-census').addEventListener('click', loadCensus);
+  loadCensus();
+
   const topics = () => {
     const values = [1,2,3,4].map(n =>
       $('topic' + n).value.trim()
     ).filter(Boolean);
-    return [...new Set(values)].slice(0,5);
+
+    return [...new Set(values)].slice(0,4);
   };
 
   function trends(geo) {
     const selected = topics();
+
     if (!selected.length) {
       $('topic1').focus();
       return;
     }
+
     const params = new URLSearchParams({
       date: $('period').value,
       geo,
       q: selected.join(',')
     });
+
     window.open(
       'https://trends.google.com/trends/explore?' + params,
       '_blank',
@@ -209,10 +380,11 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
     trends($('region').value);
   });
 
-  $('both').addEventListener('click', () => {
-    if (!topics().length) return;
-    // Both windows are opened directly from the user click.
+  $('kentucky').addEventListener('click', () => {
     trends('US-KY');
+  });
+
+  $('national').addEventListener('click', () => {
     trends('US');
   });
 
@@ -230,6 +402,24 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
     });
 
   function notes() {
+    const censusSection = lastCensus
+      ? [
+          'WOODFORD COUNTY COMMUNITY CONTEXT',
+          'Source: U.S. Census Bureau, ACS ' + lastCensus.source.year + ' five-year estimates',
+          'Population: ' + $('metric-population').textContent,
+          'Median age: ' + $('metric-age').textContent,
+          'Households: ' + $('metric-households').textContent,
+          'Median household income: ' + $('metric-income').textContent,
+          'Poverty rate: ' + $('metric-poverty').textContent,
+          'Note: Census data is community context, not local search interest.',
+          ''
+        ]
+      : [
+          'WOODFORD COUNTY COMMUNITY CONTEXT',
+          'Census data unavailable during this session.',
+          ''
+        ];
+
     return [
       'COMMUNITY PULSE — PUBLIC INTEREST RESEARCH',
       'Date: ' + new Date().toLocaleDateString(),
@@ -237,13 +427,14 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
       'Geography: ' + $('region').selectedOptions[0].text,
       'Period: ' + $('period').selectedOptions[0].text,
       '',
+      ...censusSection,
       'OBSERVED EVIDENCE',
       $('evidence').value.trim() || '(Not entered)',
       '',
       'POSSIBLE MINISTRY CONNECTIONS',
       $('ministry').value.trim() || '(Not entered)',
       '',
-      'These notes are researcher-entered, not AI-verified.'
+      'Research notes are researcher-entered, not AI-verified.'
     ].join('\n');
   }
 
@@ -261,11 +452,14 @@ Versailles United Methodist Church · Community Pulse · PIR Engine
     const blob = new Blob([notes()], {
       type: 'text/plain;charset=utf-8'
     });
+
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
+
     link.href = url;
     link.download = 'community-pulse-research.txt';
     link.click();
+
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
 })();
