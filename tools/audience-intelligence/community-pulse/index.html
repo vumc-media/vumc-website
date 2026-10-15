@@ -1,9 +1,584 @@
-<section class="panel pulse-panel" id="community-pulse" aria-labelledby="pulse-heading">
-  <div class="pulse-head"><div><span class="section-kicker">COMMUNITY LISTENING</span><h2 id="pulse-heading">Community Pulse</h2><p>Local insight. Regional awareness. National perspective.</p></div><span class="pulse-label">Research workspace</span></div>
-  <p class="pulse-intro">Explore the questions people may be asking, check public search-interest evidence, and connect those conversations with ministry opportunities. Search interest is not a measure of spiritual need.</p>
-  <div class="pulse-geographies"><div class="pulse-geo primary"><strong>01 · Local priority</strong><span>Versailles &amp; Woodford County</span><small>Use the closest available public geographic data; do not claim county-level measurements without a source.</small></div><div class="pulse-geo"><strong>02 · Regional context</strong><span>Central Kentucky &amp; Kentucky</span><small>Compare local concerns with nearby communities and statewide patterns.</small></div><div class="pulse-geo"><strong>03 · National perspective</strong><span>United States</span><small>See broader conversations without allowing them to outweigh local ministry needs.</small></div></div>
-  <div class="pulse-research"><div><label for="pulse-topic">Explore a topic or question</label><input id="pulse-topic" type="search" placeholder="e.g. loneliness, forgiveness, finding purpose" maxlength="100" autocomplete="off"><p class="pulse-hint">Enter a topic to open Google Trends research. The dashboard does not yet ingest live public trend data.</p></div><div><label for="pulse-range">Time window</label><select id="pulse-range"><option value="today 1-m">Past 30 days</option><option value="today 12-m" selected>Past 12 months</option><option value="today 5-y">Past 5 years</option></select></div><button id="pulse-research-button" type="button">Explore public interest ↗</button></div>
-  <div class="pulse-actions"><a href="https://trends.google.com/trends/explore?geo=US-KY" target="_blank" rel="noopener noreferrer">Kentucky Trends ↗</a><a href="https://trends.google.com/trends/explore?geo=US" target="_blank" rel="noopener noreferrer">National Trends ↗</a></div>
-  <div class="pulse-bottom"><div class="pulse-card"><h3>Connections to VUMC</h3><p>Review the strongest sermon themes in your existing YouTube report. These are verified channel statistics, not public search trends.</p><div id="pulse-channel-themes" class="pulse-themes" aria-live="polite">Waiting for Content Performance data…</div></div><div class="pulse-card"><h3>Ministry exploration</h3><p>Possible areas for research—not claims about current local search demand.</p><div class="pulse-chips" id="pulse-suggestions"><button type="button" data-topic="anxiety and peace">Anxiety &amp; peace</button><button type="button" data-topic="loneliness and belonging">Loneliness &amp; belonging</button><button type="button" data-topic="grief and hope">Grief &amp; hope</button><button type="button" data-topic="family relationships">Family relationships</button><button type="button" data-topic="purpose in life">Purpose &amp; direction</button><button type="button" data-topic="forgiveness">Forgiveness</button></div><p class="pulse-hint">Research can inform pastoral conversations, outreach, worship, and small groups. Biblical interpretation and ministry decisions remain with church leadership.</p></div></div>
-  <p class="pulse-disclosure">Data integrity: Google Trends uses normalized relative interest and may suppress low-volume areas. This initial release opens source research; it does not calculate local, regional, or national trend scores or generate AI recommendations.</p>
-</section>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#102c4b">
+  <title>Community Pulse | VUMC Audience Intelligence</title>
+  <link rel="stylesheet" href="./community-pulse.css?v=2">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #f1f5fa;
+      color: #20354b;
+      font-family: -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    .pulse-topbar {
+      background: linear-gradient(120deg, #102b4b, #17649b);
+      color: white;
+      padding: 34px max(24px, calc((100% - 1180px)/2));
+    }
+
+    .pulse-topbar a {
+      color: #d7ecff;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .pulse-topbar h1 {
+      margin: 14px 0 5px;
+      font-size: clamp(29px, 4vw, 43px);
+      letter-spacing: -.04em;
+    }
+
+    .pulse-topbar p {
+      margin: 0;
+      color: #d7e8f6;
+    }
+
+    .container {
+      max-width: 1220px;
+      padding: 30px 20px 65px;
+      margin: auto;
+    }
+
+    .pulse-panel {
+      background: white;
+      border-radius: 18px;
+      padding: clamp(20px, 3vw, 36px);
+      box-shadow: 0 8px 32px #1737560c;
+    }
+
+    .pulse-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .section-kicker {
+      color: #1971ac;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .14em;
+    }
+
+    .pulse-head h2 {
+      margin: 6px 0;
+      font-size: 29px;
+      letter-spacing: -.035em;
+    }
+
+    .pulse-head p {
+      margin: 0;
+      color: #6c8094;
+    }
+
+    .pulse-label {
+      background: #e8f3ff;
+      color: #165d98;
+      padding: 8px 14px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .pulse-intro {
+      margin: 24px 0;
+      color: #52687c;
+      max-width: 900px;
+    }
+
+    .pulse-geographies {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 26px 0;
+    }
+
+    .pulse-geo {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 23px;
+      border-radius: 14px;
+      background: #f5f8fc;
+      border: 1px solid #e0e8f0;
+    }
+
+    .pulse-geo.primary {
+      background: linear-gradient(135deg, #123d75, #176da8);
+      border-color: transparent;
+      color: white;
+    }
+
+    .pulse-geo strong {
+      font-size: 13px;
+      color: #17649b;
+    }
+
+    .pulse-geo.primary strong {
+      color: #b8e4ff;
+    }
+
+    .pulse-geo span {
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .pulse-geo small {
+      color: #708398;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .pulse-geo.primary small {
+      color: #d4e9f8;
+    }
+
+    .pulse-research {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 180px auto;
+      gap: 16px;
+      align-items: end;
+      margin-top: 30px;
+      padding: 25px;
+      border-radius: 15px;
+      background: #eef5fc;
+    }
+
+    .pulse-research label {
+      display: block;
+      font-size: 13px;
+      font-weight: 750;
+      margin-bottom: 9px;
+    }
+
+    .pulse-research input,
+    .pulse-research select {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 13px;
+      border: 1px solid #c9d8e7;
+      border-radius: 9px;
+      background: white;
+      color: #213c56;
+      font: inherit;
+      font-size: 14px;
+    }
+
+    .pulse-research-button {
+      min-height: 46px;
+      padding: 11px 20px;
+      border: 0;
+      border-radius: 9px;
+      background: #146ca8;
+      color: white;
+      font-size: 14px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .pulse-research-button:hover {
+      background: #0e5485;
+    }
+
+    .pulse-hint {
+      margin: 9px 0 0;
+      color: #71849a;
+      font-size: 12px;
+    }
+
+    .pulse-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 17px 0 30px;
+    }
+
+    .pulse-actions a {
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 9px;
+      background: #e8f3fc;
+      color: #145f9c;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .pulse-bottom {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .pulse-card {
+      padding: 25px;
+      border: 1px solid #e0e8f0;
+      border-radius: 15px;
+      background: #fff;
+    }
+
+    .pulse-card h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+      color: #193d60;
+    }
+
+    .pulse-card > p {
+      font-size: 13px;
+      color: #6c8094;
+    }
+
+    .pulse-themes {
+      margin-top: 18px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #f4f8fc;
+      color: #60768a;
+      font-size: 13px;
+    }
+
+    .pulse-theme {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid #dfe8f1;
+    }
+
+    .pulse-theme:last-child {
+      border-bottom: 0;
+    }
+
+    .pulse-theme strong {
+      white-space: nowrap;
+      color: #185d95;
+    }
+
+    .pulse-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .pulse-chips button {
+      border: 1px solid #d2e3f3;
+      background: #edf6ff;
+      color: #185e95;
+      border-radius: 30px;
+      padding: 10px 13px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .pulse-chips button:hover {
+      background: #d8ecfc;
+    }
+
+    .pulse-disclosure {
+      margin: 26px 0 0;
+      padding: 16px 20px;
+      border-left: 3px solid #7caed2;
+      background: #f4f8fc;
+      border-radius: 7px;
+      color: #63798e;
+      font-size: 12px;
+    }
+
+    .pulse-footer {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 12px;
+      color: #8393a3;
+    }
+
+    @media (max-width: 850px) {
+      .pulse-geographies {
+        grid-template-columns: 1fr;
+      }
+
+      .pulse-research {
+        grid-template-columns: 1fr;
+      }
+
+      .pulse-bottom {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 550px) {
+      .pulse-topbar {
+        padding: 26px 20px;
+      }
+
+      .container {
+        padding: 15px 12px 45px;
+      }
+
+      .pulse-panel {
+        padding: 18px;
+      }
+
+      .pulse-research {
+        padding: 17px;
+      }
+
+      .pulse-card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="pulse-topbar">
+    <a href="../index.html">
+      ← Back to Audience Intelligence
+    </a>
+
+    <h1>Community Pulse</h1>
+    <p>
+      Local insight. Regional awareness. National perspective.
+    </p>
+  </header>
+
+  <main class="container">
+
+    <section class="pulse-panel" id="community-pulse"
+      aria-labelledby="pulse-heading">
+
+      <div class="pulse-head">
+        <div>
+          <span class="section-kicker">
+            COMMUNITY LISTENING
+          </span>
+
+          <h2 id="pulse-heading">
+            Understanding Our Community
+          </h2>
+
+          <p>
+            Discovering questions, concerns, and
+            opportunities for meaningful ministry.
+          </p>
+        </div>
+
+        <span class="pulse-label">
+          Research Workspace
+        </span>
+      </div>
+
+      <p class="pulse-intro">
+        Community Pulse helps us explore what people are
+        searching for and connect those interests with
+        potential ministry opportunities. Public search
+        interest does not determine spiritual need or
+        replace pastoral discernment.
+      </p>
+
+      <div class="pulse-geographies">
+
+        <div class="pulse-geo primary">
+          <strong>01 · PRIMARY PRIORITY</strong>
+          <span>Versailles &amp; Woodford County</span>
+          <small>
+            Our immediate community comes first.
+            When town- or county-level search data
+            is unavailable, use the nearest supported
+            geographic region and identify it clearly.
+          </small>
+        </div>
+
+        <div class="pulse-geo">
+          <strong>02 · REGIONAL CONTEXT</strong>
+          <span>Central Kentucky &amp; Kentucky</span>
+          <small>
+            Explore interests across Lexington,
+            Frankfort, surrounding communities,
+            and statewide search patterns.
+          </small>
+        </div>
+
+        <div class="pulse-geo">
+          <strong>03 · NATIONAL PERSPECTIVE</strong>
+          <span>United States</span>
+          <small>
+            Understand larger conversations and
+            emerging interests without allowing
+            national popularity to outweigh local needs.
+          </small>
+        </div>
+
+      </div>
+
+      <div class="pulse-research">
+
+        <div>
+          <label for="pulse-topic">
+            Explore a topic or question
+          </label>
+
+          <input
+            id="pulse-topic"
+            type="search"
+            placeholder="e.g. loneliness, forgiveness, finding purpose"
+            maxlength="100"
+            autocomplete="off"
+          >
+
+          <p class="pulse-hint">
+            Opens Google Trends research.
+            Live public trend data is not yet
+            integrated into this dashboard.
+          </p>
+        </div>
+
+        <div>
+          <label for="pulse-range">
+            Time window
+          </label>
+
+          <select id="pulse-range">
+            <option value="today 1-m">
+              Past 30 days
+            </option>
+
+            <option value="today 12-m" selected>
+              Past 12 months
+            </option>
+
+            <option value="today 5-y">
+              Past 5 years
+            </option>
+          </select>
+        </div>
+
+        <button
+          id="pulse-research-button"
+          class="pulse-research-button"
+          type="button"
+        >
+          Explore public interest ↗
+        </button>
+
+      </div>
+
+      <div class="pulse-actions">
+        <a
+          href="https://trends.google.com/trends/explore?geo=US-KY"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Kentucky Trends ↗
+        </a>
+
+        <a
+          href="https://trends.google.com/trends/explore?geo=US"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          National Trends ↗
+        </a>
+      </div>
+
+      <div class="pulse-bottom">
+
+        <div class="pulse-card">
+          <h3>Connections to VUMC</h3>
+
+          <p>
+            Compare community interests with the
+            sermon themes receiving attention on
+            VUMC's YouTube channel.
+          </p>
+
+          <div
+            id="pulse-channel-themes"
+            class="pulse-themes"
+            aria-live="polite"
+          >
+            VUMC analytics connection coming next.
+          </div>
+        </div>
+
+        <div class="pulse-card">
+          <h3>Ministry Exploration</h3>
+
+          <p>
+            Select a topic to research.
+            These are suggested subjects,
+            not verified local trends.
+          </p>
+
+          <div
+            class="pulse-chips"
+            id="pulse-suggestions"
+          >
+            <button type="button" data-topic="anxiety and peace">
+              Anxiety &amp; peace
+            </button>
+
+            <button type="button" data-topic="loneliness and belonging">
+              Loneliness &amp; belonging
+            </button>
+
+            <button type="button" data-topic="grief and hope">
+              Grief &amp; hope
+            </button>
+
+            <button type="button" data-topic="family relationships">
+              Family relationships
+            </button>
+
+            <button type="button" data-topic="purpose in life">
+              Purpose &amp; direction
+            </button>
+
+            <button type="button" data-topic="forgiveness">
+              Forgiveness
+            </button>
+          </div>
+
+          <p class="pulse-hint">
+            Research may inform worship, outreach,
+            small groups, and pastoral conversations.
+          </p>
+        </div>
+
+      </div>
+
+      <p class="pulse-disclosure">
+        <strong>About the data:</strong>
+        Google Trends reports normalized relative
+        search interest, not the number of people
+        searching. This first release provides
+        research tools rather than automated
+        trend rankings or AI-generated recommendations.
+      </p>
+
+    </section>
+
+    <div class="pulse-footer">
+      Versailles United Methodist Church ·
+      Audience Intelligence · Community Pulse
+    </div>
+
+  </main>
+
+  <script src="./community-pulse.js?v=2"></script>
+
+</body>
+</html>
