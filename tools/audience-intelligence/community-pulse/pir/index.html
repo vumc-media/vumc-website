@@ -3,35 +3,28 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#102b4b">
 <title>PIR Engine | Community Pulse</title>
-
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#edf2f8;color:#193751;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-header{background:linear-gradient(110deg,#102b4b,#17649b);color:white;padding:30px max(20px,calc((100% - 1120px)/2))}
+header{background:linear-gradient(110deg,#102b4b,#17649b);color:#fff;padding:30px max(20px,calc((100% - 1120px)/2))}
 header a{color:#cce9ff;text-decoration:none;font-size:13px}
 header h1{margin:12px 0 3px;font-size:clamp(28px,4vw,40px)}
 header p{margin:0;color:#d5e8f8}
 main{max-width:1160px;margin:auto;padding:26px 20px 65px}
-.panel{background:white;border-radius:16px;padding:26px;margin-bottom:20px;box-shadow:0 8px 24px #183f6410}
+.panel{background:#fff;border-radius:16px;padding:26px;margin-bottom:20px;box-shadow:0 8px 24px #183f6410}
 h2{margin:0 0 7px;font-size:23px;color:#153e66}
-h3{margin:0 0 12px;font-size:17px}
-.sub{color:#627d92;margin:0 0 22px}
+h3{margin:0 0 12px;font-size:18px;color:#173f65}
+.sub{color:#627d92;margin:0 0 20px}
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
-.two,.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-.geo{padding:22px;border-radius:13px;color:white}
-.geo h3{color:white;margin-bottom:6px}
-.geo p{margin:0;font-size:13px}
-.local{background:linear-gradient(125deg,#123e83,#087bc4)}
-.regional{background:linear-gradient(125deg,#00645c,#06a18d)}
-.national{background:linear-gradient(125deg,#53269d,#9250d2)}
-label{display:block;font-weight:750;font-size:13px;margin-bottom:7px}
-input,select,textarea{width:100%;padding:12px;border:1px solid #b9ccdf;border-radius:9px;background:white;color:#193751;font:inherit}
-textarea{min-height:110px;resize:vertical}
+.two,.form-grid,.opportunity-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
 .field{margin-bottom:17px}
-button,.action{display:inline-block;border:0;border-radius:9px;padding:12px 17px;background:#087b83;color:white;font:inherit;font-weight:750;cursor:pointer;text-decoration:none}
+label{display:block;font-weight:750;font-size:13px;margin-bottom:7px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #b9ccdf;border-radius:9px;background:#fff;color:#193751;font:inherit}
+textarea{min-height:110px;resize:vertical}
+button,.action{display:inline-block;border:0;border-radius:9px;padding:12px 17px;background:#087b83;color:#fff;font:inherit;font-weight:750;cursor:pointer;text-decoration:none}
 button:hover,.action:hover{background:#00666d}
 button:disabled{opacity:.55;cursor:wait}
 .secondary{background:#155f9f}
@@ -39,92 +32,92 @@ button:disabled{opacity:.55;cursor:wait}
 .muted{background:#e8f1fa;color:#165889}
 .muted:hover{background:#d4e6f6}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
-.status{padding:14px 17px;background:#edf5fd;border-left:4px solid #1675b5;border-radius:8px;color:#4e6b83;font-size:13px;margin-top:18px}
-.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
-.chips button{background:#e7dcfa;color:#542493;border:1px solid #d0b7ed;font-size:12px;padding:9px 13px}
-.chips button:hover{background:#d7c1f2}
 .note{color:#60798e;font-size:12px}
-footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
+.status{padding:14px 17px;background:#edf5fd;border-left:4px solid #1675b5;border-radius:8px;color:#4e6b83;font-size:13px;margin-top:18px}
+.warning{background:#fff7e9;border:1px solid #f0dcac;color:#81602c;padding:14px;border-radius:10px;font-size:13px;margin-top:16px}
+.error{background:#fff2f0;color:#953b35;padding:13px;border-radius:9px;font-size:13px;margin-top:14px}
+.success{color:#08714f}
 [hidden]{display:none!important}
-
-/* Census snapshot */
-.snapshot-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.snapshot-heading .sub{margin-bottom:0}
-.snapshot-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px;margin-top:24px}
-.metric{padding:20px 16px;border:1px solid #dce8f3;border-radius:13px;background:linear-gradient(180deg,#f7fbff,#edf5fc);min-width:0}
-.metric-label{display:block;font-size:12px;color:#55748d;font-weight:750;min-height:37px}
-.metric-value{display:block;font-size:clamp(21px,2.5vw,30px);font-weight:850;letter-spacing:-.035em;color:#123e72;overflow-wrap:anywhere}
+.geo{padding:22px;border-radius:13px;color:#fff}
+.geo h3{color:#fff;margin-bottom:6px}
+.geo p{margin:0;font-size:13px}
+.local{background:linear-gradient(125deg,#123e83,#087bc4)}
+.regional{background:linear-gradient(125deg,#00645c,#06a18d)}
+.national{background:linear-gradient(125deg,#53269d,#9250d2)}
+.heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.heading .sub{margin-bottom:0}
+.badge{display:inline-block;background:#dcf4e9;color:#08714f;border-radius:20px;padding:5px 10px;font-size:11px;font-weight:800}
+.badge.loading{background:#e8f1fa;color:#47708e}
+.badge.error-badge{background:#fce9e9;color:#a33a3a}
+.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px;margin-top:23px}
+.metric{padding:19px 15px;border:1px solid #dce8f3;border-radius:13px;background:linear-gradient(180deg,#f7fbff,#edf5fc);min-width:0}
+.metric-label{display:block;font-size:12px;color:#55748d;font-weight:750;min-height:35px}
+.metric-value{display:block;font-size:clamp(20px,2.5vw,29px);font-weight:850;letter-spacing:-.035em;color:#123e72;overflow-wrap:anywhere}
 .metric-unit{display:block;color:#72899b;font-size:11px;margin-top:3px}
 .source-line{margin:17px 0 0;font-size:12px;color:#60798e}
 .source-line a{color:#1268a8}
-.snapshot-badge{display:inline-block;background:#dcf4e9;color:#08714f;border-radius:20px;padding:5px 10px;font-size:11px;font-weight:800}
-.snapshot-badge.loading{background:#e8f1fa;color:#47708e}
-.snapshot-badge.error{background:#fce9e9;color:#a33a3a}
-.snapshot-error{margin-top:16px;padding:13px;background:#fff2f0;color:#953b35;border-radius:9px;font-size:13px}
-.snapshot-note{margin-top:14px;padding:13px 16px;border-radius:9px;background:#f1f6fa;color:#60798e;font-size:12px}
-
-/* Community opportunities */
-.opportunity-intro{background:#f1f7fc;border:1px solid #d9e8f5;border-radius:11px;padding:15px 17px;color:#466b86;font-size:13px}
-.opportunity-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px;margin-top:22px}
-.op-card{border:1px solid #d9e5f0;border-radius:14px;padding:21px;background:white;min-width:0}
-.op-card h3{font-size:19px;color:#173f65;margin:0}
-.op-top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-.op-icon{width:43px;height:43px;flex-shrink:0;display:grid;place-items:center;border-radius:11px;font-size:21px;background:#e6f0fa}
-.op-card:nth-child(2) .op-icon{background:#e1f4ef}
-.op-card:nth-child(3) .op-icon{background:#eee8fa}
-.op-card:nth-child(4) .op-icon{background:#fff0dd}
+.intro{background:#f1f7fc;border:1px solid #d9e8f5;border-radius:11px;padding:15px 17px;color:#466b86;font-size:13px}
+.opportunity-grid{margin-top:20px}
+.op-card{border:1px solid #d9e5f0;border-radius:14px;padding:21px;min-width:0}
+.op-card h3{margin:0 0 17px}
 .op-stat{margin-bottom:17px}
 .op-stat-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:7px}
 .op-stat-name{font-size:13px;color:#48687f}
 .op-stat-number{font-size:16px;font-weight:800;color:#153e66;white-space:nowrap}
-.op-stat-detail{font-size:11px;color:#71889a;margin-top:4px}
-.op-track{height:9px;background:#e8eff5;border-radius:99px;overflow:hidden}
-.op-fill{height:100%;width:0;background:#1979b8;border-radius:99px;transition:width .4s ease}
-.op-card:nth-child(2) .op-fill{background:#09967e}
-.op-card:nth-child(3) .op-fill{background:#8451b9}
-.op-card:nth-child(4) .op-fill{background:#d38b2c}
-.op-question{background:#f6f9fc;border-radius:10px;padding:14px;margin-top:17px;font-size:13px;color:#4e6b80}
-.op-question strong{display:block;color:#244d70;margin-bottom:5px}
-.op-question p{margin:0}
-.op-card .actions{margin-top:13px}
+.op-detail{font-size:11px;color:#71889a;margin-top:4px}
+.track{height:9px;background:#e8eff5;border-radius:99px;overflow:hidden}
+.fill{height:100%;background:#1979b8;border-radius:99px}
+.op-card:nth-child(2) .fill{background:#09967e}
+.op-card:nth-child(3) .fill{background:#8451b9}
+.op-card:nth-child(4) .fill{background:#d38b2c}
+.question{background:#f6f9fc;border-radius:10px;padding:14px;margin-top:17px;font-size:13px;color:#4e6b80}
+.question strong{display:block;color:#244d70;margin-bottom:5px}
+.question p{margin:0}
 .op-card .actions button{font-size:12px;padding:9px 12px}
-.op-source,.op-footnote{font-size:12px;color:#688095;margin-top:17px}
-.op-message{margin-top:15px;font-size:13px;color:#53758d}
-
-/* Phase 4 AI Advisor */
+.table-wrap{overflow-x:auto;margin-top:18px}
+table{border-collapse:collapse;width:100%;min-width:730px;font-size:13px}
+th,td{padding:12px 10px;border-bottom:1px solid #e2eaf2;text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;font-weight:750}
+th{background:#edf5fc;color:#285679}
+tbody tr:hover{background:#f6faff}
+tbody tr.home-row{background:#f0f7ff}
+.comparison-tools{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin-top:17px}
+.comparison-tools .field{min-width:220px;flex:1;margin:0}
+.compare-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:17px}
+.compare-card{border:1px solid #dbe6f0;border-radius:12px;padding:17px;background:#f8fbff}
+.compare-card h3{font-size:15px;margin:0 0 10px}
+.compare-row{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #e3ecf5;padding:8px 0;font-size:13px}
+.compare-row strong{color:#153e66}
 .ai-panel{border:1px solid #c7d8f2;background:linear-gradient(180deg,#fff,#f8fbff)}
-.ai-heading{display:flex;align-items:center;gap:12px;margin-bottom:13px}
-.ai-icon{width:49px;height:49px;border-radius:14px;background:linear-gradient(135deg,#3457aa,#8055c4);color:white;display:grid;place-items:center;font-size:25px}
-.ai-heading h2{margin:0}
-.ai-intro{background:#eef4fd;border-radius:11px;padding:16px;color:#46627e;margin-bottom:20px;font-size:13px}
-.ai-result{border:1px solid #d6e3f3;border-radius:13px;padding:21px;margin-top:16px;background:white}
-.ai-result h3{font-size:20px;color:#153e66;margin:0 0 5px}
-.ai-type{font-size:12px;color:#6c5ab1;font-weight:800;margin-bottom:14px}
+.ai-heading{display:flex;align-items:center;gap:12px}
+.ai-icon{width:49px;height:49px;border-radius:14px;background:linear-gradient(135deg,#3457aa,#8055c4);color:#fff;display:grid;place-items:center;font-size:25px}
+.ai-result{border:1px solid #d6e3f3;border-radius:13px;padding:21px;margin-top:16px;background:#fff}
+.ai-result h3{font-size:20px;margin:0 0 5px}
 .ai-result p{margin:8px 0;font-size:14px;color:#46647c}
 .ai-result strong{color:#193e60}
+.ai-type{font-size:12px;color:#6c5ab1;font-weight:800;margin-bottom:14px}
 .ai-scriptures{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
 .ai-scriptures span{background:#e8f0fa;color:#175487;border-radius:7px;padding:6px 10px;font-size:12px;font-weight:750}
 .ai-summary{background:#f1f7fd;border-radius:11px;padding:16px;margin-top:18px;color:#375b78}
-.ai-warning{background:#fff7e9;border:1px solid #f0dcac;border-radius:10px;padding:14px;font-size:12px;color:#81602c;margin-top:16px}
 .ai-empty{border:1px dashed #b8cde2;border-radius:12px;padding:26px;text-align:center;color:#71899d;background:#fafcff}
 .ai-meta{font-size:12px;color:#607c92;margin-top:12px}
-.ai-status{margin-top:14px;font-size:13px;color:#456c87}
-.ai-status.error{color:#a33a3a}
-.ai-status.success{color:#08714f}
-
-@media(max-width:1000px){
-.snapshot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
+.evidence-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+.evidence-card{border:1px solid #d8e5f2;border-radius:11px;padding:15px;background:#fff}
+.evidence-card strong{display:block;font-size:13px;color:#153e66}
+.evidence-card span{font-size:12px;color:#60798e}
+.trend-row{border:1px solid #d9e5f0;padding:15px;border-radius:11px;margin:12px 0;background:#fafcff}
+.trend-row h3{font-size:14px;margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+.chips button{background:#e7dcfa;color:#542493;border:1px solid #d0b7ed;font-size:12px;padding:9px 13px}
+.chips button:hover{background:#d7c1f2}
+footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
+@media(max-width:1000px){.metrics{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:750px){
-.grid,.two,.form-grid,.opportunity-grid{grid-template-columns:1fr}
+.grid,.two,.form-grid,.opportunity-grid,.compare-grid,.evidence-grid{grid-template-columns:1fr}
 .panel{padding:19px}
-.snapshot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:430px){
-.snapshot-grid{gap:9px}
-.metric{padding:14px 11px}
-.metric-value{font-size:23px}
-}
+@media(max-width:430px){.metric{padding:14px 11px}.metric-value{font-size:23px}}
 </style>
 </head>
 
@@ -132,42 +125,65 @@ footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
 <header>
 <a href="../">← Back to Community Pulse</a>
 <h1>Public Interest Research</h1>
-<p>Local priorities. Regional context. National perspective.</p>
+<p>Local priorities. Regional ministry intelligence. National perspective.</p>
 </header>
 
 <main>
 
-<!-- GEOGRAPHIC RESEARCH -->
 <section class="panel">
 <h2>Geographic Research</h2>
-<p class="sub">We begin with our immediate community, then examine the wider context.</p>
+<p class="sub">Versailles is our home community, but our ministry reaches beyond county lines.</p>
 <div class="grid">
 <div class="geo local">
-<h3>01 · Local Priority</h3>
-<p>Versailles and Woodford County. Research local questions using the closest reliable geographic evidence.</p>
+<h3>01 · Home Community</h3>
+<p>Versailles and Woodford County remain our local research priority.</p>
 </div>
 <div class="geo regional">
-<h3>02 · Regional Context</h3>
-<p>Lexington, Frankfort, Central Kentucky, and statewide search interest.</p>
+<h3>02 · Regional Ministry Area</h3>
+<p>Woodford, Fayette, Franklin, Anderson, Scott, and Mercer counties.</p>
 </div>
 <div class="geo national">
-<h3>03 · National Perspective</h3>
-<p>Broader questions and emerging conversations across the United States.</p>
+<h3>03 · Broader Perspective</h3>
+<p>Kentucky and national search research can add context, without replacing local evidence.</p>
 </div>
 </div>
+
+<div class="intro" style="margin-top:20px">
+<strong>Research geography</strong>
+<p>Choose the community you want to study. The Census snapshot, opportunity cards, and AI Advisor will use this selection. Google Trends has its own geographic controls because statewide search data cannot be treated as county-specific evidence.</p>
+</div>
+
+<div class="form-grid" style="margin-top:20px">
+<div class="field">
+<label for="research-scope">Community research area</label>
+<select id="research-scope">
+<option value="woodford" selected>Woodford County — Home Community</option>
+<option value="regional">Six-County Regional Ministry Area</option>
+<option value="fayette">Fayette County — Lexington</option>
+<option value="franklin">Franklin County — Frankfort</option>
+<option value="anderson">Anderson County — Lawrenceburg</option>
+<option value="scott">Scott County — Georgetown</option>
+<option value="mercer">Mercer County — Salvisa Area</option>
+</select>
+</div>
+<div class="field">
+<label for="research-context">Current research geography</label>
+<input id="research-context" value="Woodford County, Kentucky" readonly>
+</div>
+</div>
+<p class="note">The six-county area is a ministry planning region, not a verified map of VUMC attendance.</p>
 </section>
 
-<!-- CENSUS SNAPSHOT -->
-<section class="panel" aria-labelledby="snapshot-title">
-<div class="snapshot-heading">
+<section class="panel" id="census-section">
+<div class="heading">
 <div>
 <h2 id="snapshot-title">Woodford County Community Snapshot</h2>
-<p class="sub">Verified community indicators from the U.S. Census Bureau.</p>
+<p class="sub">U.S. Census Bureau · 2024 ACS five-year estimates</p>
 </div>
-<span id="snapshot-badge" class="snapshot-badge loading">Connecting…</span>
+<span class="badge loading" id="snapshot-badge">Connecting…</span>
 </div>
 
-<div class="snapshot-grid" aria-live="polite">
+<div class="metrics" aria-live="polite">
 <div class="metric">
 <span class="metric-label">Population</span>
 <span class="metric-value" id="metric-population">—</span>
@@ -176,7 +192,7 @@ footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
 <div class="metric">
 <span class="metric-label">Median Age</span>
 <span class="metric-value" id="metric-age">—</span>
-<span class="metric-unit">years</span>
+<span class="metric-unit">years · county snapshot only</span>
 </div>
 <div class="metric">
 <span class="metric-label">Households</span>
@@ -191,252 +207,198 @@ footer{text-align:center;color:#7c8fa1;font-size:12px;padding:10px}
 <div class="metric">
 <span class="metric-label">Poverty Rate</span>
 <span class="metric-value" id="metric-poverty">—</span>
-<span class="metric-unit">percent of poverty universe</span>
+<span class="metric-unit">poverty-status population</span>
 </div>
 </div>
 
-<div id="snapshot-error" class="snapshot-error" hidden></div>
-
+<div id="snapshot-error" class="error" hidden></div>
 <p class="source-line">
 Source:
-<a id="census-source" href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener noreferrer">U.S. Census Bureau — American Community Survey</a>.
-<span id="census-year">Loading reporting year…</span>
+<a href="https://api.census.gov/data/2024/acs/acs5" target="_blank" rel="noopener noreferrer">U.S. Census Bureau — 2024 ACS</a>.
+<span id="census-year">Five-year estimates covering 2020–2024.</span>
 </p>
-
-<div class="snapshot-note">
-These are five-year survey estimates, not live counts or measurements of local Google searches. They provide context for ministry research, not conclusions about individual needs.
-</div>
-
+<div class="status">Census estimates are demographic context, not evidence of local search behavior or confirmed ministry needs. Regional percentages are calculated from combined counts, not averages of county percentages.</div>
 <div class="actions">
 <button class="muted" id="refresh-census" type="button">Refresh Community Data</button>
 </div>
 </section>
 
-<!-- COMMUNITY NEEDS & OPPORTUNITIES -->
-<section class="panel" aria-labelledby="opportunities-title">
-<div class="snapshot-heading">
+<section class="panel" id="regional-comparison">
+<div class="heading">
 <div>
-<h2 id="opportunities-title">Community Needs &amp; Opportunities</h2>
-<p class="sub">Four research perspectives on Woodford County.</p>
+<h2>Regional County Comparison</h2>
+<p class="sub">Compare the six communities surrounding Versailles.</p>
 </div>
-<span id="opportunities-badge" class="snapshot-badge loading">Connecting…</span>
+<span class="badge loading" id="regional-badge">Connecting…</span>
+</div>
+<div class="intro">
+The regional population and household figures are combined Census estimates. County median household incomes are displayed separately; a regional median cannot be calculated by averaging county medians.
+</div>
+<div id="regional-error" class="error" hidden></div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>County</th>
+<th>Population</th>
+<th>Under 18</th>
+<th>65+</th>
+<th>Households</th>
+<th>Median Income</th>
+<th>Poverty</th>
+</tr>
+</thead>
+<tbody id="regional-table">
+<tr><td colspan="7">Loading regional Census research…</td></tr>
+</tbody>
+</table>
+</div>
+<div class="comparison-tools">
+<div class="field">
+<label for="compare-a">Compare county A</label>
+<select id="compare-a"></select>
+</div>
+<div class="field">
+<label for="compare-b">Compare county B</label>
+<select id="compare-b"></select>
+</div>
+</div>
+<div id="comparison-results" class="compare-grid"></div>
+<div class="actions">
+<button class="secondary" id="add-regional" type="button" disabled>Add Regional Findings to Notebook</button>
+<button class="muted" id="refresh-regional" type="button">Refresh Regional Research</button>
+</div>
+<p class="note">Differences in Census indicators can suggest questions for further investigation, not automatic conclusions about ministry demand.</p>
+</section>
+
+<section class="panel">
+<div class="heading">
+<div>
+<h2>Community Needs &amp; Opportunities</h2>
+<p class="sub" id="opportunities-subtitle">Four research perspectives on Woodford County.</p>
+</div>
+<span class="badge loading" id="opportunities-badge">Connecting…</span>
 </div>
 
-<div class="opportunity-intro">
+<div class="intro">
 <strong>Community research, not assumptions.</strong>
-These indicators can help VUMC ask better questions about the people and families around us. Each card separates Census evidence from a possible ministry research question.
+These cards separate official Census estimates from questions VUMC may want to explore through listening, partnerships, and pastoral discernment.
 </div>
-
-<div id="opportunities-error" class="snapshot-error" hidden></div>
+<div id="opportunities-error" class="error" hidden></div>
 
 <div class="opportunity-grid">
 
 <article class="op-card">
-<div class="op-top">
-<div class="op-icon" aria-hidden="true">👥</div>
-<h3>Age &amp; Generations</h3>
-</div>
-
-<div class="op-stat">
-<div class="op-stat-head">
-<span class="op-stat-name">Children under 18</span>
-<span class="op-stat-number" id="age-children">—</span>
-</div>
-<div class="op-track"><div class="op-fill" id="bar-age-children"></div></div>
-<div class="op-stat-detail" id="count-age-children">Loading Census data…</div>
-</div>
-
-<div class="op-stat">
-<div class="op-stat-head">
-<span class="op-stat-name">Adults 18–64</span>
-<span class="op-stat-number" id="age-adults">—</span>
-</div>
-<div class="op-track"><div class="op-fill" id="bar-age-adults"></div></div>
-<div class="op-stat-detail" id="count-age-adults">Loading Census data…</div>
-</div>
-
-<div class="op-stat">
-<div class="op-stat-head">
-<span class="op-stat-name">Adults 65+</span>
-<span class="op-stat-number" id="age-seniors">—</span>
-</div>
-<div class="op-track"><div class="op-fill" id="bar-age-seniors"></div></div>
-<div class="op-stat-detail" id="count-age-seniors">Loading Census data…</div>
-</div>
-
-<div class="op-question">
+<h3>👥 Age &amp; Generations</h3>
+<div class="op-stat" data-stat="age-children"></div>
+<div class="op-stat" data-stat="age-adults"></div>
+<div class="op-stat" data-stat="age-seniors"></div>
+<div class="question">
 <strong>Possible ministry research</strong>
 <p>What opportunities exist for intergenerational relationships, family support, and connection with older adults? Which needs have local organizations already identified?</p>
 </div>
-<div class="actions">
-<button class="secondary add-finding" data-category="age" type="button" disabled>Add Findings to Notebook</button>
-</div>
+<div class="actions"><button class="secondary add-finding" data-category="age" disabled>Add Findings to Notebook</button></div>
 </article>
 
 <article class="op-card">
-<div class="op-top">
-<div class="op-icon" aria-hidden="true">🏠</div>
-<h3>Families &amp; Households</h3>
-</div>
-
-<div class="op-stat">
-<div class="op-stat-head">
-<span class="op-stat-name">Family households</span>
-<span class="op-stat-number" id="house-family">—</span>
-</div>
-<div class="op-track"><div class="op-fill" id="bar-house-family"></div></div>
-<div class="op-stat-detail" id="count-house-family">Loading Census data…</div>
-</div>
-
-<div class="op-stat">
-<div class="op-stat-head">
-<span class="op-stat-name">One-person households</span>
-<span class="op-stat-number" id="house-alone">—</span>
-</div>
-<div class="op-track"><div class="op-fill" id="bar-house-alone"></div></div>
-<div class="op-stat-detail" id="count-house-alone">Loading Census data…</div>
-</div>
-
-<div class="op-question">
+<h3>🏠 Families &amp; Households</h3>
+<div class="op-stat" data-stat="house-family"></div>
+<div class="op-stat" data-stat="house-alone"></div>
+<div class="question">
 <strong>Possible ministry research</strong>
 <p>How are residents finding meaningful relationships and community? What are families, single adults, and people living alone saying about belonging and support?</p>
 </div>
-<div class="actions">
-<button class="secondary add-finding" data-category="households" type="button" disabled>Add Findings to Notebook</button>
-</div>
+<div class="actions"><button class="secondary add-finding" data-category="households" disabled>Add Findings to Notebook</button></div>
 </article>
 
 <article class="op-card">
-<div class="op-top">
-<div class="op-icon" aria-hidden="true">🏘️</div>
-<h3>Housing &amp; Stability</h3>
-</div>
-
-<div class="op-stat">
-<div class="op-stat-head">
-<span class="op-stat-name">Owner-occupied homes</span>
-<span class="op-stat-number" id="housing-owners">—</span>
-</div>
-<div class="op-track"><div class="op-fill" id="bar-housing-owners"></div></div>
-<div class="op-stat-detail" id="count-housing-owners">Loading Census data…</div>
-</div>
-
-<div class="op-stat">
-<div class="op-stat-head">
-<span class="op-stat-name">Renter-occupied homes</span>
-<span class="op-stat-number" id="housing-renters">—</span>
-</div>
-<div class="op-track"><div class="op-fill" id="bar-housing-renters"></div></div>
-<div class="op-stat-detail" id="count-housing-renters">Loading Census data…</div>
-</div>
-
-<div class="op-question">
+<h3>🏘️ Housing &amp; Stability</h3>
+<div class="op-stat" data-stat="housing-owners"></div>
+<div class="op-stat" data-stat="housing-renters"></div>
+<div class="question">
 <strong>Possible ministry research</strong>
-<p>What do local housing partners report about affordability, accessibility, and housing security? Homeownership rates alone do not tell us whether residents face housing difficulties.</p>
+<p>What do local housing partners report about affordability, accessibility, and housing security? Homeownership rates alone do not reveal housing difficulties.</p>
 </div>
-<div class="actions">
-<button class="secondary add-finding" data-category="housing" type="button" disabled>Add Findings to Notebook</button>
-</div>
+<div class="actions"><button class="secondary add-finding" data-category="housing" disabled>Add Findings to Notebook</button></div>
 </article>
 
 <article class="op-card">
-<div class="op-top">
-<div class="op-icon" aria-hidden="true">📊</div>
-<h3>Economic Conditions</h3>
-</div>
-
-<div class="op-stat">
-<div class="op-stat-head">
-<span class="op-stat-name">Residents below poverty threshold</span>
-<span class="op-stat-number" id="economy-poverty">—</span>
-</div>
-<div class="op-track"><div class="op-fill" id="bar-economy-poverty"></div></div>
-<div class="op-stat-detail" id="count-economy-poverty">Loading Census data…</div>
-</div>
-
+<h3>📊 Economic Conditions</h3>
+<div class="op-stat" data-stat="economy-poverty"></div>
 <div class="metric" style="margin-top:18px">
 <span class="metric-label">Median Household Income</span>
 <span class="metric-value" id="economy-income">—</span>
 <span class="metric-unit">annual household income estimate</span>
 </div>
-
-<div class="op-question">
+<div class="question">
 <strong>Possible ministry research</strong>
-<p>Where are food, transportation, childcare, or emergency assistance gaps being reported? What do local service providers identify as their greatest unmet requests?</p>
+<p>What do local service providers report about food, transportation, childcare, or emergency assistance gaps? Where could VUMC collaborate rather than duplicate services?</p>
 </div>
-<div class="actions">
-<button class="secondary add-finding" data-category="economy" type="button" disabled>Add Findings to Notebook</button>
-</div>
+<div class="actions"><button class="secondary add-finding" data-category="economy" disabled>Add Findings to Notebook</button></div>
 </article>
 
 </div>
 
-<p class="op-source">
-Source:
-<a href="https://api.census.gov/data/2024/acs/acs5" target="_blank" rel="noopener noreferrer">U.S. Census Bureau — 2024 ACS five-year detailed tables</a>, covering 2020–2024.
-</p>
-
-<p class="op-footnote">
-Age percentages refer to total population. Household percentages refer to all households. Housing percentages refer to occupied housing units. Poverty percentage refers to people for whom poverty status is determined. These categories use different denominators.
-</p>
-
+<p class="source-line">Source: <a href="https://api.census.gov/data/2024/acs/acs5" target="_blank" rel="noopener noreferrer">U.S. Census Bureau — 2024 ACS five-year detailed tables</a>.</p>
+<p class="note">Age percentages use total population. Household percentages use all households. Housing percentages use occupied housing units. Poverty percentages use the population for whom poverty status is determined.</p>
 <div class="actions">
 <button class="muted" id="refresh-opportunities" type="button">Refresh Opportunity Data</button>
 <button class="secondary" id="add-all-findings" type="button" disabled>Add All Findings to Notebook</button>
 </div>
-<p class="op-message" id="opportunities-message" role="status"></p>
+<p class="note" id="opportunities-message" role="status"></p>
 </section>
 
-<!-- PHASE 4 AI MINISTRY INTELLIGENCE ADVISOR -->
 <section class="panel ai-panel" id="ai-advisor">
-<div class="snapshot-heading">
+<div class="heading">
 <div class="ai-heading">
-<div class="ai-icon" aria-hidden="true">✦</div>
+<div class="ai-icon">✦</div>
 <div>
 <h2>AI Ministry Intelligence Advisor</h2>
-<p class="sub" style="margin:2px 0 0">Research-informed sermon and ministry planning</p>
+<p class="sub" style="margin:2px 0 0">Census, VUMC YouTube evidence, and researcher-entered search observations</p>
 </div>
 </div>
-<span class="snapshot-badge" id="ai-badge">Ready to Generate</span>
-</div>
-
-<div class="ai-intro">
-<strong>From community research to meaningful ministry.</strong>
-The advisor uses Woodford County Census indicators to recommend sermon themes, relevant scripture, and possible ministry connections. Suggestions are starting points for pastoral discernment, not statements about what residents are currently searching for.
+<span class="badge" id="ai-badge">Ready to Generate</span>
 </div>
 
-<div class="field">
+<div class="intro" style="margin-top:18px">
+<strong>From regional research to meaningful ministry.</strong>
+The advisor uses the selected Census geography, attempts to retrieve actual VUMC YouTube performance, and can consider Google Trends observations you enter below. Recommendations are research hypotheses requiring pastoral and scriptural review.
+</div>
+
+<div class="field" style="margin-top:20px">
 <label for="ai-focus">Pastoral focus (optional)</label>
-<input id="ai-focus" maxlength="300" placeholder="Example: Reaching younger families, hope, spiritual growth, or community connection">
+<input id="ai-focus" maxlength="300" placeholder="Example: Younger families, spiritual growth, loneliness, hope, or community connection">
 <p class="note">Leave blank for broad recommendations, or enter a particular ministry emphasis.</p>
 </div>
 
+<h3>Google Trends Observations</h3>
+<p class="sub">Optional. Open Google Trends below, study the results, then enter what you actually observed. These entries are not independently verified by the AI.</p>
+
+<div id="trend-findings"></div>
 <div class="actions">
+<button id="add-trend" class="muted" type="button">+ Add Search Observation</button>
+<button id="clear-trends" class="muted" type="button">Clear Observations</button>
+</div>
+<p class="note">Up to four findings. Each complete finding needs a topic, geography, time period, and observation. Incomplete findings will not be submitted.</p>
+
+<div class="actions" style="margin-top:24px">
 <button id="generate-ai" type="button">✦ Generate Sermon Recommendations</button>
 <button id="ai-copy-all" class="secondary" type="button" disabled>Add All Recommendations to Notebook</button>
 <button id="ai-clear" class="muted" type="button">Clear Results</button>
 </div>
 
-<p class="ai-status" id="ai-status" role="status">
-The AI service is configured. Generate recommendations to test it.
-</p>
-
+<p id="ai-status" class="note" role="status">Ready to generate recommendations using the selected research area.</p>
+<div id="ai-evidence"></div>
 <div id="ai-results" aria-live="polite">
-<div class="ai-empty">
-<strong>Your sermon recommendations will appear here.</strong>
-<p>Generate three possible sermon themes using verified community research.</p>
+<div class="ai-empty">Your three sermon recommendations will appear here.</div>
 </div>
-</div>
-
 <div id="ai-usage" class="ai-meta"></div>
-
-<div class="ai-warning">
-<strong>Research integrity:</strong> Census figures are connected. Google Trends search data and YouTube performance are not yet supplied to this AI endpoint. AI recommendations should be checked for scriptural accuracy, pastoral appropriateness, and local relevance.
+<div class="warning">
+<strong>Research integrity:</strong> Census information is retrieved automatically. YouTube evidence is retrieved by the Worker when authorization and analytics are available. Google Trends observations are entered by the researcher and are not independently verified. AI suggestions should be checked for scriptural accuracy, pastoral appropriateness, and local relevance.
 </div>
 </section>
 
-<!-- GOOGLE TRENDS -->
-<section class="panel">
+<section class="panel" id="topic-discovery">
 <h2>Topic Discovery &amp; Comparison</h2>
 <p class="sub">Explore up to four topics using Google Trends. Search results open in a new tab.</p>
 
@@ -461,7 +423,7 @@ The AI service is configured. Generate recommendations to test it.
 
 <div class="form-grid">
 <div class="field">
-<label for="region">Geographic scope</label>
+<label for="region">Google Trends geography</label>
 <select id="region">
 <option value="US-KY">Kentucky</option>
 <option value="US">United States</option>
@@ -485,61 +447,50 @@ The AI service is configured. Generate recommendations to test it.
 </div>
 
 <div class="status">
-Google Trends measures relative search interest, not exact search volume. Kentucky results are statewide and should not be presented as Versailles or Woodford County measurements.
+Google Trends measures relative search interest, not exact search volume. Kentucky results are statewide and should not be described as measurements of Versailles or any individual county.
 </div>
 </section>
 
-<!-- TOPIC SUGGESTIONS -->
 <section class="panel">
 <h2>Explore Ministry Topics</h2>
 <p class="sub">These are starting points for research, not claims about what people are currently searching for.</p>
-
 <div class="chips" id="suggestions">
-<button type="button" data-topic="anxiety">Anxiety</button>
-<button type="button" data-topic="loneliness">Loneliness</button>
-<button type="button" data-topic="grief">Grief</button>
-<button type="button" data-topic="forgiveness">Forgiveness</button>
-<button type="button" data-topic="purpose in life">Purpose</button>
-<button type="button" data-topic="marriage">Marriage</button>
-<button type="button" data-topic="parenting">Parenting</button>
-<button type="button" data-topic="faith">Faith</button>
-<button type="button" data-topic="church">Church</button>
-<button type="button" data-topic="hope">Hope</button>
-<button type="button" data-topic="financial stress">Financial stress</button>
-<button type="button" data-topic="depression">Depression</button>
+<button data-topic="anxiety">Anxiety</button>
+<button data-topic="loneliness">Loneliness</button>
+<button data-topic="grief">Grief</button>
+<button data-topic="forgiveness">Forgiveness</button>
+<button data-topic="purpose in life">Purpose</button>
+<button data-topic="marriage">Marriage</button>
+<button data-topic="parenting">Parenting</button>
+<button data-topic="faith">Faith</button>
+<button data-topic="church">Church</button>
+<button data-topic="hope">Hope</button>
+<button data-topic="financial stress">Financial stress</button>
+<button data-topic="depression">Depression</button>
 </div>
 </section>
 
-<!-- RESEARCH NOTEBOOK -->
 <section class="panel" id="research-notebook">
 <h2>Research Notebook</h2>
-<p class="sub">Record what the source actually shows and consider possible ministry connections. Your notes remain in this browser session unless you copy or download them.</p>
-
+<p class="sub">Record what the sources show and consider possible ministry connections. Notes remain in this browser session unless you copy or download them.</p>
 <div class="two">
 <div class="field">
 <label for="evidence">What does the research show?</label>
-<textarea id="evidence" placeholder="Record the geographic scope, dates, source and observed findings."></textarea>
+<textarea id="evidence" placeholder="Record the geographic scope, dates, source, and observed findings."></textarea>
 </div>
 <div class="field">
 <label for="ministry">Possible ministry connections</label>
-<textarea id="ministry" placeholder="Possible pastoral conversations, worship themes, small groups or outreach opportunities."></textarea>
+<textarea id="ministry" placeholder="Pastoral conversations, worship themes, small groups, outreach opportunities, or questions for further research."></textarea>
 </div>
 </div>
-
 <div class="actions">
 <button id="copy" class="secondary" type="button">Copy Research Notes</button>
 <button id="download" class="muted" type="button">Download Notes</button>
 </div>
-
-<p class="note" id="note-status">
-Research notes and AI suggestions require human review.
-</p>
+<p class="note" id="note-status">Research notes and AI suggestions require human review.</p>
 </section>
 
-<footer>
-Versailles United Methodist Church · Community Pulse · PIR Engine
-</footer>
-
+<footer>Versailles United Methodist Church · Community Pulse · PIR Engine · Phase 5.1</footer>
 </main>
 
 <script>
@@ -551,17 +502,24 @@ const $ = id => document.getElementById(id);
 const WORKER =
   'https://holy-star-1faevumc-youtube-analytics.versaillesumcworshipteam.workers.dev';
 
-const CENSUS_ENDPOINT =
-  WORKER + '/api/community/woodford';
+const API = {
+  woodford: WORKER + '/api/community/woodford',
+  opportunities: WORKER + '/api/community/opportunities',
+  region: WORKER + '/api/community/region',
+  advisor: WORKER + '/api/advisor/sermons'
+};
 
-const OPPORTUNITIES_ENDPOINT =
-  WORKER + '/api/community/opportunities';
-
-const AI_ENDPOINT =
-  WORKER + '/api/advisor/sermons';
+const COUNTY_NAMES = {
+  woodford: 'Woodford County, Kentucky',
+  fayette: 'Fayette County, Kentucky',
+  franklin: 'Franklin County, Kentucky',
+  anderson: 'Anderson County, Kentucky',
+  scott: 'Scott County, Kentucky',
+  mercer: 'Mercer County, Kentucky',
+  regional: 'Six-County Regional Ministry Area'
+};
 
 const numberFormat = new Intl.NumberFormat('en-US');
-
 const moneyFormat = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -570,743 +528,527 @@ const moneyFormat = new Intl.NumberFormat('en-US', {
 
 let lastCensus = null;
 let lastOpportunities = null;
+let lastRegion = null;
 let lastAI = null;
+let activeScope = 'woodford';
+let loadSequence = 0;
 
-const formattedNumber = value =>
-  typeof value === 'number' && Number.isFinite(value)
-    ? numberFormat.format(value)
+const number = v =>
+  typeof v === 'number' && Number.isFinite(v)
+    ? numberFormat.format(v)
     : 'Unavailable';
 
-const formattedMoney = value =>
-  typeof value === 'number' && Number.isFinite(value)
-    ? moneyFormat.format(value)
+const money = v =>
+  typeof v === 'number' && Number.isFinite(v)
+    ? moneyFormat.format(v)
     : 'Unavailable';
 
-const formattedPercent = value =>
-  typeof value === 'number' && Number.isFinite(value)
-    ? value.toFixed(1) + '%'
+const percent = v =>
+  typeof v === 'number' && Number.isFinite(v)
+    ? v.toFixed(1) + '%'
     : 'Unavailable';
 
-function metric(id, value, formatter) {
-  $(id).textContent =
-    typeof value === 'number' && Number.isFinite(value)
-      ? formatter(value)
-      : 'Unavailable';
+function node(tag, className = '', content) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (content !== undefined && content !== null) {
+    el.textContent = String(content);
+  }
+  return el;
 }
 
-async function fetchJSON(endpoint) {
-  const response = await fetch(endpoint, {
+function badge(id, message, state = '') {
+  $(id).className = 'badge' + (state ? ' ' + state : '');
+  $(id).textContent = message;
+}
+
+function showError(id, message) {
+  $(id).hidden = false;
+  $(id).textContent = message;
+}
+
+function hideError(id) {
+  $(id).hidden = true;
+  $(id).textContent = '';
+}
+
+async function fetchJSON(url) {
+  const response = await fetch(url, {
     method: 'GET',
     mode: 'cors',
     credentials: 'omit',
     cache: 'no-store'
   });
 
-  if (!response.ok) {
-    throw new Error('Server returned HTTP ' + response.status);
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    throw Error('The server returned an unreadable response.');
   }
 
-  return response.json();
+  if (!response.ok) {
+    throw Error(data.message || data.error || 'HTTP ' + response.status);
+  }
+
+  return data;
 }
 
-// ====================================================
-// CENSUS SNAPSHOT
-// ====================================================
+function scopeLabel() {
+  return COUNTY_NAMES[activeScope] || 'Selected Community';
+}
 
-async function loadCensus() {
-  const badge = $('snapshot-badge');
-  const errorBox = $('snapshot-error');
-  const refresh = $('refresh-census');
+function scopeURL() {
+  if (activeScope === 'woodford') return API.opportunities;
+  if (activeScope === 'regional') return API.region;
+  return API.region + '?county=' + encodeURIComponent(activeScope);
+}
 
-  badge.className = 'snapshot-badge loading';
-  badge.textContent = 'Connecting…';
-  errorBox.hidden = true;
-  refresh.disabled = true;
+function categoriesFromResponse(data) {
+  if (data.scope === 'regional') return data.totals;
+  if (data.scope === 'county') return data.county?.categories;
+  return data.categories;
+}
+
+function metric(id, value, formatter = number) {
+  $(id).textContent = formatter(value);
+}
+
+function resetSnapshot() {
+  ['metric-population','metric-age','metric-households',
+   'metric-income','metric-poverty'].forEach(id => $(id).textContent = '—');
+}
+
+function renderSnapshot(data) {
+  if (activeScope === 'woodford' && data.indicators) {
+    const i = data.indicators;
+    metric('metric-population', i.population?.value);
+    metric('metric-age', i.medianAge?.value, v => v.toFixed(1));
+    metric('metric-households', i.households?.value);
+    metric('metric-income', i.medianHouseholdIncome?.value, money);
+    metric('metric-poverty', i.povertyRate?.value, percent);
+    return;
+  }
+
+  const c = categoriesFromResponse(data);
+  if (!c) throw Error('Missing demographic categories.');
+
+  metric('metric-population', c.age?.population);
+  $('metric-age').textContent = 'Not provided';
+  metric('metric-households', c.households?.total);
+  metric('metric-income', c.economy?.medianHouseholdIncome, money);
+  metric('metric-poverty', c.economy?.belowPoverty?.percent, percent);
+}
+
+async function loadCommunity() {
+  const sequence = ++loadSequence;
+  const scope = activeScope;
+
+  lastCensus = null;
+  lastOpportunities = null;
+
+  $('snapshot-title').textContent = scopeLabel() + ' Community Snapshot';
+  $('opportunities-subtitle').textContent =
+    'Four research perspectives on ' + scopeLabel() + '.';
+  $('research-context').value = scopeLabel();
+
+  badge('snapshot-badge', 'Connecting…', 'loading');
+  badge('opportunities-badge', 'Connecting…', 'loading');
+  hideError('snapshot-error');
+  hideError('opportunities-error');
+  resetSnapshot();
+
+  document.querySelectorAll('.add-finding').forEach(b => b.disabled = true);
+  $('add-all-findings').disabled = true;
+  $('refresh-census').disabled = true;
+  $('refresh-opportunities').disabled = true;
+  $('opportunities-message').textContent = '';
 
   try {
-    const data = await fetchJSON(CENSUS_ENDPOINT);
+    const data = await fetchJSON(scopeURL());
+    if (sequence !== loadSequence) return;
 
-    if (data.status !== 'ready' || !data.indicators) {
-      throw new Error('Community data was not available.');
+    const categories = categoriesFromResponse(data);
+    if (data.status !== 'ready' || !categories) {
+      throw Error('Incomplete Census response.');
     }
 
-    lastCensus = data;
-    const indicators = data.indicators;
+    lastOpportunities = {
+      categories,
+      geography: scopeLabel(),
+      source: data.source
+    };
 
-    metric(
-      'metric-population',
-      indicators.population?.value,
-      formattedNumber
-    );
-
-    metric(
-      'metric-age',
-      indicators.medianAge?.value,
-      n => n.toFixed(1)
-    );
-
-    metric(
-      'metric-households',
-      indicators.households?.value,
-      formattedNumber
-    );
-
-    metric(
-      'metric-income',
-      indicators.medianHouseholdIncome?.value,
-      formattedMoney
-    );
-
-    metric(
-      'metric-poverty',
-      indicators.povertyRate?.value,
-      formattedPercent
-    );
-
-    const year = data.source?.year;
-
-    $('census-year').textContent = year
-      ? `${year} ACS five-year estimates.`
-      : 'ACS five-year estimates.';
-
-    if (
-      data.source?.url &&
-      /^https:\/\/api\.census\.gov\//.test(data.source.url)
-    ) {
-      $('census-source').href = data.source.url;
+    if (scope === 'woodford') {
+      try {
+        lastCensus = await fetchJSON(API.woodford);
+      } catch (error) {
+        lastCensus = null;
+        showError(
+          'snapshot-error',
+          'Woodford median-age snapshot unavailable: ' + error.message
+        );
+      }
+      if (sequence !== loadSequence) return;
+    } else {
+      lastCensus = data;
     }
 
-    badge.className = 'snapshot-badge';
-    badge.textContent = 'Data Connected';
+    if (lastCensus) {
+      renderSnapshot(lastCensus);
+      badge('snapshot-badge', 'Data Connected');
+    } else {
+      renderSnapshot(data);
+      badge('snapshot-badge', 'Partial Data');
+    }
+
+    renderOpportunities(categories);
+    badge('opportunities-badge', 'Data Connected');
+
+    $('opportunities-message').textContent =
+      'Verified Census indicators loaded for ' + scopeLabel() + '.';
   } catch (error) {
-    badge.className = 'snapshot-badge error';
-    badge.textContent = 'Connection Unavailable';
-    errorBox.hidden = false;
-    errorBox.textContent =
-      'Unable to retrieve Census data. ' +
-      error.message;
+    if (sequence !== loadSequence) return;
 
-    if (!lastCensus) {
-      [
-        'metric-population',
-        'metric-age',
-        'metric-households',
-        'metric-income',
-        'metric-poverty'
-      ].forEach(id => {
-        $(id).textContent = '—';
-      });
-    }
+    badge('snapshot-badge', 'Connection Unavailable', 'error-badge');
+    badge('opportunities-badge', 'Connection Unavailable', 'error-badge');
+
+    showError('snapshot-error', 'Unable to retrieve Census data: ' + error.message);
+    showError('opportunities-error', 'Unable to retrieve opportunity data: ' + error.message);
   } finally {
-    refresh.disabled = false;
+    if (sequence === loadSequence) {
+      $('refresh-census').disabled = false;
+      $('refresh-opportunities').disabled = false;
+    }
   }
 }
 
-$('refresh-census').addEventListener('click', loadCensus);
-loadCensus();
+const statLabels = {
+  'age-children': ['Children under 18', 'residents under age 18'],
+  'age-adults': ['Adults 18–64', 'residents ages 18–64'],
+  'age-seniors': ['Adults 65+', 'residents ages 65+'],
+  'house-family': ['Family households', 'family households'],
+  'house-alone': ['One-person households', 'one-person households'],
+  'housing-owners': ['Owner-occupied homes', 'owner-occupied housing units'],
+  'housing-renters': ['Renter-occupied homes', 'renter-occupied housing units'],
+  'economy-poverty': ['Residents below poverty threshold', 'people below poverty threshold']
+};
 
-// ====================================================
-// COMMUNITY OPPORTUNITIES
-// ====================================================
+function renderStat(id, item) {
+  const target = document.querySelector('[data-stat="' + id + '"]');
+  if (!target) return;
 
-function showStat(prefix, item, description) {
-  const percentage = item?.percent;
-  const count = item?.count;
+  target.replaceChildren();
 
-  $(prefix).textContent = formattedPercent(percentage);
+  const head = node('div', 'op-stat-head');
+  head.append(
+    node('span', 'op-stat-name', statLabels[id][0]),
+    node('span', 'op-stat-number', percent(item?.percent))
+  );
 
-  $('count-' + prefix).textContent =
-    formattedNumber(count) + ' ' + description;
+  const track = node('div', 'track');
+  const fill = node('div', 'fill');
+  fill.style.width =
+    Math.max(0, Math.min(100, Number(item?.percent) || 0)) + '%';
+  track.appendChild(fill);
 
-  const width =
-    typeof percentage === 'number' &&
-    Number.isFinite(percentage)
-      ? Math.max(0, Math.min(100, percentage))
-      : 0;
+  const detail = node(
+    'div',
+    'op-detail',
+    number(item?.count) + ' ' + statLabels[id][1]
+  );
 
-  $('bar-' + prefix).style.width = width + '%';
+  target.append(head, track, detail);
 }
 
-function renderOpportunities(data) {
-  const c = data.categories;
+function renderOpportunities(c) {
+  renderStat('age-children', c.age?.under18);
+  renderStat('age-adults', c.age?.adults18to64);
+  renderStat('age-seniors', c.age?.seniors65plus);
+  renderStat('house-family', c.households?.family);
+  renderStat('house-alone', c.households?.livingAlone);
+  renderStat('housing-owners', c.housing?.ownerOccupied);
+  renderStat('housing-renters', c.housing?.renterOccupied);
+  renderStat('economy-poverty', c.economy?.belowPoverty);
 
-  showStat(
-    'age-children',
-    c.age.under18,
-    'residents under age 18'
-  );
+  metric('economy-income', c.economy?.medianHouseholdIncome, money);
 
-  showStat(
-    'age-adults',
-    c.age.adults18to64,
-    'residents ages 18–64'
-  );
-
-  showStat(
-    'age-seniors',
-    c.age.seniors65plus,
-    'residents ages 65+'
-  );
-
-  showStat(
-    'house-family',
-    c.households.family,
-    'family households'
-  );
-
-  showStat(
-    'house-alone',
-    c.households.livingAlone,
-    'one-person households'
-  );
-
-  showStat(
-    'housing-owners',
-    c.housing.ownerOccupied,
-    'owner-occupied housing units'
-  );
-
-  showStat(
-    'housing-renters',
-    c.housing.renterOccupied,
-    'renter-occupied housing units'
-  );
-
-  showStat(
-    'economy-poverty',
-    c.economy.belowPoverty,
-    'residents below poverty threshold'
-  );
-
-  $('economy-income').textContent =
-    formattedMoney(c.economy.medianHouseholdIncome);
-
-  document.querySelectorAll('.add-finding').forEach(
-    button => button.disabled = false
-  );
-
+  document.querySelectorAll('.add-finding').forEach(b => b.disabled = false);
   $('add-all-findings').disabled = false;
 }
 
-async function loadOpportunities() {
-  const badge = $('opportunities-badge');
-  const errorBox = $('opportunities-error');
-  const refresh = $('refresh-opportunities');
-  const message = $('opportunities-message');
+// =====================================================
+// REGIONAL COMPARISON
+// =====================================================
 
-  badge.className = 'snapshot-badge loading';
-  badge.textContent = 'Connecting…';
-  errorBox.hidden = true;
-  refresh.disabled = true;
-  message.textContent = '';
+function countyRow(c) {
+  const tr = document.createElement('tr');
+  if (c.home) tr.className = 'home-row';
+
+  [
+    c.name + (c.home ? ' ★' : ''),
+    number(c.categories.age.population),
+    percent(c.categories.age.under18.percent),
+    percent(c.categories.age.seniors65plus.percent),
+    number(c.categories.households.total),
+    money(c.categories.economy.medianHouseholdIncome),
+    percent(c.categories.economy.belowPoverty.percent)
+  ].forEach(value => tr.appendChild(node('td', '', value)));
+
+  return tr;
+}
+
+function compareItem(label, value) {
+  const row = node('div', 'compare-row');
+  row.append(node('span', '', label), node('strong', '', value));
+  return row;
+}
+
+function compareCounty(c) {
+  const card = node('div', 'compare-card');
+  card.appendChild(node('h3', '', c.name + ' County'));
+
+  const x = c.categories;
+  [
+    ['Population', number(x.age.population)],
+    ['Under 18', percent(x.age.under18.percent)],
+    ['Age 65+', percent(x.age.seniors65plus.percent)],
+    ['Family households', percent(x.households.family.percent)],
+    ['Living alone', percent(x.households.livingAlone.percent)],
+    ['Owner-occupied', percent(x.housing.ownerOccupied.percent)],
+    ['Median household income', money(x.economy.medianHouseholdIncome)],
+    ['Below poverty threshold', percent(x.economy.belowPoverty.percent)]
+  ].forEach(([label, value]) => card.appendChild(compareItem(label, value)));
+
+  return card;
+}
+
+function renderComparison() {
+  if (!lastRegion) return;
+
+  const a = lastRegion.counties.find(
+    c => c.countyFips === $('compare-a').value
+  );
+
+  const b = lastRegion.counties.find(
+    c => c.countyFips === $('compare-b').value
+  );
+
+  $('comparison-results').replaceChildren();
+
+  if (a) $('comparison-results').appendChild(compareCounty(a));
+  if (b) $('comparison-results').appendChild(compareCounty(b));
+}
+
+async function loadRegion() {
+  badge('regional-badge', 'Connecting…', 'loading');
+  hideError('regional-error');
+  $('refresh-regional').disabled = true;
+  $('add-regional').disabled = true;
 
   try {
-    const data = await fetchJSON(OPPORTUNITIES_ENDPOINT);
+    const data = await fetchJSON(API.region);
 
     if (
       data.status !== 'ready' ||
-      !data.categories?.age ||
-      !data.categories?.households ||
-      !data.categories?.housing ||
-      !data.categories?.economy
+      !Array.isArray(data.counties) ||
+      data.counties.length !== 6
     ) {
-      throw new Error('Incomplete community research response.');
+      throw Error('Incomplete six-county research response.');
     }
 
-    lastOpportunities = data;
-    renderOpportunities(data);
+    lastRegion = data;
+    const tbody = $('regional-table');
+    tbody.replaceChildren();
 
-    badge.className = 'snapshot-badge';
-    badge.textContent = 'Data Connected';
+    data.counties.forEach(c => tbody.appendChild(countyRow(c)));
 
-    message.textContent =
-      'Community indicators loaded. Choose a research card to add its verified findings to the notebook.';
+    const total = node('tr');
+    [
+      'REGIONAL TOTAL',
+      number(data.totals.age.population),
+      percent(data.totals.age.under18.percent),
+      percent(data.totals.age.seniors65plus.percent),
+      number(data.totals.households.total),
+      'Not calculated',
+      percent(data.totals.economy.belowPoverty.percent)
+    ].forEach(v => total.appendChild(node('td', '', v)));
+
+    tbody.appendChild(total);
+
+    const a = $('compare-a');
+    const b = $('compare-b');
+    const previousA = a.value || '239';
+    const previousB = b.value || '067';
+
+    a.replaceChildren();
+    b.replaceChildren();
+
+    data.counties.forEach(c => {
+      a.appendChild(new Option(c.name + ' County', c.countyFips));
+      b.appendChild(new Option(c.name + ' County', c.countyFips));
+    });
+
+    a.value = previousA;
+    b.value = previousB;
+    renderComparison();
+
+    badge('regional-badge', 'Six Counties Connected');
+    $('add-regional').disabled = false;
   } catch (error) {
-    badge.className = 'snapshot-badge error';
-    badge.textContent = 'Connection Unavailable';
-    errorBox.hidden = false;
-    errorBox.textContent =
-      'Unable to retrieve community data. ' +
-      error.message;
-
-    if (!lastOpportunities) {
-      document.querySelectorAll('.add-finding').forEach(
-        button => button.disabled = true
-      );
-      $('add-all-findings').disabled = true;
-    } else {
-      message.textContent =
-        'Previously loaded data remains visible.';
-    }
+    badge('regional-badge', 'Connection Unavailable', 'error-badge');
+    showError('regional-error', error.message);
   } finally {
-    refresh.disabled = false;
+    $('refresh-regional').disabled = false;
   }
 }
 
-$('refresh-opportunities').addEventListener(
-  'click',
-  loadOpportunities
-);
+// =====================================================
+// RESEARCH NOTEBOOK
+// =====================================================
 
-loadOpportunities();
-
-// ====================================================
-// RESEARCH NOTEBOOK HELPERS
-// ====================================================
-
-const researchQuestions = {
-  age:
-    'Research question: What do local families, older adults, and service organizations identify as opportunities for intergenerational connection and support?',
-  households:
-    'Research question: How do residents describe belonging and social connection, including people living alone?',
-  housing:
-    'Research question: What do local housing organizations report about affordability, accessibility, and housing stability?',
-  economy:
-    'Research question: What needs are local food, transportation, childcare, and emergency assistance providers observing?'
+const questions = {
+  age: 'What do local families, older adults, and service organizations identify as opportunities for intergenerational connection and support?',
+  households: 'How do residents describe belonging and social connection, including people living alone?',
+  housing: 'What do local housing organizations report about affordability, accessibility, and housing stability?',
+  economy: 'What needs are local food, transportation, childcare, and emergency assistance providers observing?'
 };
 
-function findingLines(category) {
-  if (!lastOpportunities) return [];
-
-  const c = lastOpportunities.categories;
-
-  const entry = (name, value) =>
-    name + ': ' +
-    formattedNumber(value?.count) +
-    ' (' + formattedPercent(value?.percent) + ')';
-
-  const shared = [
-    'Source: U.S. Census Bureau, 2024 ACS five-year detailed tables (2020–2024).',
-    'Geography: Woodford County, Kentucky.'
-  ];
-
-  switch (category) {
-    case 'age':
-      return [
-        'AGE & GENERATIONS',
-        ...shared,
-        'Population: ' + formattedNumber(c.age.population),
-        entry('Children under 18', c.age.under18),
-        entry('Adults ages 18–64', c.age.adults18to64),
-        entry('Adults ages 65+', c.age.seniors65plus),
-        'Denominator: total population.'
-      ];
-
-    case 'households':
-      return [
-        'FAMILIES & HOUSEHOLDS',
-        ...shared,
-        'Total households: ' +
-          formattedNumber(c.households.total),
-        entry('Family households', c.households.family),
-        entry('One-person households', c.households.livingAlone),
-        'Denominator: total households.'
-      ];
-
-    case 'housing':
-      return [
-        'HOUSING & STABILITY',
-        ...shared,
-        'Occupied housing units: ' +
-          formattedNumber(c.housing.occupiedHousingUnits),
-        entry('Owner-occupied units', c.housing.ownerOccupied),
-        entry('Renter-occupied units', c.housing.renterOccupied),
-        'Denominator: occupied housing units.'
-      ];
-
-    case 'economy':
-      return [
-        'ECONOMIC CONDITIONS',
-        ...shared,
-        'Median household income: ' +
-          formattedMoney(c.economy.medianHouseholdIncome),
-        'Poverty-status population: ' +
-          formattedNumber(c.economy.povertyUniverse),
-        entry('People below poverty threshold', c.economy.belowPoverty),
-        'Poverty percentage denominator: population for whom poverty status is determined.'
-      ];
-
-    default:
-      return [];
-  }
-}
-
-function appendUniqueBlock(textarea, block) {
-  if (!block || textarea.value.includes(block)) {
-    return false;
-  }
-
-  textarea.value = textarea.value.trim()
-    ? textarea.value.trimEnd() + '\n\n' + block
+function appendUnique(target, block) {
+  if (!block || target.value.includes(block)) return false;
+  target.value = target.value.trim()
+    ? target.value.trimEnd() + '\n\n' + block
     : block;
-
   return true;
 }
 
-function scrollToNotebook() {
+function scrollNotebook() {
   $('research-notebook').scrollIntoView({
     behavior: 'smooth',
     block: 'start'
   });
 }
 
-function addFindings(categories, scroll = true) {
-  if (!lastOpportunities) return;
+function findingText(category) {
+  if (!lastOpportunities) return '';
 
+  const c = lastOpportunities.categories;
+  const lines = [
+    category.toUpperCase() + ' — CENSUS RESEARCH',
+    'Geography: ' + lastOpportunities.geography,
+    'Source: U.S. Census Bureau, 2024 ACS five-year detailed tables (2020–2024).'
+  ];
+
+  const entry = (label, item) =>
+    label + ': ' + number(item?.count) + ' (' + percent(item?.percent) + ')';
+
+  if (category === 'age') {
+    lines.push(
+      'Population: ' + number(c.age.population),
+      entry('Under 18', c.age.under18),
+      entry('Adults 18–64', c.age.adults18to64),
+      entry('Age 65+', c.age.seniors65plus)
+    );
+  }
+
+  if (category === 'households') {
+    lines.push(
+      'Households: ' + number(c.households.total),
+      entry('Family households', c.households.family),
+      entry('One-person households', c.households.livingAlone)
+    );
+  }
+
+  if (category === 'housing') {
+    lines.push(
+      'Occupied housing units: ' + number(c.housing.occupiedHousingUnits),
+      entry('Owner-occupied', c.housing.ownerOccupied),
+      entry('Renter-occupied', c.housing.renterOccupied)
+    );
+  }
+
+  if (category === 'economy') {
+    lines.push(
+      'Median household income: ' + money(c.economy.medianHouseholdIncome),
+      'Poverty-status population: ' + number(c.economy.povertyUniverse),
+      entry('Below poverty threshold', c.economy.belowPoverty)
+    );
+  }
+
+  lines.push('Interpretation: Demographics do not prove unmet ministry needs.');
+  return lines.join('\n');
+}
+
+function addFindings(categories) {
   let added = 0;
 
   categories.forEach(category => {
-    const evidence = findingLines(category).join('\n');
-    const question = researchQuestions[category];
-
-    if (appendUniqueBlock($('evidence'), evidence)) {
-      added++;
-    }
-
-    if (question) {
-      appendUniqueBlock($('ministry'), question);
-    }
+    if (appendUnique($('evidence'), findingText(category))) added++;
+    appendUnique(
+      $('ministry'),
+      'Research question (' + scopeLabel() + '): ' + questions[category]
+    );
   });
-
-  $('opportunities-message').textContent = added
-    ? added + ' research section(s) added to the notebook.'
-    : 'Those findings are already in your notebook.';
 
   $('note-status').textContent =
-    'Census findings added. Review before copying or downloading.';
+    added
+      ? added + ' Census research section(s) added.'
+      : 'Those findings are already in the notebook.';
 
-  if (scroll) scrollToNotebook();
+  scrollNotebook();
 }
 
-document.querySelectorAll('.add-finding').forEach(button => {
-  button.addEventListener('click', () => {
-    addFindings([button.dataset.category]);
-  });
-});
+function regionalFindingText() {
+  if (!lastRegion) return '';
 
-$('add-all-findings').addEventListener('click', () => {
-  addFindings([
-    'age',
-    'households',
-    'housing',
-    'economy'
-  ]);
-});
+  const t = lastRegion.totals;
+  const lines = [
+    'SIX-COUNTY REGIONAL MINISTRY RESEARCH',
+    'Source: U.S. Census Bureau, 2024 ACS five-year detailed tables (2020–2024).',
+    'Counties: Woodford, Fayette, Franklin, Anderson, Scott, Mercer.',
+    'Combined population: ' + number(t.age.population),
+    'Combined households: ' + number(t.households.total),
+    'Under 18: ' + number(t.age.under18.count) + ' (' + percent(t.age.under18.percent) + ')',
+    'Age 65+: ' + number(t.age.seniors65plus.count) + ' (' + percent(t.age.seniors65plus.percent) + ')',
+    'Below poverty threshold: ' + number(t.economy.belowPoverty.count) +
+      ' (' + percent(t.economy.belowPoverty.percent) + ')',
+    '',
+    'COUNTY COMPARISONS'
+  ];
 
-// ====================================================
-// PHASE 4 — AI MINISTRY INTELLIGENCE ADVISOR
-// ====================================================
-
-function aiStatus(message, type = '') {
-  $('ai-status').textContent = message;
-  $('ai-status').className = 'ai-status ' + type;
-}
-
-function makeElement(tag, className, text) {
-  const element = document.createElement(tag);
-
-  if (className) element.className = className;
-
-  if (text !== undefined && text !== null) {
-    element.textContent = String(text);
-  }
-
-  return element;
-}
-
-function addLabeledParagraph(container, label, value) {
-  const paragraph = makeElement('p');
-  const strong = makeElement('strong', '', label + ': ');
-
-  paragraph.appendChild(strong);
-  paragraph.appendChild(
-    document.createTextNode(String(value || 'Not provided'))
-  );
-
-  container.appendChild(paragraph);
-}
-
-function recommendationText(item, index) {
-  return [
-    'AI SERMON RECOMMENDATION ' + (index + 1),
-    'Title: ' + item.title,
-    'Format: ' + item.format,
-    'Theme: ' + item.theme,
-    'Scripture: ' + (item.scriptures || []).join(', '),
-    'Evidence-based rationale: ' + item.why,
-    'Possible ministry connection: ' + item.ministryConnection,
-    'Research question: ' + item.researchQuestion,
-    'Evidence classification: ' + item.evidenceLevel,
-    'Note: AI-generated suggestion. Requires pastoral and scriptural review.'
-  ].join('\n');
-}
-
-function addAIToNotebook(indexes) {
-  if (!lastAI?.advisor?.recommendations) return;
-
-  let added = 0;
-
-  indexes.forEach(index => {
-    const item = lastAI.advisor.recommendations[index];
-
-    if (!item) return;
-
-    const block = recommendationText(item, index);
-
-    if (appendUniqueBlock($('ministry'), block)) {
-      added++;
-    }
+  lastRegion.counties.forEach(c => {
+    const x = c.categories;
+    lines.push(
+      c.name + ': ' +
+      'population ' + number(x.age.population) +
+      '; under 18 ' + percent(x.age.under18.percent) +
+      '; age 65+ ' + percent(x.age.seniors65plus.percent) +
+      '; median household income ' + money(x.economy.medianHouseholdIncome) +
+      '; poverty ' + percent(x.economy.belowPoverty.percent)
+    );
   });
 
-  $('note-status').textContent = added
-    ? added + ' AI recommendation(s) added to the notebook.'
-    : 'Those AI recommendations are already in the notebook.';
-
-  scrollToNotebook();
-}
-
-function renderAI(data) {
-  const container = $('ai-results');
-  container.replaceChildren();
-
-  const advisor = data.advisor;
-
-  if (advisor.summary) {
-    const summary = makeElement(
-      'div',
-      'ai-summary',
-      advisor.summary
-    );
-
-    container.appendChild(summary);
-  }
-
-  advisor.recommendations.forEach((item, index) => {
-    const card = makeElement('article', 'ai-result');
-
-    card.appendChild(
-      makeElement('h3', '', item.title || 'Untitled recommendation')
-    );
-
-    card.appendChild(
-      makeElement('div', 'ai-type', item.format || 'Sermon idea')
-    );
-
-    addLabeledParagraph(card, 'Theme', item.theme);
-
-    const scriptures = makeElement('div', 'ai-scriptures');
-
-    (item.scriptures || []).forEach(reference => {
-      scriptures.appendChild(
-        makeElement('span', '', reference)
-      );
-    });
-
-    card.appendChild(scriptures);
-
-    addLabeledParagraph(
-      card,
-      'Why this topic',
-      item.why
-    );
-
-    addLabeledParagraph(
-      card,
-      'Ministry connection',
-      item.ministryConnection
-    );
-
-    addLabeledParagraph(
-      card,
-      'Further research',
-      item.researchQuestion
-    );
-
-    addLabeledParagraph(
-      card,
-      'Evidence level',
-      item.evidenceLevel
-    );
-
-    const actions = makeElement('div', 'actions');
-
-    const addButton = makeElement(
-      'button',
-      'secondary',
-      'Add to Research Notebook'
-    );
-
-    addButton.type = 'button';
-
-    addButton.addEventListener('click', () => {
-      addAIToNotebook([index]);
-    });
-
-    actions.appendChild(addButton);
-    card.appendChild(actions);
-    container.appendChild(card);
-  });
-
-  if (Array.isArray(advisor.cautions) && advisor.cautions.length) {
-    const caution = makeElement('div', 'ai-warning');
-
-    caution.appendChild(
-      makeElement('strong', '', 'Research limitations')
-    );
-
-    const list = document.createElement('ul');
-
-    advisor.cautions.forEach(item => {
-      list.appendChild(
-        makeElement('li', '', item)
-      );
-    });
-
-    caution.appendChild(list);
-    container.appendChild(caution);
-  }
-
-  const remaining = data.usage?.remaining;
-
-  $('ai-usage').textContent =
-    'Generated: ' +
-    new Date(data.generatedAt || Date.now()).toLocaleString() +
-    (typeof remaining === 'number'
-      ? ' · Approximate daily requests remaining: ' + remaining
-      : '');
-
-  $('ai-copy-all').disabled = false;
-}
-
-async function generateAI() {
-  const button = $('generate-ai');
-  const badge = $('ai-badge');
-
-  button.disabled = true;
-  $('ai-copy-all').disabled = true;
-
-  badge.className = 'snapshot-badge loading';
-  badge.textContent = 'Generating…';
-
-  aiStatus(
-    'Analyzing Census evidence and preparing sermon recommendations…'
+  lines.push(
+    '',
+    'The regional area is a planning geography, not a verified attendance catchment.',
+    'Regional median household income is not calculated from county medians.'
   );
 
-  try {
-    const response = await fetch(AI_ENDPOINT, {
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'include',
-      cache: 'no-store',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        focus: $('ai-focus').value.trim()
-      })
-    });
-
-    let data;
-
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error(
-        'The AI service returned an unreadable response.'
-      );
-    }
-
-    if (response.status === 401) {
-      throw new Error(
-        'VUMC sign-in is required. Open Audience Intelligence, sign in with Google, and return here to try again. If your browser blocks cross-site cookies, the session may not be available.'
-      );
-    }
-
-    if (!response.ok) {
-      throw new Error(
-        data.message ||
-        data.error ||
-        'AI service returned HTTP ' + response.status
-      );
-    }
-
-    if (
-      data.status !== 'ready' ||
-      !Array.isArray(data.advisor?.recommendations) ||
-      data.advisor.recommendations.length !== 3
-    ) {
-      throw new Error(
-        'The AI response did not contain three valid recommendations.'
-      );
-    }
-
-    lastAI = data;
-    renderAI(data);
-
-    badge.className = 'snapshot-badge';
-    badge.textContent = 'Recommendations Ready';
-
-    aiStatus(
-      'Three AI recommendations generated successfully.',
-      'success'
-    );
-  } catch (error) {
-    badge.className = 'snapshot-badge error';
-    badge.textContent = 'Generation Unavailable';
-
-    aiStatus(error.message, 'error');
-
-    if (lastAI) {
-      $('ai-copy-all').disabled = false;
-    }
-  } finally {
-    button.disabled = false;
-  }
+  return lines.join('\n');
 }
 
-$('generate-ai').addEventListener(
-  'click',
-  generateAI
-);
-
-$('ai-copy-all').addEventListener('click', () => {
-  addAIToNotebook([0, 1, 2]);
-});
-
-$('ai-clear').addEventListener('click', () => {
-  lastAI = null;
-
-  $('ai-results').replaceChildren();
-
-  const empty = makeElement(
-    'div',
-    'ai-empty',
-    'Your sermon recommendations will appear here.'
-  );
-
-  $('ai-results').appendChild(empty);
-  $('ai-copy-all').disabled = true;
-  $('ai-usage').textContent = '';
-
-  $('ai-badge').className = 'snapshot-badge';
-  $('ai-badge').textContent = 'Ready to Generate';
-
-  aiStatus('Results cleared. Ready for another research request.');
-});
-
-// ====================================================
+// =====================================================
 // GOOGLE TRENDS RESEARCH
-// ====================================================
+// =====================================================
 
-const topics = () => {
-  const values = [1, 2, 3, 4]
-    .map(n => $('topic' + n).value.trim())
-    .filter(Boolean);
+const topics = () =>
+  [...new Set(
+    [1,2,3,4]
+      .map(n => $('topic' + n).value.trim())
+      .filter(Boolean)
+  )].slice(0,4);
 
-  return [...new Set(values)].slice(0, 4);
-};
-
-function trends(geo) {
+function openTrends(geo) {
   const selected = topics();
 
   if (!selected.length) {
@@ -1321,92 +1063,563 @@ function trends(geo) {
   });
 
   window.open(
-    'https://trends.google.com/trends/explore?' + params,
+    'https://trends.google.com/trends/explore?' + params.toString(),
     '_blank',
     'noopener,noreferrer'
   );
 }
 
-$('research').addEventListener('click', () => {
-  trends($('region').value);
-});
+let trendCounter = 0;
 
-$('kentucky').addEventListener('click', () => {
-  trends('US-KY');
-});
+function addTrendFinding() {
+  const holder = $('trend-findings');
+  if (holder.children.length >= 4) return;
 
-$('national').addEventListener('click', () => {
-  trends('US');
-});
+  trendCounter++;
+  const card = node('div', 'trend-row');
+  card.dataset.finding = String(trendCounter);
 
-$('clear').addEventListener('click', () => {
-  [1, 2, 3, 4].forEach(n => {
-    $('topic' + n).value = '';
+  const heading = node('h3', '', 'Search Observation ' + trendCounter);
+  card.appendChild(heading);
+
+  const fields = node('div', 'form-grid');
+
+  const definitions = [
+    ['topic', 'Topic', 'e.g. loneliness'],
+    ['geography', 'Geography', 'Kentucky'],
+    ['period', 'Time period', 'Past 12 months'],
+    ['observation', 'What did you observe?', 'Describe the actual relative search pattern']
+  ];
+
+  definitions.forEach(([key, label, placeholder]) => {
+    const field = node('div', 'field');
+    const inputLabel = node('label', '', label);
+    const id = 'trend-' + key + '-' + trendCounter;
+    inputLabel.htmlFor = id;
+
+    const input = key === 'observation'
+      ? document.createElement('textarea')
+      : document.createElement('input');
+
+    input.id = id;
+    input.dataset.trendField = key;
+    input.placeholder = placeholder;
+    input.maxLength = key === 'observation' ? 500 : 100;
+
+    if (key === 'geography') {
+      input.value = $('region').value === 'US-KY'
+        ? 'Kentucky'
+        : 'United States';
+    }
+
+    if (key === 'period') {
+      input.value = $('period').selectedOptions[0].text;
+    }
+
+    if (key === 'topic') {
+      input.value = $('topic1').value.trim();
+    }
+
+    field.append(inputLabel, input);
+    fields.appendChild(field);
   });
 
-  $('topic1').focus();
-});
+  card.appendChild(fields);
 
-document.querySelectorAll('#suggestions button')
-  .forEach(button => {
-    button.addEventListener('click', () => {
-      $('topic1').value = button.dataset.topic;
-      trends($('region').value);
+  const remove = node('button', 'muted', 'Remove Observation');
+  remove.type = 'button';
+  remove.addEventListener('click', () => {
+    card.remove();
+    $('add-trend').disabled = false;
+  });
+
+  card.appendChild(remove);
+  holder.appendChild(card);
+
+  $('add-trend').disabled = holder.children.length >= 4;
+}
+
+function getTrendFindings() {
+  const findings = [];
+
+  for (const card of $('trend-findings').children) {
+    const finding = {};
+
+    card.querySelectorAll('[data-trend-field]').forEach(input => {
+      finding[input.dataset.trendField] = input.value.trim();
     });
+
+    const values = [
+      finding.topic,
+      finding.geography,
+      finding.period,
+      finding.observation
+    ];
+
+    if (values.every(v => !v)) continue;
+
+    if (values.some(v => !v)) {
+      throw Error(
+        'Complete all four fields in each Google Trends observation, or remove the incomplete observation.'
+      );
+    }
+
+    findings.push(finding);
+  }
+
+  return findings;
+}
+
+// =====================================================
+// AI ADVISOR
+// =====================================================
+
+function labeledParagraph(container, label, value) {
+  const p = node('p');
+  p.appendChild(node('strong', '', label + ': '));
+  p.appendChild(document.createTextNode(String(value || 'Not provided')));
+  container.appendChild(p);
+}
+
+function recommendationText(item, index) {
+  const r = lastAI?.research;
+
+  return [
+    'AI SERMON RECOMMENDATION ' + (index + 1),
+    'Research geography: ' + (r?.geography || scopeLabel()),
+    'Title: ' + item.title,
+    'Format: ' + item.format,
+    'Theme: ' + item.theme,
+    'Scripture: ' + (item.scriptures || []).join(', '),
+    'Research rationale: ' + item.why,
+    'Ministry connection: ' + item.ministryConnection,
+    'Research question: ' + item.researchQuestion,
+    'Evidence level: ' + item.evidenceLevel,
+    'Evidence sources: ' + (item.evidenceSources || []).join(', '),
+    'Limitations: ' + (item.limitations || 'Requires further review'),
+    'YouTube evidence available: ' + (r?.youtube?.available ? 'Yes' : 'No'),
+    'Researcher-entered Trends findings: ' + (r?.googleTrends?.findingCount || 0),
+    'AI-generated research hypothesis. Requires pastoral and scriptural review.'
+  ].join('\n');
+}
+
+function addAIToNotebook(indexes) {
+  if (!lastAI?.advisor?.recommendations) return;
+
+  let added = 0;
+
+  indexes.forEach(index => {
+    const item = lastAI.advisor.recommendations[index];
+    if (!item) return;
+
+    if (appendUnique($('ministry'), recommendationText(item, index))) {
+      added++;
+    }
   });
 
-// ====================================================
-// NOTEBOOK COPY AND DOWNLOAD
-// ====================================================
+  $('note-status').textContent = added
+    ? added + ' AI recommendation(s) added.'
+    : 'Those recommendations are already in the notebook.';
+
+  scrollNotebook();
+}
+
+function renderEvidence(research) {
+  const holder = $('ai-evidence');
+  holder.replaceChildren();
+
+  const title = node('h3', '', 'Evidence Used');
+  title.style.marginTop = '22px';
+  holder.appendChild(title);
+
+  const grid = node('div', 'evidence-grid');
+
+  const sources = [
+    {
+      title: 'U.S. Census Bureau',
+      state: research?.census?.available ? 'Connected' : 'Unavailable',
+      detail: research?.geography || 'Geography unavailable'
+    },
+    {
+      title: 'VUMC YouTube Analytics',
+      state: research?.youtube?.available ? 'Evidence retrieved' : 'Unavailable',
+      detail: research?.youtube?.available
+        ? number(research.youtube.analyzedVideos || 0) +
+          ' videos included in the AI evidence sample'
+        : 'No YouTube evidence was supplied to this recommendation'
+    },
+    {
+      title: 'Google Trends',
+      state: research?.googleTrends?.supplied
+        ? 'Researcher observations supplied'
+        : 'Not supplied',
+      detail: number(research?.googleTrends?.findingCount || 0) +
+        ' researcher-entered finding(s), not independently verified'
+    }
+  ];
+
+  sources.forEach(source => {
+    const card = node('div', 'evidence-card');
+    card.append(
+      node('strong', '', source.title),
+      node('span', '', source.state),
+      node('p', 'note', source.detail)
+    );
+    grid.appendChild(card);
+  });
+
+  holder.appendChild(grid);
+
+  if (research?.youtube?.error) {
+    holder.appendChild(
+      node(
+        'p',
+        'note',
+        'YouTube evidence note: ' + research.youtube.error
+      )
+    );
+  }
+
+  if (research?.youtube?.limitedToRecentUploads) {
+    holder.appendChild(
+      node(
+        'p',
+        'note',
+        'YouTube discovery was limited to recent uploads. This is not a complete channel-history analysis.'
+      )
+    );
+  }
+}
+
+function renderAI(data) {
+  const holder = $('ai-results');
+  holder.replaceChildren();
+
+  renderEvidence(data.research);
+
+  if (data.advisor.summary) {
+    holder.appendChild(
+      node('div', 'ai-summary', data.advisor.summary)
+    );
+  }
+
+  data.advisor.recommendations.forEach((item, index) => {
+    const card = node('article', 'ai-result');
+
+    card.appendChild(
+      node('h3', '', item.title || 'Untitled Recommendation')
+    );
+
+    card.appendChild(
+      node('div', 'ai-type', item.format || 'Sermon idea')
+    );
+
+    labeledParagraph(card, 'Theme', item.theme);
+
+    const scriptures = node('div', 'ai-scriptures');
+
+    (item.scriptures || []).forEach(reference => {
+      scriptures.appendChild(node('span', '', reference));
+    });
+
+    card.appendChild(scriptures);
+
+    labeledParagraph(card, 'Why this topic', item.why);
+    labeledParagraph(card, 'Ministry connection', item.ministryConnection);
+    labeledParagraph(card, 'Further research', item.researchQuestion);
+    labeledParagraph(card, 'Evidence level', item.evidenceLevel);
+
+    labeledParagraph(
+      card,
+      'Evidence sources',
+      (item.evidenceSources || []).join(', ') || 'Not specified'
+    );
+
+    if (item.limitations) {
+      labeledParagraph(card, 'Limitations', item.limitations);
+    }
+
+    const actions = node('div', 'actions');
+    const add = node('button', 'secondary', 'Add to Research Notebook');
+    add.type = 'button';
+    add.addEventListener('click', () => addAIToNotebook([index]));
+
+    actions.appendChild(add);
+    card.appendChild(actions);
+    holder.appendChild(card);
+  });
+
+  if (Array.isArray(data.advisor.cautions) && data.advisor.cautions.length) {
+    const warning = node('div', 'warning');
+    warning.appendChild(node('strong', '', 'Research limitations'));
+
+    const list = node('ul');
+
+    data.advisor.cautions.forEach(item => {
+      list.appendChild(node('li', '', item));
+    });
+
+    warning.appendChild(list);
+    holder.appendChild(warning);
+  }
+
+  const remaining = data.usage?.remaining;
+
+  $('ai-usage').textContent =
+    'Generated: ' +
+    new Date(data.generatedAt || Date.now()).toLocaleString() +
+    (typeof remaining === 'number'
+      ? ' · Reported daily requests remaining: ' + remaining
+      : '');
+
+  $('ai-copy-all').disabled = false;
+}
+
+async function generateAI() {
+  const button = $('generate-ai');
+
+  let trends;
+  try {
+    trends = getTrendFindings();
+  } catch (error) {
+    $('ai-status').textContent = error.message;
+    return;
+  }
+
+  button.disabled = true;
+  $('ai-copy-all').disabled = true;
+  badge('ai-badge', 'Generating…', 'loading');
+
+  $('ai-status').textContent =
+    'Analyzing ' + scopeLabel() +
+    ', retrieving available YouTube evidence, and preparing recommendations…';
+
+  try {
+    const response = await fetch(API.advisor, {
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'include',
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        focus: $('ai-focus').value.trim(),
+        geography: activeScope,
+        trends
+      })
+    });
+
+    let data;
+
+    try {
+      data = await response.json();
+    } catch {
+      throw Error('The AI service returned an unreadable response.');
+    }
+
+    if (response.status === 401) {
+      throw Error(
+        'VUMC sign-in is required. Open Audience Intelligence, sign in with Google, and return here. Your browser must allow the Worker session cookie.'
+      );
+    }
+
+    if (!response.ok) {
+      throw Error(
+        data.message ||
+        data.error ||
+        'AI service returned HTTP ' + response.status
+      );
+    }
+
+    if (
+      data.status !== 'ready' ||
+      !Array.isArray(data.advisor?.recommendations) ||
+      data.advisor.recommendations.length !== 3
+    ) {
+      throw Error('The AI response did not contain three valid recommendations.');
+    }
+
+    lastAI = data;
+    renderAI(data);
+
+    badge('ai-badge', 'Recommendations Ready');
+
+    $('ai-status').textContent =
+      'Three recommendations generated for ' +
+      (data.research?.geography || scopeLabel()) + '.';
+  } catch (error) {
+    badge('ai-badge', 'Generation Unavailable', 'error-badge');
+    $('ai-status').textContent = error.message;
+
+    if (lastAI) {
+      $('ai-copy-all').disabled = false;
+    }
+  } finally {
+    button.disabled = false;
+  }
+}
+
+function clearAI() {
+  lastAI = null;
+  $('ai-results').replaceChildren(
+    node('div', 'ai-empty', 'Your sermon recommendations will appear here.')
+  );
+  $('ai-evidence').replaceChildren();
+  $('ai-usage').textContent = '';
+  $('ai-copy-all').disabled = true;
+  badge('ai-badge', 'Ready to Generate');
+  $('ai-status').textContent = 'Results cleared. Ready for another research request.';
+}
+
+// =====================================================
+// NOTEBOOK EXPORT
+// =====================================================
 
 function notes() {
-  const censusSection = lastCensus
+  const census = lastOpportunities?.categories;
+
+  const censusSection = census
     ? [
-        'WOODFORD COUNTY COMMUNITY CONTEXT',
-        'Source: U.S. Census Bureau, ACS ' +
-          lastCensus.source.year + ' five-year estimates',
-        'Population: ' + $('metric-population').textContent,
-        'Median age: ' + $('metric-age').textContent,
-        'Households: ' + $('metric-households').textContent,
-        'Median household income: ' + $('metric-income').textContent,
-        'Poverty rate: ' + $('metric-poverty').textContent,
-        'Note: Census data is community context, not local search interest.',
+        'SELECTED COMMUNITY CONTEXT',
+        'Geography: ' + lastOpportunities.geography,
+        'Source: U.S. Census Bureau, 2024 ACS five-year estimates.',
+        'Population: ' + number(census.age.population),
+        'Households: ' + number(census.households.total),
+        'Median household income: ' + money(census.economy.medianHouseholdIncome),
+        'Poverty rate: ' + percent(census.economy.belowPoverty.percent),
         ''
       ]
     : [
-        'WOODFORD COUNTY COMMUNITY CONTEXT',
-        'Census snapshot unavailable during this session.',
+        'SELECTED COMMUNITY CONTEXT',
+        'Census data unavailable during this session.',
         ''
       ];
+
+  let trends = [];
+
+  try {
+    trends = getTrendFindings();
+  } catch {
+    trends = [];
+  }
+
+  const trendSection = trends.length
+    ? trends.flatMap(t => [
+        'Topic: ' + t.topic,
+        'Geography: ' + t.geography,
+        'Period: ' + t.period,
+        'Observation: ' + t.observation,
+        'Verification: Researcher-entered, not independently verified.',
+        ''
+      ])
+    : ['No complete Google Trends observations entered.', ''];
 
   return [
     'COMMUNITY PULSE — PUBLIC INTEREST RESEARCH',
     'Date: ' + new Date().toLocaleDateString(),
-    'Topics: ' + topics().join(', '),
-    'Geography for Google Trends: ' +
-      $('region').selectedOptions[0].text,
-    'Trends period: ' +
-      $('period').selectedOptions[0].text,
+    'Research geography: ' + scopeLabel(),
+    'Google Trends topics: ' + topics().join(', '),
+    'Google Trends search geography: ' + $('region').selectedOptions[0].text,
+    'Google Trends period: ' + $('period').selectedOptions[0].text,
     '',
     ...censusSection,
+    'RESEARCHER-ENTERED GOOGLE TRENDS OBSERVATIONS',
+    ...trendSection,
     'OBSERVED EVIDENCE',
     $('evidence').value.trim() || '(Not entered)',
     '',
     'POSSIBLE MINISTRY CONNECTIONS / RESEARCH QUESTIONS',
     $('ministry').value.trim() || '(Not entered)',
     '',
-    'Researcher-entered notes are not AI-verified.',
-    'AI sermon suggestions require pastoral review.',
-    'Census estimates do not prove unmet community needs.'
+    'RESEARCH QUALIFICATIONS',
+    'Census estimates do not prove unmet ministry needs.',
+    'The regional ministry area is not a verified attendance catchment.',
+    'Researcher-entered Google Trends findings are not independently verified.',
+    'Whole-video YouTube analytics do not measure individual sermon segments.',
+    'AI sermon suggestions require pastoral and scriptural review.'
   ].join('\n');
 }
+
+// =====================================================
+// EVENTS AND INITIALIZATION
+// =====================================================
+
+$('research-scope').addEventListener('change', () => {
+  activeScope = $('research-scope').value;
+  clearAI();
+  loadCommunity();
+});
+
+$('refresh-census').addEventListener('click', loadCommunity);
+$('refresh-opportunities').addEventListener('click', loadCommunity);
+$('refresh-regional').addEventListener('click', loadRegion);
+
+$('compare-a').addEventListener('change', renderComparison);
+$('compare-b').addEventListener('change', renderComparison);
+
+document.querySelectorAll('.add-finding').forEach(button => {
+  button.addEventListener('click', () => {
+    addFindings([button.dataset.category]);
+  });
+});
+
+$('add-all-findings').addEventListener('click', () => {
+  addFindings(['age','households','housing','economy']);
+});
+
+$('add-regional').addEventListener('click', () => {
+  if (!lastRegion) return;
+
+  appendUnique($('evidence'), regionalFindingText());
+
+  appendUnique(
+    $('ministry'),
+    'Regional research question: How do ministry opportunities and community partnerships differ among Woodford, Fayette, Franklin, Anderson, Scott, and Mercer counties?'
+  );
+
+  $('note-status').textContent = 'Regional Census findings added.';
+  scrollNotebook();
+});
+
+$('research').addEventListener('click', () => {
+  openTrends($('region').value);
+});
+
+$('kentucky').addEventListener('click', () => openTrends('US-KY'));
+$('national').addEventListener('click', () => openTrends('US'));
+
+$('clear').addEventListener('click', () => {
+  [1,2,3,4].forEach(n => $('topic' + n).value = '');
+  $('topic1').focus();
+});
+
+document.querySelectorAll('#suggestions button').forEach(button => {
+  button.addEventListener('click', () => {
+    $('topic1').value = button.dataset.topic;
+    openTrends($('region').value);
+  });
+});
+
+$('add-trend').addEventListener('click', addTrendFinding);
+
+$('clear-trends').addEventListener('click', () => {
+  $('trend-findings').replaceChildren();
+  $('add-trend').disabled = false;
+});
+
+$('generate-ai').addEventListener('click', generateAI);
+
+$('ai-copy-all').addEventListener('click', () => {
+  addAIToNotebook([0,1,2]);
+});
+
+$('ai-clear').addEventListener('click', clearAI);
 
 $('copy').addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(notes());
-
-    $('note-status').textContent =
-      'Research notes copied.';
+    $('note-status').textContent = 'Research notes copied.';
   } catch {
     $('note-status').textContent =
       'Copy unavailable. Use Download Notes instead.';
@@ -1428,8 +1641,10 @@ $('download').addEventListener('click', () => {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 
+loadCommunity();
+loadRegion();
+
 })();
 </script>
-
 </body>
 </html>
