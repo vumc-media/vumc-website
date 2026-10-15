@@ -5,229 +5,436 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#102d50">
+
   <title>Audience Intelligence | VUMC Staff Tools</title>
+
   <link rel="stylesheet" href="./styles.css">
+
+  <style>
+    /* Community Pulse launch card */
+    .community-launch {
+      margin: 28px 0;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid #b8d9e8;
+      box-shadow: 0 10px 28px rgba(18,53,85,.12);
+    }
+
+    .community-launch-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 30px;
+      background: linear-gradient(
+        115deg, #123c78 0%, #087f83 100%
+      );
+      color: #fff;
+    }
+
+    .community-launch-copy {
+      flex: 1 1 330px;
+      min-width: 0;
+    }
+
+    .community-launch-kicker {
+      color: #c5f7ef;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .12em;
+    }
+
+    .community-launch h2 {
+      color: #fff;
+      margin: 9px 0;
+      font-size: clamp(24px,3vw,32px);
+    }
+
+    .community-launch p {
+      color: #e4f5ff;
+      line-height: 1.6;
+      max-width: 650px;
+      margin: 0;
+    }
+
+    .community-launch-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 14px 22px;
+      border-radius: 10px;
+      background: #fff;
+      color: #124d7b;
+      text-decoration: none;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .community-launch-button:hover {
+      background: #e3f5ff;
+    }
+
+    @media(max-width:600px) {
+      .community-launch-inner {
+        padding: 22px;
+      }
+
+      .community-launch-button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="brand">
-        <span class="eyebrow">VERSAILLES UNITED METHODIST CHURCH</span>
-        <h1>Audience <span>Intelligence</span></h1>
-        <p>Understand your reach. Strengthen your ministry.</p>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="eyebrow">
+        VERSAILLES UNITED METHODIST CHURCH
+      </span>
+
+      <h1>Audience <span>Intelligence</span></h1>
+
+      <p>Understand your reach. Strengthen your ministry.</p>
+    </div>
+
+    <a class="back-link" href="/tools/">
+      ← Staff Tools
+    </a>
+  </div>
+</header>
+
+<main>
+
+  <div class="notice" id="status"
+       role="status" aria-live="polite">
+    Checking YouTube Analytics connection…
+  </div>
+
+  <!-- REPORT CONTROLS -->
+
+  <section class="toolbar" aria-label="Report controls">
+    <div class="period-wrap">
+      <label for="period">Reporting period</label>
+
+      <select id="period">
+        <option value="28">Last 28 days</option>
+        <option value="90" selected>Last 90 days</option>
+        <option value="365">Last 365 days</option>
+      </select>
+    </div>
+
+    <button id="refresh" type="button">
+      ↻ Refresh data
+    </button>
+
+    <a id="login" class="connect"
+       href="https://holy-star-1faevumc-youtube-analytics.versaillesumcworshipteam.workers.dev/auth/login">
+      Connect YouTube
+    </a>
+
+    <span id="updated" class="updated"
+          aria-live="polite"></span>
+  </section>
+
+  <!-- YOUTUBE METRICS -->
+
+  <section class="metrics" aria-label="YouTube statistics">
+
+    <article class="metric navy">
+      <div class="metric-top">
+        <span>Total Subscribers</span>
+        <span class="metric-icon" aria-hidden="true">♟</span>
       </div>
-      <a class="back-link" href="/tools/">← Staff Tools</a>
-    </div>
-  </header>
+      <strong id="subscribers">—</strong>
+      <small>Current channel total</small>
+    </article>
 
-  <main>
-    <div class="notice" id="status" role="status" aria-live="polite">
-      Checking YouTube Analytics connection…
+    <article class="metric green">
+      <div class="metric-top">
+        <span>Subscribers Gained</span>
+        <span class="metric-icon" aria-hidden="true">↗</span>
+      </div>
+      <strong id="gained">—</strong>
+      <small>During selected period</small>
+    </article>
+
+    <article class="metric red">
+      <div class="metric-top">
+        <span>Subscribers Lost</span>
+        <span class="metric-icon" aria-hidden="true">↘</span>
+      </div>
+      <strong id="lost">—</strong>
+      <small>During selected period</small>
+    </article>
+
+    <article class="metric purple">
+      <div class="metric-top">
+        <span>Net Growth</span>
+        <span class="metric-icon" aria-hidden="true">＋</span>
+      </div>
+      <strong id="net">—</strong>
+      <small>Gained minus lost</small>
+    </article>
+
+    <article class="metric blue">
+      <div class="metric-top">
+        <span>Video Views</span>
+        <span class="metric-icon" aria-hidden="true">▶</span>
+      </div>
+      <strong id="views">—</strong>
+      <small>During selected period</small>
+    </article>
+
+    <article class="metric orange">
+      <div class="metric-top">
+        <span>Watch Time</span>
+        <span class="metric-icon" aria-hidden="true">◷</span>
+      </div>
+      <strong id="watch">—</strong>
+      <small>Hours watched</small>
+    </article>
+
+  </section>
+
+  <!-- SUBSCRIBER RHYTHM -->
+
+  <section class="panel chart-panel">
+    <div class="panel-head">
+      <div>
+        <span class="section-kicker">CHANNEL GROWTH</span>
+        <h2>Subscriber Rhythm</h2>
+        <p>
+          Daily subscriber gains and losses
+          for your selected period.
+        </p>
+      </div>
+
+      <div class="legend">
+        <span>
+          <i class="legend-dot gain-dot"></i>
+          Gained
+        </span>
+        <span>
+          <i class="legend-dot loss-dot"></i>
+          Lost
+        </span>
+      </div>
     </div>
 
-    <section class="toolbar" aria-label="Report controls">
-      <div class="period-wrap">
-        <label for="period">Reporting period</label>
-        <select id="period">
-          <option value="28">Last 28 days</option>
-          <option value="90" selected>Last 90 days</option>
-          <option value="365">Last 365 days</option>
+    <div id="chart" class="chart" role="img"
+         aria-label="Daily subscriber gains and losses">
+      Connect YouTube to view subscriber activity.
+    </div>
+
+    <div class="chart-axis">
+      <span id="chart-start"></span>
+      <span id="chart-end"></span>
+    </div>
+  </section>
+
+  <!-- CONTENT PERFORMANCE -->
+
+  <section class="panel content-panel"
+           id="content-performance">
+
+    <div class="panel-head">
+      <div>
+        <span class="section-kicker">
+          WORSHIP VIDEO INTELLIGENCE
+        </span>
+
+        <h2>Content Performance</h2>
+
+        <p>
+          Discover which worship services and
+          sermon themes are connecting with viewers.
+        </p>
+      </div>
+
+      <div class="content-controls">
+        <label for="content-filter">Service type</label>
+
+        <select id="content-filter">
+          <option value="All">All worship</option>
+          <option value="Traditional">Traditional</option>
+          <option value="Contemporary">Contemporary</option>
+          <option value="Unclassified">Unclassified</option>
         </select>
       </div>
-      <button id="refresh" type="button">↻ Refresh data</button>
-      <a id="login" class="connect"
-         href="https://holy-star-1faevumc-youtube-analytics.versaillesumcworshipteam.workers.dev/auth/login">
-        Connect YouTube
-      </a>
-      <span id="updated" class="updated" aria-live="polite"></span>
-    </section>
+    </div>
 
-    <section class="metrics" aria-label="YouTube statistics">
-      <article class="metric navy">
-        <div class="metric-top">
-          <span>Total Subscribers</span>
-          <span class="metric-icon" aria-hidden="true">♟</span>
-        </div>
-        <strong id="subscribers">—</strong>
-        <small>Current channel total</small>
-      </article>
+    <div id="content-status"
+         class="content-status"
+         role="status"
+         aria-live="polite">
+      Waiting for YouTube video analytics…
+    </div>
 
-      <article class="metric green">
-        <div class="metric-top">
-          <span>Subscribers Gained</span>
-          <span class="metric-icon" aria-hidden="true">↗</span>
-        </div>
-        <strong id="gained">—</strong>
-        <small>During selected period</small>
-      </article>
+    <div class="content-summary">
 
-      <article class="metric red">
-        <div class="metric-top">
-          <span>Subscribers Lost</span>
-          <span class="metric-icon" aria-hidden="true">↘</span>
-        </div>
-        <strong id="lost">—</strong>
-        <small>During selected period</small>
-      </article>
-
-      <article class="metric purple">
-        <div class="metric-top">
-          <span>Net Growth</span>
-          <span class="metric-icon" aria-hidden="true">＋</span>
-        </div>
-        <strong id="net">—</strong>
-        <small>Gained minus lost</small>
-      </article>
-
-      <article class="metric blue">
-        <div class="metric-top">
-          <span>Video Views</span>
-          <span class="metric-icon" aria-hidden="true">▶</span>
-        </div>
-        <strong id="views">—</strong>
-        <small>During selected period</small>
-      </article>
-
-      <article class="metric orange">
-        <div class="metric-top">
-          <span>Watch Time</span>
-          <span class="metric-icon" aria-hidden="true">◷</span>
-        </div>
-        <strong id="watch">—</strong>
-        <small>Hours watched</small>
-      </article>
-    </section>
-
-    <section class="panel chart-panel">
-      <div class="panel-head">
-        <div>
-          <span class="section-kicker">CHANNEL GROWTH</span>
-          <h2>Subscriber Rhythm</h2>
-          <p>Daily subscriber gains and losses for your selected period.</p>
-        </div>
-        <div class="legend">
-          <span><i class="legend-dot gain-dot"></i> Gained</span>
-          <span><i class="legend-dot loss-dot"></i> Lost</span>
-        </div>
-      </div>
-      <div id="chart" class="chart" role="img"
-           aria-label="Daily subscriber gains and losses">
-        Connect YouTube to view subscriber activity.
-      </div>
-      <div class="chart-axis">
-        <span id="chart-start"></span>
-        <span id="chart-end"></span>
-      </div>
-    </section>
-
-    <!-- CONTENT PERFORMANCE -->
-    <section class="panel content-panel" id="content-performance">
-      <div class="panel-head">
-        <div>
-          <span class="section-kicker">WORSHIP VIDEO INTELLIGENCE</span>
-          <h2>Content Performance</h2>
-          <p>Discover which worship services and sermon themes are connecting with viewers.</p>
-        </div>
-        <div class="content-controls">
-          <label for="content-filter">Service type</label>
-          <select id="content-filter">
-            <option value="All">All worship</option>
-            <option value="Traditional">Traditional</option>
-            <option value="Contemporary">Contemporary</option>
-            <option value="Unclassified">Unclassified</option>
-          </select>
-        </div>
+      <div>
+        <span>Worship Videos</span>
+        <strong id="content-count">—</strong>
+        <small>Published services analyzed</small>
       </div>
 
-      <div id="content-status" class="content-status" role="status"
-           aria-live="polite">
-        Waiting for YouTube video analytics…
+      <div>
+        <span>Video Views</span>
+        <strong id="content-views">—</strong>
+        <small>Selected reporting period</small>
       </div>
 
-      <div class="content-summary">
-        <div>
-          <span>Worship Videos</span>
-          <strong id="content-count">—</strong>
-          <small>Published services analyzed</small>
-        </div>
-        <div>
-          <span>Video Views</span>
-          <strong id="content-views">—</strong>
-          <small>Selected reporting period</small>
-        </div>
-        <div>
-          <span>Watch Hours</span>
-          <strong id="content-hours">—</strong>
-          <small>Selected reporting period</small>
-        </div>
+      <div>
+        <span>Watch Hours</span>
+        <strong id="content-hours">—</strong>
+        <small>Selected reporting period</small>
       </div>
 
-      <h3>Top Sermon Themes</h3>
-      <p class="content-help">
-        Matching Traditional and Contemporary worship videos are grouped
-        under the same sermon theme when their titles can be matched.
-      </p>
-      <div id="content-themes" class="theme-list">
-        Sermon rankings will appear when analytics are loaded.
-      </div>
+    </div>
 
-      <h3>Worship Video Details</h3>
-      <p class="content-help">
-        Browse individual services, compare views and watch hours,
-        and open each video directly on YouTube.
-      </p>
-      <div id="content-videos" class="video-grid"></div>
+    <h3>Top Sermon Themes</h3>
 
-      <p class="content-disclaimer">
-        Content Performance measures complete worship videos, not isolated
-        sermon segments. Funeral services, special events, duplicate
-        records, and upcoming broadcasts are excluded from sermon rankings.
-        Service types may be inferred from matching titles when descriptions
-        are incomplete. YouTube analytics may lag, and the current
-        integration scans up to 200 recent uploads.
-      </p>
-    </section>
-
-    <!-- FUTURE INTELLIGENCE MODULES -->
-    <section class="panels">
-      <article class="panel feature">
-        <div class="feature-icon purple-text">◎</div>
-        <div>
-          <h2>Audience Discovery</h2>
-          <p>See how viewers find your channel through search and recommendations.</p>
-          <div class="coming">Traffic-source reporting is coming next.</div>
-        </div>
-      </article>
-
-      <article class="panel feature">
-        <div class="feature-icon green-text">◉</div>
-        <div>
-          <h2>Live vs. Replay</h2>
-          <p>Compare live worship participation with viewing after the broadcast.</p>
-          <div class="coming">Livestream and replay analysis is coming next.</div>
-        </div>
-      </article>
-
-      <article class="panel feature">
-        <div class="feature-icon orange-text">✦</div>
-        <div>
-          <h2>Ministry Insights</h2>
-          <p>Turn audience trends into practical ideas for church communications.</p>
-          <div class="coming">
-            Pastoral planning insights will be added after
-            content reporting is verified.
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <p class="foot">
-      YouTube reports may lag by several days. Views and subscriptions
-      are not the same as unique people. Subscriber totals may be rounded
-      by YouTube.
+    <p class="content-help">
+      Matching Traditional and Contemporary worship
+      videos are grouped under the same sermon theme
+      when their titles can be matched.
     </p>
-  </main>
 
-  <script src="./app.js"></script>
+    <div id="content-themes" class="theme-list">
+      Sermon rankings will appear when analytics are loaded.
+    </div>
+
+    <h3>Worship Video Details</h3>
+
+    <p class="content-help">
+      Browse individual services, compare views and
+      watch hours, and open each video directly on YouTube.
+    </p>
+
+    <div id="content-videos" class="video-grid"></div>
+
+    <p class="content-disclaimer">
+      Content Performance measures complete worship
+      videos, not isolated sermon segments. Funeral
+      services, special events, duplicate records,
+      and upcoming broadcasts are excluded from
+      sermon rankings. Service types may be inferred
+      from matching titles when descriptions are
+      incomplete. YouTube analytics may lag, and
+      the current integration scans up to 200
+      recent uploads.
+    </p>
+
+  </section>
+
+  <!-- COMMUNITY PULSE LAUNCH CARD -->
+
+  <section class="community-launch"
+           aria-labelledby="community-pulse-title">
+
+    <div class="community-launch-inner">
+
+      <div class="community-launch-copy">
+
+        <span class="community-launch-kicker">
+          COMMUNITY LISTENING &amp; RESEARCH
+        </span>
+
+        <h2 id="community-pulse-title">
+          Community Pulse
+        </h2>
+
+        <p>
+          Connect VUMC sermon engagement with
+          public-interest research. Explore local
+          priorities in Versailles and Woodford County,
+          regional context across Kentucky, and
+          national perspectives.
+        </p>
+
+      </div>
+
+      <a class="community-launch-button"
+         href="/tools/audience-intelligence/community-pulse/">
+        Launch Community Pulse &rarr;
+      </a>
+
+    </div>
+  </section>
+
+  <!-- FUTURE INTELLIGENCE MODULES -->
+
+  <section class="panels">
+
+    <article class="panel feature">
+      <div class="feature-icon purple-text">◎</div>
+
+      <div>
+        <h2>Audience Discovery</h2>
+
+        <p>
+          See how viewers find your channel
+          through search and recommendations.
+        </p>
+
+        <div class="coming">
+          Traffic-source reporting is coming next.
+        </div>
+      </div>
+    </article>
+
+    <article class="panel feature">
+      <div class="feature-icon green-text">◉</div>
+
+      <div>
+        <h2>Live vs. Replay</h2>
+
+        <p>
+          Compare live worship participation
+          with viewing after the broadcast.
+        </p>
+
+        <div class="coming">
+          Livestream and replay analysis is coming next.
+        </div>
+      </div>
+    </article>
+
+    <article class="panel feature">
+      <div class="feature-icon orange-text">✦</div>
+
+      <div>
+        <h2>Ministry Insights</h2>
+
+        <p>
+          Turn audience trends into practical ideas
+          for church communications.
+        </p>
+
+        <div class="coming">
+          Pastoral planning insights will be added
+          after content reporting is verified.
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <p class="foot">
+    YouTube reports may lag by several days.
+    Views and subscriptions are not the same as
+    unique people. Subscriber totals may be
+    rounded by YouTube.
+  </p>
+
+</main>
+
+<script src="./app.js"></script>
+
 </body>
 </html>
