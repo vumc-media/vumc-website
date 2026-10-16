@@ -875,3 +875,78 @@ $('content-filter').addEventListener(
 );
 
 load();
+
+
+// =====================================================
+// VIEWER ENGAGEMENT — VERIFIED YOUTUBE ANALYTICS
+// CTR is not available from this API; do not fabricate it.
+// =====================================================
+function setupEngagement() {
+  if (document.getElementById('engagement-section')) return;
+  const section = element('section', 'engagement-section');
+  section.id = 'engagement-section';
+  section.style.cssText = 'margin:24px auto;padding:20px;border:1px solid #d5e0ea;border-radius:14px;background:#fff;max-width:1100px';
+  const title = element('h2', '', 'Viewer Engagement');
+  title.style.margin = '0 0 8px';
+  const description = element('p', '', 'Average viewing behavior for the selected reporting period. Thumbnail impressions CTR is available in YouTube Studio, not through this reporting API.');
+  description.style.color = '#58708a';
+  const grid = element('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:16px 0';
+  for (const [id, label] of [
+    ['engagement-percentage','Average percentage viewed'],
+    ['engagement-duration','Average view duration'],
+    ['engagement-ctr','Thumbnail impressions CTR']
+  ]) {
+    const card = element('div');
+    card.style.cssText = 'padding:16px;border:1px solid #d5e0ea;border-radius:12px;background:#f7fafc';
+    const labelNode = element('div','',label);
+    labelNode.style.cssText = 'font-size:13px;color:#58708a';
+    const valueNode = element('strong','',id === 'engagement-ctr' ? 'YouTube Studio' : '—');
+    valueNode.id = id;
+    valueNode.style.cssText = 'display:block;margin-top:8px;font-size:24px;color:#19344e';
+    card.append(labelNode,valueNode);
+    grid.appendChild(card);
+  }
+  const status = element('p','','Waiting for verified YouTube engagement data.');
+  status.id = 'engagement-status';
+  status.style.cssText = 'color:#58708a;font-size:13px';
+  section.append(title,description,grid,status);
+  const main = document.querySelector('main') || document.body;
+  main.appendChild(section);
+}
+function formatDuration(seconds) {
+  const s = Math.max(0,Math.round(Number(seconds) || 0));
+  return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+}
+async function loadEngagement(start,end,current) {
+  setupEngagement();
+  $('engagement-percentage').textContent = '—';
+  $('engagement-duration').textContent = '—';
+  $('engagement-status').textContent = 'Loading verified engagement metrics…';
+  try {
+    const data = await getJSON(`/api/engagement?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`);
+    if(current !== requestId) return;
+    const metrics = data.summary || {};
+    $('engagement-percentage').textContent = metrics.averageViewPercentage == null ? 'Unavailable' : `${Number(metrics.averageViewPercentage).toFixed(1)}%`;
+    $('engagement-duration').textContent = metrics.averageViewDuration == null ? 'Unavailable' : formatDuration(metrics.averageViewDuration);
+    $('engagement-status').textContent = `Verified YouTube Analytics: ${start} to ${end}. CTR must be checked in YouTube Studio.`;
+  } catch(error) {
+    if(current !== requestId) return;
+    $('engagement-status').textContent = `Viewer Engagement unavailable: ${error.message}`;
+  }
+}
+
+// Extend existing loader without changing sermon classification or video ranking.
+const originalLoad = load;
+load = async function () {
+  const result = originalLoad();
+  const current = requestId;
+  const {start,end} = dates(Number($('period').value));
+  await Promise.allSettled([result,loadEngagement(start,end,current)]);
+};
+setupEngagement();
+// Initial load() already ran in the original script; fetch engagement for that range.
+{
+  const {start,end} = dates(Number($('period').value));
+  loadEngagement(start,end,requestId);
+}
