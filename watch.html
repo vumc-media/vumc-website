@@ -16,7 +16,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Watch Worship Online | Versailles United Methodist Church</title>
   <meta name="description" content="Watch worship online with Versailles United Methodist Church in Versailles, KY. Join Sunday worship live, view current worship times from our church calendar, and connect with VUMC online or in person." />
-  <link rel="canonical" href="https://www.versaillesumc.org/watch" />
+  <link rel="canonical" href="https://www.versaillesumc.org/watch/" />
   <meta name="author" content="Versailles United Methodist Church" />
   <meta name="geo.region" content="US-KY" />
   <meta name="geo.placename" content="Versailles" />
@@ -36,23 +36,18 @@
   <meta name="twitter:image" content="https://www.versaillesumc.org/vumc-media/Worship.webp" />
 
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "@id": "https://www.versaillesumc.org/watch/#webpage",
-    "url": "https://www.versaillesumc.org/watch/",
-    "name": "Watch Worship Online | Versailles UMC",
-    "description": "Watch worship online with Versailles United Methodist Church in Versailles, Kentucky.",
-    "isPartOf": {
-      "@type": "WebSite",
-      "@id": "https://www.versaillesumc.org/#website",
-      "url": "https://www.versaillesumc.org/",
-      "name": "Versailles United Methodist Church"
-    },
-    "about": {
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
       "@type": "Church",
       "@id": "https://www.versaillesumc.org/#church",
       "name": "Versailles United Methodist Church",
+      "alternateName": "Versailles UMC",
+      "url": "https://www.versaillesumc.org/",
+      "description": "A Church Striving to Love Like Jesus. Worship, connection, discipleship, and service in Versailles, Kentucky.",
+      "telephone": "+1-859-873-4304",
+      "email": "vumcsecretary@gmail.com",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "230 Paynes Mill Road",
@@ -60,10 +55,41 @@
         "addressRegion": "KY",
         "postalCode": "40383",
         "addressCountry": "US"
+      },
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s900-c-k-c0x00ffffff-no-rj"
       }
     },
-    "inLanguage": "en-US"
-  }
+    {
+      "@type": "WebSite",
+      "@id": "https://www.versaillesumc.org/#website",
+      "url": "https://www.versaillesumc.org/",
+      "name": "Versailles United Methodist Church",
+      "publisher": {
+        "@id": "https://www.versaillesumc.org/#church"
+      },
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.versaillesumc.org/watch/#webpage",
+      "url": "https://www.versaillesumc.org/watch/",
+      "name": "Watch Worship Online | Versailles UMC",
+      "description": "Watch worship online with Versailles United Methodist Church in Versailles, Kentucky.",
+      "isPartOf": {
+        "@id": "https://www.versaillesumc.org/#website"
+      },
+      "about": {
+        "@id": "https://www.versaillesumc.org/#church"
+      },
+      "publisher": {
+        "@id": "https://www.versaillesumc.org/#church"
+      },
+      "inLanguage": "en-US"
+    }
+  ]
+}
   </script>
   <link rel="icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
