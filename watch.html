@@ -519,63 +519,27 @@
       background: #000;
     }
 
+    /* Matching eCampus / COP offline worship frame */
     #playerOverlay {
       position: absolute;
       inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       z-index: 5;
-      background:
-        linear-gradient(to top, rgba(0,0,0,0.88), rgba(0,0,0,0.72)),
-        radial-gradient(circle at center, rgba(48,95,114,0.20), transparent 55%);
-      transition: opacity 0.6s ease, visibility 0.6s ease;
+      display: block;
+      background: linear-gradient(125deg,#260b1b,#651f3d 55%,#260b1b);
+      transition: opacity .35s ease, visibility .35s ease;
     }
-
     #playerOverlay.hidden {
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
     }
-
-    .overlayContent {
-      text-align: center;
-      max-width: 540px;
-      padding: 28px 24px;
-      border-radius: 20px;
-      background: rgba(10,14,22,0.72);
-      border: 1px solid rgba(255,255,255,0.10);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
-      backdrop-filter: blur(8px);
-      color: #fff;
+    #vumcOfflineFrame {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #3e142b;
     }
-
-    .overlayEyebrow {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      margin-bottom: 10px;
-      color: #d4af37;
-      font-weight: 700;
-    }
-
-    .overlayTitle {
-      font-size: 30px;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-
-    .overlayText {
-      font-size: 16px;
-      margin-bottom: 12px;
-      opacity: .92;
-    }
-
-    .overlayTimes {
-      font-size: 15px;
-      font-weight: 700;
-    }
-
     .watch-support {
       background: var(--surface);
       border-top: 1px solid rgba(255,255,255,0.08);
@@ -1072,20 +1036,6 @@
         display: none;
       }
 
-      .overlayContent {
-        max-width: 90%;
-        padding: 22px 18px;
-      }
-
-      .overlayTitle {
-        font-size: 24px;
-      }
-
-      .overlayText,
-      .overlayTimes {
-        font-size: 14px;
-      }
-
       .vumc-chat-launcher {
         right: 14px;
         bottom: 14px;
@@ -1218,24 +1168,18 @@
         <div id="vumcFrame">
           <iframe
             id="vumcLiveFrame"
-            src="https://www.youtube.com/embed/live_stream?channel=UC_svgodM3blLqWEBQ5yNjmA&autoplay=1&mute=1&rel=0&playsinline=1"
+            data-live-src="https://www.youtube.com/embed/live_stream?channel=UC_svgodM3blLqWEBQ5yNjmA&autoplay=1&mute=1&rel=0&playsinline=1"
             title="Versailles UMC Live"
             allow="autoplay; encrypted-media; picture-in-picture; web-share"
             allowfullscreen>
           </iframe>
 
-          <div id="playerOverlay">
-            <div class="overlayContent">
-              <div class="overlayEyebrow">Worship Online</div>
-              <div class="overlayTitle">Join Us for Worship</div>
-              <div class="overlayText" id="watchOverlayText">
-                Join us online for worship and be part of the Versailles UMC community.
-              </div>
-              <div class="overlayTimes" id="watchOverlayTimes">
-                Loading current worship schedule…
-              </div>
+          <div id="playerOverlay" aria-label="Upcoming worship schedule">
+              <iframe id="vumcOfflineFrame"
+                title="VUMC Upcoming Worship Schedule"
+                src="https://online.versaillesumc.org/cop-worship-offline.html"
+                loading="eager"></iframe>
             </div>
-          </div>
         </div>
 
         <div class="watch-support">
@@ -1410,27 +1354,37 @@
   }
 })();
 
-function isSundayServiceWindow() {
-  const now = new Date();
-  const day = now.getDay();
-  const minutes = now.getHours() * 60 + now.getMinutes();
-  return day === 0 && minutes >= 567 && minutes <= 720;
-}
-
-function updateOverlay() {
-  const overlay = document.getElementById("playerOverlay");
-  if (!overlay) return;
-
-  if (isSundayServiceWindow()) {
-    overlay.classList.add("hidden");
-  } else {
-    overlay.classList.remove("hidden");
-  }
-}
-
-updateOverlay();
-setInterval(updateOverlay, 60000);
-
+ // Display the offline frame unless the calendar indicates a worship window.
+ // A scheduled window is not proof that YouTube is live; this retains the
+ // site's existing time-window behavior without exposing an offline player.
+ let vumcWorshipWindows = [];
+ function vumcChurchNowParts() {
+   const p = new Intl.DateTimeFormat('en-US', {
+     timeZone: 'America/New_York', year:'numeric',month:'2-digit',day:'2-digit',
+     hour:'2-digit',minute:'2-digit',hourCycle:'h23'
+   }).formatToParts(new Date());
+   const v = Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
+   return {date:`${v.year}-${v.month}-${v.day}`,minutes:Number(v.hour)*60+Number(v.minute)};
+ }
+ function vumcTimeMinutes(value) {
+   const match = String(value||'').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+   if (!match) return null;
+   let hour=Number(match[1])%12;
+   if (match[3].toUpperCase()==='PM') hour+=12;
+   return hour*60+Number(match[2]);
+ }
+ function vumcUpdateLiveWindow() {
+   const now=vumcChurchNowParts();
+   const today=vumcWorshipWindows.filter(x=>x.date===now.date);
+   const active=today.some(x=>now.minutes>=x.start-3 && now.minutes<=x.start+90);
+   const overlay=document.getElementById('playerOverlay');
+   const frame=document.getElementById('vumcLiveFrame');
+   if (!overlay || !frame) return;
+   overlay.classList.toggle('hidden',active);
+   if (active && !frame.src) frame.src=frame.dataset.liveSrc;
+   if (!active && frame.hasAttribute('src')) frame.removeAttribute('src');
+ }
+ setInterval(vumcUpdateLiveWindow,30000);
 const VUMC_WORSHIP_API = 'https://script.google.com/macros/s/AKfycbzOXN6-dZe3yL4xuCXL-gcUkj9clpFSjn5h1nrmwHh6vSMDxX4Dgf75ya47FnYYCxX6/exec';
 let vumcCurrentWorshipEvents = [];
 
@@ -1454,10 +1408,7 @@ function vumcFallbackWorshipData() {
     ok: false,
     label: 'Sunday Worship',
     date: '',
-    events: [
-      { title: 'Traditional Worship', time: '9:30 AM' },
-      { title: 'Contemporary Worship', time: '10:30 AM' }
-    ]
+    events: [{ title: 'Please check our church calendar', time: '' }]
   };
 }
 
@@ -1465,6 +1416,11 @@ function vumcRenderWatchWorship(data) {
   const safeData = data && Array.isArray(data.events) && data.events.length ? data : vumcFallbackWorshipData();
   const events = safeData.events || [];
   vumcCurrentWorshipEvents = events;
+  const scheduleDate = /^\d{4}-\d{2}-\d{2}$/.test(safeData.date||'') ? safeData.date : '';
+  vumcWorshipWindows = scheduleDate ? events.map(event=>({
+    date: scheduleDate, start: vumcTimeMinutes(event.time)
+  })).filter(event=>event.start!==null) : [];
+  vumcUpdateLiveWindow();
 
   const label = safeData.label || 'This Sunday';
   const dateText = safeData.date ? vumcFormatWorshipDate(safeData.date) : '';
@@ -1517,6 +1473,7 @@ async function vumcLoadWatchWorshipSchedule() {
 }
 
 window.addEventListener('DOMContentLoaded', vumcLoadWatchWorshipSchedule);
+setInterval(vumcLoadWatchWorshipSchedule, 300000);
 
 const overlay = document.getElementById('vumcModalOverlay');
 const frame = document.getElementById('vumcModalFrame');
