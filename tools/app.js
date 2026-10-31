@@ -13,6 +13,8 @@
   const bridge = document.getElementById('staffBridge');
   const pending = new Map();
   let ready = false;
+  let bridgeWindow = null;
+  let bridgeOrigin = null;
   let counter = 0;
   let booted = false;
 
@@ -39,7 +41,7 @@
   function clearToken() { sessionStorage.removeItem(KEY); }
   function request(action, payload = {}) {
     return new Promise((resolve, reject) => {
-      if (!ready || !bridge.contentWindow) {
+      if (!ready || !bridgeWindow || !bridgeOrigin) {
         reject(new Error('Authentication service is not connected. Refresh and try again.'));
         return;
       }
@@ -49,13 +51,13 @@
         reject(new Error('Authentication timed out. Please try again.'));
       }, 25000);
       pending.set(requestId, { resolve, reject, timeout });
-      bridge.contentWindow.postMessage({type:'vumc-bridge-request', requestId, action, payload}, '*');
+      bridgeWindow.postMessage({type:'vumc-bridge-request', requestId, action, payload}, bridgeOrigin);
     });
   }
-  // The GAS HTML service redirects to a googleusercontent.com frame.
-  // Verify both the message source (our iframe) and known Google origins.
+  // Apps Script HTMLService runs Bridge.html inside a nested Google iframe.
+  // The actual sender is the INNER frame, not bridge.contentWindow.
+  // Reply to the exact authenticated message source and origin.
   window.addEventListener('message', event => {
-    if (event.source !== bridge.contentWindow) return;
     let origin;
     try { origin = new URL(event.origin); } catch { return; }
     if (origin.protocol !== 'https:' || !(
@@ -66,11 +68,16 @@
     const data = event.data;
     if (!data || typeof data !== 'object') return;
     if (data.type === 'vumc-bridge-ready') {
+      if (!event.source || typeof event.source.postMessage !== 'function') return;
+      bridgeWindow = event.source;
+      bridgeOrigin = event.origin;
+      clearTimeout(connectionTimer);
       ready = true;
       if (!booted) { booted = true; restoreSession(); }
       return;
     }
     if (data.type !== 'vumc-bridge-response') return;
+    if (!ready || event.source !== bridgeWindow || event.origin !== bridgeOrigin) return;
     const item = pending.get(data.requestId);
     if (!item) return;
     clearTimeout(item.timeout);
@@ -127,7 +134,4 @@
   const connectionTimer = setTimeout(() => {
     if (!ready) setMessage('Could not connect to Staff Tools authentication. Confirm the GAS web app deployment and iframe access, then refresh.', true);
   }, 12000);
-  window.addEventListener('message', event => {
-    if (event.source === bridge.contentWindow && event.data && event.data.type === 'vumc-bridge-ready') clearTimeout(connectionTimer);
-  });
 })();
