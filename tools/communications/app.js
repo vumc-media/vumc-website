@@ -18,6 +18,7 @@ let defaultAudience = "All VUMC Contacts Group";
 let selectedImages = [];
 let publishingEnabled = false;
 let busy = false;
+let staffSessionToken = "";
 
 /* ---------- Bridge connection ---------- */
 
@@ -157,7 +158,10 @@ async function gasRequest(action, payload = {}) {
 }
 
 async function communicationsRequest(action, payload = {}) {
-  const result = await gasRequest(action, payload);
+  const result = await gasRequest(action, {
+    ...payload,
+    token: staffSessionToken
+  });
 
   if (!result || result.success === false) {
     throw new Error(
@@ -616,6 +620,30 @@ async function initializeApp() {
     "Connecting to Communications backend.";
 
   try {
+    const password = window.prompt(
+      "Enter your VUMC Staff Tools password to connect Communications:"
+    );
+
+    if (password === null) {
+      throw new Error("Staff sign-in cancelled. Refresh to try again.");
+    }
+
+    if (!password.trim()) {
+      throw new Error("Staff password is required. Refresh to try again.");
+    }
+
+    const login = await gasRequest("staffLogin", {
+      passkey: password
+    });
+
+    if (!login || !login.success || !login.token) {
+      throw new Error(
+        (login && login.error) || "Staff sign-in failed."
+      );
+    }
+
+    staffSessionToken = login.token;
+
     await loadConfiguration();
     await loadAudiences();
 
@@ -630,7 +658,8 @@ async function initializeApp() {
     publishingEnabled = false;
 
     configBox.textContent =
-      "The Communications backend could not be reached.";
+      "Communications connection unavailable: " +
+      (error.message || "Unknown error");
 
     setStatus(
       error.message ||
