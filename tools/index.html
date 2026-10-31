@@ -5,6 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
 
   <title>VUMC Staff Tools</title>
 
@@ -189,6 +190,7 @@
     </div>
 
     <div class="topbar-actions">
+      <button id="staffLogoutButton" class="logout-button" type="button" hidden>Sign out</button>
       <span class="badge">
         Internal
       </span>
@@ -200,7 +202,21 @@
        STAFF PORTAL
   ================================================== -->
 
-  <main id="staffPortal" class="shell">
+  <section id="loginPanel" class="login-stage" aria-labelledby="loginTitle">
+    <div class="login-card">
+      <p class="eyebrow">Authorized staff only</p>
+      <h2 id="loginTitle">Enter Staff Tools</h2>
+      <p class="login-description">Enter your existing Staff Tools password to continue.</p>
+      <form id="staffLoginForm">
+        <label for="staffPassword">Staff Password</label>
+        <input id="staffPassword" type="password" autocomplete="current-password" required minlength="6" maxlength="64" />
+        <button id="staffLoginButton" type="submit">Enter Staff Tools</button>
+      </form>
+      <p id="loginMessage" class="login-message" role="status" aria-live="polite">Connecting to secure staff authentication…</p>
+    </div>
+  </section>
+
+  <main id="staffPortal" class="shell" hidden inert>
 
     <section class="intro">
 
@@ -553,6 +569,9 @@
        APP
   ================================================== -->
 
+  <iframe id="staffBridge" title="Staff authentication service" aria-hidden="true" tabindex="-1"
+    src="https://script.google.com/macros/s/AKfycbzHpOIjWgX-jiOMGwiCBrONrmym-9kMJDOQ4DA15re8d-_MUidnpXbIGCZYTqM_gAJV/exec?bridge=1"
+    style="position:absolute;width:1px;height:1px;border:0;opacity:0;pointer-events:none"></iframe>
   <script src="./app.js"></script>
 
 </body>

@@ -17,3 +17,20 @@ h1,h2,h3,p{margin-top:0}.topbar h1{margin-bottom:0}.eyebrow{text-transform:upper
 .security-note{margin-top:24px;padding:16px;border-left:4px solid var(--gold);background:#fffaf0;border-radius:8px 12px 12px 8px;color:#5d6874;line-height:1.5}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.grid{grid-template-columns:1fr}.topbar{align-items:flex-start;gap:15px}.tool-card{min-height:auto}}
+
+/* Staff authentication gate */
+[hidden] { display: none !important; }
+.topbar-actions { display:flex; align-items:center; gap:12px; }
+.login-stage { min-height: min(72vh,650px); display:grid; place-items:center; padding:32px 16px; }
+.login-card { width:min(440px,100%); background:#fff; padding:30px; border:1px solid var(--line); border-radius:18px; box-shadow:0 18px 45px rgba(23,50,77,.11); }
+.login-card h2 { margin-bottom:8px; }
+.login-description { color:var(--muted); line-height:1.55; }
+.login-card form { display:grid; gap:12px; margin-top:20px; }
+.login-card label { font-weight:750; }
+.login-card input { width:100%; border:1px solid var(--line); border-radius:10px; padding:13px; font:inherit; }
+.login-card input:focus { outline:3px solid #d9eaf5; border-color:var(--blue); }
+.login-card button { border:0; border-radius:10px; padding:13px; font:inherit; font-weight:800; color:white; background:var(--blue); cursor:pointer; }
+.login-card button:disabled { opacity:.6; cursor:wait; }
+.login-message { color:var(--muted); font-size:.92rem; line-height:1.5; margin:16px 0 0; }
+.login-message.error { color:#a51e21; }
+.logout-button { border:1px solid var(--line); border-radius:10px; padding:10px 14px; background:white; color:var(--blue); font-weight:800; cursor:pointer; }
