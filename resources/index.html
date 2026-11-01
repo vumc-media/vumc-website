@@ -1,23 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://analytics.ahrefs.com/analytics.js" data-key="wVQaTSt1mgMr7ubXU5cC+A" async></script>
-  <meta name="robots" content="index, follow, max-image-preview:large">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-19L2K5PDLB"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-19L2K5PDLB');
-  </script>
-
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Faith & Community Resources | Versailles United Methodist Church</title>
-  <meta name="description" content="Explore sermon reflections, devotionals, ministry articles, Bible studies, and faith resources from Versailles United Methodist Church in Versailles, Kentucky." />
-
+  <meta name="description" content="Explore sermon reflections, devotionals, ministry articles, Bible studies, and faith resources from Versailles United Methodist Church in Versailles, Kentucky.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://www.versaillesumc.org/resources/">
+
   <link rel="icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -25,6 +17,14 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#353f69">
 
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="wVQaTSt1mgMr7ubXU5cC+A" async></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-19L2K5PDLB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-19L2K5PDLB');
+  </script>
   <script src="https://js.churchcenter.com/modal/v1"></script>
 
   <style>
@@ -38,18 +38,14 @@
       --dark-soft: #171d25;
       --accent: #bb8c3f;
       --accent-soft: #e4cda7;
-      --border: rgba(17, 22, 29, 0.08);
-      --shadow: 0 18px 45px rgba(17, 22, 29, 0.12);
-      --radius-xl: 28px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
+      --border: rgba(17,22,29,.08);
+      --shadow: 0 18px 45px rgba(17,22,29,.12);
       --max-width: 1240px;
       --transition: 220ms ease;
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
@@ -57,7 +53,6 @@
       color: var(--text);
       line-height: 1.6;
     }
-
     body.vumc-modal-open { overflow: hidden; }
     a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
@@ -66,39 +61,33 @@
       width: min(calc(100% - 32px), var(--max-width));
       margin: 0 auto;
     }
-
     .section { padding: 68px 0; }
-
     .eyebrow {
       font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
+      letter-spacing: .16em;
       color: var(--accent);
       font-weight: 700;
       margin-bottom: 14px;
     }
-
     .section-title {
       margin: 0 0 14px;
-      font-size: clamp(30px, 4.4vw, 48px);
+      font-size: clamp(30px,4.4vw,48px);
       line-height: 1.08;
-      letter-spacing: -0.02em;
+      letter-spacing: -.02em;
     }
-
     .section-copy {
       font-size: 18px;
       color: var(--muted);
       margin: 0;
       max-width: 780px;
     }
-
     .btn-row {
       display: flex;
       flex-wrap: wrap;
       gap: 14px;
       margin-top: 28px;
     }
-
     .btn {
       display: inline-flex;
       align-items: center;
@@ -111,43 +100,36 @@
       transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
       cursor: pointer;
     }
-
     .btn:hover { transform: translateY(-2px); }
-
     .btn-primary {
       background: var(--accent);
       color: #fff;
-      box-shadow: 0 10px 24px rgba(187, 140, 63, 0.28);
+      box-shadow: 0 10px 24px rgba(187,140,63,.28);
     }
-
     .btn-secondary {
-      background: rgba(255,255,255,0.16);
+      background: rgba(255,255,255,.16);
       color: #fff;
-      border-color: rgba(255,255,255,0.32);
+      border-color: rgba(255,255,255,.32);
       backdrop-filter: blur(6px);
     }
-
-    .btn-dark {
-      background: var(--dark);
-      color: #fff;
-    }
-
+    .btn-dark { background: var(--dark); color: #fff; }
     .btn-light {
       background: #fff;
       color: var(--text);
       border-color: var(--border);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,.05);
     }
+
+    /* HEADER */
 
     .site-header {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(247, 244, 239, 0.88);
+      background: rgba(247,244,239,.88);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(17, 22, 29, 0.06);
+      border-bottom: 1px solid rgba(17,22,29,.06);
     }
-
     .nav-wrap {
       display: flex;
       align-items: center;
@@ -155,14 +137,12 @@
       gap: 20px;
       min-height: 78px;
     }
-
     .brand {
       display: flex;
       align-items: center;
       gap: 14px;
       min-width: 0;
     }
-
     .brand-mark {
       width: 48px;
       height: 48px;
@@ -170,22 +150,18 @@
       object-fit: cover;
       background: #ddd;
     }
-
     .brand-text { min-width: 0; }
-
     .brand-name {
       margin: 0;
       font-size: 16px;
       font-weight: 700;
       line-height: 1.2;
     }
-
     .brand-tagline {
       margin: 2px 0 0;
       font-size: 12px;
       color: var(--muted);
     }
-
     .nav-links {
       display: flex;
       align-items: center;
@@ -193,17 +169,13 @@
       font-size: 15px;
       font-weight: 600;
     }
-
     .nav-links > a,
     .dropdown-toggle {
       color: var(--muted);
       transition: color var(--transition);
     }
-
     .nav-links > a:hover,
-    .dropdown-toggle:hover {
-      color: var(--text);
-    }
+    .dropdown-toggle:hover { color: var(--text); }
 
     .nav-item.dropdown {
       position: relative;
@@ -211,7 +183,6 @@
       align-items: center;
       height: 100%;
     }
-
     .dropdown-toggle {
       display: inline-flex;
       align-items: center;
@@ -223,14 +194,11 @@
       font: inherit;
       cursor: pointer;
     }
-
     .dropdown-toggle::after {
       content: "▾";
       font-size: 11px;
       line-height: 1;
-      transform: translateY(1px);
     }
-
     .dropdown-menu {
       position: absolute;
       top: 100%;
@@ -239,42 +207,33 @@
       background: #fff;
       border: 1px solid var(--border);
       border-radius: 18px;
-      box-shadow: 0 18px 40px rgba(17,22,29,0.12);
+      box-shadow: 0 18px 40px rgba(17,22,29,.12);
       padding: 10px 0;
       display: none;
       z-index: 1200;
     }
-
     .dropdown-menu a {
       display: block;
       padding: 11px 16px;
       color: var(--text);
       font-size: 14px;
       font-weight: 600;
-      transition: background var(--transition), color var(--transition);
     }
+    .dropdown-menu a:hover { background: #f6f3ee; }
 
-    .dropdown-menu a:hover {
-      background: #f6f3ee;
-      color: var(--text);
-    }
-
-    @media (min-width: 1101px) {
+    @media (min-width:1101px) {
       .nav-item.dropdown:hover .dropdown-menu {
         display: block;
       }
     }
-
     .nav-item.dropdown.open .dropdown-menu {
       display: block;
     }
-
     .nav-actions {
       display: flex;
       align-items: center;
       gap: 12px;
     }
-
     .mobile-toggle {
       display: none;
       width: 48px;
@@ -282,18 +241,14 @@
       border: none;
       border-radius: 14px;
       background: var(--surface);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
       font-size: 22px;
       cursor: pointer;
     }
-
     .mobile-menu {
       display: none;
       padding: 0 0 18px;
     }
-
     .mobile-menu.show { display: block; }
-
     .mobile-menu-inner {
       display: grid;
       gap: 12px;
@@ -303,7 +258,6 @@
       padding: 18px;
       box-shadow: var(--shadow);
     }
-
     .mobile-menu a,
     .mobile-submenu-toggle {
       padding: 10px 2px;
@@ -315,88 +269,79 @@
       font: inherit;
       cursor: pointer;
     }
-
     .mobile-submenu {
       display: none;
       padding-left: 14px;
-      border-left: 2px solid rgba(17,22,29,0.08);
+      border-left: 2px solid rgba(17,22,29,.08);
       margin-top: -4px;
     }
-
     .mobile-submenu.show {
       display: grid;
       gap: 2px;
     }
-
     .mobile-submenu a {
       font-size: 14px;
       color: var(--muted);
       padding: 8px 2px;
     }
 
+    /* HERO */
+
     .hero {
       position: relative;
       overflow: hidden;
       background:
-        linear-gradient(135deg, rgba(17,22,29,0.88), rgba(17,22,29,0.64)),
-        radial-gradient(circle at top right, rgba(187,140,63,0.30), transparent 36%),
+        linear-gradient(135deg,rgba(17,22,29,.88),rgba(17,22,29,.64)),
+        radial-gradient(circle at top right,rgba(187,140,63,.30),transparent 36%),
         url('/vumc-media/worship.webp') center/cover no-repeat;
       color: #fff;
     }
-
     .hero-inner {
       position: relative;
-      z-index: 1;
       padding: 86px 0 72px;
       display: grid;
-      grid-template-columns: 1.08fr 0.92fr;
+      grid-template-columns: 1.08fr .92fr;
       gap: 28px;
       align-items: center;
     }
-
     .hero .eyebrow { color: var(--accent-soft); }
-
     .hero h1 {
-      font-size: clamp(40px, 6vw, 68px);
-      line-height: 0.98;
+      font-size: clamp(40px,6vw,68px);
+      line-height: .98;
       margin: 0 0 16px;
-      letter-spacing: -0.04em;
+      letter-spacing: -.04em;
     }
-
     .hero p {
-      font-size: clamp(17px, 2.2vw, 21px);
-      color: rgba(255,255,255,0.85);
+      font-size: clamp(17px,2.2vw,21px);
+      color: rgba(255,255,255,.85);
       margin: 0;
       max-width: 700px;
     }
-
     .hero-card {
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.16);
       border-radius: 24px;
       padding: 24px;
       backdrop-filter: blur(12px);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+      box-shadow: 0 18px 40px rgba(0,0,0,.22);
     }
-
     .hero-card h3 {
       margin: 0 0 10px;
       font-size: 20px;
     }
-
     .hero-card p {
-      margin: 0;
       font-size: 15px;
-      color: rgba(255,255,255,0.78);
+      color: rgba(255,255,255,.78);
     }
+
+    /* RESOURCES */
 
     .resource-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3,1fr);
       gap: 22px;
       margin-top: 34px;
     }
-
     .resource-card,
     .topic-card {
       background: var(--surface);
@@ -405,117 +350,105 @@
       box-shadow: var(--shadow);
       overflow: hidden;
     }
-
     .resource-image {
       height: 220px;
-      background: linear-gradient(135deg, rgba(17,22,29,0.18), rgba(17,22,29,0.06)), url('/vumc-media/worship.webp') center/cover no-repeat;
+      background:
+        linear-gradient(135deg,rgba(17,22,29,.18),rgba(17,22,29,.06)),
+        url('/vumc-media/worship.webp') center/cover no-repeat;
+      background-position: center;
+      background-size: cover;
     }
-
-    .resource-content {
-      padding: 24px;
-    }
-
+    .resource-content { padding: 24px; }
     .resource-content h3,
     .topic-card h3 {
       margin: 0 0 10px;
       font-size: 24px;
       line-height: 1.12;
     }
-
     .resource-content p,
     .topic-card p,
     .topic-card li {
       color: var(--muted);
       font-size: 15px;
     }
-
-    .resource-content p {
-      margin: 0;
-    }
-
+    .resource-content p { margin: 0; }
     .topic-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4,1fr);
       gap: 20px;
       margin-top: 34px;
     }
-
-    .topic-card {
-      padding: 24px;
-    }
-
+    .topic-card { padding: 24px; }
     .topic-card ul {
       margin: 12px 0 0;
       padding-left: 20px;
     }
 
+    /* CTA */
+
     .cta-section {
       background:
-        linear-gradient(135deg, rgba(17,22,29,0.96), rgba(23,29,37,0.92)),
-        radial-gradient(circle at top right, rgba(187,140,63,0.22), transparent 36%);
+        linear-gradient(135deg,rgba(17,22,29,.96),rgba(23,29,37,.92)),
+        radial-gradient(circle at top right,rgba(187,140,63,.22),transparent 36%);
       color: #fff;
       padding: 68px 0;
     }
-
     .cta-box {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: 1.1fr .9fr;
       gap: 28px;
       align-items: center;
     }
-
     .cta-box p {
-      color: rgba(255,255,255,0.78);
+      color: rgba(255,255,255,.78);
       font-size: 18px;
       margin: 0;
     }
+
+    /* FOOTER */
 
     .site-footer {
       background: var(--dark);
       color: #fff;
       padding: 24px 0 54px;
-      margin-top: 0;
     }
-
     .footer-grid {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr 0.85fr 0.85fr;
+      grid-template-columns: 1.15fr .85fr .85fr .85fr;
       gap: 20px;
       margin-top: 22px;
     }
-
     .footer-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
       border-radius: 28px;
       padding: 24px;
     }
-
     .footer-card h4 {
       margin: 0 0 12px;
       font-size: 16px;
     }
-
     .footer-card p,
     .footer-card a {
       margin: 0;
-      color: rgba(255,255,255,0.76);
+      color: rgba(255,255,255,.76);
       font-size: 14px;
       display: block;
       line-height: 1.8;
     }
-
     .footer-bottom {
       margin-top: 26px;
       font-size: 13px;
-      color: rgba(255,255,255,0.58);
+      color: rgba(255,255,255,.58);
       text-align: center;
     }
+
+    /* MODAL */
 
     .vumc-modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(10, 14, 20, 0.72);
+      background: rgba(10,14,20,.72);
       backdrop-filter: blur(6px);
       display: none;
       align-items: center;
@@ -523,74 +456,61 @@
       padding: 24px;
       z-index: 99999;
     }
-
     .vumc-modal-overlay.open { display: flex; }
-
     .vumc-modal {
-      width: min(100%, 1040px);
-      height: min(88vh, 860px);
-      background: #ffffff;
+      width: min(100%,1040px);
+      height: min(88vh,860px);
+      background: #fff;
       border-radius: 28px;
       overflow: hidden;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+      box-shadow: 0 30px 80px rgba(0,0,0,.28);
       display: flex;
       flex-direction: column;
       position: relative;
     }
-
     .vumc-modal-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
       padding: 18px 20px;
-      background: #11161d;
+      background: var(--dark);
       color: #fff;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
-
     .vumc-modal-kicker {
       margin: 0 0 4px;
       font-size: 11px;
-      letter-spacing: 0.12em;
+      letter-spacing: .12em;
       text-transform: uppercase;
-      color: #e4cda7;
+      color: var(--accent-soft);
       font-weight: 700;
     }
-
     .vumc-modal-title {
       margin: 0;
       font-size: 20px;
       line-height: 1.2;
-      font-weight: 700;
     }
-
     .vumc-modal-close {
       border: 0;
-      background: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,.12);
       color: #fff;
       width: 42px;
       height: 42px;
-      border-radius: 999px;
+      border-radius: 50%;
       font-size: 24px;
-      line-height: 1;
       cursor: pointer;
-      flex: 0 0 auto;
     }
-
     .vumc-modal-body {
       flex: 1;
-      background: #f7f4ef;
+      background: var(--bg);
       position: relative;
     }
-
     .vumc-modal-frame {
       width: 100%;
       height: 100%;
       border: 0;
       background: #fff;
     }
-
     .vumc-modal-loading {
       position: absolute;
       inset: 0;
@@ -599,24 +519,23 @@
       justify-content: center;
       padding: 24px;
       text-align: center;
-      color: #5b6470;
-      font-size: 16px;
-      background: #f7f4ef;
+      color: var(--muted);
+      background: var(--bg);
     }
 
-    @media (max-width: 1100px) {
+    /* RESPONSIVE */
+
+    @media (max-width:1100px) {
       .nav-links,
       .nav-actions .btn-dark,
-      .nav-actions .btn-light.subscribe-desktop {
+      .nav-actions .subscribe-desktop {
         display: none;
       }
-
       .mobile-toggle {
         display: inline-flex;
         align-items: center;
         justify-content: center;
       }
-
       .hero-inner,
       .resource-grid,
       .topic-grid,
@@ -626,9 +545,8 @@
       }
     }
 
-    @media (max-width: 760px) {
+    @media (max-width:760px) {
       .section { padding: 54px 0; }
-
       .hero-inner,
       .resource-grid,
       .topic-grid,
@@ -636,31 +554,16 @@
       .footer-grid {
         grid-template-columns: 1fr;
       }
-
-      .hero-inner {
-        padding: 58px 0 48px;
-      }
-
+      .hero-inner { padding: 58px 0 48px; }
       .brand-name { font-size: 15px; }
       .brand-tagline { font-size: 11px; }
-
-      .resource-image {
-        height: 190px;
-      }
-
+      .resource-image { height: 190px; }
       .cta-box .btn-row {
         display: grid;
         grid-template-columns: 1fr;
       }
-
-      .cta-box .btn {
-        width: 100%;
-      }
-
-      .vumc-modal-overlay {
-        padding: 12px;
-      }
-
+      .cta-box .btn { width: 100%; }
+      .vumc-modal-overlay { padding: 12px; }
       .vumc-modal {
         height: 82vh;
         border-radius: 22px;
@@ -670,11 +573,17 @@
 </head>
 
 <body>
+
   <header class="site-header">
     <div class="container">
       <div class="nav-wrap">
-        <a class='brand' href='/'>
-          <img class="brand-mark" src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s176-c-k-c0x00ffffff-no-rj" alt="Versailles UMC logo" />
+
+        <a class="brand" href="/">
+          <img
+            class="brand-mark"
+            src="https://yt3.googleusercontent.com/0VzY1FMygvH9BmYV_gu_hNyZsW1kY5VPDdeRtHxyzfcXtqM5Rc6Kongrr_dw3v5I_hwJv63vIQ=s176-c-k-c0x00ffffff-no-rj"
+            alt="Versailles UMC logo"
+          >
           <div class="brand-text">
             <p class="brand-name">Versailles United Methodist Church</p>
             <p class="brand-tagline">A Church Striving to Love Like Jesus</p>
@@ -682,76 +591,91 @@
         </a>
 
         <nav class="nav-links" aria-label="Primary navigation">
-          <a href='/'>Home</a>
-          <a href='/watch/'>Watch</a>
+          <a href="/">Home</a>
+          <a href="/watch/">Watch</a>
 
           <div class="nav-item dropdown" id="connectDropdown">
-            <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="connectMenuDesktop">
+            <button class="dropdown-toggle" type="button"
+              aria-expanded="false" aria-controls="connectMenuDesktop">
               Connect
             </button>
+
             <div class="dropdown-menu" id="connectMenuDesktop">
-              <a href='/new-here/'>New Here</a>
-              <a href='/kids-families/'>Kids & Families</a>
-              <a href='/groups/'>Groups</a>
-              <a href='/serve/'>Serve</a>
-              <a href='/host-your-event/'>Host Your Event</a>
-              <a href='/next-steps/'>Next Steps</a>
+              <a href="/new-here/">New Here</a>
+              <a href="/kids-families/">Kids &amp; Families</a>
+              <a href="/groups/">Groups</a>
+              <a href="/serve/">Serve</a>
+              <a href="/host-your-event/">Host Your Event</a>
+              <a href="/next-steps/">Next Steps</a>
               <a href="/plan-your-visit/">Plan Your Visit</a>
               <a href="/contact/">Contact Us</a>
-              <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
+              <a href="https://academy.versaillesumc.org"
+                 target="_blank" rel="noopener noreferrer">Academy ↗</a>
             </div>
           </div>
 
-          <a href='/media/'>Media</a>
-          <a href='/events/'>Events</a>
-          <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+          <a href="/media/">Media</a>
+          <a href="/events/">Events</a>
+          <a href="https://versaillesumc.churchcenter.com/giving"
+             data-open-in-church-center-modal="true">Give</a>
         </nav>
 
         <div class="nav-actions">
-          <a class='btn btn-dark' href='/watch/'>Watch Live</a>
-          <a class="btn btn-light subscribe-desktop" href="https://versaillesumc.churchcenter.com/people/forms/833182" data-open-in-church-center-modal="true">Subscribe</a>
-          <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
+          <a class="btn btn-dark" href="/watch/">Watch Live</a>
+          <a class="btn btn-light subscribe-desktop"
+             href="https://versaillesumc.churchcenter.com/people/forms/833182"
+             data-open-in-church-center-modal="true">Subscribe</a>
+          <button class="mobile-toggle" id="mobileToggle"
+                  aria-label="Toggle menu">☰</button>
         </div>
       </div>
 
       <div class="mobile-menu" id="mobileMenu">
         <div class="mobile-menu-inner">
-          <a href='/'>Home</a>
-          <a href='/watch/'>Watch</a>
+          <a href="/">Home</a>
+          <a href="/watch/">Watch</a>
 
-          <button class="mobile-submenu-toggle" id="mobileConnectToggle" type="button" aria-expanded="false" aria-controls="mobileConnectMenu">
-            Connect
-          </button>
+          <button class="mobile-submenu-toggle" id="mobileConnectToggle"
+                  type="button" aria-expanded="false"
+                  aria-controls="mobileConnectMenu">Connect</button>
+
           <div class="mobile-submenu" id="mobileConnectMenu">
-            <a href='/new-here/'>New Here</a>
-            <a href='/kids-families/'>Kids & Families</a>
-            <a href='/groups/'>Groups</a>
-            <a href='/serve/'>Serve</a>
-            <a href='/host-your-event/'>Host Your Event</a>
-            <a href='/next-steps/'>Next Steps</a>
+            <a href="/new-here/">New Here</a>
+            <a href="/kids-families/">Kids &amp; Families</a>
+            <a href="/groups/">Groups</a>
+            <a href="/serve/">Serve</a>
+            <a href="/host-your-event/">Host Your Event</a>
+            <a href="/next-steps/">Next Steps</a>
             <a href="/plan-your-visit/">Plan Your Visit</a>
             <a href="/contact/">Contact Us</a>
-            <a href="https://academy.versaillesumc.org" target="_blank" rel="noopener noreferrer">Academy ↗</a>
+            <a href="https://academy.versaillesumc.org"
+               target="_blank" rel="noopener noreferrer">Academy ↗</a>
           </div>
 
-          <a href='/media/'>Media</a>
-          <a href='/events/'>Events</a>
-          <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
-          <a href="https://versaillesumc.churchcenter.com/people/forms/833182" data-open-in-church-center-modal="true">Subscribe</a>
+          <a href="/media/">Media</a>
+          <a href="/events/">Events</a>
+          <a href="https://versaillesumc.churchcenter.com/giving"
+             data-open-in-church-center-modal="true">Give</a>
+          <a href="https://versaillesumc.churchcenter.com/people/forms/833182"
+             data-open-in-church-center-modal="true">Subscribe</a>
         </div>
       </div>
     </div>
   </header>
 
   <main>
+
+    <!-- HERO -->
     <section class="hero">
       <div class="container">
         <div class="hero-inner">
           <div>
-            <div class="eyebrow">Faith & Community Resources</div>
+            <div class="eyebrow">Faith &amp; Community Resources</div>
             <h1>Grow in faith beyond Sunday.</h1>
             <p>
-              Explore sermon reflections, devotionals, Bible studies, ministry articles, and practical guides to help you follow Jesus throughout the week.
+              Explore sermon reflections, devotionals, Bible studies,
+              ministry articles, and practical guides to help you
+              follow Jesus throughout the week.
             </p>
             <div class="btn-row">
               <a class="btn btn-primary" href="#latest-resources">Latest Resources</a>
@@ -762,74 +686,111 @@
           <div class="hero-card">
             <h3>Church Beyond Sunday</h3>
             <p>
-              These resources are designed to help you reflect on sermons, understand Scripture, grow in prayer, and stay connected to the life of Versailles UMC.
+              These resources are designed to help you reflect on
+              sermons, understand Scripture, grow in prayer, and
+              stay connected to the life of Versailles UMC.
             </p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- LATEST RESOURCES -->
     <section class="section" id="latest-resources">
       <div class="container">
         <div class="eyebrow">Latest Resources</div>
-        <h2 class="section-title">Sermon reflections and practical faith guides.</h2>
+        <h2 class="section-title">
+          Sermon reflections and practical faith guides.
+        </h2>
         <p class="section-copy">
-          Start with the newest resources from sermons, worship, church seasons, and community life.
+          Start with the newest resources from sermons, worship,
+          church seasons, and community life.
         </p>
 
         <div class="resource-grid">
+
+          <!-- COURAGE TO LOVE WELL -->
           <article class="resource-card">
-            <div class="resource-image" style="background-image:linear-gradient(135deg, rgba(17,22,29,0.18), rgba(17,22,29,0.06)), url('data:image/jpeg;base64,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');"></div>
+            <div class="resource-image"
+              style="background-image:
+                linear-gradient(135deg,rgba(17,22,29,.18),rgba(17,22,29,.06)),
+                url('/vumc-media/worship.webp');">
+            </div>
             <div class="resource-content">
               <h3>The Courage to Love Well</h3>
-              <p>A reflection on 1 Corinthians 13 and Micah 6:8, exploring humility, grace, mercy, and compassion.</p>
+              <p>
+                A reflection on 1 Corinthians 13 and Micah 6:8,
+                exploring humility, grace, mercy, and compassion.
+              </p>
               <div class="btn-row">
-                <a class="btn btn-dark" href="/resources/the-courage-to-love-well/">Read Article</a>
+                <a class="btn btn-dark"
+                   href="/resources/the-courage-to-love-well/">
+                  Read Article
+                </a>
               </div>
             </div>
           </article>
 
+          <!-- PENTECOST -->
           <article class="resource-card">
-            <div class="resource-image" style="background-image:linear-gradient(135deg, rgba(17,22,29,0.18), rgba(17,22,29,0.06)), url('https://images.unsplash.com/photo-1559718382-1997e8f0d360?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');"></div>
+            <div class="resource-image"
+              style="background-image:
+                linear-gradient(135deg,rgba(17,22,29,.18),rgba(17,22,29,.06)),
+                url('https://images.unsplash.com/photo-1559718382-1997e8f0d360?q=80&amp;w=1470&amp;auto=format&amp;fit=crop');">
+            </div>
             <div class="resource-content">
               <h3>What Is Pentecost?</h3>
-              <p>Discover the meaning of Pentecost and why the coming of the Holy Spirit continues to shape the church today.</p>
+              <p>
+                Discover the meaning of Pentecost and why the
+                coming of the Holy Spirit continues to shape
+                the church today.
+              </p>
               <div class="btn-row">
-                <a class="btn btn-dark" href="/resources/what-is-pentecost/">Read Article</a>
+                <a class="btn btn-dark"
+                   href="/resources/what-is-pentecost/">
+                  Read Article
+                </a>
               </div>
             </div>
           </article>
 
+          <!-- GUARDING YOUR HEART -->
           <article class="resource-card">
-  <div class="resource-image"
-       style="background-image:linear-gradient(135deg, rgba(17,22,29,0.18), rgba(17,22,29,0.06)),
-       url('https://images.unsplash.com/photo-1500674425229-f692875b0ab7?q=80&w=1470&auto=format&fit=crop');">
-  </div>
+            <div class="resource-image"
+              style="background-image:
+                linear-gradient(135deg,rgba(17,22,29,.18),rgba(17,22,29,.06)),
+                url('https://images.unsplash.com/photo-1500674425229-f692875b0ab7?q=80&amp;w=1470&amp;auto=format&amp;fit=crop');">
+            </div>
+            <div class="resource-content">
+              <h3>Peace, Be Still: Guarding Your Heart in the Storm</h3>
+              <p>
+                Storms are everywhere—in life, ministry, and the
+                Church. Discover how Jesus speaks peace not only
+                to the storms around us, but to the storms within us.
+              </p>
+              <div class="btn-row">
+                <a class="btn btn-dark"
+                   href="/resources/guarding-your-heart/">
+                  Read Article
+                </a>
+              </div>
+            </div>
+          </article>
 
-  <div class="resource-content">
-    <h3>Peace, Be Still: Guarding Your Heart in the Storm</h3>
-
-    <p>
-      Storms are everywhere—in life, ministry, and the Church. Discover how Jesus speaks peace not only to the storms around us, but to the storms within us.
-    </p>
-
-    <div class="btn-row">
-      <a class="btn btn-dark" href="/resources/guarding-your-heart">
-        Read Article
-      </a>
-    </div>
-  </div>
-</article>
         </div>
       </div>
     </section>
 
+    <!-- BROWSE TOPICS -->
     <section class="section" id="browse-topics">
       <div class="container">
         <div class="eyebrow">Browse by Topic</div>
-        <h2 class="section-title">Find resources for your next step.</h2>
+        <h2 class="section-title">
+          Find resources for your next step.
+        </h2>
         <p class="section-copy">
-          As this section grows, these categories can help guests, members, families, and online worshipers find what they need.
+          As this section grows, these categories can help guests,
+          members, families, and online worshipers find what they need.
         </p>
 
         <div class="topic-grid">
@@ -854,7 +815,7 @@
           </div>
 
           <div class="topic-card">
-            <h3>👨‍👩‍👧‍👦 Family & Community</h3>
+            <h3>👨‍👩‍👧‍👦 Family &amp; Community</h3>
             <ul>
               <li>Vacation Bible School</li>
               <li>Parent Connect</li>
@@ -864,7 +825,7 @@
           </div>
 
           <div class="topic-card">
-            <h3>❤️ Care & Encouragement</h3>
+            <h3>❤️ Care &amp; Encouragement</h3>
             <ul>
               <li>Prayer Resources</li>
               <li>Grief Support</li>
@@ -876,38 +837,61 @@
       </div>
     </section>
 
+    <!-- PLAN YOUR VISIT -->
     <section class="cta-section">
       <div class="container">
         <div class="cta-box">
           <div>
-            <div class="eyebrow" style="color:var(--accent-soft);">Plan Your Visit</div>
-            <h2 class="section-title" style="color:#fff;">We would love to worship with you.</h2>
+            <div class="eyebrow" style="color:var(--accent-soft);">
+              Plan Your Visit
+            </div>
+            <h2 class="section-title" style="color:#fff;">
+              We would love to worship with you.
+            </h2>
             <p>
-              Whether you are exploring faith, returning to church, or looking for a church home, there is a place for you at Versailles United Methodist Church.
+              Whether you are exploring faith, returning to church,
+              or looking for a church home, there is a place for
+              you at Versailles United Methodist Church.
             </p>
           </div>
+
           <div class="btn-row">
-            <a class="btn btn-primary" href="/plan-your-visit/">Plan Your Visit</a>
-            <a class="btn btn-secondary" href="/watch/">Watch Worship Online</a>
+            <a class="btn btn-primary" href="/plan-your-visit/">
+              Plan Your Visit
+            </a>
+            <a class="btn btn-secondary" href="/watch/">
+              Watch Worship Online
+            </a>
           </div>
         </div>
       </div>
     </section>
+
   </main>
 
+  <!-- FOOTER -->
   <footer class="site-footer">
     <div class="container">
-      <div class="eyebrow" style="color:var(--accent-soft);">Versailles United Methodist Church</div>
+      <div class="eyebrow" style="color:var(--accent-soft);">
+        Versailles United Methodist Church
+      </div>
+
       <div class="footer-grid">
         <div class="footer-card">
           <h4>About</h4>
           <p>A Church Striving to Love Like Jesus.</p>
-          <p>Worship, connection, discipleship, and service in Versailles, Kentucky.</p>
+          <p>
+            Worship, connection, discipleship, and service
+            in Versailles, Kentucky.
+          </p>
         </div>
 
         <div class="footer-card">
           <h4>Resources</h4>
-          <p>Sermon reflections, devotionals, Bible studies, and practical guides for faith beyond Sunday.</p>
+          <p>
+            Sermon reflections, devotionals, Bible studies,
+            and practical guides for faith beyond Sunday.
+          </p>
         </div>
 
         <div class="footer-card">
@@ -922,8 +906,9 @@
           <a href="/watch/">Watch Worship Online</a>
           <a href="/media/">Media</a>
           <a href="/serve/">Serve</a>
-          <a href="/kids-families/">Kids & Families</a>
-          <a href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
+          <a href="/kids-families/">Kids &amp; Families</a>
+          <a href="https://versaillesumc.churchcenter.com/giving"
+             data-open-in-church-center-modal="true">Give</a>
         </div>
       </div>
 
@@ -933,30 +918,44 @@
     </div>
   </footer>
 
+  <!-- MODAL -->
   <div class="vumc-modal-overlay" id="vumcModalOverlay" aria-hidden="true">
-    <div class="vumc-modal" role="dialog" aria-modal="true" aria-labelledby="vumcModalTitle">
+    <div class="vumc-modal" role="dialog" aria-modal="true"
+         aria-labelledby="vumcModalTitle">
+
       <div class="vumc-modal-header">
         <div>
-          <p class="vumc-modal-kicker">Versailles United Methodist Church</p>
-          <h2 class="vumc-modal-title" id="vumcModalTitle">Subscribe to VUMC</h2>
+          <p class="vumc-modal-kicker">
+            Versailles United Methodist Church
+          </p>
+          <h2 class="vumc-modal-title" id="vumcModalTitle">
+            Subscribe to VUMC
+          </h2>
         </div>
-        <button class="vumc-modal-close" id="vumcModalClose" aria-label="Close modal">×</button>
+        <button class="vumc-modal-close" id="vumcModalClose"
+                aria-label="Close modal">×</button>
       </div>
 
       <div class="vumc-modal-body">
-        <div class="vumc-modal-loading" id="vumcModalLoading">Loading…</div>
-        <iframe class="vumc-modal-frame" id="vumcModalFrame" src="" title="VUMC Modal Content"></iframe>
+        <div class="vumc-modal-loading" id="vumcModalLoading">
+          Loading…
+        </div>
+        <iframe class="vumc-modal-frame" id="vumcModalFrame"
+                src="" title="VUMC Modal Content"></iframe>
       </div>
     </div>
   </div>
 
   <script>
+    // Mobile navigation
     const mobileToggle = document.getElementById('mobileToggle');
     const mobileMenu = document.getElementById('mobileMenu');
     const mobileConnectToggle = document.getElementById('mobileConnectToggle');
     const mobileConnectMenu = document.getElementById('mobileConnectMenu');
     const connectDropdown = document.getElementById('connectDropdown');
-    const desktopDropdownToggle = connectDropdown ? connectDropdown.querySelector('.dropdown-toggle') : null;
+    const desktopDropdownToggle = connectDropdown
+      ? connectDropdown.querySelector('.dropdown-toggle')
+      : null;
 
     if (mobileToggle && mobileMenu) {
       mobileToggle.addEventListener('click', () => {
@@ -967,7 +966,9 @@
     if (mobileConnectToggle && mobileConnectMenu) {
       mobileConnectToggle.addEventListener('click', () => {
         const isOpen = mobileConnectMenu.classList.toggle('show');
-        mobileConnectToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        mobileConnectToggle.setAttribute(
+          'aria-expanded', isOpen ? 'true' : 'false'
+        );
       });
     }
 
@@ -976,18 +977,22 @@
         if (window.innerWidth <= 1100) {
           e.preventDefault();
           const isOpen = connectDropdown.classList.toggle('open');
-          desktopDropdownToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          desktopDropdownToggle.setAttribute(
+            'aria-expanded', isOpen ? 'true' : 'false'
+          );
         }
       });
 
       document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 1100 && !connectDropdown.contains(e.target)) {
+        if (window.innerWidth <= 1100 &&
+            !connectDropdown.contains(e.target)) {
           connectDropdown.classList.remove('open');
           desktopDropdownToggle.setAttribute('aria-expanded', 'false');
         }
       });
     }
 
+    // Modal
     const overlay = document.getElementById('vumcModalOverlay');
     const frame = document.getElementById('vumcModalFrame');
     const loading = document.getElementById('vumcModalLoading');
@@ -1015,7 +1020,7 @@
       if (lastTrigger) lastTrigger.focus();
     }
 
-    document.addEventListener('click', function (e) {
+    document.addEventListener('click', function(e) {
       const trigger = e.target.closest('[data-modal-url]');
       if (!trigger) return;
       e.preventDefault();
@@ -1024,20 +1029,26 @@
       openModal(url, title, trigger);
     });
 
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeModal);
+    }
 
     if (overlay) {
-      overlay.addEventListener('click', function (e) {
+      overlay.addEventListener('click', function(e) {
         if (e.target === overlay) closeModal();
       });
     }
 
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && overlay && overlay.classList.contains('open')) closeModal();
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' &&
+          overlay &&
+          overlay.classList.contains('open')) {
+        closeModal();
+      }
     });
 
     if (frame) {
-      frame.addEventListener('load', function () {
+      frame.addEventListener('load', function() {
         loading.style.display = 'none';
       });
     }
