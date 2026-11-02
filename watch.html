@@ -1124,6 +1124,52 @@
 .watch-player-layout .watch-service-options .watch-service-option[aria-pressed="true"] small{color:#ffe5a0}
 .watch-player-layout .watch-service-option:hover:not(:disabled){filter:brightness(1.15)}
 
+
+/* eCampus-inspired black player frame; church website header and footer unchanged */
+.watch-player-layout {
+  grid-template-columns: minmax(0,1fr) 290px;
+  background: #0c0e13;
+  align-items: stretch;
+}
+.watch-player-layout .watch-video-stage {
+  min-width: 0;
+  padding: 18px 18px 22px;
+  background: #0c0e13;
+}
+.watch-player-layout .watch-video-stage #vumcFrame {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+}
+.watch-video-caption { color: #f6f7fa; padding: 18px 2px 0; }
+.watch-video-caption strong { font-size: 16px; font-weight: 800; }
+.watch-video-caption p { margin: 8px 0 0; font-size: 13px; line-height: 1.6; color: #d4d7df; }
+.watch-player-layout .watch-service-picker {
+  background: #171a22;
+  border-left: 1px solid #353945;
+  border-top: 0;
+  color: #fff;
+  padding: 22px 18px;
+  justify-content: flex-start;
+}
+.watch-player-layout .watch-service-heading { color: #f2c763; }
+.watch-player-layout .watch-service-status { color: #cbd0dc; }
+.watch-player-layout .watch-ecampus-cta { border-top: 1px solid #3d424d; }
+.watch-player-layout .watch-ecampus-cta h3 { color: #fff; }
+.watch-player-layout .watch-ecampus-cta p { color: #d2d6e0; }
+@media (max-width: 850px) {
+  .watch-player-layout { grid-template-columns: minmax(0,1fr); }
+  .watch-player-layout .watch-service-picker {
+    border-left: 0;
+    border-top: 1px solid #353945;
+  }
+}
+@media (max-width: 540px) {
+  .watch-player-layout .watch-video-stage { padding: 10px 10px 18px; }
+}
+
 </style>
 </head>
 <body>
@@ -1236,6 +1282,7 @@
 
       <div class="app-shell">
         <div class="watch-player-layout">
+        <div class="watch-video-stage">
         <div id="vumcFrame">
           <iframe
             id="vumcLiveFrame"
@@ -1245,13 +1292,18 @@
             allowfullscreen>
           </iframe>
         </div>
+        <div class="watch-video-caption">
+          <strong>Want a more interactive worship experience?</strong>
+          <p>Worship here, or enter VUMC eCampus for live chat, sermon notes, check-in, and prayer requests during the service.</p>
+        </div>
+        </div>
 <section class="watch-service-picker" aria-label="Choose worship service">
           <p class="watch-service-heading">Choose your worship service</p>
           <div class="watch-service-options" id="watchServiceChoices" aria-live="polite"></div>
           <p class="watch-service-status" id="watchServiceStatus">Checking upcoming YouTube broadcasts…</p>
           <div class="watch-ecampus-cta">
             <h3>Go deeper in worship</h3>
-            <p>Live chat, sermon notes, check-in, and prayer.</p>
+            <p>Join VUMC eCampus for a more interactive experience with live chat, sermon notes, check-in, and prayer.</p>
             <a class="btn btn-primary" href="https://online.versaillesumc.org/" target="_blank" rel="noopener noreferrer">Enter eCampus</a>
           </div>
         </section>
