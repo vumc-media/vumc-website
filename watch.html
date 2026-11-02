@@ -1034,6 +1034,16 @@
       }
     }
   
+/* Watch player and independent service sidebar */
+.watch-player-layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;align-items:stretch;background:#fff}
+.watch-player-layout #vumcFrame{min-width:0;align-self:start;aspect-ratio:16/9}
+.watch-player-layout .watch-service-picker{border-top:0;border-left:1px solid #e6e0d9;display:flex;flex-direction:column;justify-content:center;min-width:0;padding:22px;background:#fff}
+.watch-player-layout .watch-service-options{display:flex;flex-direction:column;gap:12px}
+.watch-player-layout .watch-service-option{width:100%;flex-direction:column;align-items:stretch;gap:8px}
+.watch-player-layout .watch-service-option .watch-service-time{align-self:flex-start}
+@media(max-width:850px){.watch-player-layout{grid-template-columns:minmax(0,1fr)}.watch-player-layout .watch-service-picker{border-left:0;border-top:1px solid #e6e0d9}.watch-player-layout .watch-service-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.watch-player-layout .watch-service-option{flex-direction:row;align-items:center}}
+@media(max-width:540px){.watch-player-layout .watch-service-options{grid-template-columns:1fr}}
+
 /* Church website worship service selector — independent of eCampus styling */
 .watch-service-picker{padding:18px 22px;background:#fff;border-top:1px solid #e6e0d9}
 .watch-service-heading{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#8b5d22;margin:0 0 10px}
@@ -1042,10 +1052,23 @@
 .watch-service-option strong{display:block;font-size:15px}.watch-service-option small{display:block;color:#62616a;font-size:12px;margin-top:5px}
 .watch-service-option .watch-service-time{font-weight:750;white-space:nowrap;font-size:13px}
 .watch-service-option[aria-pressed="true"]{border:2px solid #bd8b3e;background:#fff7e9;padding:13px 15px}
+/* Distinct service identities: Traditional = warm gold, Contemporary = blue */
+.watch-service-options .watch-service-option:nth-child(1){background:#fff4df;border:2px solid #b87c23;color:#53340d;padding:13px 15px}
+.watch-service-options .watch-service-option:nth-child(1) small{color:#76541e}
+.watch-service-options .watch-service-option:nth-child(1)[aria-pressed="true"]{background:#f5d596;border-color:#86520e;box-shadow:inset 4px 0 0 #86520e,0 0 0 2px rgba(134,82,14,.15)}
+.watch-service-options .watch-service-option:nth-child(2){background:#eaf3ff;border:2px solid #3974b3;color:#143f69;padding:13px 15px}
+.watch-service-options .watch-service-option:nth-child(2) small{color:#365d83}
+.watch-service-options .watch-service-option:nth-child(2)[aria-pressed="true"]{background:#bcd9f7;border-color:#174e85;box-shadow:inset 4px 0 0 #174e85,0 0 0 2px rgba(23,78,133,.15)}
+.watch-service-options .watch-service-option:hover:not(:disabled){filter:brightness(.97)}
+.watch-service-options .watch-service-option:focus-visible{outline:3px solid #25252a;outline-offset:3px}
 .watch-service-option:disabled{opacity:.65;cursor:not-allowed}
 .watch-service-option:focus-visible{outline:3px solid #b78330;outline-offset:2px}
 .watch-service-status{font-size:12px;color:#63616a;margin:9px 0 0}
 @media(max-width:560px){.watch-service-options{grid-template-columns:1fr}.watch-service-picker{padding:14px}}
+.watch-ecampus-cta{margin-top:22px;padding-top:20px;border-top:1px solid #e6e0d9}
+.watch-ecampus-cta h3{font-size:17px;line-height:1.25;margin:0 0 8px;color:#24272c}
+.watch-ecampus-cta p{font-size:13px;line-height:1.5;margin:0 0 14px;color:#62616a}
+.watch-ecampus-cta .btn{display:flex;width:100%;justify-content:center;text-align:center}
 </style>
 </head>
 <body>
@@ -1171,6 +1194,11 @@
           <p class="watch-service-heading">Choose your worship service</p>
           <div class="watch-service-options" id="watchServiceChoices" aria-live="polite"></div>
           <p class="watch-service-status" id="watchServiceStatus">Checking upcoming YouTube broadcasts…</p>
+          <div class="watch-ecampus-cta">
+            <h3>Go deeper in worship</h3>
+            <p>Live chat, sermon notes, check-in, and prayer.</p>
+            <a class="btn btn-primary" href="https://online.versaillesumc.org/" target="_blank" rel="noopener noreferrer">Enter eCampus</a>
+          </div>
         </section>
         </div>
         <div class="watch-support">
@@ -1183,11 +1211,7 @@
               </div>
             </div>
 
-            <div>
-              <a class="btn btn-primary" href="https://online.versaillesumc.org/" target="_blank" rel="noopener noreferrer">
-                Enter eCampus
-              </a>
-            </div>
+
           </div>
         </div>
       </div>
