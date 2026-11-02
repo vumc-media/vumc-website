@@ -1354,37 +1354,77 @@
   }
 })();
 
- // Display the offline frame unless the calendar indicates a worship window.
- // A scheduled window is not proof that YouTube is live; this retains the
- // site's existing time-window behavior without exposing an offline player.
- let vumcWorshipWindows = [];
- function vumcChurchNowParts() {
-   const p = new Intl.DateTimeFormat('en-US', {
-     timeZone: 'America/New_York', year:'numeric',month:'2-digit',day:'2-digit',
-     hour:'2-digit',minute:'2-digit',hourCycle:'h23'
-   }).formatToParts(new Date());
-   const v = Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
-   return {date:`${v.year}-${v.month}-${v.day}`,minutes:Number(v.hour)*60+Number(v.minute)};
- }
- function vumcTimeMinutes(value) {
-   const match = String(value||'').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
-   if (!match) return null;
-   let hour=Number(match[1])%12;
-   if (match[3].toUpperCase()==='PM') hour+=12;
-   return hour*60+Number(match[2]);
- }
- function vumcUpdateLiveWindow() {
-   const now=vumcChurchNowParts();
-   const today=vumcWorshipWindows.filter(x=>x.date===now.date);
-   const active=today.some(x=>now.minutes>=x.start-3 && now.minutes<=x.start+90);
-   const overlay=document.getElementById('playerOverlay');
-   const frame=document.getElementById('vumcLiveFrame');
-   if (!overlay || !frame) return;
-   overlay.classList.toggle('hidden',active);
-   if (active && !frame.src) frame.src=frame.dataset.liveSrc;
-   if (!active && frame.hasAttribute('src')) frame.removeAttribute('src');
- }
- setInterval(vumcUpdateLiveWindow,30000);
+// YouTube Data API discovery controls the player; the calendar controls schedule text only.
+// This endpoint returns live, broadcastStatus, videoId, and streams.
+const VUMC_YOUTUBE_LIVE_API = 'https://script.google.com/macros/s/AKfycbz7uxgtPT0UTDuFPEY3YoZyTgmOO1x5cDyc1Y4LaaztBAR9t0tNCp6bmb5hoWX819Cx/exec';
+const VUMC_LIVE_POLL_MS = 45000;
+let vumcActiveVideoId = '';
+let vumcNotLiveChecks = 0;
+let vumcLiveRequestInFlight = false;
+
+function vumcSelectLiveVideo(data) {
+  if (!data || data.ok !== true || data.stale === true) return '';
+  // Prefer the selected ID only when the API explicitly confirms it is live.
+  if (data.live === true && typeof data.videoId === 'string' &&
+      /^[a-zA-Z0-9_-]{11}$/.test(data.videoId)) return data.videoId;
+  if (Array.isArray(data.streams)) {
+    const liveStream = data.streams.find(item => item &&
+      String(item.broadcastStatus || '').toLowerCase() === 'live' &&
+      /^[a-zA-Z0-9_-]{11}$/.test(String(item.videoId || '')));
+    if (liveStream) return liveStream.videoId;
+  }
+  if (String(data.broadcastStatus || '').toLowerCase() === 'live' &&
+      /^[a-zA-Z0-9_-]{11}$/.test(String(data.videoId || ''))) return data.videoId;
+  return '';
+}
+
+function vumcSetLivePlayer(videoId) {
+  const overlay = document.getElementById('playerOverlay');
+  const frame = document.getElementById('vumcLiveFrame');
+  if (!overlay || !frame) return;
+  if (videoId) {
+    // Do not reload an active player on every poll.
+    if (vumcActiveVideoId !== videoId) {
+      frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&mute=1&rel=0&playsinline=1`;
+      vumcActiveVideoId = videoId;
+    }
+    overlay.classList.add('hidden');
+  } else {
+    overlay.classList.remove('hidden');
+    if (frame.hasAttribute('src')) frame.removeAttribute('src');
+    vumcActiveVideoId = '';
+  }
+}
+
+async function vumcCheckYouTubeLive() {
+  if (vumcLiveRequestInFlight) return;
+  vumcLiveRequestInFlight = true;
+  try {
+    const url = `${VUMC_YOUTUBE_LIVE_API}?t=${Date.now()}`;
+    const response = await fetch(url, { method: 'GET', cache: 'no-store', redirect: 'follow' });
+    if (!response.ok) throw new Error(`YouTube status HTTP ${response.status}`);
+    const data = await response.json();
+    if (!data || data.ok !== true || data.stale === true) {
+      throw new Error('YouTube status unavailable or stale');
+    }
+    const liveId = vumcSelectLiveVideo(data);
+    if (liveId) {
+      vumcNotLiveChecks = 0;
+      vumcSetLivePlayer(liveId);
+    } else {
+      vumcNotLiveChecks++;
+      // Require two successful non-live responses before stopping an active player.
+      if (!vumcActiveVideoId || vumcNotLiveChecks >= 2) vumcSetLivePlayer('');
+    }
+  } catch (error) {
+    // A temporary API/CORS/network failure must not interrupt ongoing worship.
+    console.warn('VUMC YouTube live status check failed:', error);
+  } finally {
+    vumcLiveRequestInFlight = false;
+  }
+}
+window.addEventListener('DOMContentLoaded', vumcCheckYouTubeLive);
+setInterval(vumcCheckYouTubeLive, VUMC_LIVE_POLL_MS);
 const VUMC_WORSHIP_API = 'https://script.google.com/macros/s/AKfycbzOXN6-dZe3yL4xuCXL-gcUkj9clpFSjn5h1nrmwHh6vSMDxX4Dgf75ya47FnYYCxX6/exec';
 let vumcCurrentWorshipEvents = [];
 
@@ -1416,11 +1456,6 @@ function vumcRenderWatchWorship(data) {
   const safeData = data && Array.isArray(data.events) && data.events.length ? data : vumcFallbackWorshipData();
   const events = safeData.events || [];
   vumcCurrentWorshipEvents = events;
-  const scheduleDate = /^\d{4}-\d{2}-\d{2}$/.test(safeData.date||'') ? safeData.date : '';
-  vumcWorshipWindows = scheduleDate ? events.map(event=>({
-    date: scheduleDate, start: vumcTimeMinutes(event.time)
-  })).filter(event=>event.start!==null) : [];
-  vumcUpdateLiveWindow();
 
   const label = safeData.label || 'This Sunday';
   const dateText = safeData.date ? vumcFormatWorshipDate(safeData.date) : '';
