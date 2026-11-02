@@ -519,26 +519,21 @@
       background: #000;
     }
 
-    /* Matching eCampus / COP offline worship frame */
-    #playerOverlay {
-      position: absolute;
-      inset: 0;
-      z-index: 5;
-      display: block;
-      background: linear-gradient(125deg,#260b1b,#651f3d 55%,#260b1b);
-      transition: opacity .35s ease, visibility .35s ease;
+    /* The worship countdown is below the player, never above it. */
+    .vumc-countdown-strip {
+      background: #361529;
+      color: #fff;
+      padding: 12px 16px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,.14);
     }
-    #playerOverlay.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    #vumcOfflineFrame {
+    .vumc-countdown-strip p { margin: 0 0 8px; font-size: 13px; font-weight: 700; }
+    .vumc-countdown-strip iframe {
       display: block;
       width: 100%;
-      height: 100%;
+      height: 180px;
       border: 0;
-      background: #3e142b;
+      background: #361529;
     }
     .watch-support {
       background: var(--surface);
@@ -1168,18 +1163,18 @@
         <div id="vumcFrame">
           <iframe
             id="vumcLiveFrame"
-            data-live-src="https://www.youtube.com/embed/live_stream?channel=UC_svgodM3blLqWEBQ5yNjmA&autoplay=1&mute=1&rel=0&playsinline=1"
-            title="Versailles UMC Live"
+            src="https://www.youtube-nocookie.com/embed/0Q5Ofl0StuY?autoplay=0&rel=0&playsinline=1"
+            title="Versailles UMC YouTube Worship Broadcast"
             allow="autoplay; encrypted-media; picture-in-picture; web-share"
             allowfullscreen>
           </iframe>
-
-          <div id="playerOverlay" aria-label="Upcoming worship schedule">
-              <iframe id="vumcOfflineFrame"
-                title="VUMC Upcoming Worship Schedule"
-                src="https://online.versaillesumc.org/cop-worship-offline.html"
-                loading="eager"></iframe>
-            </div>
+        </div>
+        <div class="vumc-countdown-strip">
+          <p>Upcoming worship schedule</p>
+          <iframe id="vumcOfflineFrame"
+            title="VUMC Upcoming Worship Countdown"
+            src="https://online.versaillesumc.org/cop-worship-offline.html"
+            loading="lazy"></iframe>
         </div>
 
         <div class="watch-support">
@@ -1358,7 +1353,7 @@
 // This endpoint returns live, broadcastStatus, videoId, and streams.
 const VUMC_YOUTUBE_LIVE_API = 'https://script.google.com/macros/s/AKfycbz7uxgtPT0UTDuFPEY3YoZyTgmOO1x5cDyc1Y4LaaztBAR9t0tNCp6bmb5hoWX819Cx/exec';
 const VUMC_LIVE_POLL_MS = 45000;
-let vumcActiveVideoId = '';
+let vumcActiveVideoId = '0Q5Ofl0StuY';
 let vumcLiveRequestInFlight = false;
 let vumcPollSequence = 0;
 
@@ -1375,22 +1370,14 @@ function vumcChooseBroadcast(data) {
 }
 
 function vumcRenderBroadcast(item) {
-  const overlay = document.getElementById('playerOverlay');
   const frame = document.getElementById('vumcLiveFrame');
-  if (!overlay || !frame) return;
-  if (!item) {
-    overlay.classList.remove('hidden');
-    if (frame.hasAttribute('src')) frame.removeAttribute('src');
-    vumcActiveVideoId = '';
-    return;
-  }
+  if (!frame || !item) return;
   const id = String(item.videoId);
   if (id !== vumcActiveVideoId) {
     frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) +
       '?autoplay=0&rel=0&playsinline=1';
     vumcActiveVideoId = id;
   }
-  overlay.classList.add('hidden');
 }
 
 // Google Apps Script redirects JSON responses. JSONP uses a script element
