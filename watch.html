@@ -1033,7 +1033,20 @@
         border-radius: 20px;
       }
     }
-  </style>
+  
+/* Church website worship service selector — independent of eCampus styling */
+.watch-service-picker{padding:18px 22px;background:#fff;border-top:1px solid #e6e0d9}
+.watch-service-heading{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#8b5d22;margin:0 0 10px}
+.watch-service-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.watch-service-option{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid #d8d4ce;border-radius:12px;background:#faf9f7;color:#25252a;text-align:left;cursor:pointer;font:inherit;min-width:0}
+.watch-service-option strong{display:block;font-size:15px}.watch-service-option small{display:block;color:#62616a;font-size:12px;margin-top:5px}
+.watch-service-option .watch-service-time{font-weight:750;white-space:nowrap;font-size:13px}
+.watch-service-option[aria-pressed="true"]{border:2px solid #bd8b3e;background:#fff7e9;padding:13px 15px}
+.watch-service-option:disabled{opacity:.65;cursor:not-allowed}
+.watch-service-option:focus-visible{outline:3px solid #b78330;outline-offset:2px}
+.watch-service-status{font-size:12px;color:#63616a;margin:9px 0 0}
+@media(max-width:560px){.watch-service-options{grid-template-columns:1fr}.watch-service-picker{padding:14px}}
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -1153,7 +1166,12 @@
             allowfullscreen>
           </iframe>
         </div>
-<div class="watch-support">
+<section class="watch-service-picker" aria-label="Choose worship service">
+          <p class="watch-service-heading">Choose your worship service</p>
+          <div class="watch-service-options" id="watchServiceChoices" aria-live="polite"></div>
+          <p class="watch-service-status" id="watchServiceStatus">Checking upcoming YouTube broadcasts…</p>
+        </section>
+        <div class="watch-support">
           <div class="watch-support-inner">
             <div>
               <h3>Want a more interactive experience?</h3>
@@ -1330,34 +1348,83 @@
 const VUMC_YOUTUBE_LIVE_API = 'https://script.google.com/macros/s/AKfycbz7uxgtPT0UTDuFPEY3YoZyTgmOO1x5cDyc1Y4LaaztBAR9t0tNCp6bmb5hoWX819Cx/exec';
 const VUMC_LIVE_POLL_MS = 45000;
 let vumcActiveVideoId = '0Q5Ofl0StuY';
+let vumcManualVideoId = null;
+let vumcStreams = [];
+let vumcDiscoveryReady = false;
 let vumcLiveRequestInFlight = false;
 let vumcPollSequence = 0;
-
+const vumcVideoValid = id => typeof id === 'string' && /^[a-zA-Z0-9_-]{11}$/.test(id);
+const vumcStreamTime = s => Date.parse(s?.scheduledStartTime || s?.actualStartTime || '') || 0;
+const vumcIsLive = s => s?.broadcastStatus === 'live' || s?.live === true;
+function vumcServiceKind(s) {
+  const title = String(s?.title || '').toLowerCase();
+  if (/traditional|9[:.]?30/.test(title)) return 'traditional';
+  if (/contemporary|10[:.]?30/.test(title)) return 'contemporary';
+  const t = vumcStreamTime(s);
+  if (!t) return null;
+  const parts = new Intl.DateTimeFormat('en-US', {timeZone:'America/New_York',hour:'numeric',minute:'2-digit',hour12:false}).formatToParts(new Date(t));
+  const val = type => parts.find(p => p.type === type)?.value || '';
+  const minutes = (Number(val('hour')) % 24) * 60 + Number(val('minute'));
+  return minutes === 570 ? 'traditional' : minutes === 630 ? 'contemporary' : null;
+}
 function vumcChooseBroadcast(data) {
   if (!data || data.ok !== true || data.stale === true) return null;
-  const items = Array.isArray(data.streams) ? data.streams : [];
-  const valid = items.filter(s => s && /^[a-zA-Z0-9_-]{11}$/.test(String(s.videoId || '')));
-  const live = valid.find(s => String(s.broadcastStatus).toLowerCase() === 'live');
+  const valid = (Array.isArray(data.streams) ? data.streams : []).filter(s => vumcVideoValid(s?.videoId));
+  const live = valid.find(vumcIsLive);
   if (live) return live;
-  const upcoming = valid.filter(s => String(s.broadcastStatus).toLowerCase() === 'upcoming' &&
-    Number.isFinite(Date.parse(s.scheduledStartTime)) && Date.parse(s.scheduledStartTime) > Date.now());
-  upcoming.sort((x,y) => Date.parse(x.scheduledStartTime) - Date.parse(y.scheduledStartTime));
+  const upcoming = valid.filter(s => String(s.broadcastStatus).toLowerCase() === 'upcoming' && vumcStreamTime(s) > Date.now())
+    .sort((a,b) => vumcStreamTime(a) - vumcStreamTime(b));
   return upcoming[0] || null;
 }
-
 function vumcRenderBroadcast(item) {
   const frame = document.getElementById('vumcLiveFrame');
-  if (!frame || !item) return;
-  const id = String(item.videoId);
+  const id = typeof item === 'string' ? item : item?.videoId;
+  if (!frame || !vumcVideoValid(id)) return;
   if (id !== vumcActiveVideoId) {
-    frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) +
-      '?autoplay=0&rel=0&playsinline=1';
+    frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=0&rel=0&playsinline=1';
     vumcActiveVideoId = id;
   }
 }
-
-// Google Apps Script redirects JSON responses. JSONP uses a script element
-// instead of cross-origin fetch, avoiding browser CORS restrictions.
+function vumcServiceOptions() {
+  const usable = vumcStreams.filter(s => vumcVideoValid(s?.videoId) && (vumcIsLive(s) || s.broadcastStatus === 'upcoming' || vumcStreamTime(s) > Date.now()))
+    .sort((a,b) => vumcStreamTime(a) - vumcStreamTime(b));
+  const found = {};
+  for (const s of usable) {
+    const kind = vumcServiceKind(s);
+    if (kind && (!found[kind] || (vumcIsLive(s) && !vumcIsLive(found[kind])))) found[kind] = s;
+  }
+  return ['traditional','contemporary'].map(kind => ({kind, stream:found[kind]}));
+}
+function vumcRenderServiceChoices() {
+  const root = document.getElementById('watchServiceChoices');
+  const status = document.getElementById('watchServiceStatus');
+  if (!root || !status) return;
+  root.replaceChildren();
+  for (const {kind,stream} of vumcServiceOptions()) {
+    const button = document.createElement('button');
+    button.type = 'button'; button.className = 'watch-service-option';
+    button.disabled = !stream;
+    button.setAttribute('aria-pressed', String(!!stream && stream.videoId === vumcActiveVideoId));
+    const left = document.createElement('span');
+    const name = document.createElement('strong'); name.textContent = kind === 'traditional' ? 'Traditional Worship' : 'Contemporary Worship';
+    const detail = document.createElement('small');
+    const t = stream && vumcStreamTime(stream);
+    detail.textContent = !stream ? (vumcDiscoveryReady ? 'No upcoming broadcast available' : 'Checking YouTube…') :
+      (vumcIsLive(stream) ? 'LIVE NOW · ' : '') + (t ? new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',month:'short',day:'numeric'}).format(new Date(t)) : 'Upcoming');
+    const time = document.createElement('span'); time.className = 'watch-service-time';
+    time.textContent = t ? new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit'}).format(new Date(t)) : (kind === 'traditional' ? '9:30 AM' : '10:30 AM');
+    left.append(name,detail); button.append(left,time);
+    if (stream) button.addEventListener('click', () => {
+      vumcManualVideoId = stream.videoId;
+      vumcRenderBroadcast(stream);
+      vumcRenderServiceChoices();
+      status.textContent = 'Showing ' + name.textContent + '. Choose another service to switch.';
+    });
+    root.append(button);
+  }
+  if (!vumcManualVideoId) status.textContent = vumcDiscoveryReady ? 'Automatically showing the next scheduled or live broadcast.' : 'Checking upcoming YouTube broadcasts…';
+}
+// JSONP is supported by the existing deployed YouTube discovery GAS.
 function vumcCheckYouTubeLive() {
   if (vumcLiveRequestInFlight) return;
   vumcLiveRequestInFlight = true;
@@ -1367,32 +1434,26 @@ function vumcCheckYouTubeLive() {
   let timeout;
   function finish() {
     if (finished) return;
-    finished = true;
-    clearTimeout(timeout);
-    delete window[callbackName];
-    script.remove();
-    vumcLiveRequestInFlight = false;
+    finished = true; clearTimeout(timeout); delete window[callbackName]; script.remove(); vumcLiveRequestInFlight = false;
   }
   window[callbackName] = function(data) {
     if (data && data.ok === true && data.stale !== true) {
-      vumcRenderBroadcast(vumcChooseBroadcast(data));
-    } else {
-      console.warn('VUMC YouTube returned an invalid response', data);
-    }
+      vumcStreams = Array.isArray(data.streams) ? data.streams : [];
+      vumcDiscoveryReady = true;
+      const ids = new Set(vumcStreams.map(s => s?.videoId));
+      if (vumcManualVideoId && !ids.has(vumcManualVideoId)) vumcManualVideoId = null;
+      const next = vumcManualVideoId || vumcChooseBroadcast(data);
+      if (next) vumcRenderBroadcast(next);
+      vumcRenderServiceChoices();
+    } else console.warn('VUMC YouTube returned an invalid response', data);
     finish();
   };
-  script.onerror = function() {
-    console.warn('VUMC YouTube discovery request failed');
-    finish();
-  };
-  timeout = setTimeout(function() {
-    console.warn('VUMC YouTube discovery timed out');
-    finish();
-  }, 15000);
+  script.onerror = function() { console.warn('VUMC YouTube discovery request failed'); finish(); };
+  timeout = setTimeout(function() { console.warn('VUMC YouTube discovery timed out'); finish(); }, 15000);
   script.src = VUMC_YOUTUBE_LIVE_API + '?callback=' + callbackName + '&t=' + Date.now();
   document.head.appendChild(script);
 }
-window.addEventListener('DOMContentLoaded', vumcCheckYouTubeLive);
+window.addEventListener('DOMContentLoaded', function(){vumcRenderServiceChoices();vumcCheckYouTubeLive();});
 setInterval(vumcCheckYouTubeLive, VUMC_LIVE_POLL_MS);
 const VUMC_WORSHIP_API = 'https://script.google.com/macros/s/AKfycbzOXN6-dZe3yL4xuCXL-gcUkj9clpFSjn5h1nrmwHh6vSMDxX4Dgf75ya47FnYYCxX6/exec';
 let vumcCurrentWorshipEvents = [];
