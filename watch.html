@@ -1359,69 +1359,75 @@
 const VUMC_YOUTUBE_LIVE_API = 'https://script.google.com/macros/s/AKfycbz7uxgtPT0UTDuFPEY3YoZyTgmOO1x5cDyc1Y4LaaztBAR9t0tNCp6bmb5hoWX819Cx/exec';
 const VUMC_LIVE_POLL_MS = 45000;
 let vumcActiveVideoId = '';
-let vumcNotLiveChecks = 0;
 let vumcLiveRequestInFlight = false;
+let vumcPollSequence = 0;
 
-function vumcSelectLiveVideo(data) {
-  if (!data || data.ok !== true || data.stale === true) return '';
-  // Prefer the selected ID only when the API explicitly confirms it is live.
-  if (data.live === true && typeof data.videoId === 'string' &&
-      /^[a-zA-Z0-9_-]{11}$/.test(data.videoId)) return data.videoId;
-  if (Array.isArray(data.streams)) {
-    const liveStream = data.streams.find(item => item &&
-      String(item.broadcastStatus || '').toLowerCase() === 'live' &&
-      /^[a-zA-Z0-9_-]{11}$/.test(String(item.videoId || '')));
-    if (liveStream) return liveStream.videoId;
-  }
-  if (String(data.broadcastStatus || '').toLowerCase() === 'live' &&
-      /^[a-zA-Z0-9_-]{11}$/.test(String(data.videoId || ''))) return data.videoId;
-  return '';
+function vumcChooseBroadcast(data) {
+  if (!data || data.ok !== true || data.stale === true) return null;
+  const items = Array.isArray(data.streams) ? data.streams : [];
+  const valid = items.filter(s => s && /^[a-zA-Z0-9_-]{11}$/.test(String(s.videoId || '')));
+  const live = valid.find(s => String(s.broadcastStatus).toLowerCase() === 'live');
+  if (live) return live;
+  const upcoming = valid.filter(s => String(s.broadcastStatus).toLowerCase() === 'upcoming' &&
+    Number.isFinite(Date.parse(s.scheduledStartTime)) && Date.parse(s.scheduledStartTime) > Date.now());
+  upcoming.sort((x,y) => Date.parse(x.scheduledStartTime) - Date.parse(y.scheduledStartTime));
+  return upcoming[0] || null;
 }
 
-function vumcSetLivePlayer(videoId) {
+function vumcRenderBroadcast(item) {
   const overlay = document.getElementById('playerOverlay');
   const frame = document.getElementById('vumcLiveFrame');
   if (!overlay || !frame) return;
-  if (videoId) {
-    // Do not reload an active player on every poll.
-    if (vumcActiveVideoId !== videoId) {
-      frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&mute=1&rel=0&playsinline=1`;
-      vumcActiveVideoId = videoId;
-    }
-    overlay.classList.add('hidden');
-  } else {
+  if (!item) {
     overlay.classList.remove('hidden');
     if (frame.hasAttribute('src')) frame.removeAttribute('src');
     vumcActiveVideoId = '';
+    return;
   }
+  const id = String(item.videoId);
+  if (id !== vumcActiveVideoId) {
+    frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) +
+      '?autoplay=0&rel=0&playsinline=1';
+    vumcActiveVideoId = id;
+  }
+  overlay.classList.add('hidden');
 }
 
-async function vumcCheckYouTubeLive() {
+// Google Apps Script redirects JSON responses. JSONP uses a script element
+// instead of cross-origin fetch, avoiding browser CORS restrictions.
+function vumcCheckYouTubeLive() {
   if (vumcLiveRequestInFlight) return;
   vumcLiveRequestInFlight = true;
-  try {
-    const url = `${VUMC_YOUTUBE_LIVE_API}?t=${Date.now()}`;
-    const response = await fetch(url, { method: 'GET', cache: 'no-store', redirect: 'follow' });
-    if (!response.ok) throw new Error(`YouTube status HTTP ${response.status}`);
-    const data = await response.json();
-    if (!data || data.ok !== true || data.stale === true) {
-      throw new Error('YouTube status unavailable or stale');
-    }
-    const liveId = vumcSelectLiveVideo(data);
-    if (liveId) {
-      vumcNotLiveChecks = 0;
-      vumcSetLivePlayer(liveId);
-    } else {
-      vumcNotLiveChecks++;
-      // Require two successful non-live responses before stopping an active player.
-      if (!vumcActiveVideoId || vumcNotLiveChecks >= 2) vumcSetLivePlayer('');
-    }
-  } catch (error) {
-    // A temporary API/CORS/network failure must not interrupt ongoing worship.
-    console.warn('VUMC YouTube live status check failed:', error);
-  } finally {
+  const callbackName = 'vumcYouTubeCallback_' + (++vumcPollSequence);
+  const script = document.createElement('script');
+  let finished = false;
+  let timeout;
+  function finish() {
+    if (finished) return;
+    finished = true;
+    clearTimeout(timeout);
+    delete window[callbackName];
+    script.remove();
     vumcLiveRequestInFlight = false;
   }
+  window[callbackName] = function(data) {
+    if (data && data.ok === true && data.stale !== true) {
+      vumcRenderBroadcast(vumcChooseBroadcast(data));
+    } else {
+      console.warn('VUMC YouTube returned an invalid response', data);
+    }
+    finish();
+  };
+  script.onerror = function() {
+    console.warn('VUMC YouTube discovery request failed');
+    finish();
+  };
+  timeout = setTimeout(function() {
+    console.warn('VUMC YouTube discovery timed out');
+    finish();
+  }, 15000);
+  script.src = VUMC_YOUTUBE_LIVE_API + '?callback=' + callbackName + '&t=' + Date.now();
+  document.head.appendChild(script);
 }
 window.addEventListener('DOMContentLoaded', vumcCheckYouTubeLive);
 setInterval(vumcCheckYouTubeLive, VUMC_LIVE_POLL_MS);
