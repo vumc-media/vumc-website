@@ -1157,6 +1157,7 @@
       </p>
 
       <div class="app-shell">
+        <div class="watch-player-layout">
         <div id="vumcFrame">
           <iframe
             id="vumcLiveFrame"
@@ -1171,6 +1172,7 @@
           <div class="watch-service-options" id="watchServiceChoices" aria-live="polite"></div>
           <p class="watch-service-status" id="watchServiceStatus">Checking upcoming YouTube broadcasts…</p>
         </section>
+        </div>
         <div class="watch-support">
           <div class="watch-support-inner">
             <div>
@@ -1349,8 +1351,15 @@ const VUMC_YOUTUBE_LIVE_API = 'https://script.google.com/macros/s/AKfycbz7uxgtPT
 const VUMC_LIVE_POLL_MS = 45000;
 let vumcActiveVideoId = '0Q5Ofl0StuY';
 let vumcManualVideoId = null;
-let vumcStreams = [];
-let vumcDiscoveryReady = false;
+// Known Nov 8 broadcasts remain selectable if the GAS endpoint fails.
+// These entries expire automatically; future services come from the API.
+const vumcKnownStreams = [
+  {videoId:'0Q5Ofl0StuY',title:'Traditional Worship',broadcastStatus:'upcoming',scheduledStartTime:'2026-11-08T14:30:00Z'},
+  {videoId:'xCwl7uzMTxg',title:'Contemporary Worship',broadcastStatus:'upcoming',scheduledStartTime:'2026-11-08T15:30:00Z'}
+];
+let vumcStreams = vumcKnownStreams.filter(s => Date.parse(s.scheduledStartTime) > Date.now());
+let vumcDiscoveryReady = true;
+let vumcDiscoverySource = 'fallback';
 let vumcLiveRequestInFlight = false;
 let vumcPollSequence = 0;
 const vumcVideoValid = id => typeof id === 'string' && /^[a-zA-Z0-9_-]{11}$/.test(id);
@@ -1386,7 +1395,7 @@ function vumcRenderBroadcast(item) {
   }
 }
 function vumcServiceOptions() {
-  const usable = vumcStreams.filter(s => vumcVideoValid(s?.videoId) && (vumcIsLive(s) || s.broadcastStatus === 'upcoming' || vumcStreamTime(s) > Date.now()))
+  const usable = vumcStreams.filter(s => vumcVideoValid(s?.videoId) && (vumcIsLive(s) || vumcStreamTime(s) > Date.now()))
     .sort((a,b) => vumcStreamTime(a) - vumcStreamTime(b));
   const found = {};
   for (const s of usable) {
@@ -1422,7 +1431,7 @@ function vumcRenderServiceChoices() {
     });
     root.append(button);
   }
-  if (!vumcManualVideoId) status.textContent = vumcDiscoveryReady ? 'Automatically showing the next scheduled or live broadcast.' : 'Checking upcoming YouTube broadcasts…';
+  if (!vumcManualVideoId) status.textContent = vumcDiscoverySource === 'fallback' ? 'Select either scheduled service. Live updates are being checked.' : 'Automatically showing the next scheduled or live broadcast.';
 }
 // JSONP is supported by the existing deployed YouTube discovery GAS.
 function vumcCheckYouTubeLive() {
@@ -1440,6 +1449,7 @@ function vumcCheckYouTubeLive() {
     if (data && data.ok === true && data.stale !== true) {
       vumcStreams = Array.isArray(data.streams) ? data.streams : [];
       vumcDiscoveryReady = true;
+      vumcDiscoverySource = 'live';
       const ids = new Set(vumcStreams.map(s => s?.videoId));
       if (vumcManualVideoId && !ids.has(vumcManualVideoId)) vumcManualVideoId = null;
       const next = vumcManualVideoId || vumcChooseBroadcast(data);
@@ -1448,8 +1458,8 @@ function vumcCheckYouTubeLive() {
     } else console.warn('VUMC YouTube returned an invalid response', data);
     finish();
   };
-  script.onerror = function() { console.warn('VUMC YouTube discovery request failed'); finish(); };
-  timeout = setTimeout(function() { console.warn('VUMC YouTube discovery timed out'); finish(); }, 15000);
+  script.onerror = function() { console.warn('VUMC YouTube discovery request failed; using known scheduled services'); vumcRenderServiceChoices(); finish(); };
+  timeout = setTimeout(function() { console.warn('VUMC YouTube discovery timed out; using known scheduled services'); vumcRenderServiceChoices(); finish(); }, 15000);
   script.src = VUMC_YOUTUBE_LIVE_API + '?callback=' + callbackName + '&t=' + Date.now();
   document.head.appendChild(script);
 }
