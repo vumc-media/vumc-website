@@ -13,6 +13,9 @@
   const API =
     'https://holy-star-1faevumc-youtube-analytics.versaillesumcworshipteam.workers.dev';
 
+  const SESSION_KEY = 'vumc_audience_session_v2';
+  const DASHBOARD_URL = '/tools/audience-intelligence/';
+
   const $ = id => document.getElementById(id);
 
   const format = number =>
@@ -220,10 +223,18 @@
   // --------------------------------------------------
 
   async function getJSON(path) {
+    // The repaired Worker accepts a bearer session, not a cross-site cookie.
+    const token = sessionStorage.getItem(SESSION_KEY);
+    if (!token) {
+      const error = new Error('YouTube sign-in required. Open Audience Intelligence and connect YouTube.');
+      error.status = 401;
+      throw error;
+    }
     const response = await fetch(API + path, {
       method: 'GET',
-      credentials: 'include',
-      cache: 'no-store'
+      mode: 'cors',
+      cache: 'no-store',
+      headers: { Authorization: 'Bearer ' + token }
     });
 
     let data = {};
@@ -237,11 +248,14 @@
     }
 
     if (!response.ok) {
-      throw new Error(
-        data.message ||
-        data.error ||
-        'Cloudflare returned HTTP ' + response.status
+      if (response.status === 401) sessionStorage.removeItem(SESSION_KEY);
+      const error = new Error(
+        response.status === 404
+          ? 'The Cloudflare Worker does not currently provide /api/content. The content endpoint must be restored before sermon comparisons can load.'
+          : (data.message || data.error || 'Cloudflare returned HTTP ' + response.status)
       );
+      error.status = response.status;
+      throw error;
     }
 
     return data;
@@ -592,8 +606,7 @@
       );
 
       if (
-        /401|403|unauthorized|authentication/i
-          .test(error.message)
+        error.status === 401
       ) {
         target.appendChild(
           element(
@@ -603,6 +616,14 @@
             'through the main Audience Intelligence dashboard.'
           )
         );
+      }
+
+      if (error.status === 401) {
+        const signIn = element('a', 'pulse-retry', 'Open Audience Intelligence');
+        signIn.href = DASHBOARD_URL;
+        signIn.style.display = 'inline-block';
+        signIn.style.textDecoration = 'none';
+        target.appendChild(signIn);
       }
 
       const retry = element(
