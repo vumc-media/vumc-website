@@ -18,6 +18,36 @@ const safeNumber = value =>
 
 let requestId = 0;
 let contentRecords = [];
+const SESSION_KEY = 'vumc_audience_session_v2';
+let sessionToken = sessionStorage.getItem(SESSION_KEY) || '';
+let authReady = Promise.resolve();
+
+async function completeAuthRedirect() {
+  const fragment = new URLSearchParams(location.hash.slice(1));
+  const code = fragment.get('auth_code');
+  if (!code) return;
+  history.replaceState(null, '', location.pathname + location.search);
+  sessionStorage.removeItem(SESSION_KEY);
+  sessionToken = '';
+  const response = await fetch(API + '/auth/exchange', {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-store',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code })
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || !result.session) {
+    throw new Error(result.error || 'Unable to complete YouTube sign-in');
+  }
+  sessionToken = result.session;
+  sessionStorage.setItem(SESSION_KEY, sessionToken);
+}
+
+if (location.hash.includes('auth_code=')) {
+  authReady = completeAuthRedirect();
+}
+
 
 // =====================================================
 // DATE RANGE
@@ -41,9 +71,10 @@ function dates(days) {
 // =====================================================
 
 async function getJSON(path) {
+  await authReady;
   const response = await fetch(API + path, {
-    credentials: 'include',
-    cache: 'no-store'
+    cache: 'no-store',
+    headers: sessionToken ? { Authorization: 'Bearer ' + sessionToken } : {}
   });
 
   let data = {};
@@ -60,6 +91,10 @@ async function getJSON(path) {
     );
 
     error.status = response.status;
+    if (response.status === 401) {
+      sessionToken = '';
+      sessionStorage.removeItem(SESSION_KEY);
+    }
     throw error;
   }
 
