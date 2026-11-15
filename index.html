@@ -2718,6 +2718,15 @@ rkp("event","PAGE_VIEW");
 .roku-launch .roku-art img{display:block;width:100%;height:auto;object-fit:contain}
 @media(max-width:800px){.roku-launch{padding:42px 0}.roku-launch .roku-inner{grid-template-columns:1fr;gap:28px}.roku-launch .roku-art{min-height:190px}.roku-launch .roku-desc{font-size:16px}}
 </style>
+<style>
+.roku-art-button{width:100%;padding:0;cursor:zoom-in;position:relative;font:inherit}
+.roku-art-button:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.roku-zoom-hint{position:absolute;bottom:14px;right:14px;background:#150b2bdc;color:#fff;padding:9px 14px;border-radius:10px;font-size:13px;font-weight:700}
+.roku-image-dialog{border:0;border-radius:14px;padding:18px;background:#171020;max-width:min(96vw,1500px);max-height:94vh;box-shadow:0 25px 90px #0009;overflow:auto}
+.roku-image-dialog::backdrop{background:rgba(0,0,0,.85)}
+.roku-image-dialog img{display:block;max-width:100%;width:auto;height:auto;max-height:calc(94vh - 36px);object-fit:contain;margin:auto}
+.roku-dialog-close{position:sticky;top:0;float:right;z-index:1;background:#fff;color:#171020;border:0;border-radius:50%;font-size:26px;line-height:1;width:40px;height:40px;cursor:pointer;margin:0 0 -40px 0}
+</style>
 </head>
 <body>
   <header class="site-header">
@@ -2865,10 +2874,25 @@ rkp("event","PAGE_VIEW");
           <a class="roku-button" href="https://channelstore.roku.com/search/versailles%20umc" target="_blank" rel="noopener noreferrer">Find Versailles UMC on Roku →</a>
           <p class="roku-hint">On your Roku device, search for “Versailles UMC” in the Streaming Store.</p>
         </div>
-        <div class="roku-art"><img src="/vumc-media/vumc-roku.webp" alt="Versailles UMC Roku channel artwork" loading="lazy" onerror="this.style.display='none'"></div>
+        <button class="roku-art roku-art-button" type="button" id="roku-image-open" aria-label="Enlarge Roku setup instructions"><img src="/vumc-media/vumc-roku.webp" alt="Versailles UMC Roku channel setup instructions" loading="lazy"><span class="roku-zoom-hint">Click image to enlarge <span aria-hidden="true">⤢</span></span></button>
       </div>
     </section>
 
+    <dialog id="roku-image-dialog" class="roku-image-dialog" aria-label="Enlarged Roku setup instructions">
+      <button type="button" class="roku-dialog-close" id="roku-image-close" aria-label="Close enlarged image">×</button>
+      <img src="/vumc-media/vumc-roku.webp" alt="Versailles UMC Roku channel setup instructions, enlarged">
+    </dialog>
+    <script>
+      (() => {
+        const dialog = document.getElementById('roku-image-dialog');
+        const open = document.getElementById('roku-image-open');
+        const close = document.getElementById('roku-image-close');
+        if (!dialog || !open || !close) return;
+        open.addEventListener('click', () => dialog.showModal());
+        close.addEventListener('click', () => dialog.close());
+        dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+      })();
+    </script>
     <!-- SMART VISITOR WELCOME SECTION -->
     <section class="section" id="smart-visitor-welcome">
       <div class="container">
