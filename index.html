@@ -2702,6 +2702,22 @@ rkp("event","PAGE_VIEW");
     }
 
   </style>
+<style>
+/* Roku channel homepage announcement */
+.roku-launch{background:linear-gradient(115deg,#160b2d 0%,#31145b 57%,#56259a 100%);color:#fff;padding:64px 0;position:relative;overflow:hidden}
+.roku-launch:before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:#a066ff22;right:-140px;top:-200px;filter:blur(8px)}
+.roku-launch .roku-inner{position:relative;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:54px}
+.roku-launch .roku-eyebrow{color:#d9c1ff;font-weight:800;text-transform:uppercase;letter-spacing:.15em;font-size:13px;margin:0 0 14px}
+.roku-launch h2{color:white;font-size:clamp(32px,4vw,55px);line-height:1.09;letter-spacing:-.035em;margin:0 0 20px}
+.roku-launch .roku-desc{color:#e6dff1;font-size:18px;line-height:1.65;margin:0 0 25px;max-width:570px}
+.roku-launch .roku-features{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 30px}
+.roku-launch .roku-features span{padding:9px 13px;border:1px solid #ffffff35;border-radius:100px;color:#f3eaff;font-size:13px;background:#ffffff0b}
+.roku-launch .roku-button{display:inline-block;background:white;color:#341164;font-weight:800;text-decoration:none;border-radius:12px;padding:16px 24px;box-shadow:0 12px 25px #0b001b44}
+.roku-launch .roku-hint{font-size:13px;color:#d6c6e8;margin-top:15px}
+.roku-launch .roku-art{border-radius:20px;min-height:300px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#51229c,#160b31);border:1px solid #ffffff30;box-shadow:0 30px 65px #09001580;overflow:hidden}
+.roku-launch .roku-art img{display:block;width:100%;height:auto;object-fit:contain}
+@media(max-width:800px){.roku-launch{padding:42px 0}.roku-launch .roku-inner{grid-template-columns:1fr;gap:28px}.roku-launch .roku-art{min-height:190px}.roku-launch .roku-desc{font-size:16px}}
+</style>
 </head>
 <body>
   <header class="site-header">
@@ -2835,6 +2851,21 @@ rkp("event","PAGE_VIEW");
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ROKU CHANNEL LAUNCH FEATURE -->
+    <section class="roku-launch" id="roku-channel" aria-labelledby="roku-title">
+      <div class="container roku-inner">
+        <div>
+          <p class="roku-eyebrow">Now available on Roku</p>
+          <h2 id="roku-title">Your church.<br>Your living room.</h2>
+          <p class="roku-desc">Versailles United Methodist Church is now on Roku! Watch worship services, catch up on recent messages, and stay connected with our church family from your TV.</p>
+          <div class="roku-features"><span>Sunday worship</span><span>Recent services</span><span>Ministry connections</span></div>
+          <a class="roku-button" href="https://channelstore.roku.com/search/versailles%20umc" target="_blank" rel="noopener noreferrer">Find Versailles UMC on Roku →</a>
+          <p class="roku-hint">On your Roku device, search for “Versailles UMC” in the Streaming Store.</p>
+        </div>
+        <div class="roku-art"><img src="/vumc-media/vumc-roku.webp" alt="Versailles UMC Roku channel artwork" loading="lazy" onerror="this.style.display='none'"></div>
       </div>
     </section>
 
