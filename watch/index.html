@@ -1216,7 +1216,9 @@
 .watch-service-option:has(.watch-live-badge) strong { padding-right: 58px; }
 
 
-/* Compact Roku banner below worship player */
+/* Compact Roku banner above the Watch page hero */
+.roku-top-placement{padding-top:18px;padding-bottom:18px}
+.roku-top-placement .roku-watch-banner{margin-top:0}
 .roku-watch-banner{margin-top:24px;padding:22px 26px;border-radius:18px;background:linear-gradient(110deg,#241044,#492083);color:#fff;display:flex;align-items:center;gap:20px;box-shadow:0 12px 28px rgba(37,16,68,.16)}
 .roku-watch-icon{flex:0 0 58px;width:58px;height:58px;border-radius:14px;background:rgba(255,255,255,.13);display:grid;place-items:center}
 .roku-watch-icon svg{width:31px;height:31px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -1303,6 +1305,19 @@
 </header>
 
 <main>
+  <div class="container roku-top-placement">
+      <aside class="roku-watch-banner" id="roku-watch-banner" aria-label="Watch Versailles UMC on Roku">
+        <div class="roku-watch-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="13" rx="2"></rect><path d="M8 22h8M12 18v4"></path></svg>
+        </div>
+        <div class="roku-watch-copy">
+          <p class="roku-watch-kicker">Watch on your TV</p>
+          <h3>Versailles UMC is now on Roku!</h3>
+          <p>Enjoy worship services and recent messages on your television. Search for <strong>Versailles UMC</strong> in the Roku Streaming Store.</p>
+        </div>
+        <a class="roku-watch-action" href="https://channelstore.roku.com/search/versailles%20umc" target="_blank" rel="noopener noreferrer" aria-label="Find Versailles UMC in the Roku Streaming Store">Find Us on Roku ↗</a>
+      </aside>
+  </div>
   <section class="watch-hero">
     <div class="container">
       <div class="watch-hero-inner">
@@ -1368,17 +1383,7 @@
         </div>
 
       </div>
-      <aside class="roku-watch-banner" id="roku-watch-banner" aria-label="Watch Versailles UMC on Roku">
-        <div class="roku-watch-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="13" rx="2"></rect><path d="M8 22h8M12 18v4"></path></svg>
-        </div>
-        <div class="roku-watch-copy">
-          <p class="roku-watch-kicker">Watch on your TV</p>
-          <h3>Versailles UMC is now on Roku!</h3>
-          <p>Enjoy worship services and recent messages on your television. Search for <strong>Versailles UMC</strong> in the Roku Streaming Store.</p>
-        </div>
-        <a class="roku-watch-action" href="https://channelstore.roku.com/search/versailles%20umc" target="_blank" rel="noopener noreferrer" aria-label="Find Versailles UMC in the Roku Streaming Store">Find Us on Roku ↗</a>
-      </aside>
+
     </div>
   </section>
 
