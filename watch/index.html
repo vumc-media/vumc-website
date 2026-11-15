@@ -1219,6 +1219,10 @@
 /* Compact Roku banner above the Watch page hero */
 .roku-top-placement{padding-top:18px;padding-bottom:18px}
 .roku-top-placement .roku-watch-banner{margin-top:0}
+.roku-top-placement{padding:0}
+.roku-top-placement .roku-watch-banner{border-radius:0;box-shadow:none;padding:22px max(24px,calc((100vw - 1240px)/2));width:100%;margin:0}
+@media(max-width:680px){.roku-top-placement .roku-watch-banner{padding:18px 20px}}
+
 .roku-watch-banner{margin-top:24px;padding:22px 26px;border-radius:18px;background:linear-gradient(110deg,#241044,#492083);color:#fff;display:flex;align-items:center;gap:20px;box-shadow:0 12px 28px rgba(37,16,68,.16)}
 .roku-watch-icon{flex:0 0 58px;width:58px;height:58px;border-radius:14px;background:rgba(255,255,255,.13);display:grid;place-items:center}
 .roku-watch-icon svg{width:31px;height:31px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -1305,7 +1309,7 @@
 </header>
 
 <main>
-  <div class="container roku-top-placement">
+  <div class="roku-top-placement">
       <aside class="roku-watch-banner" id="roku-watch-banner" aria-label="Watch Versailles UMC on Roku">
         <div class="roku-watch-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="13" rx="2"></rect><path d="M8 22h8M12 18v4"></path></svg>
