@@ -3600,7 +3600,7 @@ rkp("event","PAGE_VIEW");
         if (loadingEl) loadingEl.textContent = 'Loading latest worship service…';
 
         const separator = VUMC_YOUTUBE_API.includes('?') ? '&' : '?';
-        const response = await fetch(`${VUMC_YOUTUBE_API}${separator}action=latest&t=${Date.now()}`, {
+        const response = await fetch(`${VUMC_YOUTUBE_API}${separator}action=latest&refresh=1&t=${Date.now()}`, {
           method: 'GET',
           cache: 'no-store'
         });
