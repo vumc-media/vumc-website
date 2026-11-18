@@ -4543,7 +4543,7 @@ You are welcome in person or online.`,
           // Reuse the same YouTube discovery service and JSONP transport as /watch/.
           // Apps Script's JSONP callback avoids browser cross-origin fetch failures.
           const data = await new Promise((resolve, reject) => {
-            const callbackName = 'vumcHomeUpcoming_' + Date.now();
+            const callbackName = 'vumcYouTubeCallback_' + Date.now();
             const script = document.createElement('script');
             let settled = false;
             const timeout = setTimeout(() => finish(new Error('Livestream discovery timed out')), 15000);
