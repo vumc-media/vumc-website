@@ -4540,27 +4540,31 @@ You are welcome in person or online.`,
 
       async function loadUpcomingStreams() {
         try {
-          const separator = VUMC_YOUTUBE_API.includes('?') ? '&' : '?';
-          const response = await fetch(
-            `${VUMC_YOUTUBE_API}${separator}action=upcoming&t=${Date.now()}`,
-            {
-              method: 'GET',
-              cache: 'no-store'
+          // Reuse the same YouTube discovery service and JSONP transport as /watch/.
+          // Apps Script's JSONP callback avoids browser cross-origin fetch failures.
+          const data = await new Promise((resolve, reject) => {
+            const callbackName = 'vumcHomeUpcoming_' + Date.now();
+            const script = document.createElement('script');
+            let settled = false;
+            const timeout = setTimeout(() => finish(new Error('Livestream discovery timed out')), 15000);
+            function finish(error, value) {
+              if (settled) return;
+              settled = true;
+              clearTimeout(timeout);
+              delete window[callbackName];
+              script.remove();
+              if (error) reject(error);
+              else resolve(value);
             }
-          );
+            window[callbackName] = value => finish(null, value);
+            script.onerror = () => finish(new Error('Livestream discovery request failed'));
+            script.src = 'https://script.google.com/macros/s/AKfycbz7uxgtPT0UTDuFPEY3YoZyTgmOO1x5cDyc1Y4LaaztBAR9t0tNCp6bmb5hoWX819Cx/exec'
+              + '?callback=' + encodeURIComponent(callbackName) + '&t=' + Date.now();
+            document.head.appendChild(script);
+          });
 
-          if (!response.ok) {
-            throw new Error(`Livestream feed returned HTTP ${response.status}`);
-          }
-
-          const data = await response.json();
-
-          if (!data || data.ok !== true) {
-            throw new Error(
-              data && data.error
-                ? data.error
-                : 'The livestream feed did not return a valid response.'
-            );
+          if (!data || data.ok !== true || data.stale === true) {
+            throw new Error('The livestream discovery service returned no current data.');
           }
 
           const now = Date.now();
