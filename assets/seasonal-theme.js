@@ -28,7 +28,7 @@ function render(){const hero=document.querySelector('main .hero'),panel=hero&&he
  const section=document.createElement('aside');section.id='vumc-seasonal-feature';section.className='vumc-seasonal-feature';section.setAttribute('aria-label','Church season');
  const eyebrow=active.type==='advent'?'Advent · Week '+active.week:active.type==='christmas'?'Christmas Season':active.type==='thanksgiving'?'Thanksgiving Week':active.type==='holyweek'?'Holy Week':active.type==='lent'?'Lenten Season':active.type==='easter'?'Easter Season':'Pentecost';
  section.innerHTML='<div class="vumc-seasonal-copy"><span class="vumc-seasonal-eyebrow"></span><h2></h2><p></p></div>'+(active.week?wreath(active.week):'<div class="vumc-seasonal-symbol" aria-hidden="true">'+({thanksgiving:'✦',lent:'✝',holyweek:'✝',easter:'✦',pentecost:'✦'}[active.type]||'✦')+'</div>');
- section.querySelector('.vumc-seasonal-eyebrow').textContent=eyebrow;section.querySelector('h2').textContent=active.title;section.querySelector('p').textContent=active.text;
+ section.querySelector('.vumc-seasonal-eyebrow').remove();section.querySelector('h2').textContent=active.title;section.querySelector('p').textContent=active.text;
  panel.prepend(section);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render,{once:true});else render();
