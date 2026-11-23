@@ -4089,10 +4089,10 @@ You are welcome in person or online.`,
         visits = 1;
       }
 
-      function render(kicker, heading, description, href, action) {
+      function render(stage, heading, description, href, action) {
         el.innerHTML = `<div class="smart-welcome-box">
           <div class="smart-welcome-copy">
-            <div class="eyebrow">${kicker}</div>
+            <!-- Smart welcome stage: ${stage}; retained in source for editing -->
             <h2>${heading}</h2>
             <p>${description}</p>
           </div>
