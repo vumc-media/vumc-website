@@ -1,0 +1,20 @@
+/* Seasonal homepage accent: existing hero/slideshow stays intact */
+.vumc-seasonal-feature{--season-accent:#e4ba72;display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 20px;padding:16px 19px;border:1px solid rgba(255,255,255,.32);border-left:4px solid var(--season-accent);border-radius:14px;background:rgba(14,24,40,.72);color:#fff;box-shadow:0 8px 28px rgba(0,0,0,.16);backdrop-filter:blur(8px)}
+.vumc-seasonal-feature .vumc-seasonal-eyebrow{display:block;color:var(--season-accent);font-size:.73rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;margin-bottom:5px}
+.vumc-seasonal-feature h2{font-size:clamp(1.15rem,2.5vw,1.6rem);line-height:1.2;color:#fff;margin:0 0 5px}
+.vumc-seasonal-feature p{font-size:.9rem;line-height:1.5;color:#f1ecf7;margin:0}
+.hero[data-vumc-season="advent"] .vumc-seasonal-feature{--season-accent:#c9a7f2}
+.hero[data-vumc-season="christmas"] .vumc-seasonal-feature{--season-accent:#f1d18b}
+.hero[data-vumc-season="lent"] .vumc-seasonal-feature,.hero[data-vumc-season="holyweek"] .vumc-seasonal-feature{--season-accent:#c9a7f2}
+.hero[data-vumc-season="easter"] .vumc-seasonal-feature{--season-accent:#f6d77e}
+.hero[data-vumc-season="pentecost"] .vumc-seasonal-feature{--season-accent:#f5a18c}
+.vumc-seasonal-symbol{font-size:3rem;line-height:1;color:var(--season-accent);flex:none}
+.vumc-wreath{position:relative;flex:0 0 128px;height:98px}
+.vumc-evergreen{position:absolute;bottom:5px;left:2px;width:124px;height:32px;border-radius:50%;background:repeating-conic-gradient(from 5deg,#35674a 0deg 15deg,#1f4c37 15deg 30deg);box-shadow:0 6px 10px #0005}
+.vumc-candle{position:absolute;bottom:24px;width:15px;height:43px;border-radius:3px 3px 1px 1px;background:linear-gradient(90deg,#0003,transparent 45%,#fff4 75%,#0003),var(--candle);box-shadow:0 2px 3px #0006}
+.vumc-candle-0{left:16px}.vumc-candle-1{left:39px}.vumc-candle-2{left:73px}.vumc-candle-3{left:96px}.vumc-candle-4{left:56px;height:59px;bottom:25px}
+.vumc-candle:before{content:'';position:absolute;top:-5px;left:7px;width:2px;height:6px;background:#241c19}
+.vumc-flame{position:absolute;left:4px;top:-22px;width:8px;height:19px;border-radius:75% 5% 70% 45%;background:linear-gradient(#fff9c4,#ffbd50 65%,#fa7728);transform:rotate(12deg);box-shadow:0 0 13px 5px #ffc35d66;animation:vumc-flicker 2.4s ease-in-out infinite alternate;transform-origin:bottom}
+@keyframes vumc-flicker{from{transform:rotate(8deg) scale(.92)}to{transform:rotate(16deg) scale(1.05)}}
+@media(max-width:580px){.vumc-seasonal-feature{padding:12px;gap:8px}.vumc-wreath{transform:scale(.75);transform-origin:right center;flex-basis:94px}.vumc-seasonal-feature p{font-size:.8rem}}
+@media(prefers-reduced-motion:reduce){.vumc-flame{animation:none}}
