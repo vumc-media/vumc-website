@@ -1631,7 +1631,7 @@ function vumcRenderServiceChoices() {
     button.disabled = !stream;
     button.setAttribute('aria-pressed', String(!!stream && stream.videoId === vumcActiveVideoId));
     const left = document.createElement('span');
-    const name = document.createElement('strong'); name.textContent = kind === 'traditional' ? 'Traditional Worship' : 'Contemporary Worship';
+    const name = document.createElement('strong'); name.textContent = kind === 'traditional' ? '9:30 AM' : '10:30 AM';
     const detail = document.createElement('small');
     const t = stream && vumcStreamTime(stream);
     detail.textContent = !stream ? (vumcDiscoveryReady ? 'No upcoming broadcast available' : 'Checking YouTube…') :
