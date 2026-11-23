@@ -52,5 +52,5 @@
 .hero[data-vumc-season="advent"] .vumc-wreath,.hero[data-vumc-season="christmas"] .vumc-wreath{display:none}
 
 /* Elegant seasonal headlines; text remains readable on all devices. */
-.hero .vumc-seasonal-feature h2{font-family:'Great Vibes','Brush Script MT',cursive!important;font-weight:400!important;letter-spacing:.01em!important;line-height:1.25!important;font-size:clamp(46px,6vw,88px)!important;text-shadow:0 3px 18px rgba(0,0,0,.38)}
-@media(max-width:720px){.hero .vumc-seasonal-feature h2{font-size:clamp(42px,11vw,65px)!important}}
+.hero .vumc-seasonal-feature h2{font-family:'Great Vibes','Brush Script MT',cursive!important;font-weight:400!important;letter-spacing:.01em!important;line-height:1.25!important;font-size:clamp(64px,8vw,116px)!important;text-shadow:0 3px 18px rgba(0,0,0,.38)}
+@media(max-width:720px){.hero .vumc-seasonal-feature h2{font-size:clamp(56px,13vw,82px)!important}}
