@@ -1,4 +1,4 @@
-/* Seasonal homepage accent: existing hero/slideshow stays intact */
+/* Seasonal homepage styling; original slideshow returns outside church seasons. */
 .vumc-seasonal-feature{--season-accent:#e4ba72;display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 20px;padding:16px 19px;border:1px solid rgba(255,255,255,.32);border-left:4px solid var(--season-accent);border-radius:14px;background:rgba(14,24,40,.72);color:#fff;box-shadow:0 8px 28px rgba(0,0,0,.16);backdrop-filter:blur(8px)}
 .vumc-seasonal-feature .vumc-seasonal-eyebrow{display:block;color:var(--season-accent);font-size:.73rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;margin-bottom:5px}
 .vumc-seasonal-feature h2{font-size:clamp(1.15rem,2.5vw,1.6rem);line-height:1.2;color:#fff;margin:0 0 5px}
@@ -18,3 +18,12 @@
 @keyframes vumc-flicker{from{transform:rotate(8deg) scale(.92)}to{transform:rotate(16deg) scale(1.05)}}
 @media(max-width:580px){.vumc-seasonal-feature{padding:12px;gap:8px}.vumc-wreath{transform:scale(.75);transform-origin:right center;flex-basis:94px}.vumc-seasonal-feature p{font-size:.8rem}}
 @media(prefers-reduced-motion:reduce){.vumc-flame{animation:none}}
+/* Seasonal backgrounds replace the rotating photographs only while active. */
+.hero[data-vumc-season]{isolation:isolate;background-color:#30243b;background-image:radial-gradient(ellipse at 78% 30%,rgba(255,211,138,.18),transparent 43%),linear-gradient(120deg,#372820,#69422e 58%,#352b2c)}
+.hero[data-vumc-season] .hero-slideshow{display:none!important}
+.hero[data-vumc-season] .hero-overlay{background:linear-gradient(90deg,rgba(12,14,22,.42),rgba(12,14,22,.12))!important}
+.hero[data-vumc-season="advent"]{background-image:radial-gradient(circle at 80% 34%,rgba(198,163,239,.27),transparent 40%),linear-gradient(115deg,#20182e,#47365c 60%,#1d203a)}
+.hero[data-vumc-season="christmas"]{background-image:radial-gradient(circle at 78% 30%,rgba(247,213,130,.32),transparent 38%),linear-gradient(115deg,#182e29,#385143 55%,#402d2b)}
+.hero[data-vumc-season="lent"],.hero[data-vumc-season="holyweek"]{background-image:radial-gradient(circle at 78% 30%,rgba(176,148,206,.19),transparent 43%),linear-gradient(115deg,#221b2c,#4a3a59 65%,#202332)}
+.hero[data-vumc-season="easter"]{background-image:radial-gradient(circle at 78% 28%,rgba(255,229,154,.37),transparent 45%),linear-gradient(115deg,#2b3e4b,#7b745f 62%,#b38c62)}
+.hero[data-vumc-season="pentecost"]{background-image:radial-gradient(circle at 80% 30%,rgba(255,186,114,.28),transparent 40%),linear-gradient(115deg,#3b1d27,#7a3534 60%,#432b35)}
