@@ -27,3 +27,17 @@
 .hero[data-vumc-season="lent"],.hero[data-vumc-season="holyweek"]{background-image:radial-gradient(circle at 78% 30%,rgba(176,148,206,.19),transparent 43%),linear-gradient(115deg,#221b2c,#4a3a59 65%,#202332)}
 .hero[data-vumc-season="easter"]{background-image:radial-gradient(circle at 78% 28%,rgba(255,229,154,.37),transparent 45%),linear-gradient(115deg,#2b3e4b,#7b745f 62%,#b38c62)}
 .hero[data-vumc-season="pentecost"]{background-image:radial-gradient(circle at 80% 30%,rgba(255,186,114,.28),transparent 40%),linear-gradient(115deg,#3b1d27,#7a3534 60%,#432b35)}
+
+.hero[data-vumc-season="thanksgiving"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-thanksgiving.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
+
+.hero[data-vumc-season="advent"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-advent.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
+
+.hero[data-vumc-season="christmas"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-christmas.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
+
+.hero[data-vumc-season="lent"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-lent.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
+
+.hero[data-vumc-season="holyweek"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-lent.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
+
+.hero[data-vumc-season="easter"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-easter.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
+
+.hero[data-vumc-season="pentecost"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-pentecost.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
