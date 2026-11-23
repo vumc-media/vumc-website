@@ -1233,6 +1233,18 @@
 .roku-watch-action:hover,.roku-watch-action:focus-visible{background:#eee2ff}
 @media(max-width:680px){.roku-watch-banner{padding:20px;flex-wrap:wrap;gap:14px}.roku-watch-icon{width:46px;height:46px;flex-basis:46px}.roku-watch-copy{flex-basis:calc(100% - 65px)}.roku-watch-copy h3{font-size:18px}.roku-watch-action{width:100%}}
 
+
+/* Quick navigation to Watch page sections */
+.watch-jump-nav{background:#f7f1e8;border-bottom:1px solid rgba(60,45,35,.12);padding:17px 0}
+.watch-jump-nav .container{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap}
+.watch-jump-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#89533a}
+.watch-jump-links{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.watch-jump-links a{display:inline-flex;align-items:center;gap:6px;padding:11px 18px;border-radius:999px;background:white;border:1px solid rgba(60,45,35,.16);color:#302720;text-decoration:none;font-weight:750;font-size:14px;transition:background .2s,transform .2s}
+.watch-jump-links a:hover,.watch-jump-links a:focus-visible{background:#ead8c7;transform:translateY(-1px)}
+#watch-experience,#latest-worship,#watchWorshipCard{scroll-margin-top:110px}
+html{scroll-behavior:smooth}
+@media(max-width:600px){.watch-jump-nav .container{gap:9px}.watch-jump-links{gap:7px}.watch-jump-links a{padding:10px 12px;font-size:13px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 <style id="vumc-shared-floating-logo">
 /* VUMC shared floating-logo header — matches homepage */
@@ -1331,7 +1343,8 @@
         <a class="roku-watch-action" href="https://channelstore.roku.com/search/versailles%20umc" target="_blank" rel="noopener noreferrer" aria-label="Find Versailles UMC in the Roku Streaming Store">Find Us on Roku ↗</a>
       </aside>
   </div>
-  <section class="watch-hero">
+  <nav class="watch-jump-nav" aria-label="Jump to worship sections"><div class="container"><span class="watch-jump-label">Explore this page</span><div class="watch-jump-links"><a href="#watch-experience">▶ Watch Live</a><a href="#latest-worship">↺ Missed Sunday?</a><a href="#watchWorshipCard">◷ Worship Schedule</a></div></div></nav>
+<section class="watch-hero">
     <div class="container">
       <div class="watch-hero-inner">
         <div>
