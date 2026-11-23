@@ -10,7 +10,7 @@ function easter(y){let a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%
 function advent(y){const christmas=utc(y,12,25),dow=christmas.getUTCDay();return plus(christmas,-(dow===0?28:21+dow));}
 function thanksgiving(y){const d=utc(y,11,1);return plus(d,(4-d.getUTCDay()+7)%7+21);}
 function season(now){const y=now.getUTCFullYear(),e=easter(y),a=advent(y),t=thanksgiving(y);
- if(now>=a&&now<utc(y,12,25))return {type:'advent',week:Math.min(4,1+Math.floor((now-a)/day/7)),title:'A Season of Hope',text:'Preparing our hearts for the coming of Christ'};
+ if(now>=a&&now<utc(y,12,25)){const week=Math.min(4,1+Math.floor((now-a)/day/7));const themes=[['Hope','The promise of Christ brings light into our darkness.'],['Peace','Preparing our hearts for the coming Prince of Peace.'],['Joy','Rejoice! Our Savior is drawing near.'],['Love',"God’s greatest gift is coming into the world."]];return {type:'advent',week,title:themes[week-1][0],text:themes[week-1][1]};}
  if(now>=utc(y,12,25)&&now<utc(y+1,1,6))return {type:'christmas',week:5,title:'Christ Is Born',text:'Celebrating the light and hope of Christmas'};
  if(now>=utc(y,1,1)&&now<utc(y,1,6))return {type:'christmas',week:5,title:'Christ Is Born',text:'Celebrating the light and hope of Christmas'};
  if(now>=plus(t,-4)&&now<plus(t,3))return {type:'thanksgiving',title:'A Season of Thanksgiving',text:'Giving thanks to God for every blessing and every neighbor'};
@@ -26,9 +26,8 @@ function render(){const hero=document.querySelector('main .hero'),panel=hero&&he
  if(!active)return;
  hero.setAttribute('data-vumc-season',active.type);if(active.type==='advent')hero.setAttribute('data-vumc-advent-week',String(active.week));
  const section=document.createElement('aside');section.id='vumc-seasonal-feature';section.className='vumc-seasonal-feature';section.setAttribute('aria-label','Church season');
- const eyebrow=active.type==='advent'?'Advent · Week '+active.week:active.type==='christmas'?'Christmas Season':active.type==='thanksgiving'?'Thanksgiving Week':active.type==='holyweek'?'Holy Week':active.type==='lent'?'Lenten Season':active.type==='easter'?'Easter Season':'Pentecost';
- section.innerHTML='<div class="vumc-seasonal-copy"><span class="vumc-seasonal-eyebrow"></span><h2></h2><p></p></div>'+(active.week?wreath(active.week):'<div class="vumc-seasonal-symbol" aria-hidden="true">'+({thanksgiving:'✦',lent:'✝',holyweek:'✝',easter:'✦',pentecost:'✦'}[active.type]||'✦')+'</div>');
- section.querySelector('.vumc-seasonal-eyebrow').remove();section.querySelector('h2').textContent=active.title;section.querySelector('p').textContent=active.text;
+ section.innerHTML='<div class="vumc-seasonal-copy"><h2></h2><p></p></div>'+(active.week?wreath(active.week):'<div class="vumc-seasonal-symbol" aria-hidden="true">'+({thanksgiving:'✦',lent:'✝',holyweek:'✝',easter:'✦',pentecost:'✦'}[active.type]||'✦')+'</div>');
+ section.querySelector('h2').textContent=active.title;section.querySelector('p').textContent=active.text;
  panel.prepend(section);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render,{once:true});else render();
