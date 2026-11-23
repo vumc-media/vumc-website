@@ -22,9 +22,9 @@ function season(now){const y=now.getUTCFullYear(),e=easter(y),a=advent(y),t=than
 }
 function wreath(n){const colors=['#6c4998','#6c4998','#d88ba9','#6c4998','#f4e8d5'];return '<div class="vumc-wreath" role="img" aria-label="'+(n===5?'Four Advent candles and the Christ candle lit':n+' of four Advent candles lit')+'"><div class="vumc-evergreen"></div>'+colors.map((color,i)=>'<div class="vumc-candle vumc-candle-'+i+'" style="--candle:'+color+'">'+(n>i?'<span class="vumc-flame"></span>':'')+'</div>').join('')+'</div>';}
 function render(){const hero=document.querySelector('main .hero'),panel=hero&&hero.querySelector('.hero-panel');if(!panel)return;
- const active=season(localDate());const old=document.getElementById('vumc-seasonal-feature');if(old)old.remove();hero.removeAttribute('data-vumc-season');
+ const active=season(localDate());const old=document.getElementById('vumc-seasonal-feature');if(old)old.remove();hero.removeAttribute('data-vumc-season');hero.removeAttribute('data-vumc-advent-week');
  if(!active)return;
- hero.setAttribute('data-vumc-season',active.type);
+ hero.setAttribute('data-vumc-season',active.type);if(active.type==='advent')hero.setAttribute('data-vumc-advent-week',String(active.week));
  const section=document.createElement('aside');section.id='vumc-seasonal-feature';section.className='vumc-seasonal-feature';section.setAttribute('aria-label','Church season');
  const eyebrow=active.type==='advent'?'Advent · Week '+active.week:active.type==='christmas'?'Christmas Season':active.type==='thanksgiving'?'Thanksgiving Week':active.type==='holyweek'?'Holy Week':active.type==='lent'?'Lenten Season':active.type==='easter'?'Easter Season':'Pentecost';
  section.innerHTML='<div class="vumc-seasonal-copy"><span class="vumc-seasonal-eyebrow"></span><h2></h2><p></p></div>'+(active.week?wreath(active.week):'<div class="vumc-seasonal-symbol" aria-hidden="true">'+({thanksgiving:'✦',lent:'✝',holyweek:'✝',easter:'✦',pentecost:'✦'}[active.type]||'✦')+'</div>');
