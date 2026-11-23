@@ -30,7 +30,7 @@
 
 .hero[data-vumc-season="thanksgiving"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-thanksgiving.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
 
-.hero[data-vumc-season="advent"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-advent.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
+.hero[data-vumc-season="advent"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-advent-1.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
 
 .hero[data-vumc-season="christmas"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-christmas.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
 
@@ -41,3 +41,11 @@
 .hero[data-vumc-season="easter"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-easter.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
 
 .hero[data-vumc-season="pentecost"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-pentecost.webp');background-position:center center;background-size:cover;background-repeat:no-repeat}
+
+/* Advent: select a distinct photographic background every Sunday. */
+.hero[data-vumc-season="advent"][data-vumc-advent-week="1"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-advent-1.webp')}
+.hero[data-vumc-season="advent"][data-vumc-advent-week="2"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-advent-2.webp')}
+.hero[data-vumc-season="advent"][data-vumc-advent-week="3"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-advent-3.webp')}
+.hero[data-vumc-season="advent"][data-vumc-advent-week="4"]{background-image:linear-gradient(90deg,rgba(9,12,22,.73) 0%,rgba(9,12,22,.50) 48%,rgba(9,12,22,.20) 100%),url('/vumc-media/hero-advent-4.webp')}
+/* The photographic Advent wreath already contains the correct candles. */
+.hero[data-vumc-season="advent"] .vumc-wreath,.hero[data-vumc-season="christmas"] .vumc-wreath{display:none}
