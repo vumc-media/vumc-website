@@ -2716,7 +2716,19 @@ rkp("event","PAGE_VIEW");
       }
     }
 
-  </style>
+  
+/* Compact smart visitor greeting above the homepage hero */
+.smart-visitor-strip{padding:9px 0;background:#f8f3eb}
+.smart-visitor-strip .smart-welcome-box{display:flex;align-items:center;justify-content:space-between;gap:18px;text-align:left;padding:13px 22px;border-radius:15px;box-shadow:0 3px 15px rgba(0,0,0,.07);background:linear-gradient(115deg,#20262c,#30353b)}
+.smart-visitor-strip .smart-welcome-box::before{display:none}
+.smart-visitor-strip .smart-welcome-box .eyebrow{font-size:10px;letter-spacing:.12em;margin:0 0 3px}
+.smart-visitor-strip .smart-welcome-box h2{font-size:clamp(17px,1.7vw,22px);line-height:1.2;margin:0 0 3px}
+.smart-visitor-strip .smart-welcome-box p{font-size:12px;line-height:1.35;margin:0;max-width:540px;color:#e3e4e6}
+.smart-visitor-strip .smart-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:7px;flex-shrink:0;margin:0}
+.smart-visitor-strip .smart-actions .btn{font-size:12px;padding:9px 12px;min-height:0;line-height:1.2;white-space:nowrap}
+@media(max-width:900px){.smart-visitor-strip .smart-welcome-box{flex-direction:column;text-align:center;gap:10px;padding:13px 16px}.smart-visitor-strip .smart-actions{justify-content:center;flex-shrink:1}}
+@media(max-width:500px){.smart-visitor-strip{padding:6px 0}.smart-visitor-strip .smart-welcome-box{border-radius:12px}.smart-visitor-strip .smart-welcome-box p{font-size:11px}.smart-visitor-strip .smart-actions .btn{font-size:11px;padding:8px 10px}}
+</style>
 <style>
 /* Roku channel homepage announcement */
 .roku-launch{background:linear-gradient(115deg,#160b2d 0%,#31145b 57%,#56259a 100%);color:#fff;padding:64px 0;position:relative;overflow:hidden}
@@ -2871,6 +2883,8 @@ body{background:#faf5eb}
   </header>
 
   <main>
+    <!-- Compact personalized visitor greeting; retains visit-count behavior -->
+    <section id="smart-visitor-welcome" class="smart-visitor-strip" aria-label="Personalized welcome"><div class="container"><div id="smartWelcome" aria-live="polite"></div></div></section>
     <section class="hero">
       <div class="hero-slideshow" aria-hidden="true">
         <!-- HERO IMAGE 1: Change this URL to your first selected image -->
@@ -2950,12 +2964,6 @@ body{background:#faf5eb}
         dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
       })();
     </script>
-    <!-- SMART VISITOR WELCOME SECTION -->
-    <section class="section" id="smart-visitor-welcome">
-      <div class="container">
-        <div id="smartWelcome" aria-live="polite"></div>
-      </div>
-    </section>
 
     <!-- COMMUNITY STORIES HOMEPAGE FEATURE -->
     <!-- Explore: concise homepage navigation -->
