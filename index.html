@@ -2728,6 +2728,10 @@ rkp("event","PAGE_VIEW");
 .smart-visitor-strip .smart-actions .btn{font-size:12px;padding:9px 12px;min-height:0;line-height:1.2;white-space:nowrap}
 @media(max-width:900px){.smart-visitor-strip .smart-welcome-box{flex-direction:column;text-align:center;gap:10px;padding:13px 16px}.smart-visitor-strip .smart-actions{justify-content:center;flex-shrink:1}}
 @media(max-width:500px){.smart-visitor-strip{padding:6px 0}.smart-visitor-strip .smart-welcome-box{border-radius:12px}.smart-visitor-strip .smart-welcome-box p{font-size:11px}.smart-visitor-strip .smart-actions .btn{font-size:11px;padding:8px 10px}}
+
+.smart-visitor-strip .smart-welcome-copy{min-width:0;flex:1}
+.smart-visitor-strip .smart-welcome-copy .eyebrow{color:#e5bd88}
+@media(max-width:900px){.smart-visitor-strip .smart-welcome-copy{text-align:center}}
 </style>
 <style>
 /* Roku channel homepage announcement */
@@ -4063,7 +4067,7 @@ You are welcome in person or online.`,
 
 
 
-    // SMART VISITOR SYSTEM
+    // SMART VISITOR SYSTEM — one clear action per visit stage
     (function() {
       const el = document.getElementById('smartWelcome');
       if (!el) return;
@@ -4071,72 +4075,43 @@ You are welcome in person or online.`,
       const visitKey = 'vumc_homepage_visits';
       const lastVisitKey = 'vumc_homepage_last_visit';
       const now = Date.now();
-      const resetAfterDays = 90;
-      const resetAfterMs = resetAfterDays * 24 * 60 * 60 * 1000;
-
-      let visits = parseInt(localStorage.getItem(visitKey) || '0', 10);
-      const lastVisit = parseInt(localStorage.getItem(lastVisitKey) || '0', 10);
-
-      if (lastVisit && now - lastVisit > resetAfterMs) {
-        visits = 0;
+      const resetAfterMs = 90 * 24 * 60 * 60 * 1000;
+      let visits = 0;
+      try {
+        visits = parseInt(localStorage.getItem(visitKey) || '0', 10) || 0;
+        const lastVisit = parseInt(localStorage.getItem(lastVisitKey) || '0', 10) || 0;
+        if (lastVisit && now - lastVisit > resetAfterMs) visits = 0;
+        visits += 1;
+        localStorage.setItem(visitKey, String(visits));
+        localStorage.setItem(lastVisitKey, String(now));
+      } catch (error) {
+        // The welcome remains usable when browser storage is disabled.
+        visits = 1;
       }
 
-      visits += 1;
-      localStorage.setItem(visitKey, String(visits));
-      localStorage.setItem(lastVisitKey, String(now));
-
-      function render(html) {
-        el.innerHTML = `<div class="smart-welcome-box">${html}</div>`;
+      function render(kicker, heading, description, href, action) {
+        el.innerHTML = `<div class="smart-welcome-box">
+          <div class="smart-welcome-copy">
+            <div class="eyebrow">${kicker}</div>
+            <h2>${heading}</h2>
+            <p>${description}</p>
+          </div>
+          <div class="smart-actions"><a class="btn btn-primary" href="${href}">${action} →</a></div>
+        </div>`;
       }
 
       if (visits === 1) {
-        render(`
-          <div class="eyebrow">First Time Here?</div>
-          <h2>Welcome to Versailles UMC</h2>
-          <p>We’re glad you found us. Whether you are exploring faith, looking for a church home, or just curious, here are the best places to begin.</p>
-          <div class="smart-actions">
-            <a class="btn btn-primary" href="/plan-your-visit/">Plan Your Visit</a>
-            <a class="btn btn-secondary" href="/watch/">Watch Online</a>
-            <a class="btn btn-light" href="/new-here/">New Here</a>
-            <a class="btn btn-light" href="/faq/">FAQ</a>
-          </div>
-        `);
+        render('First Time Here?', 'Welcome to Versailles UMC!',
+          "We're glad you're here. Discover what to expect when you visit.",
+          '/plan-your-visit/', 'Plan Your Visit');
       } else if (visits === 2) {
-        render(`
-          <div class="eyebrow">Welcome Back</div>
-          <h2>Want to learn more about VUMC?</h2>
-          <p>Since you’ve been here before, here are a few deeper places to explore our mission, our ministries, and how families connect at Versailles UMC.</p>
-          <div class="smart-actions">
-            <a class="btn btn-primary" href="/lovelikejesus/">Our Mission</a>
-            <a class="btn btn-secondary" href="/kids-families/">Kids & Families</a>
-            <a class="btn btn-secondary" href="/media/">Recent Messages</a>
-            <a class="btn btn-light" href="/watch/">Watch Again</a>
-          </div>
-        `);
-      } else if (visits === 3) {
-        render(`
-          <div class="eyebrow">Take a Next Step</div>
-          <h2>Ready to get connected?</h2>
-          <p>Church becomes more meaningful when you move from watching to belonging. Here are simple ways to take a next step with VUMC.</p>
-          <div class="smart-actions">
-            <a class="btn btn-primary" href="/groups/">Groups</a>
-            <a class="btn btn-secondary" href="/serve/">Serve</a>
-            <a class="btn btn-secondary" href="/events/">Events</a>
-            <a class="btn btn-light" href="https://versaillesumc.churchcenter.com/people/forms/554033" data-open-in-church-center-modal="true">Prayer Request</a>
-          </div>
-        `);
+        render('Welcome Back', "There's a place for you here.",
+          'Explore opportunities to connect, grow in faith, and serve alongside others.',
+          '/next-steps/', 'Take Your Next Step');
       } else {
-        render(`
-          <div class="eyebrow">VUMC Family</div>
-          <h2>Welcome back</h2>
-          <p>Thanks for staying connected. Here are quick links for worship, giving, events, and Church Center.</p>
-          <div class="smart-actions">
-            <a class="btn btn-primary" href="/watch/">Watch</a>
-            <a class="btn btn-secondary" href="https://versaillesumc.churchcenter.com/giving" data-open-in-church-center-modal="true">Give</a>
-            <a class="btn btn-secondary" href="https://versaillesumc.churchcenter.com/pages/vumc-hub">Church Center</a>
-            <a class="btn btn-light" href="/events/">Events</a>
-          </div>
-        `);
+        render('VUMC Family', 'Welcome back!',
+          'Stay connected with everything happening in your church family.',
+          'https://versaillesumc.churchcenter.com/pages/vumc-hub', 'Church Center');
       }
     })();
 
