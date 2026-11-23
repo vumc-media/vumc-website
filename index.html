@@ -2769,6 +2769,29 @@ body{background:#faf5eb}
 @media(max-width:600px){.brand{gap:11px}.brand-mark{width:66px;height:66px;flex-basis:66px;margin-top:2px;margin-bottom:-8px}.brand-name{font-size:14px}.brand-tagline{font-size:11px}}
 </style>
   <link rel="stylesheet" href="/assets/seasonal-theme.css" />
+
+<style id="vumc-hero-refinement-2026">
+/* Clean, photographic hero; keep accessible church name and live PCO schedule. */
+.hero .hero-panel{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;backdrop-filter:none!important}
+.hero .hero-kicker{display:block;background:none!important;border:0!important;padding:0!important;margin:0 0 14px!important;color:#eacb99!important;font-size:12px!important;font-weight:800;letter-spacing:.13em}
+.hero .hero-panel h1{font-size:clamp(22px,2.2vw,32px)!important;line-height:1.18!important;max-width:680px;margin:0 0 13px!important}
+.hero .hero-panel .hero-welcome{font-size:clamp(18px,2vw,25px)!important;line-height:1.4!important;font-weight:500!important;margin:0 0 24px!important;max-width:570px}
+.hero .hero-panel .btn-row{margin-top:10px!important;gap:12px!important}
+.hero .hero-panel .btn-row .btn{padding:12px 20px!important}
+.hero .hero-side .glass-card{background:rgba(29,23,26,.45)!important;border:1px solid rgba(255,255,255,.25)!important;box-shadow:none!important;backdrop-filter:blur(8px)}
+.hero .hero-side .worship-card{padding:18px 20px!important}
+.hero .hero-side .worship-card h3{font-size:17px!important;margin-bottom:8px!important}
+.hero .hero-side .worship-card p{font-size:13px!important}
+.hero .hero-side .service-time{font-size:13px!important}
+.hero[data-vumc-season] .hero-panel h1{font-size:14px!important;letter-spacing:.09em;text-transform:uppercase;color:#f0d8b4!important;margin-bottom:10px!important}
+.hero[data-vumc-season] .hero-panel .hero-kicker{display:none}
+.hero .vumc-seasonal-feature{display:block!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;border:0!important;border-radius:0!important;padding:0!important;margin:0 0 16px!important;max-width:700px}
+.hero .vumc-seasonal-feature .vumc-seasonal-eyebrow{font-size:12px!important;margin-bottom:9px!important}
+.hero .vumc-seasonal-feature h2{font-size:clamp(34px,4.2vw,62px)!important;line-height:1.06!important;letter-spacing:-.025em;margin-bottom:12px!important}
+.hero .vumc-seasonal-feature p{font-size:clamp(15px,1.35vw,19px)!important;line-height:1.45!important;max-width:580px}
+.hero .vumc-seasonal-symbol{display:none!important}
+@media(max-width:720px){.hero .hero-panel{padding:8px 0!important}.hero .hero-panel h1{font-size:22px!important}.hero .vumc-seasonal-feature h2{font-size:clamp(31px,8vw,44px)!important}.hero .hero-side .worship-card{padding:14px!important}}
+</style>
 </head>
 <body>
   <header class="site-header">
@@ -2872,19 +2895,12 @@ body{background:#faf5eb}
       <div class="container">
         <div class="hero-grid">
           <div class="hero-panel">
-            <div class="hero-kicker">Versailles, Kentucky • In Person & Online</div>
-            <div class="golden-harvest-greeting">Give Thanks with a Grateful Heart</div>
+            <div class="hero-kicker">VERSAILLES UNITED METHODIST CHURCH</div>
             <h1>Versailles United Methodist Church</h1>
-            <h2>A Welcoming Church in Versailles, Kentucky</h2>
-            <p>
-              We are a church in Versailles, Kentucky seeking to Love Like Jesus through worship, connection, service, and spiritual growth.
-              Whether you are exploring faith, returning to church, or looking for a church home, there is a place for you here. #LoveLikeJesus
-            </p>
+            <h2 class="hero-welcome">A place to worship, grow in faith, and love like Jesus.</h2>
             <div class="btn-row">
-              <a class='btn btn-primary' href='/plan-your-visit/'>Plan Your Visit</a>
-              <a class='btn btn-secondary' href='/watch/'>Watch Worship Online</a>
-              <a class="btn btn-secondary" href="#who-we-are">Who We Are</a>
-              <a class="btn btn-light" href="https://versaillesumc.churchcenter.com/people/forms/833182" data-open-in-church-center-modal="true">Subscribe</a>
+              <a class="btn btn-primary" href="/plan-your-visit/">Plan Your Visit</a>
+              <a class="btn btn-secondary" href="/watch/">Watch Online</a>
             </div>
           </div>
 
@@ -2897,10 +2913,7 @@ body{background:#faf5eb}
               </div>
             </div>
 
-            <div class="glass-card">
-              <h3>Take Your Next Step</h3>
-              <p>Join us in person, worship online, find your place to connect, or discover ways to serve in ministry and community.</p>
-            </div>
+
           </div>
         </div>
       </div>
